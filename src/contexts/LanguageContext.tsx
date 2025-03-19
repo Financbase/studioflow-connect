@@ -109,6 +109,258 @@ const translations = {
     fr: "Suédois",
     de: "Schwedisch",
     sv: "Svenska"
+  },
+  "notfound.title": {
+    en: "Page Not Found",
+    es: "Página No Encontrada",
+    fr: "Page Non Trouvée",
+    de: "Seite Nicht Gefunden",
+    sv: "Sidan Hittades Inte"
+  },
+  "notfound.description": {
+    en: "Sorry, the page you are looking for does not exist.",
+    es: "Lo sentimos, la página que estás buscando no existe.",
+    fr: "Désolé, la page que vous recherchez n'existe pas.",
+    de: "Entschuldigung, die gesuchte Seite existiert nicht.",
+    sv: "Tyvärr, sidan du letar efter finns inte."
+  },
+  "notfound.back": {
+    en: "Back to Home",
+    es: "Volver al Inicio",
+    fr: "Retour à l'Accueil",
+    de: "Zurück zur Startseite",
+    sv: "Tillbaka till Startsidan"
+  },
+  "docs.title": {
+    en: "Documentation",
+    es: "Documentación",
+    fr: "Documentation",
+    de: "Dokumentation",
+    sv: "Dokumentation"
+  },
+  "docs.description": {
+    en: "Learn how to use StudioFlow X to enhance your music production workflow.",
+    es: "Aprende a usar StudioFlow X para mejorar tu flujo de trabajo de producción musical.",
+    fr: "Apprenez à utiliser StudioFlow X pour améliorer votre flux de travail de production musicale.",
+    de: "Lernen Sie, wie Sie StudioFlow X verwenden können, um Ihren Musikproduktions-Workflow zu verbessern.",
+    sv: "Lär dig hur du använder StudioFlow X för att förbättra ditt musikproduktionsarbetsflöde."
+  },
+  "button.customize": {
+    en: "Customize Layout",
+    es: "Personalizar Diseño",
+    fr: "Personnaliser Disposition",
+    de: "Layout Anpassen",
+    sv: "Anpassa Layout"
+  },
+  "dropdown.quickactions": {
+    en: "Quick Actions",
+    es: "Acciones Rápidas",
+    fr: "Actions Rapides",
+    de: "Schnellaktionen",
+    sv: "Snabbåtgärder"
+  },
+  "dropdown.batchprocess": {
+    en: "Batch Process",
+    es: "Procesamiento por Lotes",
+    fr: "Traitement par Lots",
+    de: "Stapelverarbeitung",
+    sv: "Batchbearbetning"
+  },
+  "dropdown.aitools": {
+    en: "AI Tools",
+    es: "Herramientas de IA",
+    fr: "Outils IA",
+    de: "KI-Werkzeuge",
+    sv: "AI-verktyg"
+  },
+  "dropdown.vmmanagement": {
+    en: "VM Management",
+    es: "Gestión de VM",
+    fr: "Gestion de VM",
+    de: "VM-Verwaltung",
+    sv: "VM-hantering"
+  },
+  "label.dashboardview": {
+    en: "Dashboard View",
+    es: "Vista del Panel",
+    fr: "Vue du Tableau de Bord",
+    de: "Dashboard-Ansicht",
+    sv: "Instrumentpanelsvy"
+  },
+  "label.plan": {
+    en: "Plan",
+    es: "Plan",
+    fr: "Forfait",
+    de: "Plan",
+    sv: "Plan"
+  },
+  "label.uitheme": {
+    en: "UI Theme",
+    es: "Tema de UI",
+    fr: "Thème UI",
+    de: "UI-Theme",
+    sv: "UI-tema"
+  },
+  "label.language": {
+    en: "Language",
+    es: "Idioma",
+    fr: "Langue",
+    de: "Sprache",
+    sv: "Språk"
+  },
+  "view.simple": {
+    en: "Simple",
+    es: "Simple",
+    fr: "Simple",
+    de: "Einfach",
+    sv: "Enkel"
+  },
+  "view.advanced": {
+    en: "Advanced",
+    es: "Avanzado",
+    fr: "Avancé",
+    de: "Erweitert",
+    sv: "Avancerad"
+  },
+  "view.custom": {
+    en: "Custom",
+    es: "Personalizado",
+    fr: "Personnalisé",
+    de: "Benutzerdefiniert",
+    sv: "Anpassad"
+  },
+  "tooltips.simpleview": {
+    en: "Basic view with essential widgets",
+    es: "Vista básica con widgets esenciales",
+    fr: "Vue basique avec widgets essentiels",
+    de: "Einfache Ansicht mit wesentlichen Widgets",
+    sv: "Grundvy med väsentliga widgets"
+  },
+  "tooltips.advancedview": {
+    en: "Comprehensive view with all features",
+    es: "Vista completa con todas las funciones",
+    fr: "Vue complète avec toutes les fonctionnalités",
+    de: "Umfassende Ansicht mit allen Funktionen",
+    sv: "Omfattande vy med alla funktioner"
+  },
+  "tooltips.customview": {
+    en: "Personalized dashboard layout",
+    es: "Diseño de panel personalizado",
+    fr: "Disposition de tableau de bord personnalisée",
+    de: "Personalisiertes Dashboard-Layout",
+    sv: "Personlig instrumentpanelslayout"
+  },
+  "tooltips.proonly": {
+    en: "Available with Pro plan only",
+    es: "Disponible solo con plan Pro",
+    fr: "Disponible uniquement avec le forfait Pro",
+    de: "Nur mit Pro-Plan verfügbar",
+    sv: "Endast tillgängligt med Pro-plan"
+  },
+  "dialog.customdashboard": {
+    en: "Customize Dashboard",
+    es: "Personalizar Panel",
+    fr: "Personnaliser le Tableau de Bord",
+    de: "Dashboard Anpassen",
+    sv: "Anpassa Instrumentpanel"
+  },
+  "dialog.selectwidgets": {
+    en: "Select which widgets to display in your custom dashboard view.",
+    es: "Selecciona qué widgets mostrar en tu vista personalizada del panel.",
+    fr: "Sélectionnez les widgets à afficher dans votre vue personnalisée du tableau de bord.",
+    de: "Wählen Sie aus, welche Widgets in Ihrer benutzerdefinierten Dashboard-Ansicht angezeigt werden sollen.",
+    sv: "Välj vilka widgets som ska visas i din anpassade instrumentpanelsvy."
+  },
+  "dialog.cancel": {
+    en: "Cancel",
+    es: "Cancelar",
+    fr: "Annuler",
+    de: "Abbrechen",
+    sv: "Avbryt"
+  },
+  "dialog.save": {
+    en: "Save Changes",
+    es: "Guardar Cambios",
+    fr: "Enregistrer les Modifications",
+    de: "Änderungen Speichern",
+    sv: "Spara Ändringar"
+  },
+  "toast.layoutupdated": {
+    en: "Layout Updated",
+    es: "Diseño Actualizado",
+    fr: "Disposition Mise à Jour",
+    de: "Layout Aktualisiert",
+    sv: "Layout Uppdaterad"
+  },
+  "toast.layoutsaved": {
+    en: "Your custom dashboard layout has been saved",
+    es: "Se ha guardado el diseño personalizado de tu panel",
+    fr: "Votre disposition de tableau de bord personnalisée a été sauvegardée",
+    de: "Ihr benutzerdefiniertes Dashboard-Layout wurde gespeichert",
+    sv: "Din anpassade instrumentpanelslayout har sparats"
+  },
+  "toast.invalidlayout": {
+    en: "Invalid Layout",
+    es: "Diseño Inválido",
+    fr: "Disposition Invalide",
+    de: "Ungültiges Layout",
+    sv: "Ogiltig Layout"
+  },
+  "toast.selectatleastone": {
+    en: "You must select at least one widget",
+    es: "Debes seleccionar al menos un widget",
+    fr: "Vous devez sélectionner au moins un widget",
+    de: "Sie müssen mindestens ein Widget auswählen",
+    sv: "Du måste välja minst en widget"
+  },
+  "widget.systemmonitor": {
+    en: "System Monitor",
+    es: "Monitor del Sistema",
+    fr: "Moniteur Système",
+    de: "Systemmonitor",
+    sv: "Systemövervakare"
+  },
+  "widget.vmcontroller": {
+    en: "VM Controller",
+    es: "Controlador de VM",
+    fr: "Contrôleur de VM",
+    de: "VM-Controller",
+    sv: "VM-kontroller"
+  },
+  "widget.dawworkflow": {
+    en: "DAW Workflow",
+    es: "Flujo de Trabajo DAW",
+    fr: "Flux de Travail DAW",
+    de: "DAW-Workflow",
+    sv: "DAW-arbetsflöde"
+  },
+  "widget.audioanalyzer": {
+    en: "Audio Analyzer",
+    es: "Analizador de Audio",
+    fr: "Analyseur Audio",
+    de: "Audio-Analysator",
+    sv: "Ljudanalysator"
+  },
+  "widget.aitools": {
+    en: "AI Tools",
+    es: "Herramientas de IA",
+    fr: "Outils IA",
+    de: "KI-Werkzeuge",
+    sv: "AI-verktyg"
+  },
+  "widget.marketplace": {
+    en: "Marketplace",
+    es: "Mercado",
+    fr: "Marché",
+    de: "Marktplatz",
+    sv: "Marknadsplats"
+  },
+  "label.profeature": {
+    en: "Pro Feature",
+    es: "Función Pro",
+    fr: "Fonctionnalité Pro",
+    de: "Pro-Funktion",
+    sv: "Pro-funktion"
   }
 };
 

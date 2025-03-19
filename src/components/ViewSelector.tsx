@@ -18,9 +18,11 @@ import {
 } from "@/components/ui/tooltip";
 import { useDashboard, ViewMode } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ViewSelector = () => {
   const { viewMode, setViewMode, pricingTier } = useDashboard();
+  const { t } = useLanguage();
   
   const handleViewChange = (value: string) => {
     if (value) {
@@ -43,18 +45,18 @@ const ViewSelector = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-muted-foreground mr-2">View:</span>
+      <span className="text-sm font-medium text-muted-foreground mr-2">{t("label.dashboardview")}:</span>
       <ToggleGroup type="single" value={viewMode} onValueChange={handleViewChange}>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <ToggleGroupItem value="simple" aria-label="Simple View">
                 <LayoutDashboard className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Simple</span>
+                <span className="hidden sm:inline">{t("view.simple")}</span>
               </ToggleGroupItem>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Basic view with essential widgets</p>
+              <p>{t("tooltips.simpleview")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -64,11 +66,11 @@ const ViewSelector = () => {
             <TooltipTrigger asChild>
               <ToggleGroupItem value="advanced" aria-label="Advanced View">
                 <LayoutPanelTop className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Advanced</span>
+                <span className="hidden sm:inline">{t("view.advanced")}</span>
               </ToggleGroupItem>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Comprehensive view with all features</p>
+              <p>{t("tooltips.advancedview")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -83,7 +85,7 @@ const ViewSelector = () => {
                 className="relative"
               >
                 <Settings2 className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Custom</span>
+                <span className="hidden sm:inline">{t("view.custom")}</span>
                 {pricingTier !== "pro" && (
                   <Lock className="h-3 w-3 absolute -top-1 -right-1" />
                 )}
@@ -91,8 +93,8 @@ const ViewSelector = () => {
             </TooltipTrigger>
             <TooltipContent>
               <p>{pricingTier === "pro" 
-                  ? "Personalized dashboard layout" 
-                  : "Available with Pro plan only"}
+                  ? t("tooltips.customview") 
+                  : t("tooltips.proonly")}
               </p>
             </TooltipContent>
           </Tooltip>

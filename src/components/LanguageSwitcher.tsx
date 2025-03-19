@@ -31,11 +31,11 @@ const LanguageSwitcher = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <Languages className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Change Language</span>
+          <span className="sr-only">{t("label.language")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Language</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("label.language")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         
         <DropdownMenuItem 

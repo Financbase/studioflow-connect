@@ -15,20 +15,26 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
-
-const widgetLabels: Record<WidgetId, string> = {
-  system: "System Monitor",
-  vm: "VM Controller",
-  daw: "DAW Workflow",
-  audio: "Audio Analyzer",
-  ai: "AI Tools",
-  marketplace: "Marketplace"
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess } = useDashboard();
+  const { t } = useLanguage();
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
+  
+  const getWidgetLabel = (widgetId: WidgetId): string => {
+    const widgetLabelMap: Record<WidgetId, string> = {
+      'system': 'widget.systemmonitor',
+      'vm': 'widget.vmcontroller',
+      'daw': 'widget.dawworkflow',
+      'audio': 'widget.audioanalyzer',
+      'ai': 'widget.aitools',
+      'marketplace': 'widget.marketplace'
+    };
+    
+    return t(widgetLabelMap[widgetId]);
+  };
   
   const handleToggleWidget = (widgetId: WidgetId) => {
     setSelectedWidgets(prev => {
@@ -43,8 +49,8 @@ const CustomLayoutEditor = () => {
   const handleSave = () => {
     if (selectedWidgets.length === 0) {
       toast({
-        title: "Invalid Layout",
-        description: "You must select at least one widget",
+        title: t("toast.invalidlayout"),
+        description: t("toast.selectatleastone"),
         variant: "destructive"
       });
       return;
@@ -53,8 +59,8 @@ const CustomLayoutEditor = () => {
     updateCustomLayout(selectedWidgets);
     setIsOpen(false);
     toast({
-      title: "Layout Updated",
-      description: "Your custom dashboard layout has been saved"
+      title: t("toast.layoutupdated"),
+      description: t("toast.layoutsaved")
     });
   };
   
@@ -63,29 +69,29 @@ const CustomLayoutEditor = () => {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
           <Settings2 className="h-4 w-4" />
-          Customize Layout
+          {t("button.customize")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Customize Dashboard</DialogTitle>
+          <DialogTitle>{t("dialog.customdashboard")}</DialogTitle>
           <DialogDescription>
-            Select which widgets to display in your custom dashboard view.
+            {t("dialog.selectwidgets")}
           </DialogDescription>
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
-          {(Object.keys(widgetLabels) as WidgetId[]).map((widgetId) => {
+          {(Object.keys(featureAccess) as WidgetId[]).map((widgetId) => {
             const hasAccess = featureAccess[widgetId];
             
             return (
               <div key={widgetId} className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                   <Label htmlFor={`widget-${widgetId}`} className="flex items-center gap-2">
-                    {widgetLabels[widgetId]}
+                    {getWidgetLabel(widgetId)}
                     {!hasAccess && (
                       <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">
-                        Pro Feature
+                        {t("label.profeature")}
                       </span>
                     )}
                   </Label>
@@ -103,10 +109,10 @@ const CustomLayoutEditor = () => {
         
         <DialogFooter>
           <Button variant="outline" onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("dialog.cancel")}
           </Button>
           <Button onClick={handleSave}>
-            Save Changes
+            {t("dialog.save")}
           </Button>
         </DialogFooter>
       </DialogContent>

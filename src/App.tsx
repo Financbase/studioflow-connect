@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  // Initialize themes
+  // Initialize themes and language
   useEffect(() => {
     // Set dark mode by default if not set
     if (!localStorage.getItem("theme")) {
@@ -42,6 +42,11 @@ const App = () => {
     } else {
       document.documentElement.classList.add("theme-modern");
       localStorage.setItem("ui_theme_variant", "modern");
+    }
+    
+    // Initialize language if not set
+    if (!localStorage.getItem("app_language")) {
+      localStorage.setItem("app_language", "en");
     }
   }, []);
 

@@ -78,15 +78,15 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
                   <Sliders className="h-[1.2rem] w-[1.2rem]" />
-                  <span className="sr-only">Options</span>
+                  <span className="sr-only">{t("dropdown.quickactions")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[180px] animate-fade-in">
-                <DropdownMenuLabel>Quick Actions</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("dropdown.quickactions")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Batch Process</DropdownMenuItem>
-                <DropdownMenuItem>AI Tools</DropdownMenuItem>
-                <DropdownMenuItem>VM Management</DropdownMenuItem>
+                <DropdownMenuItem>{t("dropdown.batchprocess")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("dropdown.aitools")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("dropdown.vmmanagement")}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
@@ -116,15 +116,15 @@ const Header = () => {
         )}
         
         {isMobile && isMenuOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-background border-b border-border animate-slide-in">
+          <div className="absolute top-16 left-0 right-0 bg-background border-b border-border animate-slide-in z-50">
             <nav className="flex flex-col p-4 gap-4">
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">Dashboard View</span>
+                <span className="text-sm font-medium">{t("label.dashboardview")}</span>
                 <ViewSelector />
               </div>
               
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">Plan</span>
+                <span className="text-sm font-medium">{t("label.plan")}</span>
                 <PlanSwitcher 
                   currentPlan={pricingTier}
                   onPlanChange={(plan) => {
@@ -135,13 +135,13 @@ const Header = () => {
               
               {pricingTier === "pro" && (
                 <div className="flex items-center justify-between py-2">
-                  <span className="text-sm font-medium">UI Theme</span>
+                  <span className="text-sm font-medium">{t("label.uitheme")}</span>
                   <ThemeSwitcher />
                 </div>
               )}
               
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">Language</span>
+                <span className="text-sm font-medium">{t("label.language")}</span>
                 <LanguageSwitcher />
               </div>
               
@@ -157,16 +157,16 @@ const Header = () => {
               </Link>
               
               <a href="#system" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                System
+                {t("widget.systemmonitor")}
               </a>
               <a href="#audio" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                Audio Analysis
+                {t("widget.audioanalyzer")}
               </a>
               <a href="#ai-tools" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                AI Tools
+                {t("widget.aitools")}
               </a>
               <a href="#vm-controller" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                VM Controller
+                {t("widget.vmcontroller")}
               </a>
             </nav>
           </div>

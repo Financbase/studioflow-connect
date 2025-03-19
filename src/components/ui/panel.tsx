@@ -22,9 +22,9 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           isDarkMode && themeVariant === "classic" && "bg-gradient-to-b from-card/80 to-card shadow-md",
           
           // Windows theme styles
-          themeVariant === "windows" && "border rounded-none",
-          !isDarkMode && themeVariant === "windows" && "border-2 shadow-md",
-          isDarkMode && themeVariant === "windows" && "border-[1px] shadow-lg",
+          themeVariant === "windows" && "border rounded-md",
+          !isDarkMode && themeVariant === "windows" && "border-2 shadow-md bg-card/95",
+          isDarkMode && themeVariant === "windows" && "border-[1px] shadow-lg bg-card/90",
           
           // Legacy theme styles
           themeVariant === "legacy" && "shadow-sm",
@@ -32,7 +32,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           isDarkMode && themeVariant === "legacy" && "bg-gradient-to-b from-card/90 to-card",
           
           // Modern theme styles
-          !isDarkMode && themeVariant === "modern" && "shadow-sm",
+          !isDarkMode && themeVariant === "modern" && "shadow-sm bg-card/95",
           isDarkMode && themeVariant === "modern" && "bg-card/90 backdrop-blur-sm",
           
           // Elevated variant
