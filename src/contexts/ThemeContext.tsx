@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useDashboard } from "./DashboardContext";
 
 type ThemeVariant = "modern" | "legacy" | "classic" | "windows";
 
@@ -11,10 +10,17 @@ interface ThemeContextType {
   toggleDarkMode: () => void;
 }
 
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  pricingTier?: string;
+}
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { pricingTier } = useDashboard();
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 
+  children, 
+  pricingTier = "free" 
+}) => {
   const [themeVariant, setThemeVariant] = useState<ThemeVariant>("modern");
   const [isDarkMode, setIsDarkMode] = useState(true);
   
