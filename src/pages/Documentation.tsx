@@ -6,8 +6,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, Cpu, Database, Music, Bot, ShoppingBag, FileVolume, FileAudio, Laptop } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const Documentation = () => {
+interface DocumentationProps {
+  page?: string;
+}
+
+const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
+  const { language, t } = useLanguage();
+  
   useEffect(() => {
     const { hash } = window.location;
     if (hash) {
@@ -22,10 +29,185 @@ const Documentation = () => {
         }, 100);
       }
     }
-  }, []);
+    
+    // Set appropriate tab based on page prop
+    if (page && page !== "docs") {
+      // You could implement specific content for terms, privacy, contact pages
+      document.title = `StudioFlow X | ${page.charAt(0).toUpperCase() + page.slice(1)}`;
+    }
+  }, [page]);
 
   const { themeVariant } = useTheme();
+  
+  // Render different content based on page prop
+  if (page === "terms") {
+    return (
+      <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
+          <div className="max-w-[800px] mx-auto space-y-8">
+            <section className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("terms.title", "Terms and Conditions")}</h1>
+              <p className="text-lg text-muted-foreground">
+                {t("terms.description", "Please read these terms and conditions carefully before using StudioFlow X")}
+              </p>
+            </section>
+            
+            <Separator />
+            
+            <div className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+              <h2 className="text-2xl font-bold mb-4">{t("terms.agreement", "User Agreement")}</h2>
+              <p className="mb-4">{t("terms.agreement_description", "By accessing or using StudioFlow X, you agree to be bound by these Terms and Conditions and agree that you are responsible for compliance with any applicable local laws.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("terms.license", "License")}</h3>
+              <p className="mb-4">{t("terms.license_description", "StudioFlow X grants you a limited, non-exclusive, non-transferable license to use the application for your personal or business use in accordance with these Terms.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("terms.restrictions", "Restrictions")}</h3>
+              <p className="mb-4">{t("terms.restrictions_description", "You are specifically prohibited from: modifying, copying, or creating derivative works based on the Software or any part thereof; reverse engineering, disassembling, or otherwise attempting to discover the source code; removing any proprietary notices or labels; or transferring the Software to third parties.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("terms.subscription", "Subscription")}</h3>
+              <p className="mb-4">{t("terms.subscription_description", "Access to certain features of StudioFlow X requires a paid subscription. Subscription fees are charged in advance on a monthly or annual basis. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("terms.termination", "Termination")}</h3>
+              <p className="mb-4">{t("terms.termination_description", "StudioFlow X reserves the right to terminate your access to the service for violation of these Terms or for any other reason at its discretion.")}</p>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
+            </div>
+          </div>
+        </main>
+        
+        <footer className="border-t py-6">
+          <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>© 2024 StudioFlow X. {t("common.all_rights_reserved", "All rights reserved.")}</p>
+            <div className="flex gap-6">
+              <Link to="/terms" className="hover:text-foreground transition-colors">{t("common.terms", "Terms")}</Link>
+              <Link to="/privacy" className="hover:text-foreground transition-colors">{t("common.privacy", "Privacy")}</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">{t("common.contact", "Contact")}</Link>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+  
+  if (page === "privacy") {
+    return (
+      <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
+          <div className="max-w-[800px] mx-auto space-y-8">
+            <section className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("privacy.title", "Privacy Policy")}</h1>
+              <p className="text-lg text-muted-foreground">
+                {t("privacy.description", "How we collect, use, and protect your information")}
+              </p>
+            </section>
+            
+            <Separator />
+            
+            <div className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+              <h2 className="text-2xl font-bold mb-4">{t("privacy.collection", "Information We Collect")}</h2>
+              <p className="mb-4">{t("privacy.collection_description", "We collect information that you provide directly to us, such as when you create an account, subscribe to our service, or contact us for support. This may include your name, email address, payment information, and usage data.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("privacy.usage", "How We Use Your Information")}</h3>
+              <p className="mb-4">{t("privacy.usage_description", "We use the information we collect to provide, maintain, and improve our services, to process your subscription, communicate with you, and for research and analytics purposes.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("privacy.sharing", "Information Sharing")}</h3>
+              <p className="mb-4">{t("privacy.sharing_description", "We do not sell your personal information. We may share your information with third-party service providers who perform services on our behalf, such as payment processing and data analysis.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("privacy.security", "Data Security")}</h3>
+              <p className="mb-4">{t("privacy.security_description", "We take reasonable measures to help protect your personal information from loss, theft, misuse, unauthorized access, disclosure, alteration, and destruction.")}</p>
+              
+              <h3 className="text-xl font-semibold mt-6 mb-2">{t("privacy.rights", "Your Rights")}</h3>
+              <p className="mb-4">{t("privacy.rights_description", "Depending on your location, you may have certain rights regarding your personal information, such as the right to access, correct, or delete your data.")}</p>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
+            </div>
+          </div>
+        </main>
+        
+        <footer className="border-t py-6">
+          <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>© 2024 StudioFlow X. {t("common.all_rights_reserved", "All rights reserved.")}</p>
+            <div className="flex gap-6">
+              <Link to="/terms" className="hover:text-foreground transition-colors">{t("common.terms", "Terms")}</Link>
+              <Link to="/privacy" className="hover:text-foreground transition-colors">{t("common.privacy", "Privacy")}</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">{t("common.contact", "Contact")}</Link>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+  
+  if (page === "contact") {
+    return (
+      <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
+          <div className="max-w-[800px] mx-auto space-y-8">
+            <section className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("contact.title", "Contact Us")}</h1>
+              <p className="text-lg text-muted-foreground">
+                {t("contact.description", "Reach out to our support team")}
+              </p>
+            </section>
+            
+            <Separator />
+            
+            <div className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+              <h2 className="text-2xl font-bold mb-4">{t("contact.support", "Support Options")}</h2>
+              <p className="mb-4">{t("contact.support_description", "Our support team is available to help you with any questions or issues you may have with StudioFlow X.")}</p>
+              
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <div className="border p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-2">{t("contact.email", "Email Support")}</h3>
+                  <p className="mb-2">{t("contact.email_description", "For general inquiries and non-urgent support:")}</p>
+                  <p className="font-medium">support@studioflowx.com</p>
+                  <p className="text-sm text-muted-foreground mt-2">{t("contact.response_time", "Response time: Within 24 hours")}</p>
+                </div>
+                
+                <div className="border p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-2">{t("contact.phone", "Phone Support")}</h3>
+                  <p className="mb-2">{t("contact.phone_description", "For urgent matters (Pro subscribers only):")}</p>
+                  <p className="font-medium">+1 (555) 123-4567</p>
+                  <p className="text-sm text-muted-foreground mt-2">{t("contact.hours", "Hours: Monday-Friday, 9am-5pm EST")}</p>
+                </div>
+              </div>
+              
+              <h3 className="text-xl font-semibold mt-8 mb-4">{t("contact.headquarters", "Headquarters")}</h3>
+              <p className="mb-1">StudioFlow X Inc.</p>
+              <p className="mb-1">123 Music Avenue</p>
+              <p className="mb-1">Suite 456</p>
+              <p className="mb-1">Los Angeles, CA 90001</p>
+              <p>United States</p>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
+            </div>
+          </div>
+        </main>
+        
+        <footer className="border-t py-6">
+          <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>© 2024 StudioFlow X. {t("common.all_rights_reserved", "All rights reserved.")}</p>
+            <div className="flex gap-6">
+              <Link to="/terms" className="hover:text-foreground transition-colors">{t("common.terms", "Terms")}</Link>
+              <Link to="/privacy" className="hover:text-foreground transition-colors">{t("common.privacy", "Privacy")}</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">{t("common.contact", "Contact")}</Link>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
 
+  // Default documentation page content
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
       <Header />
@@ -33,9 +215,9 @@ const Documentation = () => {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
         <div className="max-w-[1000px] mx-auto space-y-8">
           <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">StudioFlow X Documentation</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("docs.title", "StudioFlow X Documentation")}</h1>
             <p className="text-lg text-muted-foreground">
-              Comprehensive guides, tips, and best practices for maximizing your music production workflow
+              {t("docs.description", "Comprehensive guides, tips, and best practices for maximizing your music production workflow")}
             </p>
           </section>
           
@@ -43,9 +225,9 @@ const Documentation = () => {
           
           <Tabs defaultValue="features">
             <TabsList className="grid w-full md:w-auto md:inline-grid grid-cols-3 md:grid-cols-3">
-              <TabsTrigger value="features">Features</TabsTrigger>
-              <TabsTrigger value="tutorials">Tutorials</TabsTrigger>
-              <TabsTrigger value="faq">FAQ</TabsTrigger>
+              <TabsTrigger value="features">{t("docs.features", "Features")}</TabsTrigger>
+              <TabsTrigger value="tutorials">{t("docs.tutorials", "Tutorials")}</TabsTrigger>
+              <TabsTrigger value="faq">{t("docs.faq", "FAQ")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="features" className="mt-6 space-y-8">
@@ -55,34 +237,34 @@ const Documentation = () => {
                     <Cpu className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">System Monitor</h2>
-                    <p className="text-muted-foreground">Keep track of your system's performance in real-time to ensure optimal audio processing.</p>
+                    <h2 className="text-2xl font-bold">{t("docs.system_monitor", "System Monitor")}</h2>
+                    <p className="text-muted-foreground">{t("docs.system_monitor_desc", "Keep track of your system's performance in real-time to ensure optimal audio processing.")}</p>
                     
                     <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Real-time CPU usage monitoring with per-core breakdown</li>
-                        <li>RAM allocation and available memory tracking</li>
-                        <li>Disk I/O performance metrics with buffer analysis</li>
-                        <li>Audio processing load visualization</li>
-                        <li>Thermal monitoring with warning alerts</li>
+                        <li>{t("docs.system_feature1", "Real-time CPU usage monitoring with per-core breakdown")}</li>
+                        <li>{t("docs.system_feature2", "RAM allocation and available memory tracking")}</li>
+                        <li>{t("docs.system_feature3", "Disk I/O performance metrics with buffer analysis")}</li>
+                        <li>{t("docs.system_feature4", "Audio processing load visualization")}</li>
+                        <li>{t("docs.system_feature5", "Thermal monitoring with warning alerts")}</li>
                       </ul>
                       
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Keep CPU usage below 70% for stable audio processing</li>
-                        <li>Monitor thermal status during heavy processing sessions</li>
-                        <li>Set up automatic warnings when system resources are constrained</li>
-                        <li>Compare performance across different configurations</li>
+                        <li>{t("docs.system_practice1", "Keep CPU usage below 70% for stable audio processing")}</li>
+                        <li>{t("docs.system_practice2", "Monitor thermal status during heavy processing sessions")}</li>
+                        <li>{t("docs.system_practice3", "Set up automatic warnings when system resources are constrained")}</li>
+                        <li>{t("docs.system_practice4", "Compare performance across different configurations")}</li>
                       </ul>
                       
                       <div className="p-4 bg-amber-500/10 border border-amber-200/20 rounded-md mt-4">
                         <div className="flex items-start">
                           <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5" />
                           <div>
-                            <h4 className="font-medium">Important Consideration</h4>
+                            <h4 className="font-medium">{t("docs.important", "Important Consideration")}</h4>
                             <p className="text-sm text-muted-foreground">
-                              System monitoring itself consumes resources. For ultra-low-latency applications, consider disabling real-time monitoring temporarily.
+                              {t("docs.system_important", "System monitoring itself consumes resources. For ultra-low-latency applications, consider disabling real-time monitoring temporarily.")}
                             </p>
                           </div>
                         </div>
@@ -90,7 +272,7 @@ const Documentation = () => {
                     </div>
                     
                     <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
                     </div>
                   </div>
                 </div>
@@ -102,34 +284,34 @@ const Documentation = () => {
                     <Laptop className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Virtual Machine Controller</h2>
-                    <p className="text-muted-foreground">Run different operating systems and DAW environments in isolated virtual machines.</p>
+                    <h2 className="text-2xl font-bold">{t("docs.vm_controller", "Virtual Machine Controller")}</h2>
+                    <p className="text-muted-foreground">{t("docs.vm_controller_desc", "Run different operating systems and DAW environments in isolated virtual machines.")}</p>
                     
                     <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Manage and switch between multiple VM environments</li>
-                        <li>Resource allocation controls for CPU, RAM, and disk</li>
-                        <li>Snapshot system for quick backup and restore</li>
-                        <li>Audio driver pass-through configuration</li>
-                        <li>Cross-VM file sharing and project synchronization</li>
+                        <li>{t("docs.vm_feature1", "Manage and switch between multiple VM environments")}</li>
+                        <li>{t("docs.vm_feature2", "Resource allocation controls for CPU, RAM, and disk")}</li>
+                        <li>{t("docs.vm_feature3", "Snapshot system for quick backup and restore")}</li>
+                        <li>{t("docs.vm_feature4", "Audio driver pass-through configuration")}</li>
+                        <li>{t("docs.vm_feature5", "Cross-VM file sharing and project synchronization")}</li>
                       </ul>
                       
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Dedicate adequate resources to VM environments running DAWs</li>
-                        <li>Create regular snapshots before making system changes</li>
-                        <li>Configure automatic file synchronization for projects</li>
-                        <li>Optimize each VM for its specific DAW or plugin collection</li>
+                        <li>{t("docs.vm_practice1", "Dedicate adequate resources to VM environments running DAWs")}</li>
+                        <li>{t("docs.vm_practice2", "Create regular snapshots before making system changes")}</li>
+                        <li>{t("docs.vm_practice3", "Configure automatic file synchronization for projects")}</li>
+                        <li>{t("docs.vm_practice4", "Optimize each VM for its specific DAW or plugin collection")}</li>
                       </ul>
                       
                       <div className="p-4 bg-red-500/10 border border-red-200/20 rounded-md mt-4">
                         <div className="flex items-start">
                           <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
                           <div>
-                            <h4 className="font-medium">Critical Warning</h4>
+                            <h4 className="font-medium">{t("docs.critical_warning", "Critical Warning")}</h4>
                             <p className="text-sm text-muted-foreground">
-                              Modifying VM resource allocation while audio is processing can cause dropouts or system instability. Always make changes while DAW projects are closed.
+                              {t("docs.vm_warning", "Modifying VM resource allocation while audio is processing can cause dropouts or system instability. Always make changes while DAW projects are closed.")}
                             </p>
                           </div>
                         </div>
@@ -137,7 +319,7 @@ const Documentation = () => {
                     </div>
                     
                     <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
                     </div>
                   </div>
                 </div>
@@ -149,30 +331,30 @@ const Documentation = () => {
                     <Music className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">DAW Workflow Integration</h2>
-                    <p className="text-muted-foreground">Seamlessly integrate and synchronize multiple digital audio workstations.</p>
+                    <h2 className="text-2xl font-bold">{t("docs.daw_integration", "DAW Workflow Integration")}</h2>
+                    <p className="text-muted-foreground">{t("docs.daw_integration_desc", "Seamlessly integrate and synchronize multiple digital audio workstations.")}</p>
                     
                     <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Cross-DAW project conversion and synchronization</li>
-                        <li>Plugin database management across all workstations</li>
-                        <li>Template sharing and standardization</li>
-                        <li>MIDI and audio routing between DAWs</li>
-                        <li>Unified keycommand system for multiple DAWs</li>
+                        <li>{t("docs.daw_feature1", "Cross-DAW project conversion and synchronization")}</li>
+                        <li>{t("docs.daw_feature2", "Plugin database management across all workstations")}</li>
+                        <li>{t("docs.daw_feature3", "Template sharing and standardization")}</li>
+                        <li>{t("docs.daw_feature4", "MIDI and audio routing between DAWs")}</li>
+                        <li>{t("docs.daw_feature5", "Unified keycommand system for multiple DAWs")}</li>
                       </ul>
                       
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Establish a primary DAW and secondary specialist DAWs</li>
-                        <li>Create standardized naming conventions across platforms</li>
-                        <li>Maintain synchronized plugin versions across systems</li>
-                        <li>Document workflow processes for consistency</li>
+                        <li>{t("docs.daw_practice1", "Establish a primary DAW and secondary specialist DAWs")}</li>
+                        <li>{t("docs.daw_practice2", "Create standardized naming conventions across platforms")}</li>
+                        <li>{t("docs.daw_practice3", "Maintain synchronized plugin versions across systems")}</li>
+                        <li>{t("docs.daw_practice4", "Document workflow processes for consistency")}</li>
                       </ul>
                       
                       <div className="p-4 bg-primary/10 border border-primary/20 rounded-md mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-medium">Supported DAWs</h4>
+                          <h4 className="font-medium">{t("docs.supported_daws", "Supported DAWs")}</h4>
                           <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
                             <li>Ableton Live</li>
                             <li>Logic Pro</li>
@@ -185,7 +367,7 @@ const Documentation = () => {
                           </ul>
                         </div>
                         <div>
-                          <h4 className="font-medium">Integration Capabilities</h4>
+                          <h4 className="font-medium">{t("docs.integration_caps", "Integration Capabilities")}</h4>
                           <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
                             <li>Project file conversion</li>
                             <li>Plugin mapping</li>
@@ -199,7 +381,7 @@ const Documentation = () => {
                     </div>
                     
                     <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
                     </div>
                   </div>
                 </div>
@@ -211,67 +393,67 @@ const Documentation = () => {
                     <FileAudio className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Audio Analysis</h2>
-                    <p className="text-muted-foreground">Detailed audio analysis tools for production, mixing, and mastering workflows.</p>
+                    <h2 className="text-2xl font-bold">{t("docs.audio_analysis", "Audio Analysis")}</h2>
+                    <p className="text-muted-foreground">{t("docs.audio_analysis_desc", "Detailed audio analysis tools for production, mixing, and mastering workflows.")}</p>
                     
                     <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Real-time spectral analysis with reference track comparisons</li>
-                        <li>Dynamic range visualization and monitoring</li>
-                        <li>Phase correlation analysis across channels</li>
-                        <li>LUFS and peak metering for broadcast standards</li>
-                        <li>Harmonic content analysis for tonal balance</li>
+                        <li>{t("docs.audio_feature1", "Real-time spectral analysis with reference track comparisons")}</li>
+                        <li>{t("docs.audio_feature2", "Dynamic range visualization and monitoring")}</li>
+                        <li>{t("docs.audio_feature3", "Phase correlation analysis across channels")}</li>
+                        <li>{t("docs.audio_feature4", "LUFS and peak metering for broadcast standards")}</li>
+                        <li>{t("docs.audio_feature5", "Harmonic content analysis for tonal balance")}</li>
                       </ul>
                       
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Use reference tracks from the same genre for spectral comparison</li>
-                        <li>Monitor phase correlation to avoid cancellation issues</li>
-                        <li>Target appropriate LUFS levels for your distribution platform</li>
-                        <li>Regular calibration of monitoring environment</li>
+                        <li>{t("docs.audio_practice1", "Use reference tracks from the same genre for spectral comparison")}</li>
+                        <li>{t("docs.audio_practice2", "Monitor phase correlation to avoid cancellation issues")}</li>
+                        <li>{t("docs.audio_practice3", "Target appropriate LUFS levels for your distribution platform")}</li>
+                        <li>{t("docs.audio_practice4", "Regular calibration of monitoring environment")}</li>
                       </ul>
                       
                       <div className="p-4 bg-primary/10 border border-primary/20 rounded-md mt-4">
-                        <h4 className="font-medium">Analysis Presets</h4>
+                        <h4 className="font-medium">{t("docs.analysis_presets", "Analysis Presets")}</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
                           <Card className="h-full">
                             <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Mastering</CardTitle>
+                              <CardTitle className="text-sm">{t("docs.mastering", "Mastering")}</CardTitle>
                             </CardHeader>
                             <CardContent className="p-3 pt-0">
                               <CardDescription className="text-xs">
-                                Standards-compliant LUFS and peak analysis
+                                {t("docs.mastering_desc", "Standards-compliant LUFS and peak analysis")}
                               </CardDescription>
                             </CardContent>
                           </Card>
                           <Card className="h-full">
                             <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Mixing</CardTitle>
+                              <CardTitle className="text-sm">{t("docs.mixing", "Mixing")}</CardTitle>
                             </CardHeader>
                             <CardContent className="p-3 pt-0">
                               <CardDescription className="text-xs">
-                                Frequency balance and channel comparisons
+                                {t("docs.mixing_desc", "Frequency balance and channel comparisons")}
                               </CardDescription>
                             </CardContent>
                           </Card>
                           <Card className="h-full">
                             <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Tracking</CardTitle>
+                              <CardTitle className="text-sm">{t("docs.tracking", "Tracking")}</CardTitle>
                             </CardHeader>
                             <CardContent className="p-3 pt-0">
                               <CardDescription className="text-xs">
-                                Distortion detection and transient analysis
+                                {t("docs.tracking_desc", "Distortion detection and transient analysis")}
                               </CardDescription>
                             </CardContent>
                           </Card>
                           <Card className="h-full">
                             <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Reference</CardTitle>
+                              <CardTitle className="text-sm">{t("docs.reference", "Reference")}</CardTitle>
                             </CardHeader>
                             <CardContent className="p-3 pt-0">
                               <CardDescription className="text-xs">
-                                Multi-track reference comparison tools
+                                {t("docs.reference_desc", "Multi-track reference comparison tools")}
                               </CardDescription>
                             </CardContent>
                           </Card>
@@ -280,7 +462,7 @@ const Documentation = () => {
                     </div>
                     
                     <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
                     </div>
                   </div>
                 </div>
@@ -292,30 +474,30 @@ const Documentation = () => {
                     <Bot className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">AI-Powered Tools</h2>
-                    <p className="text-muted-foreground">Machine learning tools to enhance creativity and streamline your workflow.</p>
+                    <h2 className="text-2xl font-bold">{t("docs.ai_tools", "AI-Powered Tools")}</h2>
+                    <p className="text-muted-foreground">{t("docs.ai_tools_desc", "Machine learning tools to enhance creativity and streamline your workflow.")}</p>
                     
                     <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Intelligent sample recommendations based on project context</li>
-                        <li>Style-matching for compositions and arrangements</li>
-                        <li>Smart EQ and dynamics processing suggestions</li>
-                        <li>Melody and chord progression generators</li>
-                        <li>Vocal tuning and timing correction with natural results</li>
+                        <li>{t("docs.ai_feature1", "Intelligent sample recommendations based on project context")}</li>
+                        <li>{t("docs.ai_feature2", "Style-matching for compositions and arrangements")}</li>
+                        <li>{t("docs.ai_feature3", "Smart EQ and dynamics processing suggestions")}</li>
+                        <li>{t("docs.ai_feature4", "Melody and chord progression generators")}</li>
+                        <li>{t("docs.ai_feature5", "Vocal tuning and timing correction with natural results")}</li>
                       </ul>
                       
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
                       <ul className="list-disc ml-5 space-y-2">
-                        <li>Use AI suggestions as starting points, not final solutions</li>
-                        <li>Train custom models on your own productions for personalized results</li>
-                        <li>Combine multiple AI tools for comprehensive workflow enhancement</li>
-                        <li>Document successful AI configurations for future projects</li>
+                        <li>{t("docs.ai_practice1", "Use AI suggestions as starting points, not final solutions")}</li>
+                        <li>{t("docs.ai_practice2", "Train custom models on your own productions for personalized results")}</li>
+                        <li>{t("docs.ai_practice3", "Combine multiple AI tools for comprehensive workflow enhancement")}</li>
+                        <li>{t("docs.ai_practice4", "Document successful AI configurations for future projects")}</li>
                       </ul>
                       
                       <div className="p-4 bg-primary/10 border border-primary/20 rounded-md mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-medium">Creative Tools</h4>
+                          <h4 className="font-medium">{t("docs.creative_tools", "Creative Tools")}</h4>
                           <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
                             <li>MIDI pattern generator</li>
                             <li>Chord progression builder</li>
@@ -325,7 +507,7 @@ const Documentation = () => {
                           </ul>
                         </div>
                         <div>
-                          <h4 className="font-medium">Technical Tools</h4>
+                          <h4 className="font-medium">{t("docs.technical_tools", "Technical Tools")}</h4>
                           <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
                             <li>Intelligent gain staging</li>
                             <li>Mix balance analyzer</li>
@@ -338,7 +520,7 @@ const Documentation = () => {
                     </div>
                     
                     <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
                     </div>
                   </div>
                 </div>
@@ -350,185 +532,5 @@ const Documentation = () => {
                     <ShoppingBag className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Studio Marketplace</h2>
-                    <p className="text-muted-foreground">Discover, purchase, and sell audio resources in an integrated marketplace.</p>
-                    
-                    <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">Key Features</h3>
-                      <ul className="list-disc ml-5 space-y-2">
-                        <li>Curated selection of plugins, samples, and presets</li>
-                        <li>In-app previewing and testing before purchase</li>
-                        <li>Direct installation to your system without leaving StudioFlow</li>
-                        <li>Creator tools for publishing your own content</li>
-                        <li>Compatibility checking with your existing setup</li>
-                      </ul>
-                      
-                      <h3 className="text-xl font-semibold mt-6">Best Practices</h3>
-                      <ul className="list-disc ml-5 space-y-2">
-                        <li>Test plugins and samples in context with your project</li>
-                        <li>Use the compatibility checker before purchasing</li>
-                        <li>Organize purchased content with the integrated library manager</li>
-                        <li>Create collections for quick access to favorite resources</li>
-                      </ul>
-                      
-                      <div className="p-4 bg-primary/10 border border-primary/20 rounded-md mt-4 grid grid-cols-1 gap-4">
-                        <h4 className="font-medium">Featured Categories</h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Plugins</CardTitle>
-                            </CardHeader>
-                          </Card>
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Samples</CardTitle>
-                            </CardHeader>
-                          </Card>
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Presets</CardTitle>
-                            </CardHeader>
-                          </Card>
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">MIDI</CardTitle>
-                            </CardHeader>
-                          </Card>
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Templates</CardTitle>
-                            </CardHeader>
-                          </Card>
-                          <Card className="h-full">
-                            <CardHeader className="p-3">
-                              <CardTitle className="text-sm">Tutorials</CardTitle>
-                            </CardHeader>
-                          </Card>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">Return to Dashboard</Link>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </TabsContent>
-            
-            <TabsContent value="tutorials" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Getting Started with StudioFlow X</CardTitle>
-                    <CardDescription>A complete walkthrough of basic features</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">Learn how to set up your workspace, configure connections, and establish your workflow in StudioFlow X.</p>
-                    <button className="text-primary text-sm hover:underline mt-4">Watch tutorial</button>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Multi-DAW Workflows</CardTitle>
-                    <CardDescription>Seamlessly work across multiple platforms</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">Master techniques for maintaining consistent workflows between different DAWs and environments.</p>
-                    <button className="text-primary text-sm hover:underline mt-4">Watch tutorial</button>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>AI-Assisted Production</CardTitle>
-                    <CardDescription>Leverage AI to enhance your creativity</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">Discover how to use StudioFlow's AI tools to generate ideas, improve workflow, and solve mixing challenges.</p>
-                    <button className="text-primary text-sm hover:underline mt-4">Watch tutorial</button>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>System Optimization</CardTitle>
-                    <CardDescription>Get the most from your hardware</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">Learn to configure your system for optimal performance with audio production workloads.</p>
-                    <button className="text-primary text-sm hover:underline mt-4">Watch tutorial</button>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="faq" className="mt-6 space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Frequently Asked Questions</h3>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="font-medium">What are the system requirements for StudioFlow X?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      StudioFlow X requires a minimum of 8GB RAM, 4-core CPU, and 10GB of free storage space. For optimal performance with multiple DAWs, we recommend 16GB+ RAM and a 6+ core CPU.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">Can I use StudioFlow X with my existing plugins?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Yes, StudioFlow X is designed to work with your existing VST, AU, and AAX plugins. The plugin manager will scan and catalog all compatible plugins installed on your system.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">How do I transfer projects between different DAWs?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      StudioFlow X provides DAW-specific project conversion tools that maintain as much information as possible between formats. For best results, use the standardized template system to establish consistent naming and routing conventions.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">Is my data stored securely?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      All user data is stored locally by default. If you enable cloud synchronization, data is encrypted before being transmitted and stored. You retain full control over what is synchronized.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">What's the difference between Free, Standard, and Pro plans?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      The Free plan includes basic audio analysis and limited DAW integration. Standard adds full DAW integration and system monitoring. Pro includes all features, including AI tools, virtual machine management, and custom UI themes.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium">How do I get support if I encounter issues?</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      All users have access to our documentation and community forums. Standard and Pro users also receive priority email support, and Pro users get access to live chat support and scheduled consultation calls.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      
-      <footer className="border-t py-6">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2024 StudioFlow X. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default Documentation;
+                    <h2 className="text-2xl font-bold">{t("docs.studio_marketplace", "Studio Marketplace")}</h2>
+                    <p className="text-muted-foreground">{t("docs.studio_marketplace_desc",
