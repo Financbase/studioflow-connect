@@ -15,9 +15,10 @@ interface UseAuthReturn {
 }
 
 export const useAuth = (): UseAuthReturn => {
-  const { isLoading, session, error } = useSessionContext();
+  const { isLoading: sessionLoading, session, error } = useSessionContext();
   const user = useUser();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Use try-catch to handle cases where this hook is used outside a Router context
   let navigate;
@@ -45,31 +46,36 @@ export const useAuth = (): UseAuthReturn => {
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
 
-        if (error) {
-          console.error('Error fetching profile:', error);
-          return;
+          if (error) {
+            console.error('Error fetching profile:', error);
+          } else if (data) {
+            // Ensure plan is one of the allowed values
+            const planValue = data.plan as 'free' | 'standard' | 'pro';
+            // Create a properly typed profile object
+            setProfile({
+              ...data,
+              plan: planValue || 'free' // Default to free if undefined
+            } as Profile);
+          }
+        } catch (error) {
+          console.error('Error in profile fetch:', error);
+        } finally {
+          setIsLoading(false);
         }
-
-        if (data) {
-          // Ensure plan is one of the allowed values
-          const planValue = data.plan as 'free' | 'standard' | 'pro';
-          // Create a properly typed profile object
-          setProfile({
-            ...data,
-            plan: planValue
-          } as Profile);
-        }
+      } else {
+        setIsLoading(sessionLoading);
       }
     };
 
     fetchProfile();
-  }, [user]);
+  }, [user, sessionLoading]);
 
   const signOut = async () => {
     try {

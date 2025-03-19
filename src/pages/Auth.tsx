@@ -8,9 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { MusicIcon, Mail, Lock, UserPlus, LogIn } from "lucide-react";
 
 const Auth = () => {
@@ -18,7 +17,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { themeVariant } = useTheme();
-  const { t } = useLanguage();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,8 +52,8 @@ const Auth = () => {
       }
       
       toast({
-        title: t("auth.success"),
-        description: t("auth.check_email"),
+        title: "Success",
+        description: "Check your email for a confirmation link",
         duration: 5000,
       });
       
@@ -67,7 +65,7 @@ const Auth = () => {
       
     } catch (error: any) {
       toast({
-        title: t("auth.error"),
+        title: "Error",
         description: error.message,
         variant: "destructive",
       });
@@ -91,15 +89,15 @@ const Auth = () => {
       }
       
       toast({
-        title: t("auth.welcome_back"),
-        description: t("auth.logged_in"),
+        title: "Welcome back",
+        description: "You have successfully logged in",
       });
       
       navigate("/");
       
     } catch (error: any) {
       toast({
-        title: t("auth.error"),
+        title: "Error",
         description: error.message,
         variant: "destructive",
       });
@@ -115,21 +113,21 @@ const Auth = () => {
           <div className="flex items-center justify-center mb-2">
             <MusicIcon className="h-10 w-10 text-primary" />
           </div>
-          <CardTitle className="text-2xl">{t("auth.welcome")}</CardTitle>
-          <CardDescription>{t("auth.continue")}</CardDescription>
+          <CardTitle className="text-2xl">Welcome</CardTitle>
+          <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">{t("auth.sign_in")}</TabsTrigger>
-            <TabsTrigger value="signup">{t("auth.sign_up")}</TabsTrigger>
+            <TabsTrigger value="signin">Sign In</TabsTrigger>
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
           
           <TabsContent value="signin">
             <form onSubmit={handleSignIn}>
               <CardContent className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t("auth.email")}</Label>
+                  <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -146,7 +144,7 @@ const Auth = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">{t("auth.password")}</Label>
+                    <Label htmlFor="password">Password</Label>
                     <Button 
                       variant="link" 
                       className="px-0 text-xs font-normal text-muted-foreground h-auto"
@@ -154,8 +152,8 @@ const Auth = () => {
                       onClick={async () => {
                         if (!email) {
                           toast({
-                            title: t("auth.error"),
-                            description: t("auth.email_required"),
+                            title: "Error",
+                            description: "Please enter your email address first",
                             variant: "destructive",
                           });
                           return;
@@ -166,12 +164,12 @@ const Auth = () => {
                           const { error } = await supabase.auth.resetPasswordForEmail(email);
                           if (error) throw error;
                           toast({
-                            title: t("auth.password_reset"),
-                            description: t("auth.check_email"),
+                            title: "Password Reset",
+                            description: "Check your email for a password reset link",
                           });
                         } catch (error: any) {
                           toast({
-                            title: t("auth.error"),
+                            title: "Error",
                             description: error.message,
                             variant: "destructive",
                           });
@@ -180,7 +178,7 @@ const Auth = () => {
                         }
                       }}
                     >
-                      {t("auth.forgot")}
+                      Forgot password?
                     </Button>
                   </div>
                   <div className="relative">
@@ -203,10 +201,10 @@ const Auth = () => {
                   className="w-full" 
                   disabled={loading}
                 >
-                  {loading ? t("auth.loading") : (
+                  {loading ? "Loading..." : (
                     <>
                       <LogIn className="mr-2 h-4 w-4" />
-                      {t("auth.sign_in")}
+                      Sign In
                     </>
                   )}
                 </Button>
@@ -218,7 +216,7 @@ const Auth = () => {
             <form onSubmit={handleSignUp}>
               <CardContent className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">{t("auth.email")}</Label>
+                  <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -234,11 +232,11 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="username">{t("auth.username")}</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder={t("auth.username_placeholder")}
+                    placeholder="Choose a username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -246,18 +244,18 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">{t("auth.full_name")}</Label>
+                  <Label htmlFor="fullName">Full Name</Label>
                   <Input
                     id="fullName"
                     type="text"
-                    placeholder={t("auth.full_name_placeholder")}
+                    placeholder="Your full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">{t("auth.password")}</Label>
+                  <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -279,10 +277,10 @@ const Auth = () => {
                   className="w-full" 
                   disabled={loading}
                 >
-                  {loading ? t("auth.loading") : (
+                  {loading ? "Loading..." : (
                     <>
                       <UserPlus className="mr-2 h-4 w-4" />
-                      {t("auth.sign_up")}
+                      Sign Up
                     </>
                   )}
                 </Button>

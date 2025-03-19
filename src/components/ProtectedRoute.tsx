@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -30,7 +31,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       <div className="flex h-screen w-full items-center justify-center">
         <div className="w-full max-w-md p-4">
           <Alert>
-            <AlertTitle>Loading your profile</AlertTitle>
+            <AlertTitle className="flex items-center">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Loading your profile
+            </AlertTitle>
             <AlertDescription>
               Please wait while we load your profile and settings...
             </AlertDescription>

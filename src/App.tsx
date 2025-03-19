@@ -15,6 +15,7 @@ import { useThemeInitializer } from "./hooks/use-theme-initializer";
 import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { ToastProvider } from "./hooks/use-toast";
 
 // Initialize query client with optimized settings
 const queryClient = new QueryClient({
@@ -50,58 +51,60 @@ const App = () => {
         <TooltipProvider>
           <ThemeProvider>
             <LanguageProvider>
-              <BrowserRouter>
-                {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
-                <DashboardProvider>
-                  <Toaster />
-                  <ScrollToTop />
-                  <Routes>
-                    <Route path="/auth" element={<Auth />} />
-                    <Route 
-                      path="/" 
-                      element={
-                        <ProtectedRoute>
-                          <Index />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/docs" 
-                      element={
-                        <ProtectedRoute>
-                          <Documentation />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/terms" 
-                      element={
-                        <ProtectedRoute>
-                          <Documentation page="terms" />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/privacy" 
-                      element={
-                        <ProtectedRoute>
-                          <Documentation page="privacy" />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/contact" 
-                      element={
-                        <ProtectedRoute>
-                          <Documentation page="contact" />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </DashboardProvider>
-              </BrowserRouter>
+              <ToastProvider>
+                <BrowserRouter>
+                  {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
+                  <DashboardProvider>
+                    <Toaster />
+                    <ScrollToTop />
+                    <Routes>
+                      <Route path="/auth" element={<Auth />} />
+                      <Route 
+                        path="/" 
+                        element={
+                          <ProtectedRoute>
+                            <Index />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/docs" 
+                        element={
+                          <ProtectedRoute>
+                            <Documentation />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/terms" 
+                        element={
+                          <ProtectedRoute>
+                            <Documentation page="terms" />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/privacy" 
+                        element={
+                          <ProtectedRoute>
+                            <Documentation page="privacy" />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/contact" 
+                        element={
+                          <ProtectedRoute>
+                            <Documentation page="contact" />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </DashboardProvider>
+                </BrowserRouter>
+              </ToastProvider>
             </LanguageProvider>
           </ThemeProvider>
         </TooltipProvider>
