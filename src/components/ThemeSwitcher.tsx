@@ -9,17 +9,17 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Paintbrush, Monitor, Wind, Layers, Lock } from "lucide-react";
+import { Paintbrush, Monitor, Wind, Layers, Lock, Sun, Moon } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
 
 const ThemeSwitcher = () => {
-  const { themeVariant, setThemeVariant } = useTheme();
+  const { themeVariant, setThemeVariant, isDarkMode, toggleDarkMode } = useTheme();
   const { pricingTier } = useDashboard();
   
   const handleThemeChange = (theme: "modern" | "legacy" | "classic" | "windows") => {
-    if (pricingTier !== "pro") {
+    if (theme !== "modern" && pricingTier !== "pro") {
       toast({
         title: "Pro Feature",
         description: "UI themes are available with the Pro plan",
@@ -29,16 +29,6 @@ const ThemeSwitcher = () => {
     }
     
     setThemeVariant(theme);
-    toast({
-      title: "Theme Updated",
-      description: `UI theme changed to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
-    });
-    
-    // Force a small timeout to ensure DOM updates
-    setTimeout(() => {
-      document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows");
-      document.documentElement.classList.add(`theme-${theme}`);
-    }, 50);
   };
   
   const getThemeIcon = () => {
@@ -51,56 +41,67 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className={themeVariant !== "modern" ? `theme-${themeVariant}` : ""}>
-          {getThemeIcon()}
-          <span className="sr-only">Change UI Theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>UI Theme</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        
-        <DropdownMenuItem 
-          onClick={() => handleThemeChange("modern")}
-          className={themeVariant === "modern" ? "bg-accent text-accent-foreground" : ""}
-        >
-          <Paintbrush className="mr-2 h-4 w-4" />
-          <span>Modern (Apple-inspired)</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => handleThemeChange("legacy")}
-          className={themeVariant === "legacy" ? "bg-accent text-accent-foreground" : ""}
-          disabled={pricingTier !== "pro"}
-        >
-          <Layers className="mr-2 h-4 w-4" />
-          <span>Legacy</span>
-          {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => handleThemeChange("classic")}
-          className={themeVariant === "classic" ? "bg-accent text-accent-foreground" : ""}
-          disabled={pricingTier !== "pro"}
-        >
-          <Monitor className="mr-2 h-4 w-4" />
-          <span>Classic</span>
-          {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => handleThemeChange("windows")}
-          className={themeVariant === "windows" ? "bg-accent text-accent-foreground" : ""}
-          disabled={pricingTier !== "pro"}
-        >
-          <Wind className="mr-2 h-4 w-4" />
-          <span>Windows</span>
-          {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon" className="relative">
+            {getThemeIcon()}
+            <span className="sr-only">Change UI Theme</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-[200px]">
+          <DropdownMenuLabel>UI Theme</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          
+          <DropdownMenuItem 
+            onClick={() => handleThemeChange("modern")}
+            className={themeVariant === "modern" ? "bg-accent text-accent-foreground" : ""}
+          >
+            <Paintbrush className="mr-2 h-4 w-4" />
+            <span>Modern (Apple-inspired)</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            onClick={() => handleThemeChange("legacy")}
+            className={themeVariant === "legacy" ? "bg-accent text-accent-foreground" : ""}
+            disabled={pricingTier !== "pro"}
+          >
+            <Layers className="mr-2 h-4 w-4" />
+            <span>Legacy</span>
+            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            onClick={() => handleThemeChange("classic")}
+            className={themeVariant === "classic" ? "bg-accent text-accent-foreground" : ""}
+            disabled={pricingTier !== "pro"}
+          >
+            <Monitor className="mr-2 h-4 w-4" />
+            <span>Classic</span>
+            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            onClick={() => handleThemeChange("windows")}
+            className={themeVariant === "windows" ? "bg-accent text-accent-foreground" : ""}
+            disabled={pricingTier !== "pro"}
+          >
+            <Wind className="mr-2 h-4 w-4" />
+            <span>Windows</span>
+            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      
+      <Button variant="outline" size="icon" onClick={toggleDarkMode}>
+        {isDarkMode ? (
+          <Sun className="h-[1.2rem] w-[1.2rem]" />
+        ) : (
+          <Moon className="h-[1.2rem] w-[1.2rem]" />
+        )}
+        <span className="sr-only">Toggle dark mode</span>
+      </Button>
+    </div>
   );
 };
 

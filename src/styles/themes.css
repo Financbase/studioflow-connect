@@ -1,0 +1,78 @@
+
+/* Theme-specific styles */
+:root {
+  --radius: 0.5rem;
+}
+
+/* Modern Theme (Apple-inspired) - Default */
+.theme-modern {
+  --radius: 0.75rem;
+}
+
+/* Legacy Theme */
+.theme-legacy {
+  --radius: 0.25rem;
+}
+.theme-legacy .card,
+.theme-legacy .panel {
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.theme-legacy button {
+  border-radius: 0.25rem;
+}
+.theme-legacy h1, 
+.theme-legacy h2, 
+.theme-legacy h3 {
+  font-weight: 600;
+}
+
+/* Classic Theme */
+.theme-classic {
+  --radius: 0.125rem;
+}
+.theme-classic .card,
+.theme-classic .panel {
+  border-width: 2px;
+  border-color: hsl(var(--border));
+  background-color: hsl(var(--card));
+  box-shadow: 2px 2px 0 hsl(var(--border));
+}
+.theme-classic button {
+  border-radius: 0.125rem;
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  box-shadow: 1px 1px 0 hsl(var(--border));
+}
+.theme-classic input, 
+.theme-classic select {
+  border-radius: 0.125rem;
+  border-width: 1px;
+}
+
+/* Windows Theme */
+.theme-windows {
+  --radius: 0;
+}
+.theme-windows .card,
+.theme-windows .panel {
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+.theme-windows button {
+  border-radius: 0;
+  border-width: 1px;
+  border-color: hsl(var(--border));
+}
+.theme-windows input,
+.theme-windows select {
+  border-radius: 0;
+}
+.theme-windows h1, 
+.theme-windows h2, 
+.theme-windows h3 {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+}

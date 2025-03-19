@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "@/components/Header";
 import SystemMonitor from "@/components/SystemMonitor";
 import AudioAnalyzer from "@/components/AudioAnalyzer";
@@ -10,20 +10,13 @@ import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
 import WidgetSection from "@/components/WidgetSection";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Panel } from "@/components/ui/panel";
 
 const Index = () => {
   const { themeVariant } = useTheme();
 
-  // Set dark mode by default
-  useEffect(() => {
-    if (!localStorage.getItem("theme")) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-  }, []);
-
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased ${themeVariant !== "modern" ? `theme-${themeVariant}` : ""}`}>
+    <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased`}>
       <Header />
       
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
@@ -38,49 +31,49 @@ const Index = () => {
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="system" title="StudioFlow System Monitor" isPremiumFeature>
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <SystemMonitor />
-            </div>
+            </Panel>
           </WidgetSection>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="vm" title="Virtual Machine Controller" isPremiumFeature>
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <VMController />
-            </div>
+            </Panel>
           </WidgetSection>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="daw" title="DAW Workflow Integration" isPremiumFeature>
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <DAWWorkflow />
-            </div>
+            </Panel>
           </WidgetSection>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="audio" title="Audio Analysis">
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <AudioAnalyzer />
-            </div>
+            </Panel>
           </WidgetSection>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="ai" title="AI-Powered Tools" isPremiumFeature>
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <AITools />
-            </div>
+            </Panel>
           </WidgetSection>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="marketplace" title="Studio Marketplace" isPremiumFeature>
-            <div className={themeVariant !== "modern" ? `panel` : ""}>
+            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <StudioMarketplace />
-            </div>
+            </Panel>
           </WidgetSection>
         </div>
       </main>

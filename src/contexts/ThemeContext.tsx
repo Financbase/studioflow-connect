@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 type ThemeVariant = "modern" | "legacy" | "classic" | "windows";
 
@@ -51,17 +52,31 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     console.log("Theme changed to:", themeVariant);
   }, [themeVariant]);
   
+  const handleSetThemeVariant = (theme: ThemeVariant) => {
+    setThemeVariant(theme);
+    // Add a toast notification for feedback
+    toast({
+      title: "Theme Updated",
+      description: `UI theme changed to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
+    });
+  };
+  
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     document.documentElement.classList.toggle("dark", newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
+    
+    toast({
+      title: newMode ? "Dark Mode Enabled" : "Light Mode Enabled",
+      description: `Theme mode has been changed`,
+    });
   };
   
   return (
     <ThemeContext.Provider value={{
       themeVariant,
-      setThemeVariant,
+      setThemeVariant: handleSetThemeVariant,
       isDarkMode,
       toggleDarkMode
     }}>

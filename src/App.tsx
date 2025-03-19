@@ -22,19 +22,25 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  // Set dark mode by default
+  // Initialize themes
   useEffect(() => {
+    // Set dark mode by default if not set
     if (!localStorage.getItem("theme")) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
+    } else {
+      // Apply existing theme setting
+      const isDarkMode = localStorage.getItem("theme") === "dark";
+      document.documentElement.classList.toggle("dark", isDarkMode);
     }
     
-    // Initialize theme class if it exists in localStorage
+    // Initialize theme variant if it exists in localStorage
     const storedTheme = localStorage.getItem("ui_theme_variant");
     if (storedTheme && ["modern", "legacy", "classic", "windows"].includes(storedTheme)) {
       document.documentElement.classList.add(`theme-${storedTheme}`);
     } else {
       document.documentElement.classList.add("theme-modern");
+      localStorage.setItem("ui_theme_variant", "modern");
     }
   }, []);
 
