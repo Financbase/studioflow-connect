@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { PricingTier } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface PlanSwitcherProps {
   currentPlan: PricingTier;
@@ -27,6 +28,17 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
       description: `Your plan has been updated to ${value}`,
     });
   };
+  
+  const getPlanBadge = (plan: PricingTier) => {
+    switch(plan) {
+      case "free":
+        return <Badge variant="outline" className="ml-2">Free</Badge>;
+      case "standard":
+        return <Badge variant="secondary" className="ml-2">Standard</Badge>;
+      case "pro":
+        return <Badge variant="default" className="bg-gradient-to-r from-blue-500 to-purple-500 ml-2">Pro</Badge>;
+    }
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -41,6 +53,7 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
           <SelectItem value="pro">Pro</SelectItem>
         </SelectContent>
       </Select>
+      {getPlanBadge(currentPlan)}
     </div>
   );
 };

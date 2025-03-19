@@ -20,7 +20,7 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { viewMode, pricingTier, setViewMode } = useDashboard();
+  const { viewMode, pricingTier, setViewMode, setPricingTier } = useDashboard();
 
   // Initialize dark mode from localStorage or based on user preference
   useEffect(() => {
@@ -61,11 +61,7 @@ const Header = () => {
             <PlanSwitcher 
               currentPlan={pricingTier}
               onPlanChange={(plan) => {
-                // We're updating localStorage directly because 
-                // in a real app this would be handled by the backend
-                localStorage.setItem("pricing_tier", plan);
-                // Force a page reload to update the context
-                window.location.reload();
+                setPricingTier(plan);
               }}
             />
             
@@ -110,8 +106,7 @@ const Header = () => {
                 <PlanSwitcher 
                   currentPlan={pricingTier}
                   onPlanChange={(plan) => {
-                    localStorage.setItem("pricing_tier", plan);
-                    window.location.reload();
+                    setPricingTier(plan);
                   }}
                 />
               </div>

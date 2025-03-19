@@ -19,6 +19,7 @@ interface DashboardContextType {
   visibleWidgets: WidgetId[];
   featureAccess: Record<WidgetId, boolean>;
   setViewMode: (mode: ViewMode) => void;
+  setPricingTier: (tier: PricingTier) => void;
   updateCustomLayout: (widgets: WidgetId[]) => void;
   isWidgetVisible: (widgetId: WidgetId) => boolean;
   hasFeatureAccess: (widgetId: WidgetId) => boolean;
@@ -104,6 +105,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return featureAccess[widgetId];
   };
   
+  const handleSetPricingTier = (tier: PricingTier) => {
+    setPricingTier(tier);
+    localStorage.setItem("pricing_tier", tier);
+  };
+  
   return (
     <DashboardContext.Provider value={{
       viewMode: preferences.viewMode,
@@ -112,6 +118,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       visibleWidgets,
       featureAccess,
       setViewMode,
+      setPricingTier: handleSetPricingTier,
       updateCustomLayout,
       isWidgetVisible,
       hasFeatureAccess

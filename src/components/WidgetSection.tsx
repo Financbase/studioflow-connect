@@ -4,6 +4,8 @@ import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
+import FeatureRecommendation from "@/components/FeatureRecommendation";
+import { recommendations } from "@/data/featureRecommendations";
 
 interface WidgetSectionProps {
   id: WidgetId;
@@ -39,10 +41,17 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children }) =>
     );
   }
   
+  const sectionRecommendations = recommendations[id] || [];
+  
   return (
     <section id={id} className="py-6 w-full">
       <h2 className="text-2xl font-semibold mb-4">{title}</h2>
       {children}
+      
+      <FeatureRecommendation 
+        recommendations={sectionRecommendations}
+        category={title}
+      />
     </section>
   );
 };
