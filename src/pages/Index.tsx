@@ -9,8 +9,11 @@ import DAWWorkflow from "@/components/DAWWorkflow";
 import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
 import WidgetSection from "@/components/WidgetSection";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Index = () => {
+  const { themeVariant } = useTheme();
+
   // Set dark mode by default
   useEffect(() => {
     if (!localStorage.getItem("theme")) {
@@ -20,7 +23,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+    <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased ${themeVariant !== "modern" ? `theme-${themeVariant}` : ""}`}>
       <Header />
       
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
@@ -32,51 +35,63 @@ const Index = () => {
             </p>
           </section>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="system" title="StudioFlow System Monitor" isPremiumFeature>
-            <SystemMonitor />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <SystemMonitor />
+            </div>
           </WidgetSection>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="vm" title="Virtual Machine Controller" isPremiumFeature>
-            <VMController />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <VMController />
+            </div>
           </WidgetSection>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="daw" title="DAW Workflow Integration" isPremiumFeature>
-            <DAWWorkflow />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <DAWWorkflow />
+            </div>
           </WidgetSection>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="audio" title="Audio Analysis">
-            <AudioAnalyzer />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <AudioAnalyzer />
+            </div>
           </WidgetSection>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="ai" title="AI-Powered Tools" isPremiumFeature>
-            <AITools />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <AITools />
+            </div>
           </WidgetSection>
           
-          <Separator />
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <WidgetSection id="marketplace" title="Studio Marketplace" isPremiumFeature>
-            <StudioMarketplace />
+            <div className={themeVariant !== "modern" ? `panel` : ""}>
+              <StudioMarketplace />
+            </div>
           </WidgetSection>
         </div>
       </main>
       
-      <footer className="border-t py-6">
+      <footer className={`border-t py-6 ${themeVariant === "windows" ? "border-t-2" : ""}`}>
         <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© 2024 StudioFlow X. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+            <a href="/docs#terms" className="hover:text-foreground transition-colors">Terms</a>
+            <a href="/docs#privacy" className="hover:text-foreground transition-colors">Privacy</a>
+            <a href="/docs#contact" className="hover:text-foreground transition-colors">Contact</a>
           </div>
         </div>
       </footer>

@@ -33,6 +33,12 @@ const ThemeSwitcher = () => {
       title: "Theme Updated",
       description: `UI theme changed to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
     });
+    
+    // Force a small timeout to ensure DOM updates
+    setTimeout(() => {
+      document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows");
+      document.documentElement.classList.add(`theme-${theme}`);
+    }, 50);
   };
   
   const getThemeIcon = () => {
@@ -47,7 +53,7 @@ const ThemeSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" className={themeVariant !== "modern" ? `theme-${themeVariant}` : ""}>
           {getThemeIcon()}
           <span className="sr-only">Change UI Theme</span>
         </Button>
@@ -61,7 +67,7 @@ const ThemeSwitcher = () => {
           className={themeVariant === "modern" ? "bg-accent text-accent-foreground" : ""}
         >
           <Paintbrush className="mr-2 h-4 w-4" />
-          <span>Modern</span>
+          <span>Modern (Apple-inspired)</span>
         </DropdownMenuItem>
         
         <DropdownMenuItem 
