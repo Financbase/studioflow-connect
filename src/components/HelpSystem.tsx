@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { HelpCircle, AlertTriangle, Info } from "lucide-react";
+import { HelpCircle, AlertTriangle, Info, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type HelpSeverity = "info" | "warning" | "critical";
 
@@ -22,9 +23,17 @@ interface HelpProps {
   size?: "small" | "large";
   severity?: HelpSeverity;
   className?: string;
+  sectionId?: string;
 }
 
-export const HelpTip = ({ title, content, size = "small", severity = "info", className }: HelpProps) => {
+export const HelpTip = ({ 
+  title, 
+  content, 
+  size = "small", 
+  severity = "info", 
+  className,
+  sectionId 
+}: HelpProps) => {
   const getIcon = () => {
     switch (severity) {
       case "warning": return <AlertTriangle className="h-4 w-4 text-amber-500" />;
@@ -46,13 +55,24 @@ export const HelpTip = ({ title, content, size = "small", severity = "info", cla
             <span className="sr-only">Help</span>
           </Button>
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
+        <HoverCardContent side="right" align="start" className="w-80 z-50 p-4">
           <div className="flex justify-between space-x-4">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <h4 className="text-sm font-semibold">{title}</h4>
               <div className="text-sm text-muted-foreground">
                 {content}
               </div>
+              {sectionId && (
+                <div className="mt-2 pt-2 border-t">
+                  <Link 
+                    to={`/docs#${sectionId}`} 
+                    className="flex items-center text-xs text-primary hover:underline"
+                  >
+                    <BookOpen className="h-3 w-3 mr-1" />
+                    Read full documentation
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </HoverCardContent>
@@ -72,7 +92,7 @@ export const HelpTip = ({ title, content, size = "small", severity = "info", cla
           <span>{title}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80 z-50 p-4">
         <div className="space-y-2">
           <h3 className="font-medium leading-none">{title}</h3>
           <div className="text-sm text-muted-foreground">
@@ -90,6 +110,17 @@ export const HelpTip = ({ title, content, size = "small", severity = "info", cla
                 }
               </AlertDescription>
             </Alert>
+          )}
+          {sectionId && (
+            <div className="mt-3 pt-2 border-t">
+              <Link 
+                to={`/docs#${sectionId}`} 
+                className="flex items-center text-sm text-primary hover:underline"
+              >
+                <BookOpen className="h-4 w-4 mr-1" />
+                View detailed documentation
+              </Link>
+            </div>
           )}
         </div>
       </PopoverContent>

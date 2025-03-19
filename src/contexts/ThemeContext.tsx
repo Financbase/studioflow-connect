@@ -27,7 +27,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   // Initialize theme from localStorage
   useEffect(() => {
     const storedTheme = localStorage.getItem("ui_theme_variant") as ThemeVariant;
-    if (storedTheme && pricingTier === "pro") {
+    if (storedTheme && ["modern", "legacy", "classic", "windows"].includes(storedTheme) && pricingTier === "pro") {
       setThemeVariant(storedTheme);
     }
     
@@ -37,7 +37,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     setIsDarkMode(isDark);
     document.documentElement.classList.toggle("dark", isDark);
     
-    // Apply theme-specific class
+    // Clean up existing theme classes first
     document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows");
     document.documentElement.classList.add(`theme-${themeVariant}`);
   }, [pricingTier]);
@@ -50,6 +50,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       // Apply theme-specific class
       document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows");
       document.documentElement.classList.add(`theme-${themeVariant}`);
+      
+      console.log("Theme changed to:", themeVariant);
     }
   }, [themeVariant, pricingTier]);
   

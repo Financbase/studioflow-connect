@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { MusicIcon, Sliders, Menu, HelpCircle } from "lucide-react";
+import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +18,7 @@ import { useDashboard } from "@/contexts/DashboardContext";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import HelpTip from "@/components/HelpSystem";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const isMobile = useIsMobile();
@@ -37,6 +38,10 @@ const Header = () => {
               <div className="space-y-2">
                 <p>This unified platform helps you manage multiple DAWs, plugins, and creative tools.</p>
                 <p>Navigate using the section tabs below or customize your view from the header controls.</p>
+                <Link to="/docs" className="flex items-center text-primary hover:underline mt-2">
+                  <BookOpen className="h-3 w-3 mr-1" />
+                  View full documentation
+                </Link>
               </div>
             }
             size="small"
@@ -89,6 +94,13 @@ const Header = () => {
               <span className="sr-only">Toggle theme</span>
             </Button>
             
+            <Link to="/docs">
+              <Button variant="outline" size="sm" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                <span className="hidden sm:inline">Documentation</span>
+              </Button>
+            </Link>
+            
             <HelpTip
               title="Need Help?"
               content={
@@ -137,6 +149,11 @@ const Header = () => {
                   <CustomLayoutEditor />
                 </div>
               )}
+              
+              <Link to="/docs" className="text-sm font-medium py-2 transition-colors hover:text-primary flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                Documentation
+              </Link>
               
               <a href="#system" className="text-sm font-medium py-2 transition-colors hover:text-primary">
                 System

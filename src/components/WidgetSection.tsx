@@ -1,9 +1,10 @@
 
 import React from "react";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
-import { ChevronDown, ChevronUp, Lock } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock, BookOpen } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import HelpTip from "@/components/HelpSystem";
+import { Link } from "react-router-dom";
 
 interface WidgetSectionProps {
   id: WidgetId;
@@ -97,21 +98,32 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({
     <section id={id} className="relative rounded-lg border bg-card shadow-sm animate-fade-in transition-all duration-300">
       <Collapsible open={!isCollapsed} onOpenChange={open => toggleWidgetCollapse(id)}>
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2">
-            {title}
-            {isPremiumFeature && !hasAccess && (
-              <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium">
-                <Lock className="mr-1 h-3 w-3" />
-                Pro
-              </span>
-            )}
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+              {title}
+              {isPremiumFeature && !hasAccess && (
+                <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium">
+                  <Lock className="mr-1 h-3 w-3" />
+                  Pro
+                </span>
+              )}
+            </h2>
             <HelpTip
               title={helpInfo.title}
               content={helpInfo.content}
               severity={helpInfo.severity || "info"}
               size="small"
+              sectionId={id}
             />
-          </h2>
+            <Link 
+              to={`/docs#${id}`} 
+              className="ml-2 text-xs text-muted-foreground hover:text-primary flex items-center"
+              aria-label={`View ${title} documentation`}
+            >
+              <BookOpen className="h-3 w-3 mr-1" />
+              <span className="hidden sm:inline">Docs</span>
+            </Link>
+          </div>
           <CollapsibleTrigger asChild>
             <button
               className="rounded-full p-1 hover:bg-muted transition-colors focus:outline-none"
