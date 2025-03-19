@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
@@ -21,6 +21,17 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// ScrollToTop component to handle navigation
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 const App = () => {
   // Initialize themes and language
@@ -68,12 +79,13 @@ const App = () => {
               <Toaster />
               <Sonner />
               <BrowserRouter>
+                <ScrollToTop />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/docs" element={<Documentation />} />
-                  <Route path="/terms" element={<Documentation />} />
-                  <Route path="/privacy" element={<Documentation />} />
-                  <Route path="/contact" element={<Documentation />} />
+                  <Route path="/terms" element={<Documentation page="terms" />} />
+                  <Route path="/privacy" element={<Documentation page="privacy" />} />
+                  <Route path="/contact" element={<Documentation page="contact" />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

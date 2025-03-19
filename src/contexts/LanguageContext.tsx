@@ -27,6 +27,13 @@ const translations = {
     de: "Brauchen Sie Hilfe?",
     sv: "Behöver du hjälp?"
   },
+  "header.welcome": {
+    en: "Welcome to StudioFlow X",
+    es: "Bienvenido a StudioFlow X",
+    fr: "Bienvenue sur StudioFlow X",
+    de: "Willkommen bei StudioFlow X",
+    sv: "Välkommen till StudioFlow X"
+  },
   
   // Dashboard translations
   "dashboard.title": {
@@ -273,6 +280,27 @@ const translations = {
     fr: "Gestion de VM",
     de: "VM-Verwaltung",
     sv: "VM-hantering"
+  },
+  "dropdown.more": {
+    en: "More",
+    es: "Más",
+    fr: "Plus",
+    de: "Mehr",
+    sv: "Mer"
+  },
+  "dropdown.actions": {
+    en: "Actions",
+    es: "Acciones",
+    fr: "Actions",
+    de: "Aktionen",
+    sv: "Åtgärder"
+  },
+  "dropdown.resources": {
+    en: "Resources",
+    es: "Recursos",
+    fr: "Ressources",
+    de: "Ressourcen",
+    sv: "Resurser"
   },
   
   // Labels
@@ -551,6 +579,10 @@ export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ childr
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem("app_language", lang);
+    
+    // Dispatch custom event for responsive text adjustment
+    const event = new CustomEvent("languageChange", { detail: { language: lang } });
+    window.dispatchEvent(event);
     
     toast({
       title: "Language Updated",

@@ -45,13 +45,13 @@ const LanguageSwitcher = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px] bg-popover">
-        <DropdownMenuLabel>{t("label.language")}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className={`w-[150px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
+        <DropdownMenuLabel className="text-foreground">{t("label.language")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         
         <DropdownMenuItem 
           onClick={() => setLanguage("en")}
-          className={`hover:bg-accent hover:text-accent-foreground ${language === "en" ? "bg-accent text-accent-foreground" : ""}`}
+          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "en" ? "bg-accent text-accent-foreground" : ""}`}
         >
           <span className="mr-2">{getFlagEmoji("en")}</span>
           <span>{t("language.en")}</span>
@@ -59,7 +59,7 @@ const LanguageSwitcher = () => {
         
         <DropdownMenuItem 
           onClick={() => setLanguage("es")}
-          className={`hover:bg-accent hover:text-accent-foreground ${language === "es" ? "bg-accent text-accent-foreground" : ""}`}
+          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "es" ? "bg-accent text-accent-foreground" : ""}`}
         >
           <span className="mr-2">{getFlagEmoji("es")}</span>
           <span>{t("language.es")}</span>
@@ -67,7 +67,7 @@ const LanguageSwitcher = () => {
         
         <DropdownMenuItem 
           onClick={() => setLanguage("fr")}
-          className={`hover:bg-accent hover:text-accent-foreground ${language === "fr" ? "bg-accent text-accent-foreground" : ""}`}
+          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "fr" ? "bg-accent text-accent-foreground" : ""}`}
         >
           <span className="mr-2">{getFlagEmoji("fr")}</span>
           <span>{t("language.fr")}</span>
@@ -75,7 +75,7 @@ const LanguageSwitcher = () => {
         
         <DropdownMenuItem 
           onClick={() => setLanguage("de")}
-          className={`hover:bg-accent hover:text-accent-foreground ${language === "de" ? "bg-accent text-accent-foreground" : ""}`}
+          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "de" ? "bg-accent text-accent-foreground" : ""}`}
         >
           <span className="mr-2">{getFlagEmoji("de")}</span>
           <span>{t("language.de")}</span>
@@ -83,7 +83,7 @@ const LanguageSwitcher = () => {
         
         <DropdownMenuItem 
           onClick={() => setLanguage("sv")}
-          className={`hover:bg-accent hover:text-accent-foreground ${language === "sv" ? "bg-accent text-accent-foreground" : ""}`}
+          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "sv" ? "bg-accent text-accent-foreground" : ""}`}
         >
           <span className="mr-2">{getFlagEmoji("sv")}</span>
           <span>{t("language.sv")}</span>

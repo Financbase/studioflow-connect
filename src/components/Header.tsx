@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen } from "lucide-react";
+import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ViewSelector from "@/components/ViewSelector";
@@ -27,6 +28,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { viewMode, pricingTier, setViewMode, setPricingTier } = useDashboard();
   const { t } = useLanguage();
+  const { themeVariant } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md transition-all duration-200">
@@ -34,7 +36,7 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <MusicIcon className="h-6 w-6 text-primary animate-pulse-soft" />
-            <span className="text-lg font-semibold tracking-tight max-w-[160px] truncate">{t("dashboard.title")}</span>
+            <span className="text-lg font-semibold tracking-tight max-w-[140px] truncate">{t("dashboard.title")}</span>
           </Link>
           {pricingTier === "pro" && (
             <span className="bg-primary/20 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">
@@ -42,7 +44,7 @@ const Header = () => {
             </span>
           )}
           <HelpTip 
-            title="Welcome to StudioFlow X"
+            title={t("header.welcome")}
             content={
               <div className="space-y-2">
                 <p>{t("help.welcome_description")}</p>
@@ -63,7 +65,7 @@ const Header = () => {
             <Menu className="h-5 w-5" />
           </Button>
         ) : (
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-2 md:gap-3">
             <ViewSelector />
             
             {viewMode === "custom" && pricingTier === "pro" && (
@@ -84,25 +86,58 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
-                  <Sliders className="h-[1.2rem] w-[1.2rem]" />
-                  <span className="sr-only">{t("dropdown.quickactions")}</span>
+                  <MoreHorizontal className="h-[1.2rem] w-[1.2rem]" />
+                  <span className="sr-only">{t("dropdown.more")}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[180px] animate-fade-in bg-popover">
-                <DropdownMenuLabel>{t("dropdown.quickactions")}</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className={`w-[220px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
+                <DropdownMenuLabel className="text-foreground">{t("dropdown.actions")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground">{t("dropdown.batchprocess")}</DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground">{t("dropdown.aitools")}</DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground">{t("dropdown.vmmanagement")}</DropdownMenuItem>
+                
+                <DropdownMenuGroup>
+                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                    <Sliders className="h-4 w-4 mr-2" />
+                    {t("dropdown.quickactions")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                    {t("dropdown.batchprocess")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                    {t("dropdown.aitools")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                    {t("dropdown.vmmanagement")}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                
+                <DropdownMenuSeparator />
+                
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-foreground">{t("dropdown.resources")}</DropdownMenuLabel>
+                  <Link to="/docs">
+                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      {t("header.documentation")}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/terms">
+                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                      {t("footer.terms")}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/privacy">
+                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                      {t("footer.privacy")}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/contact">
+                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
+                      {t("footer.contact")}
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            <Link to="/docs">
-              <Button variant="outline" size="sm" className="gap-2">
-                <BookOpen className="h-4 w-4" />
-                <span className="hidden sm:inline">{t("header.documentation")}</span>
-              </Button>
-            </Link>
             
             <HelpTip
               title={t("header.need_help")}
@@ -114,9 +149,6 @@ const Header = () => {
                     <li>{t("help.tip_docs")}</li>
                     <li>{t("help.tip_support")}</li>
                   </ul>
-                  <Button variant="outline" size="sm" className="mt-2 w-full">
-                    {t("help.chat_support")}
-                  </Button>
                 </div>
               }
               size="small"
@@ -165,6 +197,20 @@ const Header = () => {
                 <BookOpen className="h-4 w-4" />
                 {t("header.documentation")}
               </Link>
+              
+              <Link to="/terms" className="text-sm font-medium py-2 transition-colors hover:text-primary">
+                {t("footer.terms")}
+              </Link>
+              
+              <Link to="/privacy" className="text-sm font-medium py-2 transition-colors hover:text-primary">
+                {t("footer.privacy")}
+              </Link>
+              
+              <Link to="/contact" className="text-sm font-medium py-2 transition-colors hover:text-primary">
+                {t("footer.contact")}
+              </Link>
+              
+              <div className="h-px bg-border my-2"></div>
               
               <a href="#system" className="text-sm font-medium py-2 transition-colors hover:text-primary">
                 {t("widget.systemmonitor")}

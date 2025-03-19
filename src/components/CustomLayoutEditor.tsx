@@ -16,10 +16,12 @@ import { Label } from "@/components/ui/label";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess } = useDashboard();
   const { t } = useLanguage();
+  const { themeVariant } = useTheme();
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
   
@@ -72,7 +74,7 @@ const CustomLayoutEditor = () => {
           {t("button.customize")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className={`sm:max-w-[425px] ${themeVariant === "windows" ? "rounded-none" : ""}`}>
         <DialogHeader>
           <DialogTitle>{t("dialog.customdashboard")}</DialogTitle>
           <DialogDescription>
@@ -87,7 +89,7 @@ const CustomLayoutEditor = () => {
             return (
               <div key={widgetId} className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
-                  <Label htmlFor={`widget-${widgetId}`} className="flex items-center gap-2">
+                  <Label htmlFor={`widget-${widgetId}`} className="flex items-center gap-2 text-foreground">
                     {getWidgetLabel(widgetId)}
                     {!hasAccess && (
                       <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">
