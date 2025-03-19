@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Cpu, Database, Music, Robot, ShoppingBag, FileVolume, FileAudio, Laptop } from "lucide-react";
+import { AlertCircle, Cpu, Database, Music, Bot, ShoppingBag, FileVolume, FileAudio, Laptop } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Link } from "react-router-dom";
 
