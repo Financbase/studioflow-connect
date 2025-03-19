@@ -11,13 +11,18 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { useEffect } from "react";
 import { useThemeInitializer } from "./hooks/use-theme-initializer";
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-js';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
 
-// Initialize query client
+// Initialize query client with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
+      refetchOnWindowFocus: false, // Disable refetching on window focus for better performance
+      cacheTime: 10 * 60 * 1000, // 10 minutes
     },
   },
 });
@@ -36,31 +41,36 @@ const ScrollToTop = () => {
 const App = () => {
   // Initialize themes and language
   useThemeInitializer();
+  
+  // Initialize Supabase client
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <DashboardProvider>
-          <ThemeProvider>
-            <LanguageProvider>
-              <Toaster />
-              <BrowserRouter>
-                <ScrollToTop />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/docs" element={<Documentation />} />
-                  <Route path="/terms" element={<Documentation page="terms" />} />
-                  <Route path="/privacy" element={<Documentation page="privacy" />} />
-                  <Route path="/contact" element={<Documentation page="contact" />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </LanguageProvider>
-          </ThemeProvider>
-        </DashboardProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <SessionContextProvider supabaseClient={supabaseClient}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <DashboardProvider>
+            <ThemeProvider>
+              <LanguageProvider>
+                <Toaster />
+                <BrowserRouter>
+                  <ScrollToTop />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/docs" element={<Documentation />} />
+                    <Route path="/terms" element={<Documentation page="terms" />} />
+                    <Route path="/privacy" element={<Documentation page="privacy" />} />
+                    <Route path="/contact" element={<Documentation page="contact" />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </LanguageProvider>
+            </ThemeProvider>
+          </DashboardProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </SessionContextProvider>
   );
 };
 

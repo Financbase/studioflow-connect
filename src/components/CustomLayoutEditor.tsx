@@ -17,13 +17,13 @@ import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useResponsive } from "@/hooks/use-mobile";
 
 const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess } = useDashboard();
   const { t } = useLanguage();
   const { themeVariant } = useTheme();
-  const isMobile = useIsMobile();
+  const { isMobile } = useResponsive();
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
   
