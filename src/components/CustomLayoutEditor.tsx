@@ -17,11 +17,13 @@ import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess } = useDashboard();
   const { t } = useLanguage();
   const { themeVariant } = useTheme();
+  const isMobile = useIsMobile();
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
   
@@ -70,12 +72,12 @@ const CustomLayoutEditor = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size={isMobile ? "icon" : "sm"} className={isMobile ? "w-9 h-9 p-0" : "gap-2"}>
           <Settings2 className="h-4 w-4" />
-          {t("button.customize")}
+          {!isMobile && t("button.customize")}
         </Button>
       </DialogTrigger>
-      <DialogContent className={`sm:max-w-[425px] ${themeVariant === "windows" ? "rounded-none" : ""}`}>
+      <DialogContent className={`${isMobile ? "w-[95vw] max-w-[95vw]" : "sm:max-w-[425px]"} ${themeVariant === "windows" ? "rounded-none" : ""}`}>
         <DialogHeader>
           <DialogTitle>{t("dialog.customdashboard")}</DialogTitle>
           <DialogDescription>
@@ -110,11 +112,11 @@ const CustomLayoutEditor = () => {
           })}
         </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+        <DialogFooter className={isMobile ? "flex-col space-y-2" : ""}>
+          <Button variant="outline" onClick={() => setIsOpen(false)} className={isMobile ? "w-full" : ""}>
             {t("dialog.cancel")}
           </Button>
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} className={isMobile ? "w-full" : ""}>
             {t("dialog.save")}
           </Button>
         </DialogFooter>

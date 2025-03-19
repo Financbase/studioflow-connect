@@ -1,10 +1,11 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Type definitions
 export type WidgetId = 'system' | 'audio' | 'ai' | 'vm' | 'daw' | 'marketplace' | 'connect';
 export type PricingTier = 'free' | 'standard' | 'pro';
-export type ViewMode = 'simple' | 'advanced' | 'custom';
+export type ViewMode = 'simple' | 'advanced' | 'custom' | 'mobile';
 
 // Feature access mapping based on pricing tier
 const featureAccessMap: Record<PricingTier, Record<WidgetId, boolean>> = {
@@ -41,7 +42,8 @@ const featureAccessMap: Record<PricingTier, Record<WidgetId, boolean>> = {
 const defaultVisibleWidgets: Record<ViewMode, WidgetId[]> = {
   simple: ['connect', 'audio'], // MVP core features
   advanced: ['connect', 'system', 'audio', 'ai', 'daw', 'marketplace'],
-  custom: [] // Will be set by user preference
+  custom: [], // Will be set by user preference
+  mobile: ['connect'] // Mobile view focuses on the core MVP
 };
 
 interface DashboardContextType {
@@ -50,7 +52,7 @@ interface DashboardContextType {
   toggleWidget: (widgetId: WidgetId) => void;
   isWidgetCollapsed: (widgetId: WidgetId) => boolean;
   
-  // Added properties based on errors
+  // Properties for widget management
   isWidgetVisible: (widgetId: WidgetId) => boolean;
   hasFeatureAccess: (widgetId: WidgetId) => boolean;
   toggleWidgetCollapse: (widgetId: WidgetId) => void;
@@ -69,16 +71,37 @@ interface DashboardContextType {
   
   // Feature access
   featureAccess: Record<WidgetId, boolean>;
+  
+  // Mobile specific
+  isMobileView: boolean;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Mobile detection
+  const isMobile = useIsMobile();
+  
   // Collapsed widgets state
   const [collapsedWidgets, setCollapsedWidgets] = useState<WidgetId[]>([]);
   
-  // View mode state
-  const [viewMode, setViewMode] = useState<ViewMode>('simple');
+  // View mode state - default to mobile if on mobile device
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const savedMode = localStorage.getItem('view_mode');
+    if (savedMode && ['simple', 'advanced', 'custom', 'mobile'].includes(savedMode)) {
+      return savedMode as ViewMode;
+    }
+    return isMobile ? 'mobile' : 'simple';
+  });
+  
+  // Update view mode when mobile status changes
+  useEffect(() => {
+    if (isMobile && viewMode !== 'mobile') {
+      setViewMode('mobile');
+    } else if (!isMobile && viewMode === 'mobile') {
+      setViewMode('simple');
+    }
+  }, [isMobile, viewMode]);
   
   // Pricing tier state - load from localStorage if available
   const [pricingTier, setPricingTier] = useState<PricingTier>(() => {
@@ -86,15 +109,25 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return (savedTier as PricingTier) || 'free';
   });
   
-  // Custom layout state - default based on viewMode
-  const [customLayout, setCustomLayout] = useState<WidgetId[]>([]);
+  // Custom layout state
+  const [customLayout, setCustomLayout] = useState<WidgetId[]>(() => {
+    const savedLayout = localStorage.getItem('custom_layout');
+    if (savedLayout) {
+      try {
+        return JSON.parse(savedLayout) as WidgetId[];
+      } catch (e) {
+        return ['connect', 'audio'];
+      }
+    }
+    return ['connect', 'audio'];
+  });
   
   // Feature access based on current pricing tier
   const featureAccess = featureAccessMap[pricingTier];
   
   // Initialize custom layout when view mode or pricing tier changes
   useEffect(() => {
-    // If custom layout is empty, set default based on viewMode
+    // If custom layout is empty, set default based on available features
     if (customLayout.length === 0 && viewMode === 'custom') {
       const accessibleWidgets = Object.entries(featureAccess)
         .filter(([_, hasAccess]) => hasAccess)
@@ -103,9 +136,14 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setCustomLayout(accessibleWidgets);
     }
     
-    // Save current pricing tier to localStorage
+    // Save current settings to localStorage
     localStorage.setItem('pricing_tier', pricingTier);
-  }, [viewMode, pricingTier, customLayout.length, featureAccess]);
+    localStorage.setItem('view_mode', viewMode);
+    
+    if (viewMode === 'custom' && customLayout.length > 0) {
+      localStorage.setItem('custom_layout', JSON.stringify(customLayout));
+    }
+  }, [viewMode, pricingTier, customLayout, featureAccess]);
   
   // Determines if a widget should be visible based on current view mode
   const isWidgetVisible = (widgetId: WidgetId): boolean => {
@@ -160,7 +198,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setPricingTier,
         customLayout,
         updateCustomLayout,
-        featureAccess
+        featureAccess,
+        isMobileView: isMobile
       }}
     >
       {children}
