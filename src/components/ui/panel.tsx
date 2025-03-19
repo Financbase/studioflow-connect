@@ -15,7 +15,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-lg border bg-card text-card-foreground p-4", 
+          "rounded-lg border bg-card text-card-foreground p-4 overflow-hidden", 
           // Classic theme styles
           themeVariant === "classic" && "border-2 shadow-sm",
           !isDarkMode && themeVariant === "classic" && "bg-gradient-to-b from-card/95 to-card",

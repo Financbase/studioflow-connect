@@ -12,6 +12,7 @@ import WidgetSection from "@/components/WidgetSection";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Panel } from "@/components/ui/panel";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { themeVariant } = useTheme();
@@ -24,8 +25,8 @@ const Index = () => {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
         <div className="max-w-[1200px] mx-auto space-y-8">
           <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("dashboard.title")}</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">{t("dashboard.title")}</h1>
+            <p className="text-lg text-muted-foreground text-balance">
               {t("dashboard.subtitle")}
             </p>
           </section>
@@ -84,9 +85,9 @@ const Index = () => {
         <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>{t("footer.copyright")}</p>
           <div className="flex gap-6">
-            <a href="/docs#terms" className="hover:text-foreground transition-colors">{t("footer.terms")}</a>
-            <a href="/docs#privacy" className="hover:text-foreground transition-colors">{t("footer.privacy")}</a>
-            <a href="/docs#contact" className="hover:text-foreground transition-colors">{t("footer.contact")}</a>
+            <Link to="/terms" className="hover:text-foreground transition-colors">{t("footer.terms")}</Link>
+            <Link to="/privacy" className="hover:text-foreground transition-colors">{t("footer.privacy")}</Link>
+            <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contact")}</Link>
           </div>
         </div>
       </footer>

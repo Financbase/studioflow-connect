@@ -12,6 +12,7 @@ interface LanguageContextType {
 }
 
 const translations = {
+  // Header translations
   "header.documentation": {
     en: "Documentation",
     es: "Documentación",
@@ -26,6 +27,8 @@ const translations = {
     de: "Brauchen Sie Hilfe?",
     sv: "Behöver du hjälp?"
   },
+  
+  // Dashboard translations
   "dashboard.title": {
     en: "StudioFlow X",
     es: "StudioFlow X",
@@ -40,6 +43,8 @@ const translations = {
     de: "Einheitliche Musikproduktionsplattform für Legacy-Integration, Multi-DAW-Workflows und kreative Tools",
     sv: "Enhetlig musikproduktionsplattform för legacy-integration, multi-DAW-arbetsflöden och kreativa verktyg"
   },
+  
+  // Footer translations
   "footer.terms": {
     en: "Terms",
     es: "Términos",
@@ -68,6 +73,8 @@ const translations = {
     de: "© 2024 StudioFlow X. Alle Rechte vorbehalten.",
     sv: "© 2024 StudioFlow X. Alla rättigheter förbehållna."
   },
+  
+  // Widget titles
   "widgets.system": {
     en: "StudioFlow System Monitor",
     es: "Monitor del Sistema StudioFlow",
@@ -75,6 +82,8 @@ const translations = {
     de: "StudioFlow Systemmonitor",
     sv: "StudioFlow Systemövervakning"
   },
+  
+  // Language names
   "language.en": {
     en: "English",
     es: "Inglés",
@@ -110,6 +119,8 @@ const translations = {
     de: "Schwedisch",
     sv: "Svenska"
   },
+  
+  // Not Found page
   "notfound.title": {
     en: "Page Not Found",
     es: "Página No Encontrada",
@@ -131,6 +142,8 @@ const translations = {
     de: "Zurück zur Startseite",
     sv: "Tillbaka till Startsidan"
   },
+  
+  // Documentation page
   "docs.title": {
     en: "Documentation",
     es: "Documentación",
@@ -145,6 +158,85 @@ const translations = {
     de: "Lernen Sie, wie Sie StudioFlow X verwenden können, um Ihren Musikproduktions-Workflow zu verbessern.",
     sv: "Lär dig hur du använder StudioFlow X för att förbättra ditt musikproduktionsarbetsflöde."
   },
+  "docs.getting_started": {
+    en: "Getting Started",
+    es: "Primeros Pasos",
+    fr: "Commencer",
+    de: "Erste Schritte",
+    sv: "Komma igång"
+  },
+  "docs.installation": {
+    en: "Installation",
+    es: "Instalación",
+    fr: "Installation",
+    de: "Installation",
+    sv: "Installation"
+  },
+  "docs.configuration": {
+    en: "Configuration",
+    es: "Configuración",
+    fr: "Configuration",
+    de: "Konfiguration",
+    sv: "Konfiguration"
+  },
+  "docs.api": {
+    en: "API Reference",
+    es: "Referencia de API",
+    fr: "Référence de l'API",
+    de: "API-Referenz",
+    sv: "API-referens"
+  },
+  "docs.features": {
+    en: "Features",
+    es: "Características",
+    fr: "Fonctionnalités",
+    de: "Funktionen",
+    sv: "Funktioner"
+  },
+  "docs.tutorials": {
+    en: "Tutorials",
+    es: "Tutoriales",
+    fr: "Tutoriels",
+    de: "Tutorials",
+    sv: "Handledningar"
+  },
+  "docs.faq": {
+    en: "FAQ",
+    es: "Preguntas Frecuentes",
+    fr: "FAQ",
+    de: "FAQ",
+    sv: "Vanliga frågor"
+  },
+  "docs.search": {
+    en: "Search documentation...",
+    es: "Buscar documentación...",
+    fr: "Rechercher dans la documentation...",
+    de: "Dokumentation durchsuchen...",
+    sv: "Sök i dokumentationen..."
+  },
+  "docs.terms_title": {
+    en: "Terms of Service",
+    es: "Términos de Servicio",
+    fr: "Conditions d'Utilisation",
+    de: "Nutzungsbedingungen",
+    sv: "Användarvillkor"
+  },
+  "docs.privacy_title": {
+    en: "Privacy Policy",
+    es: "Política de Privacidad",
+    fr: "Politique de Confidentialité",
+    de: "Datenschutzrichtlinie",
+    sv: "Integritetspolicy"
+  },
+  "docs.contact_title": {
+    en: "Contact Us",
+    es: "Contáctenos",
+    fr: "Contactez-nous",
+    de: "Kontaktieren Sie uns",
+    sv: "Kontakta oss"
+  },
+  
+  // Button texts
   "button.customize": {
     en: "Customize Layout",
     es: "Personalizar Diseño",
@@ -152,6 +244,8 @@ const translations = {
     de: "Layout Anpassen",
     sv: "Anpassa Layout"
   },
+  
+  // Dropdown menu items
   "dropdown.quickactions": {
     en: "Quick Actions",
     es: "Acciones Rápidas",
@@ -180,6 +274,8 @@ const translations = {
     de: "VM-Verwaltung",
     sv: "VM-hantering"
   },
+  
+  // Labels
   "label.dashboardview": {
     en: "Dashboard View",
     es: "Vista del Panel",
@@ -208,6 +304,22 @@ const translations = {
     de: "Sprache",
     sv: "Språk"
   },
+  "label.pro": {
+    en: "PRO",
+    es: "PRO",
+    fr: "PRO",
+    de: "PRO",
+    sv: "PRO"
+  },
+  "label.profeature": {
+    en: "Pro Feature",
+    es: "Función Pro",
+    fr: "Fonctionnalité Pro",
+    de: "Pro-Funktion",
+    sv: "Pro-funktion"
+  },
+  
+  // View options
   "view.simple": {
     en: "Simple",
     es: "Simple",
@@ -229,6 +341,8 @@ const translations = {
     de: "Benutzerdefiniert",
     sv: "Anpassad"
   },
+  
+  // Tooltips
   "tooltips.simpleview": {
     en: "Basic view with essential widgets",
     es: "Vista básica con widgets esenciales",
@@ -257,6 +371,8 @@ const translations = {
     de: "Nur mit Pro-Plan verfügbar",
     sv: "Endast tillgängligt med Pro-plan"
   },
+  
+  // Custom dashboard dialog
   "dialog.customdashboard": {
     en: "Customize Dashboard",
     es: "Personalizar Panel",
@@ -285,6 +401,8 @@ const translations = {
     de: "Änderungen Speichern",
     sv: "Spara Ändringar"
   },
+  
+  // Toast notifications
   "toast.layoutupdated": {
     en: "Layout Updated",
     es: "Diseño Actualizado",
@@ -313,6 +431,8 @@ const translations = {
     de: "Sie müssen mindestens ein Widget auswählen",
     sv: "Du måste välja minst en widget"
   },
+  
+  // Widgets names
   "widget.systemmonitor": {
     en: "System Monitor",
     es: "Monitor del Sistema",
@@ -355,12 +475,63 @@ const translations = {
     de: "Marktplatz",
     sv: "Marknadsplats"
   },
-  "label.profeature": {
-    en: "Pro Feature",
-    es: "Función Pro",
-    fr: "Fonctionnalité Pro",
-    de: "Pro-Funktion",
-    sv: "Pro-funktion"
+  
+  // Help system
+  "help.welcome_description": {
+    en: "This unified platform helps you manage multiple DAWs, plugins, and creative tools.",
+    es: "Esta plataforma unificada te ayuda a gestionar múltiples DAWs, plugins y herramientas creativas.",
+    fr: "Cette plateforme unifiée vous aide à gérer plusieurs DAW, plugins et outils créatifs.",
+    de: "Diese einheitliche Plattform hilft Ihnen bei der Verwaltung mehrerer DAWs, Plugins und kreativer Tools.",
+    sv: "Denna enhetliga plattform hjälper dig att hantera flera DAW, plugins och kreativa verktyg."
+  },
+  "help.navigation_tip": {
+    en: "Navigate using the section tabs below or customize your view from the header controls.",
+    es: "Navega usando las pestañas de sección a continuación o personaliza tu vista desde los controles del encabezado.",
+    fr: "Naviguez à l'aide des onglets de section ci-dessous ou personnalisez votre vue à partir des contrôles d'en-tête.",
+    de: "Navigieren Sie mit den Abschnitts-Tabs unten oder passen Sie Ihre Ansicht über die Kopfzeilensteuerungen an.",
+    sv: "Navigera med hjälp av sektionsflikarna nedan eller anpassa din vy från rubrikkontrollen."
+  },
+  "help.view_documentation": {
+    en: "View full documentation",
+    es: "Ver documentación completa",
+    fr: "Voir la documentation complète",
+    de: "Vollständige Dokumentation anzeigen",
+    sv: "Visa fullständig dokumentation"
+  },
+  "help.assistance_description": {
+    en: "Get assistance with any feature in StudioFlow X:",
+    es: "Obtén ayuda con cualquier función en StudioFlow X:",
+    fr: "Obtenez de l'aide pour toute fonctionnalité dans StudioFlow X:",
+    de: "Erhalten Sie Unterstützung für jede Funktion in StudioFlow X:",
+    sv: "Få hjälp med vilken funktion som helst i StudioFlow X:"
+  },
+  "help.tip_icons": {
+    en: "Look for help icons near features",
+    es: "Busca los iconos de ayuda cerca de las funciones",
+    fr: "Recherchez les icônes d'aide près des fonctionnalités",
+    de: "Suchen Sie nach Hilfesymbolen in der Nähe von Funktionen",
+    sv: "Leta efter hjälpikoner nära funktioner"
+  },
+  "help.tip_docs": {
+    en: "Visit our documentation for detailed guides",
+    es: "Visita nuestra documentación para guías detalladas",
+    fr: "Consultez notre documentation pour des guides détaillés",
+    de: "Besuchen Sie unsere Dokumentation für detaillierte Anleitungen",
+    sv: "Besök vår dokumentation för detaljerade guider"
+  },
+  "help.tip_support": {
+    en: "Contact support for personalized assistance",
+    es: "Contacta con soporte para asistencia personalizada",
+    fr: "Contactez le support pour une assistance personnalisée",
+    de: "Kontaktieren Sie den Support für persönliche Unterstützung",
+    sv: "Kontakta support för personlig hjälp"
+  },
+  "help.chat_support": {
+    en: "Open Chat Support",
+    es: "Abrir Chat de Soporte",
+    fr: "Ouvrir le Chat d'Assistance",
+    de: "Support-Chat Öffnen",
+    sv: "Öppna Chatthjälp"
   }
 };
 

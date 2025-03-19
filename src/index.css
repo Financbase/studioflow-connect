@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -127,7 +128,7 @@
 }
 
 @layer components {
-  /* Modern Theme Components - Apple-inspired minimalism */
+  /* Modern Theme Components */
   .theme-modern .btn-primary {
     @apply bg-primary text-primary-foreground shadow-sm rounded-md transition-all;
   }
@@ -192,6 +193,31 @@
   
   .theme-windows * {
     @apply rounded-none;
+  }
+  
+  /* Dropdown Menu Styles to ensure legibility */
+  .dropdown-menu-content,
+  [data-radix-popper-content-wrapper] {
+    @apply bg-popover text-popover-foreground border border-border shadow-md;
+  }
+  
+  [role="menuitem"] {
+    @apply text-foreground hover:text-accent-foreground;
+  }
+}
+
+/* Responsive text handling */
+@layer utilities {
+  .text-adaptive {
+    @apply break-words hyphens-auto overflow-wrap-anywhere;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
   }
 }
 

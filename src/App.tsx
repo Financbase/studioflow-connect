@@ -48,6 +48,15 @@ const App = () => {
     if (!localStorage.getItem("app_language")) {
       localStorage.setItem("app_language", "en");
     }
+    
+    // Add event listener for language changes to adjust layout
+    window.addEventListener("languageChange", () => {
+      document.documentElement.classList.add("text-adaptive");
+    });
+    
+    return () => {
+      window.removeEventListener("languageChange", () => {});
+    };
   }, []);
 
   return (
@@ -62,6 +71,9 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/docs" element={<Documentation />} />
+                  <Route path="/terms" element={<Documentation />} />
+                  <Route path="/privacy" element={<Documentation />} />
+                  <Route path="/contact" element={<Documentation />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
