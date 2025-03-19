@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +8,6 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Link } from "react-router-dom";
 
 const Documentation = () => {
-  // Handle scroll to section if hash is present in URL
   useEffect(() => {
     const { hash } = window.location;
     if (hash) {
@@ -291,7 +289,7 @@ const Documentation = () => {
               <section id="ai" className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
                 <div className="flex items-start gap-4">
                   <div className="bg-primary/10 p-3 rounded-full">
-                    <Robot className="h-6 w-6 text-primary" />
+                    <Bot className="h-6 w-6 text-primary" />
                   </div>
                   <div className="space-y-2">
                     <h2 className="text-2xl font-bold">AI-Powered Tools</h2>
