@@ -1,6 +1,7 @@
 
 /**
- * Initialize audio visualizer on a canvas element
+ * Initialize audio visualizer on a canvas element with enhanced features
+ * for sample analysis and categorization
  */
 export function initAudioVisualizer(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d');
@@ -21,7 +22,14 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
   let dataArray: Uint8Array;
   let analyser: AnalyserNode;
   
-  // Simulate an audio context and analyzer
+  // Sample classification markers (for visualization purposes)
+  const sampleMarkers = [
+    { position: 0.2, label: "Kick", color: "rgba(255, 100, 100, 0.8)" },
+    { position: 0.4, label: "Snare", color: "rgba(100, 255, 100, 0.8)" },
+    { position: 0.6, label: "Hi-hat", color: "rgba(100, 100, 255, 0.8)" },
+    { position: 0.8, label: "Percussion", color: "rgba(255, 255, 100, 0.8)" },
+  ];
+  
   try {
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     analyser = audioContext.createAnalyser();
@@ -71,6 +79,26 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
       ctx.lineTo(canvas.width, canvas.height / 2);
       ctx.stroke();
       
+      // Draw sample classification markers
+      sampleMarkers.forEach(marker => {
+        const markerX = canvas.width * marker.position;
+        
+        // Draw vertical line
+        ctx.beginPath();
+        ctx.strokeStyle = marker.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 3]);
+        ctx.moveTo(markerX, 0);
+        ctx.lineTo(markerX, canvas.height);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Draw label
+        ctx.fillStyle = marker.color;
+        ctx.font = '12px Arial';
+        ctx.fillText(marker.label, markerX + 4, 16);
+      });
+      
       // Add some randomness for visualization effect
       for (let i = 0; i < dataArray.length; i++) {
         dataArray[i] = Math.random() * 50 + 90;
@@ -106,6 +134,14 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
       }
       
       ctx.stroke();
+      
+      // Even in fallback mode, show some sample markers
+      sampleMarkers.forEach(marker => {
+        const markerX = canvas.width * marker.position;
+        ctx.fillStyle = marker.color;
+        ctx.font = '12px Arial';
+        ctx.fillText(marker.label, markerX + 4, 16);
+      });
     };
     
     fallbackDraw();

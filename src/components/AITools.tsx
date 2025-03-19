@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Brain, Wand2, Zap, Filter, Tag, Brush } from "lucide-react";
+import { Brain, FolderSearch, Wand2, Layers, Tag, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 
@@ -9,61 +9,70 @@ const AITools = () => {
   const handleToolClick = (tool: string) => {
     toast({
       title: `${tool} activated`,
-      description: "AI processing has started. This feature is a placeholder.",
+      description: "AI workflow assistance has started. This feature is a placeholder.",
       duration: 3000,
     });
   };
 
   return (
     <section id="ai-tools" className="py-6 w-full">
-      <h2 className="text-2xl font-semibold mb-4">AI Tools</h2>
+      <h2 className="text-2xl font-semibold mb-4">AI Workflow Assistant</h2>
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-medium">Intelligent Audio Processing</h3>
+            <h3 className="text-lg font-medium">Intelligent Production Workflow</h3>
           </div>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-6">
-            Leverage AI to enhance your audio production workflow with these powerful tools.
+            AI-powered tools to organize and optimize your production workflow without affecting your creative output.
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <AIToolCard 
-              title="Smart Mastering" 
-              description="Automatically apply mastering to your tracks using AI" 
-              icon={<Wand2 className="h-5 w-5" />}
-              onClick={() => handleToolClick("Smart Mastering")}
+              title="Sample Organizer" 
+              description="Automatically categorize and tag sample libraries by instrument, genre, and character" 
+              icon={<FolderSearch className="h-5 w-5" />}
+              onClick={() => handleToolClick("Sample Organizer")}
             />
             <AIToolCard 
-              title="Noise Reduction" 
-              description="Remove background noise and imperfections" 
-              icon={<Filter className="h-5 w-5" />}
-              onClick={() => handleToolClick("Noise Reduction")}
+              title="Drum Pattern Categorizer" 
+              description="Identify and categorize drum patterns by genre, BPM, and complexity" 
+              icon={<Layers className="h-5 w-5" />}
+              onClick={() => handleToolClick("Drum Pattern Categorizer")}
             />
             <AIToolCard 
-              title="Auto Tagging" 
-              description="Automatically generate metadata and tags for your audio" 
+              title="Smart Tagging" 
+              description="Automatically generate consistent tags and metadata across your entire library" 
               icon={<Tag className="h-5 w-5" />}
-              onClick={() => handleToolClick("Auto Tagging")}
+              onClick={() => handleToolClick("Smart Tagging")}
             />
             <AIToolCard 
-              title="Style Transfer" 
-              description="Apply the characteristics of one audio to another" 
-              icon={<Brush className="h-5 w-5" />}
-              onClick={() => handleToolClick("Style Transfer")}
+              title="Session Planner" 
+              description="Optimize your studio time with intelligent session planning and reminders" 
+              icon={<Clock className="h-5 w-5" />}
+              onClick={() => handleToolClick("Session Planner")}
             />
           </div>
           
-          <div className="mt-6 flex justify-end">
-            <Button variant="outline" className="mr-2">
-              View AI History
-            </Button>
-            <Button>
-              <Zap className="h-4 w-4 mr-2" />
-              Run Batch Process
-            </Button>
+          <div className="mt-6">
+            <div className="bg-muted/50 p-4 rounded-md mb-4">
+              <p className="text-sm font-medium mb-2">AI Workflow Assistant Philosophy</p>
+              <p className="text-xs text-muted-foreground">
+                Our AI tools focus solely on workflow optimization - organizing samples, categorizing content, and planning sessions. 
+                These tools never modify your audio or creative content, preserving your artistic vision while eliminating tedious organization tasks.
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <Button variant="outline" className="mr-2">
+                View Assistant History
+              </Button>
+              <Button>
+                <Wand2 className="h-4 w-4 mr-2" />
+                Start Batch Organization
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
