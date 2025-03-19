@@ -1,14 +1,9 @@
 
 import React from "react";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Lock, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
-import FeatureRecommendation from "@/components/FeatureRecommendation";
-import { recommendations } from "@/data/featureRecommendations";
-import { Badge } from "@/components/ui/badge";
+import { ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
+import HelpTip from "@/components/HelpSystem";
 
 interface WidgetSectionProps {
   id: WidgetId;
@@ -17,79 +12,135 @@ interface WidgetSectionProps {
   isPremiumFeature?: boolean;
 }
 
-const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPremiumFeature }) => {
+// Help content for each widget section
+const widgetHelpContent: Record<WidgetId, { title: string, content: React.ReactNode, severity?: "info" | "warning" | "critical" }> = {
+  system: {
+    title: "System Monitor",
+    content: (
+      <div className="space-y-2">
+        <p>Monitors your system's performance metrics including CPU, RAM, and disk usage.</p>
+        <p>Keep an eye on these values to ensure optimal performance during audio processing.</p>
+      </div>
+    )
+  },
+  vm: {
+    title: "Virtual Machine Controller",
+    content: (
+      <div className="space-y-2">
+        <p>Manage virtual machines for running different OS environments and DAW setups.</p>
+        <p>Each VM maintains isolated audio environments for maximum compatibility.</p>
+      </div>
+    ),
+    severity: "warning"
+  },
+  daw: {
+    title: "DAW Workflow Integration",
+    content: (
+      <div className="space-y-2">
+        <p>Connect and manage multiple DAWs to maintain consistent workflows between them.</p>
+        <p>Synchronize projects, plugins, and settings across different audio workstations.</p>
+      </div>
+    )
+  },
+  audio: {
+    title: "Audio Analysis",
+    content: (
+      <div className="space-y-2">
+        <p>Analyze audio files and signals for frequency response, dynamics, and potential issues.</p>
+        <p>Compare your mixes to reference tracks or industry standards.</p>
+      </div>
+    )
+  },
+  ai: {
+    title: "AI-Powered Tools",
+    content: (
+      <div className="space-y-2">
+        <p>Leverage machine learning to enhance your production workflow.</p>
+        <p>Generate musical ideas, improve mixing decisions, and automate repetitive tasks.</p>
+      </div>
+    )
+  },
+  marketplace: {
+    title: "Studio Marketplace",
+    content: (
+      <div className="space-y-2">
+        <p>Browse and purchase plugins, samples, presets, and other studio resources.</p>
+        <p>Share and sell your own creations to the community.</p>
+      </div>
+    )
+  }
+};
+
+const WidgetSection: React.FC<WidgetSectionProps> = ({ 
+  id, 
+  title, 
+  children, 
+  isPremiumFeature = false 
+}) => {
   const { 
     isWidgetVisible, 
     hasFeatureAccess, 
-    pricingTier, 
     isWidgetCollapsed, 
     toggleWidgetCollapse 
   } = useDashboard();
   
-  const visible = isWidgetVisible(id);
-  const hasAccess = hasFeatureAccess(id);
-  const isCollapsed = isWidgetCollapsed(id);
-  
-  if (!visible) {
+  // Don't render if this widget shouldn't be visible
+  if (!isWidgetVisible(id)) {
     return null;
   }
   
-  const handleToggleCollapse = () => {
-    toggleWidgetCollapse(id);
-  };
-  
-  if (!hasAccess) {
-    return (
-      <section id={id} className="py-6 w-full">
-        <h2 className="text-2xl font-semibold mb-4">{title}</h2>
-        <Card className="p-8 flex flex-col items-center justify-center text-center">
-          <Lock className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-xl font-medium mb-2">Feature Locked</h3>
-          <p className="text-muted-foreground max-w-md mb-6">
-            This feature is available with our premium plans. Upgrade to access {title} and other advanced features.
-          </p>
-          <Button size="lg">
-            Upgrade Plan
-          </Button>
-        </Card>
-      </section>
-    );
-  }
-  
-  const sectionRecommendations = recommendations[id] || [];
+  const hasAccess = hasFeatureAccess(id);
+  const isCollapsed = isWidgetCollapsed(id);
+  const helpInfo = widgetHelpContent[id];
   
   return (
-    <section id={id} className="py-6 w-full">
-      <Collapsible open={!isCollapsed} onOpenChange={(open) => !open && handleToggleCollapse()}>
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-semibold">{title}</h2>
-            {isPremiumFeature && pricingTier !== "free" && (
-              <Badge variant="default" className="bg-gradient-to-r from-amber-500 to-orange-500">
-                <Sparkles className="h-3 w-3 mr-1" /> Premium
-              </Badge>
+    <section id={id} className="relative rounded-lg border bg-card shadow-sm animate-fade-in transition-all duration-300">
+      <Collapsible open={!isCollapsed} onOpenChange={open => toggleWidgetCollapse(id)}>
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+            {title}
+            {isPremiumFeature && !hasAccess && (
+              <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium">
+                <Lock className="mr-1 h-3 w-3" />
+                Pro
+              </span>
             )}
-          </div>
+            <HelpTip
+              title={helpInfo.title}
+              content={helpInfo.content}
+              severity={helpInfo.severity || "info"}
+              size="small"
+            />
+          </h2>
           <CollapsibleTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleToggleCollapse}
-              className="h-8 w-8 p-0"
-              aria-label={isCollapsed ? "Expand" : "Collapse"}
+            <button
+              className="rounded-full p-1 hover:bg-muted transition-colors focus:outline-none"
+              aria-label={isCollapsed ? "Expand section" : "Collapse section"}
             >
-              {isCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
-            </Button>
+              {isCollapsed ? (
+                <ChevronDown className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <ChevronUp className="h-5 w-5 text-muted-foreground" />
+              )}
+            </button>
           </CollapsibleTrigger>
         </div>
         
-        <CollapsibleContent>
-          {children}
-          
-          <FeatureRecommendation 
-            recommendations={sectionRecommendations}
-            category={title}
-          />
+        <CollapsibleContent className="transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+          <div className="p-4">
+            {hasAccess ? (
+              children
+            ) : (
+              <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
+                <Lock className="h-8 w-8 text-muted-foreground" />
+                <h3 className="text-lg font-medium">Premium Feature</h3>
+                <p className="text-muted-foreground max-w-md">
+                  This feature is available on Standard and Pro plans. 
+                  Upgrade your plan to access this and other premium features.
+                </p>
+              </div>
+            )}
+          </div>
         </CollapsibleContent>
       </Collapsible>
     </section>
