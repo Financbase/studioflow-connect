@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
+import Auth from "./pages/Auth";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -14,6 +15,7 @@ import { useThemeInitializer } from "./hooks/use-theme-initializer";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Initialize query client with optimized settings
 const queryClient = new QueryClient({
@@ -56,11 +58,47 @@ const App = () => {
                 <BrowserRouter>
                   <ScrollToTop />
                   <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/docs" element={<Documentation />} />
-                    <Route path="/terms" element={<Documentation page="terms" />} />
-                    <Route path="/privacy" element={<Documentation page="privacy" />} />
-                    <Route path="/contact" element={<Documentation page="contact" />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route 
+                      path="/" 
+                      element={
+                        <ProtectedRoute>
+                          <Index />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/docs" 
+                      element={
+                        <ProtectedRoute>
+                          <Documentation />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/terms" 
+                      element={
+                        <ProtectedRoute>
+                          <Documentation page="terms" />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/privacy" 
+                      element={
+                        <ProtectedRoute>
+                          <Documentation page="privacy" />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/contact" 
+                      element={
+                        <ProtectedRoute>
+                          <Documentation page="contact" />
+                        </ProtectedRoute>
+                      } 
+                    />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

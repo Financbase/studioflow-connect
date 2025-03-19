@@ -1,6 +1,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/use-auth';
+import { DashboardSettings } from '@/types/supabase';
+import { useToast } from '@/components/ui/use-toast';
 
 // Type definitions
 export type WidgetId = 'system' | 'audio' | 'ai' | 'vm' | 'daw' | 'marketplace' | 'connect';
@@ -81,16 +85,14 @@ const DashboardContext = createContext<DashboardContextType | undefined>(undefin
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Mobile detection
   const isMobile = useIsMobile();
+  const { user, profile } = useAuth();
+  const { toast } = useToast();
   
   // Collapsed widgets state
   const [collapsedWidgets, setCollapsedWidgets] = useState<WidgetId[]>([]);
   
   // View mode state - default to mobile if on mobile device
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    const savedMode = localStorage.getItem('view_mode');
-    if (savedMode && ['simple', 'advanced', 'custom', 'mobile'].includes(savedMode)) {
-      return savedMode as ViewMode;
-    }
     return isMobile ? 'mobile' : 'simple';
   });
   
@@ -103,47 +105,129 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, [isMobile, viewMode]);
   
-  // Pricing tier state - load from localStorage if available
-  const [pricingTier, setPricingTier] = useState<PricingTier>(() => {
-    const savedTier = localStorage.getItem('pricing_tier');
-    return (savedTier as PricingTier) || 'free';
-  });
+  // Pricing tier state - load from profile if available
+  const [pricingTier, setPricingTier] = useState<PricingTier>('free');
   
   // Custom layout state
-  const [customLayout, setCustomLayout] = useState<WidgetId[]>(() => {
-    const savedLayout = localStorage.getItem('custom_layout');
-    if (savedLayout) {
-      try {
-        return JSON.parse(savedLayout) as WidgetId[];
-      } catch (e) {
-        return ['connect', 'audio'];
+  const [customLayout, setCustomLayout] = useState<WidgetId[]>(['connect', 'audio']);
+  
+  // Load dashboard settings from Supabase when user is authenticated
+  useEffect(() => {
+    const loadDashboardSettings = async () => {
+      if (user) {
+        try {
+          // Get settings from database
+          const { data, error } = await supabase
+            .from('dashboard_settings')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+            
+          if (error && error.code !== 'PGRST116') {
+            console.error('Error loading dashboard settings:', error);
+            return;
+          }
+          
+          if (data) {
+            // Set view mode from database
+            if (data.view_mode && !isMobile) {
+              setViewMode(data.view_mode as ViewMode);
+            }
+            
+            // Set custom layout from database
+            if (data.custom_layout && Array.isArray(data.custom_layout)) {
+              setCustomLayout(data.custom_layout as WidgetId[]);
+            }
+            
+            // Set collapsed widgets from database
+            if (data.collapsed_widgets && Array.isArray(data.collapsed_widgets)) {
+              setCollapsedWidgets(data.collapsed_widgets as WidgetId[]);
+            }
+          }
+          
+          // Set pricing tier from profile
+          if (profile) {
+            setPricingTier(profile.plan as PricingTier);
+          }
+        } catch (err) {
+          console.error('Error in loading dashboard settings:', err);
+        }
       }
+    };
+    
+    loadDashboardSettings();
+  }, [user, profile, isMobile]);
+  
+  // Save dashboard settings to Supabase when they change
+  useEffect(() => {
+    const saveDashboardSettings = async () => {
+      if (user) {
+        try {
+          const { error } = await supabase
+            .from('dashboard_settings')
+            .upsert({
+              user_id: user.id,
+              view_mode: viewMode,
+              custom_layout: customLayout,
+              collapsed_widgets: collapsedWidgets,
+              updated_at: new Date().toISOString()
+            }, {
+              onConflict: 'user_id'
+            });
+            
+          if (error) {
+            console.error('Error saving dashboard settings:', error);
+          }
+        } catch (err) {
+          console.error('Error in saving dashboard settings:', err);
+        }
+      }
+    };
+    
+    if (user) {
+      saveDashboardSettings();
     }
-    return ['connect', 'audio'];
-  });
+  }, [viewMode, customLayout, collapsedWidgets, user]);
+  
+  // Update user profile when pricing tier changes
+  useEffect(() => {
+    const updatePricingTier = async () => {
+      if (user && profile && profile.plan !== pricingTier) {
+        try {
+          const { error } = await supabase
+            .from('profiles')
+            .update({
+              plan: pricingTier,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+            
+          if (error) {
+            console.error('Error updating pricing tier:', error);
+            toast({
+              title: 'Error',
+              description: 'Could not update subscription plan',
+              variant: 'destructive'
+            });
+          } else {
+            toast({
+              title: 'Plan Updated',
+              description: `Your plan has been updated to ${pricingTier}`
+            });
+          }
+        } catch (err) {
+          console.error('Error in updating pricing tier:', err);
+        }
+      }
+    };
+    
+    if (user && profile) {
+      updatePricingTier();
+    }
+  }, [pricingTier, user, profile, toast]);
   
   // Feature access based on current pricing tier
   const featureAccess = featureAccessMap[pricingTier];
-  
-  // Initialize custom layout when view mode or pricing tier changes
-  useEffect(() => {
-    // If custom layout is empty, set default based on available features
-    if (customLayout.length === 0 && viewMode === 'custom') {
-      const accessibleWidgets = Object.entries(featureAccess)
-        .filter(([_, hasAccess]) => hasAccess)
-        .map(([widgetId]) => widgetId as WidgetId);
-      
-      setCustomLayout(accessibleWidgets);
-    }
-    
-    // Save current settings to localStorage
-    localStorage.setItem('pricing_tier', pricingTier);
-    localStorage.setItem('view_mode', viewMode);
-    
-    if (viewMode === 'custom' && customLayout.length > 0) {
-      localStorage.setItem('custom_layout', JSON.stringify(customLayout));
-    }
-  }, [viewMode, pricingTier, customLayout, featureAccess]);
   
   // Determines if a widget should be visible based on current view mode
   const isWidgetVisible = (widgetId: WidgetId): boolean => {
@@ -180,7 +264,6 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Update custom layout
   const updateCustomLayout = (widgets: WidgetId[]) => {
     setCustomLayout(widgets);
-    localStorage.setItem('custom_layout', JSON.stringify(widgets));
   };
   
   return (

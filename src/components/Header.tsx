@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen, MoreHorizontal } from "lucide-react";
+import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen, MoreHorizontal, UserCircle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +22,8 @@ import HelpTip from "@/components/HelpSystem";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header = () => {
   const isMobile = useIsMobile();
@@ -29,6 +31,25 @@ const Header = () => {
   const { viewMode, pricingTier, setViewMode, setPricingTier } = useDashboard();
   const { t } = useLanguage();
   const { themeVariant } = useTheme();
+  const { user, profile, signOut, isAuthenticated } = useAuth();
+
+  // Get initials for avatar fallback
+  const getInitials = () => {
+    if (profile?.full_name) {
+      return profile.full_name
+        .split(' ')
+        .map(name => name[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+    }
+    
+    if (profile?.username) {
+      return profile.username.substring(0, 2).toUpperCase();
+    }
+    
+    return 'U';
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md transition-all duration-200">
@@ -66,49 +87,73 @@ const Header = () => {
           </Button>
         ) : (
           <div className="flex items-center gap-2 md:gap-3">
-            <ViewSelector />
-            
-            {viewMode === "custom" && pricingTier === "pro" && (
-              <CustomLayoutEditor />
+            {isAuthenticated && (
+              <>
+                <ViewSelector />
+                
+                {viewMode === "custom" && pricingTier === "pro" && (
+                  <CustomLayoutEditor />
+                )}
+                
+                <PlanSwitcher 
+                  currentPlan={pricingTier}
+                  onPlanChange={(plan) => {
+                    setPricingTier(plan);
+                  }}
+                />
+                
+                {pricingTier === "pro" && <ThemeSwitcher />}
+                
+                <LanguageSwitcher />
+              </>
             )}
-            
-            <PlanSwitcher 
-              currentPlan={pricingTier}
-              onPlanChange={(plan) => {
-                setPricingTier(plan);
-              }}
-            />
-            
-            {pricingTier === "pro" && <ThemeSwitcher />}
-            
-            <LanguageSwitcher />
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <MoreHorizontal className="h-[1.2rem] w-[1.2rem]" />
-                  <span className="sr-only">{t("dropdown.more")}</span>
-                </Button>
+                {isAuthenticated ? (
+                  <Avatar className="h-9 w-9 cursor-pointer border-2 border-transparent hover:border-primary transition-all">
+                    <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.username || "User"} />
+                    <AvatarFallback>{getInitials()}</AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <Button variant="outline" size="icon">
+                    <MoreHorizontal className="h-[1.2rem] w-[1.2rem]" />
+                    <span className="sr-only">{t("dropdown.more")}</span>
+                  </Button>
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className={`w-[220px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
-                <DropdownMenuLabel className="text-foreground">{t("dropdown.actions")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuGroup>
-                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                    <Sliders className="h-4 w-4 mr-2" />
-                    {t("dropdown.quickactions")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                    {t("dropdown.batchprocess")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                    {t("dropdown.aitools")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                    {t("dropdown.vmmanagement")}
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuLabel className="text-foreground">
+                      <div className="flex flex-col space-y-1">
+                        <p className="font-medium">{profile?.full_name || profile?.username}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="cursor-pointer hover:bg-accent hover:text-accent-foreground text-foreground"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      {t("auth.sign_out")}
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuLabel className="text-foreground">{t("dropdown.actions")}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <Link to="/auth">
+                        <DropdownMenuItem className="cursor-pointer hover:bg-accent hover:text-accent-foreground text-foreground">
+                          <UserCircle className="h-4 w-4 mr-2" />
+                          {t("auth.sign_in")}
+                        </DropdownMenuItem>
+                      </Link>
+                    </DropdownMenuGroup>
+                  </>
+                )}
                 
                 <DropdownMenuSeparator />
                 
@@ -160,38 +205,73 @@ const Header = () => {
         {isMobile && isMenuOpen && (
           <div className="absolute top-16 left-0 right-0 bg-background border-b border-border animate-slide-in z-50">
             <nav className="flex flex-col p-4 gap-4">
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">{t("label.dashboardview")}</span>
-                <ViewSelector />
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center space-x-4 py-2">
+                    <Avatar>
+                      <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.username || "User"} />
+                      <AvatarFallback>{getInitials()}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{profile?.full_name || profile?.username}</p>
+                      <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    </div>
+                  </div>
               
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">{t("label.plan")}</span>
-                <PlanSwitcher 
-                  currentPlan={pricingTier}
-                  onPlanChange={(plan) => {
-                    setPricingTier(plan);
-                  }}
-                />
-              </div>
-              
-              {pricingTier === "pro" && (
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm font-medium">{t("label.uitheme")}</span>
-                  <ThemeSwitcher />
-                </div>
+                  <div className="h-px bg-border my-2"></div>
+                  
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-sm font-medium">{t("label.dashboardview")}</span>
+                    <ViewSelector />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-sm font-medium">{t("label.plan")}</span>
+                    <PlanSwitcher 
+                      currentPlan={pricingTier}
+                      onPlanChange={(plan) => {
+                        setPricingTier(plan);
+                      }}
+                    />
+                  </div>
+                  
+                  {pricingTier === "pro" && (
+                    <div className="flex items-center justify-between py-2">
+                      <span className="text-sm font-medium">{t("label.uitheme")}</span>
+                      <ThemeSwitcher />
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-sm font-medium">{t("label.language")}</span>
+                    <LanguageSwitcher />
+                  </div>
+                  
+                  {viewMode === "custom" && pricingTier === "pro" && (
+                    <div className="py-2">
+                      <CustomLayoutEditor />
+                    </div>
+                  )}
+                  
+                  <Button 
+                    className="w-full justify-start" 
+                    variant="outline"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    {t("auth.sign_out")}
+                  </Button>
+                </>
+              ) : (
+                <Link to="/auth">
+                  <Button className="w-full">
+                    <UserCircle className="h-4 w-4 mr-2" />
+                    {t("auth.sign_in")}
+                  </Button>
+                </Link>
               )}
               
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">{t("label.language")}</span>
-                <LanguageSwitcher />
-              </div>
-              
-              {viewMode === "custom" && pricingTier === "pro" && (
-                <div className="py-2">
-                  <CustomLayoutEditor />
-                </div>
-              )}
+              <div className="h-px bg-border my-2"></div>
               
               <Link to="/docs" className="text-sm font-medium py-2 transition-colors hover:text-primary flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />

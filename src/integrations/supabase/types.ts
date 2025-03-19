@@ -27,6 +27,69 @@ export type Database = {
         }
         Relationships: []
       }
+      audio_assets: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          size: number
+          storage_path: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          size: number
+          storage_path: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          size?: number
+          storage_path?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dashboard_settings: {
+        Row: {
+          collapsed_widgets: Json
+          created_at: string
+          custom_layout: Json
+          id: string
+          updated_at: string
+          user_id: string
+          view_mode: string
+        }
+        Insert: {
+          collapsed_widgets?: Json
+          created_at?: string
+          custom_layout?: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+          view_mode?: string
+        }
+        Update: {
+          collapsed_widgets?: Json
+          created_at?: string
+          custom_layout?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+          view_mode?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           content: string | null
@@ -63,6 +126,36 @@ export type Database = {
           id?: number
           message?: Json
           session_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          plan: string | null
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          plan?: string | null
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          plan?: string | null
+          updated_at?: string
+          username?: string | null
         }
         Relationships: []
       }
