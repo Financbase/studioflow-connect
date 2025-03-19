@@ -65,10 +65,10 @@ export function useToast() {
   return context;
 }
 
-type ToastOptions = Omit<Partial<Toast>, 'id'>;
+type ToastOptions = Omit<Toast, 'id'>;
 
-// Create a toast function that can be called directly
-const toast = (opts: ToastOptions) => {
+// Create a direct function that can be called like toast({...})
+const toast = function(opts: Partial<ToastOptions>) {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -77,8 +77,8 @@ const toast = (opts: ToastOptions) => {
   });
 };
 
-// Add methods to the toast function for variant-specific toasts
-toast.default = (opts: ToastOptions) => {
+// Add variant methods
+toast.default = function(opts: Partial<ToastOptions>) {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -87,7 +87,7 @@ toast.default = (opts: ToastOptions) => {
   });
 };
 
-toast.destructive = (opts: ToastOptions) => {
+toast.destructive = function(opts: Partial<ToastOptions>) {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -96,7 +96,7 @@ toast.destructive = (opts: ToastOptions) => {
   });
 };
 
-toast.custom = (opts: ToastOptions) => {
+toast.custom = function(opts: Partial<ToastOptions>) {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -104,5 +104,4 @@ toast.custom = (opts: ToastOptions) => {
   });
 };
 
-// Export the toast function with its methods
 export { toast };

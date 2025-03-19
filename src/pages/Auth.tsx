@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast, toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { MusicIcon, Mail, Lock, UserPlus, LogIn } from "lucide-react";
 
@@ -21,6 +22,7 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   // Redirect to home if already logged in
   useEffect(() => {
@@ -32,6 +34,7 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -51,17 +54,31 @@ const Auth = () => {
       
       toast.default({
         title: "Success",
-        description: "Check your email for a confirmation link",
+        description: "Check your email for a confirmation link. Signing you in...",
         duration: 5000,
       });
       
+      console.log("Sign up successful, attempting sign in");
+      
       // Auto-login for development
-      await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password
       });
       
+      if (signInError) {
+        console.error("Auto-sign in failed:", signInError);
+        toast.destructive({
+          title: "Sign-in failed after registration",
+          description: "Please try signing in manually",
+        });
+      } else {
+        console.log("Auto-sign in successful");
+      }
+      
     } catch (error: any) {
+      console.error("Sign up error:", error);
+      setError(error.message);
       toast.destructive({
         title: "Error",
         description: error.message,
@@ -74,8 +91,10 @@ const Auth = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
     try {
+      console.log("Signing in with:", email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -85,6 +104,7 @@ const Auth = () => {
         throw error;
       }
       
+      console.log("Sign in successful, redirecting");
       toast.default({
         title: "Welcome back",
         description: "You have successfully logged in",
@@ -93,6 +113,8 @@ const Auth = () => {
       navigate("/");
       
     } catch (error: any) {
+      console.error("Sign in error:", error);
+      setError(error.message);
       toast.destructive({
         title: "Error",
         description: error.message,
@@ -111,6 +133,11 @@ const Auth = () => {
           </div>
           <CardTitle className="text-2xl">Welcome</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
+          {error && (
+            <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md mt-2">
+              {error}
+            </div>
+          )}
         </CardHeader>
         
         <Tabs defaultValue="signin" className="w-full">
@@ -147,10 +174,9 @@ const Auth = () => {
                       type="button"
                       onClick={async () => {
                         if (!email) {
-                          toast({
+                          toast.destructive({
                             title: "Error",
                             description: "Please enter your email address first",
-                            variant: "destructive",
                           });
                           return;
                         }
@@ -159,15 +185,14 @@ const Auth = () => {
                           setLoading(true);
                           const { error } = await supabase.auth.resetPasswordForEmail(email);
                           if (error) throw error;
-                          toast({
+                          toast.default({
                             title: "Password Reset",
                             description: "Check your email for a password reset link",
                           });
                         } catch (error: any) {
-                          toast({
+                          toast.destructive({
                             title: "Error",
                             description: error.message,
-                            variant: "destructive",
                           });
                         } finally {
                           setLoading(false);
