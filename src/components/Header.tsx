@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { MusicIcon, Sliders, Menu } from "lucide-react";
+import { MusicIcon, Sliders, Menu, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

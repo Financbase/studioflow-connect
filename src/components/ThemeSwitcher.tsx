@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Paintbrush, Monitor, Window, Layers, Lock } from "lucide-react";
+import { Paintbrush, Monitor, Wind, Layers, Lock } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { toast } from "@/components/ui/use-toast";
@@ -39,7 +39,7 @@ const ThemeSwitcher = () => {
     switch (themeVariant) {
       case "legacy": return <Layers className="h-[1.2rem] w-[1.2rem]" />;
       case "classic": return <Monitor className="h-[1.2rem] w-[1.2rem]" />;
-      case "windows": return <Window className="h-[1.2rem] w-[1.2rem]" />;
+      case "windows": return <Wind className="h-[1.2rem] w-[1.2rem]" />;
       default: return <Paintbrush className="h-[1.2rem] w-[1.2rem]" />;
     }
   };
@@ -89,7 +89,7 @@ const ThemeSwitcher = () => {
           className={themeVariant === "windows" ? "bg-accent text-accent-foreground" : ""}
           disabled={pricingTier !== "pro"}
         >
-          <Window className="mr-2 h-4 w-4" />
+          <Wind className="mr-2 h-4 w-4" />
           <span>Windows</span>
           {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
         </DropdownMenuItem>
