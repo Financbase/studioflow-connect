@@ -5,6 +5,9 @@ import {
   createContext,
   useContext,
   useState,
+  ReactNode,
+  FC,
+  createElement,
 } from "react";
 
 type ToastContextType = {
@@ -23,11 +26,11 @@ interface Toast extends ToastProps {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export function ToastProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+interface ToastProviderProps {
+  children: ReactNode;
+}
+
+export const ToastProvider: FC<ToastProviderProps> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = (toast: Toast) => {
@@ -44,14 +47,13 @@ export function ToastProvider({
     );
   };
 
-  return (
-    <ToastContext.Provider
-      value={{ toasts, addToast, removeToast, updateToast }}
-    >
-      {children}
-    </ToastContext.Provider>
+  // Using createElement instead of JSX since this is a .ts file
+  return createElement(
+    ToastContext.Provider,
+    { value: { toasts, addToast, removeToast, updateToast } },
+    children
   );
-}
+};
 
 export function useToast() {
   const context = useContext(ToastContext);
