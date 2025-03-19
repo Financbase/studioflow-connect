@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   Dialog,
@@ -14,7 +13,7 @@ import { Settings2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useResponsive } from "@/hooks/use-mobile";
@@ -53,17 +52,16 @@ const CustomLayoutEditor = () => {
   
   const handleSave = () => {
     if (selectedWidgets.length === 0) {
-      toast({
+      toast.destructive({
         title: t("toast.invalidlayout"),
         description: t("toast.selectatleastone"),
-        variant: "destructive"
       });
       return;
     }
     
     updateCustomLayout(selectedWidgets);
     setIsOpen(false);
-    toast({
+    toast.default({
       title: t("toast.layoutupdated"),
       description: t("toast.layoutsaved")
     });

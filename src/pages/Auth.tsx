@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,14 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
+import { useToast, toast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { MusicIcon, Mail, Lock, UserPlus, LogIn } from "lucide-react";
 
 const Auth = () => {
   const { session } = useSessionContext();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { themeVariant } = useTheme();
   
   const [email, setEmail] = useState("");
@@ -51,7 +49,7 @@ const Auth = () => {
         throw error;
       }
       
-      toast({
+      toast.default({
         title: "Success",
         description: "Check your email for a confirmation link",
         duration: 5000,
@@ -64,10 +62,9 @@ const Auth = () => {
       });
       
     } catch (error: any) {
-      toast({
+      toast.destructive({
         title: "Error",
         description: error.message,
-        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -88,7 +85,7 @@ const Auth = () => {
         throw error;
       }
       
-      toast({
+      toast.default({
         title: "Welcome back",
         description: "You have successfully logged in",
       });
@@ -96,10 +93,9 @@ const Auth = () => {
       navigate("/");
       
     } catch (error: any) {
-      toast({
+      toast.destructive({
         title: "Error",
         description: error.message,
-        variant: "destructive",
       });
     } finally {
       setLoading(false);

@@ -1,6 +1,5 @@
 
-import { Toast, ToastActionElement, ToastProps } from "@/components/ui/toast";
-import { useToast as useToastPrimitive } from "@radix-ui/react-toast";
+import { ToastActionElement, ToastProps } from "@/components/ui/toast";
 import {
   createContext,
   useContext,
@@ -17,11 +16,14 @@ type ToastContextType = {
   updateToast: (id: string, toast: Partial<Toast>) => void;
 };
 
-interface Toast extends ToastProps {
+interface Toast {
   id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
+  variant?: "default" | "destructive";
+  title?: ReactNode;
+  description?: ReactNode;
   action?: ToastActionElement;
+  duration?: number;
+  className?: string;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -63,27 +65,36 @@ export function useToast() {
   return context;
 }
 
-type ToastOptions = Partial<Toast> & {
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: ToastActionElement;
-};
+type ToastOptions = Partial<Toast>;
 
-export const toast = ({
-  variant = "default",
-  title,
-  description,
-  action,
-  ...props
-}: ToastOptions) => {
-  const { addToast } = useToast();
+// Export a toast function that can be imported and used directly
+export const toast = {
+  // Default toast
+  default: (opts: ToastOptions) => {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      variant: "default",
+      ...opts,
+    });
+  },
   
-  addToast({
-    id: crypto.randomUUID(),
-    variant,
-    title,
-    description,
-    action,
-    ...props,
-  });
+  // Destructive toast
+  destructive: (opts: ToastOptions) => {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      variant: "destructive",
+      ...opts,
+    });
+  },
+  
+  // Main toast function with options
+  custom: (opts: ToastOptions) => {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      ...opts,
+    });
+  }
 };

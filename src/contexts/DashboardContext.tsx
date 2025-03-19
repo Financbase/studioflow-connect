@@ -1,10 +1,9 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/use-auth';
 import { DashboardSettings } from '@/types/supabase';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast, toast } from '@/hooks/use-toast';
 
 // Type definitions
 export type WidgetId = 'system' | 'audio' | 'ai' | 'vm' | 'daw' | 'marketplace' | 'connect';
@@ -86,7 +85,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Mobile detection
   const isMobile = useIsMobile();
   const { user, profile } = useAuth();
-  const { toast } = useToast();
+  const { addToast } = useToast();
   
   // Collapsed widgets state
   const [collapsedWidgets, setCollapsedWidgets] = useState<WidgetId[]>([]);
@@ -208,13 +207,13 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             
           if (error) {
             console.error('Error updating pricing tier:', error);
-            toast({
+            addToast({
               title: 'Error',
               description: 'Could not update subscription plan',
               variant: 'destructive'
             });
           } else {
-            toast({
+            addToast({
               title: 'Plan Updated',
               description: `Your plan has been updated to ${pricingTier}`
             });
@@ -228,7 +227,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (user && profile) {
       updatePricingTier();
     }
-  }, [pricingTier, user, profile, toast]);
+  }, [pricingTier, user, profile, addToast]);
   
   // Feature access based on current pricing tier
   const featureAccess = featureAccessMap[pricingTier];

@@ -1,9 +1,8 @@
-
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { Profile } from '@/types/supabase';
 
 interface UseAuthReturn {
@@ -35,10 +34,9 @@ export const useAuth = (): UseAuthReturn => {
 
   useEffect(() => {
     if (error) {
-      toast({
+      toast.destructive({
         title: 'Authentication Error',
         description: error.message,
-        variant: 'destructive',
       });
     }
   }, [error]);
@@ -83,15 +81,14 @@ export const useAuth = (): UseAuthReturn => {
       if (navigate) {
         navigate('/auth');
       }
-      toast({
+      toast.default({
         title: 'Signed out',
         description: 'You have been signed out successfully',
       });
     } catch (error: any) {
-      toast({
+      toast.destructive({
         title: 'Error signing out',
         description: error.message,
-        variant: 'destructive',
       });
     }
   };
