@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Cpu, Database, HardDrive, Wifi, GitBranch, Shield, Zap, Lock, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -8,6 +7,7 @@ import { fetchSystemMetrics } from "@/lib/systemMetrics";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 
 const SystemMonitor = () => {
   const { pricingTier } = useDashboard();
@@ -28,6 +28,10 @@ const SystemMonitor = () => {
   const [adaptiveCpuPrioritization, setAdaptiveCpuPrioritization] = useState(false);
   const [smartMemoryManagement, setSmartMemoryManagement] = useState(false);
   
+  // Memory management specific states
+  const [memoryOptimizationLevel, setMemoryOptimizationLevel] = useState("balanced");
+  const [compressedPlugins, setCompressedPlugins] = useState(0);
+  
   const hasAdvancedFeatures = pricingTier === "standard" || pricingTier === "pro";
   const hasProFeatures = pricingTier === "pro";
 
@@ -43,7 +47,17 @@ const SystemMonitor = () => {
         
         // If smart memory management is active, reduce memory usage by 10-20%
         if (smartMemoryManagement && hasAdvancedFeatures) {
-          data.memory = Math.max(20, data.memory - Math.floor(Math.random() * 10) - 10);
+          const optimizationMap = {
+            "minimal": 5 + Math.floor(Math.random() * 5),
+            "balanced": 10 + Math.floor(Math.random() * 10),
+            "aggressive": 15 + Math.floor(Math.random() * 15)
+          };
+          
+          const reduction = optimizationMap[memoryOptimizationLevel] || 10;
+          data.memory = Math.max(20, data.memory - reduction);
+          
+          // Update compressed plugins count
+          setCompressedPlugins(Math.floor(Math.random() * 5) + 3);
         }
         
         setMetrics(data);
@@ -56,7 +70,7 @@ const SystemMonitor = () => {
     updateMetrics();
     const interval = setInterval(updateMetrics, 3000);
     return () => clearInterval(interval);
-  }, [adaptiveCpuPrioritization, smartMemoryManagement, hasAdvancedFeatures]);
+  }, [adaptiveCpuPrioritization, smartMemoryManagement, hasAdvancedFeatures, memoryOptimizationLevel]);
 
   const toggleOptimization = () => {
     setOptimizationActive(!optimizationActive);
@@ -115,7 +129,19 @@ const SystemMonitor = () => {
         : "Smart Memory Management Enabled",
       description: smartMemoryManagement 
         ? "Memory will be managed normally." 
-        : "Memory compression for 32-bit plugins activated",
+        : `Memory compression activated with ${memoryOptimizationLevel} optimization`,
+      duration: 3000,
+    });
+  };
+  
+  const changeMemoryOptimizationLevel = (level: string) => {
+    if (level === memoryOptimizationLevel || !smartMemoryManagement) return;
+    
+    setMemoryOptimizationLevel(level);
+    
+    toast({
+      title: "Memory Optimization Updated",
+      description: `Memory optimization set to ${level} level`,
       duration: 3000,
     });
   };
@@ -187,7 +213,11 @@ const SystemMonitor = () => {
               icon={<Database className="h-5 w-5 text-green-500" />} 
               value={metrics.memory} 
               color="bg-green-500" 
-              detail={smartMemoryManagement ? "32-bit plugins compressed" : ".NET 9 Optimized"}
+              detail={
+                smartMemoryManagement 
+                  ? `${compressedPlugins} plugins compressed (${memoryOptimizationLevel})`
+                  : ".NET 9 Optimized"
+              }
               isOptimized={smartMemoryManagement}
             />
             <MetricCard 
@@ -246,7 +276,7 @@ const SystemMonitor = () => {
                 <h3 className="text-lg font-medium">Advanced Resource Controls</h3>
               </CardHeader>
               <CardContent className="p-4">
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -272,7 +302,9 @@ const SystemMonitor = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
+                  <Separator />
+                  
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Database className="h-4 w-4 text-green-500" />
@@ -290,29 +322,105 @@ const SystemMonitor = () => {
                       Implements memory compression for older 32-bit plugins to reduce their footprint, 
                       while maintaining fast access to frequently used samples through predictive loading.
                     </p>
+                    
+                    {smartMemoryManagement && (
+                      <div className="space-y-2 pt-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Optimization Level:</span>
+                          <div className="flex gap-2">
+                            <Button 
+                              size="sm" 
+                              variant={memoryOptimizationLevel === "minimal" ? "default" : "outline"}
+                              className="h-7 px-2 text-xs"
+                              onClick={() => changeMemoryOptimizationLevel("minimal")}
+                            >
+                              Minimal
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant={memoryOptimizationLevel === "balanced" ? "default" : "outline"}
+                              className="h-7 px-2 text-xs"
+                              onClick={() => changeMemoryOptimizationLevel("balanced")}
+                            >
+                              Balanced
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant={memoryOptimizationLevel === "aggressive" ? "default" : "outline"}
+                              className="h-7 px-2 text-xs"
+                              onClick={() => changeMemoryOptimizationLevel("aggressive")}
+                            >
+                              Aggressive
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-muted/50 p-3 rounded-md">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs font-medium">Compressed Plugins:</span>
+                            <span className="text-xs font-medium">{compressedPlugins}</span>
+                          </div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs font-medium">Memory Savings:</span>
+                            <span className="text-xs font-medium">
+                              {
+                                memoryOptimizationLevel === "minimal" ? "5-10%" :
+                                memoryOptimizationLevel === "balanced" ? "10-20%" : "15-30%"
+                              }
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-medium">Compression Ratio:</span>
+                            <span className="text-xs font-medium">
+                              {
+                                memoryOptimizationLevel === "minimal" ? "1.5:1" :
+                                memoryOptimizationLevel === "balanced" ? "2:1" : "3:1"
+                              }
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center gap-2">
                       <span className="text-sm">Compression ratio:</span>
-                      <Progress className="h-2" value={smartMemoryManagement ? 65 : 0} />
-                      <span className="text-sm">{smartMemoryManagement ? "2:1" : "None"}</span>
+                      <Progress 
+                        className="h-2" 
+                        value={
+                          !smartMemoryManagement ? 0 :
+                          memoryOptimizationLevel === "minimal" ? 30 :
+                          memoryOptimizationLevel === "balanced" ? 65 : 90
+                        } 
+                      />
+                      <span className="text-sm">
+                        {
+                          !smartMemoryManagement ? "None" :
+                          memoryOptimizationLevel === "minimal" ? "1.5:1" :
+                          memoryOptimizationLevel === "balanced" ? "2:1" : "3:1"
+                        }
+                      </span>
                     </div>
                   </div>
                   
                   {hasProFeatures && (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <HardDrive className="h-4 w-4 text-amber-500" />
-                          <span className="font-medium">Project-Specific Resource Profiles</span>
+                    <>
+                      <Separator />
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <HardDrive className="h-4 w-4 text-amber-500" />
+                            <span className="font-medium">Project-Specific Resource Profiles</span>
+                          </div>
+                          <div>
+                            <Button size="sm" variant="outline">Configure</Button>
+                          </div>
                         </div>
-                        <div>
-                          <Button size="sm" variant="outline">Configure</Button>
-                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Creates and saves optimized resource allocation profiles for different project types 
+                          (e.g., mixing sessions need more plugin CPU, while tracking sessions prioritize low-latency monitoring).
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Creates and saves optimized resource allocation profiles for different project types 
-                        (e.g., mixing sessions need more plugin CPU, while tracking sessions prioritize low-latency monitoring).
-                      </p>
-                    </div>
+                    </>
                   )}
                 </div>
               </CardContent>
