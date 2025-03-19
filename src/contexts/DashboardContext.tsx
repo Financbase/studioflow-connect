@@ -207,13 +207,12 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             
           if (error) {
             console.error('Error updating pricing tier:', error);
-            addToast({
+            toast.destructive({
               title: 'Error',
-              description: 'Could not update subscription plan',
-              variant: 'destructive'
+              description: 'Could not update subscription plan'
             });
           } else {
-            addToast({
+            toast.default({
               title: 'Plan Updated',
               description: `Your plan has been updated to ${pricingTier}`
             });
