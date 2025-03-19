@@ -31,6 +31,31 @@ export const recommendations: FeatureRecommendations = {
       title: "Historical Usage Patterns",
       description: "Track resource usage across sessions to identify problematic setups or performance trends.",
       requiredTier: "pro"
+    },
+    {
+      title: "Hardware Accelerated Processing",
+      description: "Automatically offloads compatible DSP processes to GPU for tasks like convolution reverb or spectral processing.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Background Rendering Pipeline",
+      description: "Intelligently pre-renders effect chains that don't require real-time interaction while keeping interactive elements responsive.",
+      requiredTier: "standard"
+    },
+    {
+      title: "I/O Performance Tracking",
+      description: "Monitors disk read/write speeds for sample streaming, buffer underruns, and suggests optimal sample rate/bit depth settings.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Network Performance Analysis",
+      description: "For collaborative sessions, monitors latency, packet loss, and bandwidth utilization with automatic quality adjustment recommendations.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Environment Variables Monitoring",
+      description: "Tracks system-level variables like temperature, power draw, and disk fragmentation that might impact audio performance.",
+      requiredTier: "standard"
     }
   ],
   vm: [
@@ -57,6 +82,31 @@ export const recommendations: FeatureRecommendations = {
     {
       title: "Environment Comparison Tools",
       description: "Visually compare settings between environments to diagnose performance differences.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Distributed Processing Network",
+      description: "Links multiple VMs for parallel processing, allowing projects to distribute CPU-intensive plugins across several virtualized systems.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Hardware Abstraction Layer",
+      description: "Provides consistent access to audio interfaces and controllers across different VM environments through a universal driver translation layer.",
+      requiredTier: "standard"
+    },
+    {
+      title: "VM Resource Scheduling",
+      description: "Allocates system resources to different VMs based on active task priorities, scaling up resources for rendering VMs.",
+      requiredTier: "pro"
+    },
+    {
+      title: "OS Configuration Wizards",
+      description: "Provides guided setup of OS-level parameters critical for audio work with one-click application.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Periodic Optimization Scans",
+      description: "Runs scheduled analysis of VM environments to detect fragmentation, driver conflicts, or other performance degrading factors.",
       requiredTier: "standard"
     }
   ],
@@ -85,6 +135,31 @@ export const recommendations: FeatureRecommendations = {
       title: "Focus Mode Configurations",
       description: "Customized workspace layouts that show only relevant tools for specific tasks to reduce cognitive load.",
       requiredTier: "standard"
+    },
+    {
+      title: "Automation Curve Preservation",
+      description: "Maintains precise automation data even when moving between DAWs with different automation curve implementations or resolution.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Asset Relationship Mapping",
+      description: "Preserves relationships between tracks (sends, groups, VCAs) even when the routing architecture differs between DAWs.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Mix Calibration Tools",
+      description: "Ensures consistent output levels and frequency response when moving projects between different DAW summing engines.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Session Setup Blueprints",
+      description: "Creates comprehensive templates that include not just track structure but also window layouts, controller mappings, and plugin chains.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Intelligent Default Suggestions",
+      description: "Learns from user behavior to suggest appropriate starting points for new projects based on past successful workflows.",
+      requiredTier: "standard"
     }
   ],
   audio: [
@@ -112,6 +187,31 @@ export const recommendations: FeatureRecommendations = {
       title: "Contextual EQ Recommendations",
       description: "Suggests precise EQ adjustments based on instrument recognition and its role in the current mix.",
       requiredTier: "pro"
+    },
+    {
+      title: "Spatial Analysis Tools",
+      description: "Visualizes stereo field, phase relationships, and immersive audio positioning with guidance for optimal placement.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Temporal Pattern Recognition",
+      description: "Identifies rhythmic patterns in spectral content to help analyze groove, note timing, and dynamic consistency across similar sections.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Harmonic Suggestion Engine",
+      description: "Analyzes existing harmonic content to suggest complementary chord progressions, bass lines, or melodic elements.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Instrument Balance Coach",
+      description: "Provides feedback on mix balance using machine learning models trained on successful mixes within similar genres.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Dynamic Contour Visualization",
+      description: "Maps the emotional energy curve of a song based on dynamic range, instrumentation density, and frequency content over time.",
+      requiredTier: "standard"
     }
   ],
   ai: [
@@ -139,6 +239,31 @@ export const recommendations: FeatureRecommendations = {
       title: "Progressive Learning Interface",
       description: "Gradually introduces advanced techniques as users master basics, creating a personalized learning curve.",
       requiredTier: "standard"
+    },
+    {
+      title: "Sound Design Evolution",
+      description: "Generates evolving sound design elements that develop over time based on arrangement landmarks detected in the project.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Character-Based Lyrics",
+      description: "Creates lyric suggestions based on defined character personas, storytelling arc, and emotional progression.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Adaptive Session Planning",
+      description: "Recommends session structures based on available time, project deadlines, and historical time spent on similar tasks.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Contextual Voice Commands",
+      description: "Provides a voice control system that understands DAW-specific terminology and can execute complex command chains.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Decision Fatigue Reduction",
+      description: "Identifies when users are experiencing decision fatigue and suggests either breaks or simplifies choices.",
+      requiredTier: "pro"
     }
   ],
   marketplace: [
@@ -166,6 +291,31 @@ export const recommendations: FeatureRecommendations = {
       title: "Community Beta Testing",
       description: "Connects creators with willing beta testers who match their target user profile.",
       requiredTier: "standard"
+    },
+    {
+      title: "Subscription Bundle Creator",
+      description: "Allows content creators to build their own subscription offerings with customizable access tiers and preview capabilities.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Usage Analytics Dashboard",
+      description: "Provides sellers with detailed analytics on how customers use their products and which features are most valuable.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Automated Quality Assurance",
+      description: "Tests creator submissions across different system configurations to ensure compatibility and stability before marketplace listing.",
+      requiredTier: "pro"
+    },
+    {
+      title: "Dynamic Pricing Models",
+      description: "Offers creators flexible pricing options including pay-what-you-want, subscription access, free-with-attribution, or traditional one-time purchase.",
+      requiredTier: "standard"
+    },
+    {
+      title: "Educational Content Framework",
+      description: "Provides tools for creating interactive tutorials that integrate directly with the DAW environment for hands-on learning.",
+      requiredTier: "pro"
     }
   ]
 };
