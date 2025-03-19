@@ -95,6 +95,13 @@
   }
 }
 
+/* Animation duration and easing adjustments */
+.animate-accordion-down,
+.animate-accordion-up {
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Ensure full page height */
 html, body, #root {
   height: 100%;

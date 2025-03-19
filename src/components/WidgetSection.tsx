@@ -83,11 +83,7 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPr
           </CollapsibleTrigger>
         </div>
         
-        <CollapsibleContent className={cn(
-          "overflow-hidden transition-all",
-          "data-[state=closed]:animate-accordion-up",
-          "data-[state=open]:animate-accordion-down"
-        )}>
+        <CollapsibleContent>
           {children}
           
           <FeatureRecommendation 
