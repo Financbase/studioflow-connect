@@ -12,10 +12,10 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { useEffect } from "react";
 import { useThemeInitializer } from "./hooks/use-theme-initializer";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { supabase } from '@/integrations/supabase/client';
 import { useState } from 'react';
 import ProtectedRoute from "./components/ProtectedRoute";
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 // Initialize query client with optimized settings
 const queryClient = new QueryClient({
@@ -43,12 +43,9 @@ const ScrollToTop = () => {
 const App = () => {
   // Initialize themes and language
   useThemeInitializer();
-  
-  // Initialize Supabase client with correct API
-  const [supabaseClient] = useState(() => createClientComponentClient());
 
   return (
-    <SessionContextProvider supabaseClient={supabaseClient}>
+    <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <DashboardProvider>
