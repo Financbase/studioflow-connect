@@ -5,6 +5,8 @@ import SystemMonitor from "@/components/SystemMonitor";
 import AudioAnalyzer from "@/components/AudioAnalyzer";
 import AITools from "@/components/AITools";
 import VMController from "@/components/VMController";
+import DAWWorkflow from "@/components/DAWWorkflow";
+import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
 
 const Index = () => {
@@ -23,15 +25,23 @@ const Index = () => {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
         <div className="max-w-[1200px] mx-auto space-y-8">
           <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Music Suite Pro</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">StudioFlow X</h1>
             <p className="text-lg text-muted-foreground">
-              Advanced audio production and management toolkit
+              Unified music production platform for legacy integration, multi-DAW workflows, and creative tools
             </p>
           </section>
           
           <Separator />
           
           <SystemMonitor />
+          
+          <Separator />
+          
+          <VMController />
+          
+          <Separator />
+          
+          <DAWWorkflow />
           
           <Separator />
           
@@ -43,13 +53,13 @@ const Index = () => {
           
           <Separator />
           
-          <VMController />
+          <StudioMarketplace />
         </div>
       </main>
       
       <footer className="border-t py-6">
         <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2023 Music Suite Pro. All rights reserved.</p>
+          <p>© 2024 StudioFlow X. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-foreground transition-colors">Terms</a>
             <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
