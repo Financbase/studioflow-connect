@@ -13,7 +13,6 @@ import { DashboardProvider } from "./contexts/DashboardContext";
 import { useEffect } from "react";
 import { useThemeInitializer } from "./hooks/use-theme-initializer";
 import { supabase } from '@/integrations/supabase/client';
-import { useState } from 'react';
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
@@ -40,6 +39,7 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Main application with proper provider nesting
 const App = () => {
   // Initialize themes and language
   useThemeInitializer();
@@ -48,11 +48,12 @@ const App = () => {
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <DashboardProvider>
-            <ThemeProvider>
-              <LanguageProvider>
-                <Toaster />
-                <BrowserRouter>
+          <ThemeProvider>
+            <LanguageProvider>
+              <BrowserRouter>
+                {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
+                <DashboardProvider>
+                  <Toaster />
                   <ScrollToTop />
                   <Routes>
                     <Route path="/auth" element={<Auth />} />
@@ -99,10 +100,10 @@ const App = () => {
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                </BrowserRouter>
-              </LanguageProvider>
-            </ThemeProvider>
-          </DashboardProvider>
+                </DashboardProvider>
+              </BrowserRouter>
+            </LanguageProvider>
+          </ThemeProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </SessionContextProvider>

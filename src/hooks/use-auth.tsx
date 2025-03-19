@@ -2,7 +2,7 @@
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import { Profile } from '@/types/supabase';
 
@@ -17,8 +17,18 @@ interface UseAuthReturn {
 export const useAuth = (): UseAuthReturn => {
   const { isLoading, session, error } = useSessionContext();
   const user = useUser();
-  const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
+  
+  // Use try-catch to handle cases where this hook is used outside a Router context
+  let navigate;
+  try {
+    navigate = useNavigate();
+  } catch (e) {
+    // Create a fallback function that logs an error when used
+    navigate = (path: string) => {
+      console.error('Navigation attempted outside Router context to:', path);
+    };
+  }
 
   const isAuthenticated = !!user;
 
@@ -64,7 +74,9 @@ export const useAuth = (): UseAuthReturn => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      navigate('/auth');
+      if (navigate) {
+        navigate('/auth');
+      }
       toast({
         title: 'Signed out',
         description: 'You have been signed out successfully',
