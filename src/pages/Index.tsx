@@ -7,6 +7,7 @@ import AITools from "@/components/AITools";
 import VMController from "@/components/VMController";
 import DAWWorkflow from "@/components/DAWWorkflow";
 import StudioMarketplace from "@/components/StudioMarketplace";
+import StudioFlowConnect from "@/components/StudioFlowConnect";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -30,6 +31,13 @@ const Index = () => {
               {t("dashboard.subtitle")}
             </p>
           </section>
+          
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+          
+          {/* Prioritizing StudioFlow Connect as the main MVP feature */}
+          <DashboardWidget id="connect" title="StudioFlow Connect">
+            <StudioFlowConnect />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
