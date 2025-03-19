@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
@@ -179,7 +180,7 @@ const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
                 
                 <div className="border p-4 rounded-lg">
                   <h3 className="text-xl font-semibold mb-2">{getTranslation("contact.phone", "Phone Support")}</h3>
-                  <p className="mb-2">{getTranslation("contact.phone_description", "For urgent matters (Pro subscribers only):\")}</p>
+                  <p className="mb-2">{getTranslation("contact.phone_description", "For urgent matters (Pro subscribers only):")}</p>
                   <p className="font-medium">+1 (555) 123-4567</p>
                   <p className="text-sm text-muted-foreground mt-2">{getTranslation("contact.hours", "Hours: Monday-Friday, 9am-5pm EST")}</p>
                 </div>
@@ -530,4 +531,163 @@ const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
                       </div>
                     </div>
                     
-                    <
+                    <div className="mt-6">
+                      <Link to="/" className="text-primary hover:underline">{getTranslation("common.back_to_dashboard", "Return to Dashboard")}</Link>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              
+              {/* Marketplace section */}
+              <section id="marketplace" className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-3 rounded-full">
+                    <ShoppingBag className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-bold">{getTranslation("docs.studio_marketplace", "Studio Marketplace")}</h2>
+                    <p className="text-muted-foreground">{getTranslation("docs.studio_marketplace_desc", "Discover and purchase plugins, samples, and other resources for your production needs.")}</p>
+                    
+                    <div className="mt-4 space-y-4">
+                      <h3 className="text-xl font-semibold">{getTranslation("docs.key_features", "Key Features")}</h3>
+                      <ul className="list-disc ml-5 space-y-2">
+                        <li>{getTranslation("docs.marketplace_feature1", "Curated collection of professional quality plugins and samples")}</li>
+                        <li>{getTranslation("docs.marketplace_feature2", "One-click installation and integration with your DAW")}</li>
+                        <li>{getTranslation("docs.marketplace_feature3", "User reviews and ratings to help you make informed decisions")}</li>
+                        <li>{getTranslation("docs.marketplace_feature4", "Exclusive deals and discounts for StudioFlow X users")}</li>
+                        <li>{getTranslation("docs.marketplace_feature5", "Automated license management and updates")}</li>
+                      </ul>
+                      
+                      <h3 className="text-xl font-semibold mt-6">{getTranslation("docs.best_practices", "Best Practices")}</h3>
+                      <ul className="list-disc ml-5 space-y-2">
+                        <li>{getTranslation("docs.marketplace_practice1", "Create collections of your favorite tools for quick access")}</li>
+                        <li>{getTranslation("docs.marketplace_practice2", "Set up a budget and wishlist for planned purchases")}</li>
+                        <li>{getTranslation("docs.marketplace_practice3", "Use the compatibility checker before purchasing plugins")}</li>
+                        <li>{getTranslation("docs.marketplace_practice4", "Take advantage of the trial versions before committing to purchase")}</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="mt-6">
+                      <Link to="/" className="text-primary hover:underline">{getTranslation("common.back_to_dashboard", "Return to Dashboard")}</Link>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </TabsContent>
+            
+            <TabsContent value="tutorials" className="mt-6 space-y-8">
+              <div className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+                <h2 className="text-2xl font-bold mb-4">{getTranslation("docs.tutorials_title", "Video Tutorials")}</h2>
+                <p className="mb-6">{getTranslation("docs.tutorials_description", "Learn how to get the most out of StudioFlow X with our comprehensive video tutorials.")}</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-lg">Getting Started with StudioFlow X</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <CardDescription className="mb-3">
+                        Learn the basics of setting up your workspace and navigating the interface.
+                      </CardDescription>
+                      <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+                        <div className="text-sm text-muted-foreground">Video Preview</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-lg">System Monitor Advanced Features</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <CardDescription className="mb-3">
+                        Deep dive into performance optimization and resource monitoring.
+                      </CardDescription>
+                      <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+                        <div className="text-sm text-muted-foreground">Video Preview</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-lg">Working with Virtual Machines</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <CardDescription className="mb-3">
+                        Set up and optimize multiple DAW environments with VM Controller.
+                      </CardDescription>
+                      <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+                        <div className="text-sm text-muted-foreground">Video Preview</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-lg">AI-Assisted Mixing Workflows</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <CardDescription className="mb-3">
+                        Leverage AI tools to enhance your mixing process and decisions.
+                      </CardDescription>
+                      <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+                        <div className="text-sm text-muted-foreground">Video Preview</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="faq" className="mt-6 space-y-8">
+              <div className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
+                <h2 className="text-2xl font-bold mb-4">{getTranslation("docs.faq_title", "Frequently Asked Questions")}</h2>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q1", "What are the system requirements for StudioFlow X?")}</h3>
+                    <p className="mt-2">{getTranslation("docs.faq_a1", "StudioFlow X requires a computer with at least 8GB RAM, multi-core processor (Intel i5/AMD Ryzen 5 or better), 5GB free disk space, and Windows 10/11 or macOS 10.15 or later.")}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q2", "Can I use StudioFlow X with any DAW?")}</h3>
+                    <p className="mt-2">{getTranslation("docs.faq_a2", "Yes, StudioFlow X is designed to work with all major DAWs including Ableton Live, Logic Pro, Pro Tools, FL Studio, Cubase, Studio One, Reason, and Bitwig Studio. Some advanced integration features may vary between DAWs.")}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q3", "How do I transfer my license to a new computer?")}</h3>
+                    <p className="mt-2">{getTranslation("docs.faq_a3", "You can deactivate StudioFlow X on your current computer through the Settings > License menu, then activate it on your new computer. Pro subscribers can have StudioFlow X activated on up to 3 devices simultaneously.")}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q4", "What's the difference between Standard and Pro subscriptions?")}</h3>
+                    <p className="mt-2">{getTranslation("docs.faq_a4", "Pro subscription includes additional features such as advanced AI tools, multi-device activation, priority support, beta access to new features, custom theme creation, and expanded cloud storage for project synchronization.")}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q5", "How do I report a bug or request a feature?")}</h3>
+                    <p className="mt-2">{getTranslation("docs.faq_a5", "You can report bugs and submit feature requests through the Help menu > Feedback option in StudioFlow X, or by contacting our support team. We value user feedback and regularly incorporate suggestions into our development roadmap.")}</p>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+      
+      <footer className="border-t py-6">
+        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <p>© 2024 StudioFlow X. {getTranslation("common.all_rights_reserved", "All rights reserved.")}</p>
+          <div className="flex gap-6">
+            <Link to="/terms" className="hover:text-foreground transition-colors">{getTranslation("common.terms", "Terms")}</Link>
+            <Link to="/privacy" className="hover:text-foreground transition-colors">{getTranslation("common.privacy", "Privacy")}</Link>
+            <Link to="/contact" className="hover:text-foreground transition-colors">{getTranslation("common.contact", "Contact")}</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Documentation;
