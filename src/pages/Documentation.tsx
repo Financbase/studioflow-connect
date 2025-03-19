@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
@@ -180,7 +179,7 @@ const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
                 
                 <div className="border p-4 rounded-lg">
                   <h3 className="text-xl font-semibold mb-2">{getTranslation("contact.phone", "Phone Support")}</h3>
-                  <p className="mb-2">{getTranslation("contact.phone_description", "For urgent matters (Pro subscribers only):")}</p>
+                  <p className="mb-2">{getTranslation("contact.phone_description", "For urgent matters (Pro subscribers only):\")}</p>
                   <p className="font-medium">+1 (555) 123-4567</p>
                   <p className="text-sm text-muted-foreground mt-2">{getTranslation("contact.hours", "Hours: Monday-Friday, 9am-5pm EST")}</p>
                 </div>
@@ -531,102 +530,4 @@ const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
                       </div>
                     </div>
                     
-                    <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">{getTranslation("common.back_to_dashboard", "Return to Dashboard")}</Link>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              
-              {/* Marketplace section */}
-              <section id="marketplace" className={`p-6 border rounded-lg ${themeVariant === "windows" ? "windows-panel" : themeVariant === "classic" ? "classic-panel" : themeVariant === "legacy" ? "legacy-panel" : ""}`}>
-                <div className="flex items-start gap-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <ShoppingBag className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">{getTranslation("docs.studio_marketplace", "Studio Marketplace")}</h2>
-                    <p className="text-muted-foreground">{getTranslation("docs.studio_marketplace_desc", "Browse and purchase tools, presets, and sample packs to enhance your studio setup.")}</p>
-                    
-                    <div className="mt-4 space-y-4">
-                      <h3 className="text-xl font-semibold">{getTranslation("docs.key_features", "Key Features")}</h3>
-                      <ul className="list-disc ml-5 space-y-2">
-                        <li>{getTranslation("docs.marketplace_feature1", "Curated collection of high-quality plugins and tools")}</li>
-                        <li>{getTranslation("docs.marketplace_feature2", "Direct integration with your existing projects")}</li>
-                        <li>{getTranslation("docs.marketplace_feature3", "One-click installation and updates")}</li>
-                        <li>{getTranslation("docs.marketplace_feature4", "Community ratings and reviews")}</li>
-                        <li>{getTranslation("docs.marketplace_feature5", "Subscription options for premium content")}</li>
-                      </ul>
-                      
-                      <h3 className="text-xl font-semibold mt-6">{getTranslation("docs.best_practices", "Best Practices")}</h3>
-                      <ul className="list-disc ml-5 space-y-2">
-                        <li>{getTranslation("docs.marketplace_practice1", "Create a wishlist for budget planning")}</li>
-                        <li>{getTranslation("docs.marketplace_practice2", "Try demo versions before purchasing")}</li>
-                        <li>{getTranslation("docs.marketplace_practice3", "Keep track of your licenses and activation codes")}</li>
-                        <li>{getTranslation("docs.marketplace_practice4", "Subscribe to notifications for updates and sales")}</li>
-                      </ul>
-                    </div>
-                    
-                    <div className="mt-6">
-                      <Link to="/" className="text-primary hover:underline">{getTranslation("common.back_to_dashboard", "Return to Dashboard")}</Link>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </TabsContent>
-            
-            <TabsContent value="tutorials" className="mt-6">
-              <div className="p-6 border rounded-lg">
-                <h2 className="text-2xl font-bold mb-4">{getTranslation("docs.coming_soon", "Coming Soon")}</h2>
-                <p className="text-muted-foreground">
-                  {getTranslation("docs.tutorials_coming_soon", "Our team is currently developing comprehensive tutorials for StudioFlow X. Check back soon for detailed guides on how to make the most of your music production workflow.")}
-                </p>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="faq" className="mt-6">
-              <div className="p-6 border rounded-lg">
-                <h2 className="text-2xl font-bold mb-4">{getTranslation("docs.faq_title", "Frequently Asked Questions")}</h2>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q1", "How do I optimize my system for audio processing?")}</h3>
-                    <p className="mt-2 text-muted-foreground">
-                      {getTranslation("docs.faq_a1", "Use the System Monitor to identify resource bottlenecks. Increase buffer size for stability, close unused applications, disable unnecessary background services, and consider dedicated audio drives for improved performance.")}
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q2", "Can I use multiple DAWs simultaneously?")}</h3>
-                    <p className="mt-2 text-muted-foreground">
-                      {getTranslation("docs.faq_a2", "Yes, with DAW Workflow Integration you can run multiple DAWs and share audio and MIDI between them. Virtual audio routing is configured automatically, and project files can be synchronized for a seamless experience.")}
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold">{getTranslation("docs.faq_q3", "Which subscription tier is right for me?")}</h3>
-                    <p className="mt-2 text-muted-foreground">
-                      {getTranslation("docs.faq_a3", "The Free tier provides essential monitoring tools and basic integration. The Standard tier adds advanced analysis and multi-DAW support. The Pro tier includes everything plus AI tools and priority support. Choose based on your production complexity and professional needs.")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      
-      <footer className="border-t py-6">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2024 StudioFlow X. {getTranslation("common.all_rights_reserved", "All rights reserved.")}</p>
-          <div className="flex gap-6">
-            <Link to="/terms" className="hover:text-foreground transition-colors">{getTranslation("common.terms", "Terms")}</Link>
-            <Link to="/privacy" className="hover:text-foreground transition-colors">{getTranslation("common.privacy", "Privacy")}</Link>
-            <Link to="/contact" className="hover:text-foreground transition-colors">{getTranslation("common.contact", "Contact")}</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default Documentation;
+                    <
