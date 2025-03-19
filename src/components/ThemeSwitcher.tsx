@@ -58,7 +58,7 @@ const ThemeSwitcher = () => {
             className={themeVariant === "modern" ? "bg-accent text-accent-foreground" : ""}
           >
             <Paintbrush className="mr-2 h-4 w-4" />
-            <span>Modern (Apple-inspired)</span>
+            <span>Modern</span>
           </DropdownMenuItem>
           
           <DropdownMenuItem 
