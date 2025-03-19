@@ -8,11 +8,10 @@ import VMController from "@/components/VMController";
 import DAWWorkflow from "@/components/DAWWorkflow";
 import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
-import WidgetSection from "@/components/WidgetSection";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Panel } from "@/components/ui/panel";
 import { Link } from "react-router-dom";
+import DashboardWidget from "@/components/DashboardWidget";
 
 const Index = () => {
   const { themeVariant } = useTheme();
@@ -33,51 +32,39 @@ const Index = () => {
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="system" title={t("widgets.system")} isPremiumFeature>
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <SystemMonitor />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="system" title={t("widgets.system")} isPremiumFeature>
+            <SystemMonitor />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="vm" title="Virtual Machine Controller" isPremiumFeature>
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <VMController />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="vm" title="Virtual Machine Controller" isPremiumFeature>
+            <VMController />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="daw" title="DAW Workflow Integration" isPremiumFeature>
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <DAWWorkflow />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="daw" title="DAW Workflow Integration" isPremiumFeature>
+            <DAWWorkflow />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="audio" title="Audio Analysis">
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <AudioAnalyzer />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="audio" title="Audio Analysis">
+            <AudioAnalyzer />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="ai" title="AI-Powered Tools" isPremiumFeature>
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <AITools />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="ai" title="AI-Powered Tools" isPremiumFeature>
+            <AITools />
+          </DashboardWidget>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="marketplace" title="Studio Marketplace" isPremiumFeature>
-            <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
-              <StudioMarketplace />
-            </Panel>
-          </WidgetSection>
+          <DashboardWidget id="marketplace" title="Studio Marketplace" isPremiumFeature>
+            <StudioMarketplace />
+          </DashboardWidget>
         </div>
       </main>
       

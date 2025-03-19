@@ -1,0 +1,32 @@
+
+/* Responsive text handling */
+.text-adaptive {
+  @apply break-words hyphens-auto overflow-wrap-anywhere;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+/* Component styling utilities */
+.btn-primary {
+  @apply bg-primary text-primary-foreground shadow-sm transition-all;
+}
+
+.panel {
+  @apply bg-card border border-border/50 shadow-sm p-4;
+}
+
+/* Dropdown Menu Styles to ensure legibility */
+.dropdown-menu-content,
+[data-radix-popper-content-wrapper] {
+  @apply bg-popover text-popover-foreground border border-border shadow-md;
+}
+
+[role="menuitem"] {
+  @apply text-foreground hover:text-accent-foreground;
+}
