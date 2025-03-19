@@ -3,18 +3,20 @@ import React from "react";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
+import { Lock, Sparkles } from "lucide-react";
 import FeatureRecommendation from "@/components/FeatureRecommendation";
 import { recommendations } from "@/data/featureRecommendations";
+import { Badge } from "@/components/ui/badge";
 
 interface WidgetSectionProps {
   id: WidgetId;
   title: string;
   children: React.ReactNode;
+  isPremiumFeature?: boolean;
 }
 
-const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children }) => {
-  const { isWidgetVisible, hasFeatureAccess } = useDashboard();
+const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPremiumFeature }) => {
+  const { isWidgetVisible, hasFeatureAccess, pricingTier } = useDashboard();
   
   const visible = isWidgetVisible(id);
   const hasAccess = hasFeatureAccess(id);
@@ -45,7 +47,14 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children }) =>
   
   return (
     <section id={id} className="py-6 w-full">
-      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <h2 className="text-2xl font-semibold">{title}</h2>
+        {isPremiumFeature && pricingTier !== "free" && (
+          <Badge variant="default" className="bg-gradient-to-r from-amber-500 to-orange-500">
+            <Sparkles className="h-3 w-3 mr-1" /> Premium
+          </Badge>
+        )}
+      </div>
       {children}
       
       <FeatureRecommendation 

@@ -10,6 +10,7 @@ import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
 import { DashboardProvider } from "@/contexts/DashboardContext";
 import WidgetSection from "@/components/WidgetSection";
+import { Plus } from "lucide-react";
 
 const Index = () => {
   // Set dark mode by default
@@ -36,19 +37,19 @@ const Index = () => {
             
             <Separator />
             
-            <WidgetSection id="system" title="StudioFlow System Monitor">
+            <WidgetSection id="system" title="StudioFlow System Monitor" isPremiumFeature>
               <SystemMonitor />
             </WidgetSection>
             
             <Separator />
             
-            <WidgetSection id="vm" title="Virtual Machine Controller">
+            <WidgetSection id="vm" title="Virtual Machine Controller" isPremiumFeature>
               <VMController />
             </WidgetSection>
             
             <Separator />
             
-            <WidgetSection id="daw" title="DAW Workflow Integration">
+            <WidgetSection id="daw" title="DAW Workflow Integration" isPremiumFeature>
               <DAWWorkflow />
             </WidgetSection>
             
@@ -60,13 +61,13 @@ const Index = () => {
             
             <Separator />
             
-            <WidgetSection id="ai" title="AI-Powered Tools">
+            <WidgetSection id="ai" title="AI-Powered Tools" isPremiumFeature>
               <AITools />
             </WidgetSection>
             
             <Separator />
             
-            <WidgetSection id="marketplace" title="Studio Marketplace">
+            <WidgetSection id="marketplace" title="Studio Marketplace" isPremiumFeature>
               <StudioMarketplace />
             </WidgetSection>
           </div>
