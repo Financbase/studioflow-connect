@@ -8,6 +8,7 @@ import FeatureRecommendation from "@/components/FeatureRecommendation";
 import { recommendations } from "@/data/featureRecommendations";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 
 interface WidgetSectionProps {
   id: WidgetId;
@@ -82,7 +83,11 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPr
           </CollapsibleTrigger>
         </div>
         
-        <CollapsibleContent className="data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
+        <CollapsibleContent className={cn(
+          "overflow-hidden transition-all",
+          "data-[state=closed]:animate-accordion-up",
+          "data-[state=open]:animate-accordion-down"
+        )}>
           {children}
           
           <FeatureRecommendation 
