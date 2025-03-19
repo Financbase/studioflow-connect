@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
@@ -533,4 +534,148 @@ const Documentation: React.FC<DocumentationProps> = ({ page = "docs" }) => {
                   </div>
                   <div className="space-y-2">
                     <h2 className="text-2xl font-bold">{t("docs.studio_marketplace", "Studio Marketplace")}</h2>
-                    <p className="text-muted-foreground">{t("docs.studio_marketplace_desc",
+                    <p className="text-muted-foreground">{t("docs.studio_marketplace_desc", "Discover and acquire professional tools, presets, and content for your audio productions.")}</p>
+                    
+                    <div className="mt-4 space-y-4">
+                      <h3 className="text-xl font-semibold">{t("docs.key_features", "Key Features")}</h3>
+                      <ul className="list-disc ml-5 space-y-2">
+                        <li>{t("docs.marketplace_feature1", "Curated instrument and effect plugins from top developers")}</li>
+                        <li>{t("docs.marketplace_feature2", "Professional sample packs and loop libraries")}</li>
+                        <li>{t("docs.marketplace_feature3", "Preset collections for popular synthesizers and effects")}</li>
+                        <li>{t("docs.marketplace_feature4", "Project templates for various genres and production styles")}</li>
+                        <li>{t("docs.marketplace_feature5", "One-click installation and integration with your DAW")}</li>
+                      </ul>
+                      
+                      <h3 className="text-xl font-semibold mt-6">{t("docs.best_practices", "Best Practices")}</h3>
+                      <ul className="list-disc ml-5 space-y-2">
+                        <li>{t("docs.marketplace_practice1", "Use the tag system to find content that matches your production style")}</li>
+                        <li>{t("docs.marketplace_practice2", "Check compatibility information before purchasing plugins")}</li>
+                        <li>{t("docs.marketplace_practice3", "Utilize the preview features to audition content before purchase")}</li>
+                        <li>{t("docs.marketplace_practice4", "Consider bundle deals for related content to maximize value")}</li>
+                      </ul>
+                      
+                      <div className="p-4 bg-primary/10 border border-primary/20 rounded-md mt-4">
+                        <h4 className="font-medium">{t("docs.featured_categories", "Featured Categories")}</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                          <Card className="h-full">
+                            <CardHeader className="p-3">
+                              <CardTitle className="text-sm">{t("docs.plugins", "Plugins")}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-3 pt-0">
+                              <CardDescription className="text-xs">
+                                {t("docs.plugins_desc", "Virtual instruments and audio effects")}
+                              </CardDescription>
+                            </CardContent>
+                          </Card>
+                          <Card className="h-full">
+                            <CardHeader className="p-3">
+                              <CardTitle className="text-sm">{t("docs.samples", "Samples")}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-3 pt-0">
+                              <CardDescription className="text-xs">
+                                {t("docs.samples_desc", "Professional audio samples and loops")}
+                              </CardDescription>
+                            </CardContent>
+                          </Card>
+                          <Card className="h-full">
+                            <CardHeader className="p-3">
+                              <CardTitle className="text-sm">{t("docs.presets", "Presets")}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-3 pt-0">
+                              <CardDescription className="text-xs">
+                                {t("docs.presets_desc", "Ready-to-use settings for instruments and effects")}
+                              </CardDescription>
+                            </CardContent>
+                          </Card>
+                          <Card className="h-full">
+                            <CardHeader className="p-3">
+                              <CardTitle className="text-sm">{t("docs.templates", "Templates")}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-3 pt-0">
+                              <CardDescription className="text-xs">
+                                {t("docs.templates_desc", "Production-ready project templates")}
+                              </CardDescription>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6">
+                      <Link to="/" className="text-primary hover:underline">{t("common.back_to_dashboard", "Return to Dashboard")}</Link>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </TabsContent>
+            
+            <TabsContent value="tutorials">
+              <div className="p-6 text-center">
+                <h3 className="text-xl font-semibold">{t("docs.coming_soon", "Tutorials Coming Soon")}</h3>
+                <p className="text-muted-foreground mt-2">
+                  {t("docs.tutorials_message", "Our video and text tutorials are currently being prepared and will be available soon. Check back for comprehensive workflow guides.")}
+                </p>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="faq">
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-4">{t("docs.faq_title", "Frequently Asked Questions")}</h3>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-medium">{t("docs.faq1", "How do I install plugins for use with StudioFlow X?")}</h4>
+                    <p className="text-muted-foreground mt-1">
+                      {t("docs.faq1_answer", "StudioFlow X automatically detects VST, AU, and AAX plugins installed on your system. You can also manually specify plugin directories in the Settings > Audio > Plugin Paths section.")}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium">{t("docs.faq2", "Can I use StudioFlow X with my existing DAW?")}</h4>
+                    <p className="text-muted-foreground mt-1">
+                      {t("docs.faq2_answer", "Yes, StudioFlow X is designed to integrate with popular DAWs rather than replace them. It enhances your existing workflow by providing system monitoring, resource optimization, and workflow tools that complement your DAW.")}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium">{t("docs.faq3", "What hardware specifications do you recommend?")}</h4>
+                    <p className="text-muted-foreground mt-1">
+                      {t("docs.faq3_answer", "For optimal performance, we recommend a multi-core processor (8+ cores), 16GB+ RAM, and an SSD for your system and audio files. However, StudioFlow X is optimized to work efficiently even on more modest systems.")}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium">{t("docs.faq4", "How do I backup my configurations and presets?")}</h4>
+                    <p className="text-muted-foreground mt-1">
+                      {t("docs.faq4_answer", "StudioFlow X includes an automatic backup system in Settings > System > Backup. You can also manually export your configurations as archives that can be restored on any installation.")}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium">{t("docs.faq5", "Is there a subscription model or is it a one-time purchase?")}</h4>
+                    <p className="text-muted-foreground mt-1">
+                      {t("docs.faq5_answer", "StudioFlow X offers both options. The Core version is available as a one-time purchase, while the Pro and Enterprise editions are available on a subscription basis with advanced features and priority support.")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+      
+      <footer className="border-t py-6">
+        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <p>© 2024 StudioFlow X. {t("common.all_rights_reserved", "All rights reserved.")}</p>
+          <div className="flex gap-6">
+            <Link to="/terms" className="hover:text-foreground transition-colors">{t("common.terms", "Terms")}</Link>
+            <Link to="/privacy" className="hover:text-foreground transition-colors">{t("common.privacy", "Privacy")}</Link>
+            <Link to="/contact" className="hover:text-foreground transition-colors">{t("common.contact", "Contact")}</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Documentation;

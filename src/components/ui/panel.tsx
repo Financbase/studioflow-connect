@@ -15,7 +15,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-lg border bg-card text-card-foreground p-4 overflow-auto", 
+          "rounded-lg border bg-card text-card-foreground p-4 overflow-auto max-h-full", 
           // Classic theme styles
           themeVariant === "classic" && "border-2 shadow-sm",
           !isDarkMode && themeVariant === "classic" && "bg-gradient-to-b from-card/95 to-card",
@@ -40,6 +40,10 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           variant === "elevated" && themeVariant === "legacy" && "shadow-md",
           variant === "elevated" && themeVariant === "classic" && "shadow-[3px_3px_0] shadow-border",
           variant === "elevated" && themeVariant === "windows" && "shadow-[2px_2px_5px_rgba(0,0,0,0.2)]",
+          
+          // Add stronger hover/focus states with better contrast for all themes
+          isDarkMode && "hover:bg-card/100 focus-within:bg-card/100 focus-within:ring-1 focus-within:ring-primary/40",
+          !isDarkMode && "hover:bg-card focus-within:bg-card/100 focus-within:ring-1 focus-within:ring-primary/20",
           
           className
         )}
