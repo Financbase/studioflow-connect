@@ -12,6 +12,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import DashboardWidget from "@/components/DashboardWidget";
+import { WidgetId } from "@/contexts/DashboardContext";
 
 const Index = () => {
   const { themeVariant } = useTheme();

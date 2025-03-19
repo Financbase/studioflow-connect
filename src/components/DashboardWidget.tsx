@@ -3,9 +3,10 @@ import React from "react";
 import { Panel } from "@/components/ui/panel";
 import { useTheme } from "@/contexts/ThemeContext";
 import WidgetSection from "@/components/WidgetSection";
+import { WidgetId } from "@/contexts/DashboardContext";
 
 interface DashboardWidgetProps {
-  id: string;
+  id: WidgetId;
   title: string;
   isPremiumFeature?: boolean;
   children: React.ReactNode;
