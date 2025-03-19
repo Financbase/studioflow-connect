@@ -69,6 +69,17 @@ const widgetHelpContent: Record<WidgetId, { title: string, content: React.ReactN
         <p>Share and sell your own creations to the community.</p>
       </div>
     )
+  },
+  connect: {
+    title: "StudioFlow Connect",
+    content: (
+      <div className="space-y-2">
+        <p>Cross-platform storage access for producers to connect their hard drives across any operating system.</p>
+        <p>Seamlessly read and write to storage devices regardless of format, eliminating compatibility issues.</p>
+        <p>Bridge legacy plugins across different DAWs and operating systems.</p>
+      </div>
+    ),
+    severity: "info"
   }
 };
 

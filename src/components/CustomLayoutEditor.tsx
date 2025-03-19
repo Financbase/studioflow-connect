@@ -32,7 +32,8 @@ const CustomLayoutEditor = () => {
       'daw': 'widget.dawworkflow',
       'audio': 'widget.audioanalyzer',
       'ai': 'widget.aitools',
-      'marketplace': 'widget.marketplace'
+      'marketplace': 'widget.marketplace',
+      'connect': 'widget.connect'
     };
     
     return t(widgetLabelMap[widgetId]);
