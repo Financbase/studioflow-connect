@@ -60,19 +60,19 @@ const AudioAssetUploader: React.FC<AudioAssetUploaderProps> = ({ onUploadComplet
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
       
-      // Upload file to Supabase Storage
+      // Upload file to Supabase Storage - Fixed: Removed onUploadProgress
       const { data: storageData, error: storageError } = await supabase.storage
         .from('audio_assets')
         .upload(filePath, file, {
           cacheControl: '3600',
-          onUploadProgress: (progress) => {
-            setProgress(Math.round((progress.loaded / progress.total) * 100));
-          },
         });
         
       if (storageError) {
         throw storageError;
       }
+      
+      // Manually update progress since we can't use onUploadProgress
+      setProgress(100);
       
       // Create a record in the audio_assets table
       const { data: assetData, error: assetError } = await supabase
