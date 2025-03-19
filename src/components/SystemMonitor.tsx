@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Cpu, Memory, HardDrive, Wifi } from "lucide-react";
+import { Cpu, Database, HardDrive, Wifi } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { fetchSystemMetrics } from "@/lib/systemMetrics";
@@ -40,7 +40,7 @@ const SystemMonitor = () => {
         />
         <MetricCard 
           title="Memory" 
-          icon={<Memory className="h-5 w-5 text-green-500" />} 
+          icon={<Database className="h-5 w-5 text-green-500" />} 
           value={metrics.memory} 
           color="bg-green-500" 
         />
@@ -79,7 +79,12 @@ const MetricCard = ({ title, icon, value, color }: MetricCardProps) => {
         <span className="text-sm font-semibold">{value}%</span>
       </CardHeader>
       <CardContent className="p-4 pt-2">
-        <Progress value={value} className="h-2" indicatorClassName={color} />
+        <div className={`h-2 w-full bg-secondary rounded-full overflow-hidden`}>
+          <div 
+            className={`h-full ${color} transition-all`} 
+            style={{ width: `${value}%` }}
+          />
+        </div>
       </CardContent>
     </Card>
   );
