@@ -67,8 +67,8 @@ export function useToast() {
 
 type ToastOptions = Omit<Partial<Toast>, 'id'>;
 
-// Create a toast function that can be called directly and will use default variant
-const createToast = (opts: ToastOptions) => {
+// Create a toast function that can be called directly
+const toast = (opts: ToastOptions) => {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -77,8 +77,8 @@ const createToast = (opts: ToastOptions) => {
   });
 };
 
-// Add methods to the createToast function for variant-specific toasts
-createToast.default = (opts: ToastOptions) => {
+// Add methods to the toast function for variant-specific toasts
+toast.default = (opts: ToastOptions) => {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -87,7 +87,7 @@ createToast.default = (opts: ToastOptions) => {
   });
 };
 
-createToast.destructive = (opts: ToastOptions) => {
+toast.destructive = (opts: ToastOptions) => {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -96,7 +96,7 @@ createToast.destructive = (opts: ToastOptions) => {
   });
 };
 
-createToast.custom = (opts: ToastOptions) => {
+toast.custom = (opts: ToastOptions) => {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
@@ -105,4 +105,4 @@ createToast.custom = (opts: ToastOptions) => {
 };
 
 // Export the toast function with its methods
-export const toast = createToast;
+export { toast };
