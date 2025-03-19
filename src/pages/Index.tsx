@@ -8,6 +8,8 @@ import VMController from "@/components/VMController";
 import DAWWorkflow from "@/components/DAWWorkflow";
 import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
+import { DashboardProvider } from "@/contexts/DashboardContext";
+import WidgetSection from "@/components/WidgetSection";
 
 const Index = () => {
   // Set dark mode by default
@@ -19,55 +21,69 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
-      <Header />
-      
-      <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
-        <div className="max-w-[1200px] mx-auto space-y-8">
-          <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">StudioFlow X</h1>
-            <p className="text-lg text-muted-foreground">
-              Unified music production platform for legacy integration, multi-DAW workflows, and creative tools
-            </p>
-          </section>
-          
-          <Separator />
-          
-          <SystemMonitor />
-          
-          <Separator />
-          
-          <VMController />
-          
-          <Separator />
-          
-          <DAWWorkflow />
-          
-          <Separator />
-          
-          <AudioAnalyzer />
-          
-          <Separator />
-          
-          <AITools />
-          
-          <Separator />
-          
-          <StudioMarketplace />
-        </div>
-      </main>
-      
-      <footer className="border-t py-6">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2024 StudioFlow X. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+    <DashboardProvider>
+      <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+        <Header />
+        
+        <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
+          <div className="max-w-[1200px] mx-auto space-y-8">
+            <section className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">StudioFlow X</h1>
+              <p className="text-lg text-muted-foreground">
+                Unified music production platform for legacy integration, multi-DAW workflows, and creative tools
+              </p>
+            </section>
+            
+            <Separator />
+            
+            <WidgetSection id="system" title="StudioFlow System Monitor">
+              <SystemMonitor />
+            </WidgetSection>
+            
+            <Separator />
+            
+            <WidgetSection id="vm" title="Virtual Machine Controller">
+              <VMController />
+            </WidgetSection>
+            
+            <Separator />
+            
+            <WidgetSection id="daw" title="DAW Workflow Integration">
+              <DAWWorkflow />
+            </WidgetSection>
+            
+            <Separator />
+            
+            <WidgetSection id="audio" title="Audio Analysis">
+              <AudioAnalyzer />
+            </WidgetSection>
+            
+            <Separator />
+            
+            <WidgetSection id="ai" title="AI-Powered Tools">
+              <AITools />
+            </WidgetSection>
+            
+            <Separator />
+            
+            <WidgetSection id="marketplace" title="Studio Marketplace">
+              <StudioMarketplace />
+            </WidgetSection>
           </div>
-        </div>
-      </footer>
-    </div>
+        </main>
+        
+        <footer className="border-t py-6">
+          <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>© 2024 StudioFlow X. All rights reserved.</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-foreground transition-colors">Terms</a>
+              <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
+              <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </DashboardProvider>
   );
 };
 

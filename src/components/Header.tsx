@@ -11,11 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ViewSelector from "@/components/ViewSelector";
+import PlanSwitcher from "@/components/PlanSwitcher";
+import CustomLayoutEditor from "@/components/CustomLayoutEditor";
+import { useDashboard } from "@/contexts/DashboardContext";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { viewMode, pricingTier, setViewMode } = useDashboard();
 
   // Initialize dark mode from localStorage or based on user preference
   useEffect(() => {
@@ -46,19 +51,23 @@ const Header = () => {
             <Menu className="h-5 w-5" />
           </Button>
         ) : (
-          <nav className="flex items-center gap-5">
-            <a href="#system" className="text-sm font-medium transition-colors hover:text-primary">
-              System
-            </a>
-            <a href="#audio" className="text-sm font-medium transition-colors hover:text-primary">
-              Audio Analysis
-            </a>
-            <a href="#ai-tools" className="text-sm font-medium transition-colors hover:text-primary">
-              AI Tools
-            </a>
-            <a href="#vm-controller" className="text-sm font-medium transition-colors hover:text-primary">
-              VM Controller
-            </a>
+          <div className="flex items-center gap-5">
+            <ViewSelector />
+            
+            {viewMode === "custom" && pricingTier === "pro" && (
+              <CustomLayoutEditor />
+            )}
+            
+            <PlanSwitcher 
+              currentPlan={pricingTier}
+              onPlanChange={(plan) => {
+                // We're updating localStorage directly because 
+                // in a real app this would be handled by the backend
+                localStorage.setItem("pricing_tier", plan);
+                // Force a page reload to update the context
+                window.location.reload();
+              }}
+            />
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -85,12 +94,34 @@ const Header = () => {
               <LucideHelpCircle className="h-[1.2rem] w-[1.2rem]" />
               <span className="sr-only">Help</span>
             </Button>
-          </nav>
+          </div>
         )}
         
         {isMobile && isMenuOpen && (
           <div className="absolute top-16 left-0 right-0 bg-background border-b border-border animate-slide-in">
             <nav className="flex flex-col p-4 gap-4">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium">Dashboard View</span>
+                <ViewSelector />
+              </div>
+              
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium">Plan</span>
+                <PlanSwitcher 
+                  currentPlan={pricingTier}
+                  onPlanChange={(plan) => {
+                    localStorage.setItem("pricing_tier", plan);
+                    window.location.reload();
+                  }}
+                />
+              </div>
+              
+              {viewMode === "custom" && pricingTier === "pro" && (
+                <div className="py-2">
+                  <CustomLayoutEditor />
+                </div>
+              )}
+              
               <a href="#system" className="text-sm font-medium py-2 transition-colors hover:text-primary">
                 System
               </a>
