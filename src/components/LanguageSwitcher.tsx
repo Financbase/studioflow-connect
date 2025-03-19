@@ -1,0 +1,85 @@
+
+import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Languages } from "lucide-react";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
+
+const LanguageSwitcher = () => {
+  const { language, setLanguage, t } = useLanguage();
+  
+  const getFlagEmoji = (languageCode: Language) => {
+    const flags: Record<Language, string> = {
+      en: "🇬🇧",
+      es: "🇪🇸",
+      fr: "🇫🇷",
+      de: "🇩🇪",
+      sv: "🇸🇪"
+    };
+    return flags[languageCode];
+  };
+  
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" className="relative">
+          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <span className="sr-only">Change Language</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[150px]">
+        <DropdownMenuLabel>Language</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        
+        <DropdownMenuItem 
+          onClick={() => setLanguage("en")}
+          className={language === "en" ? "bg-accent text-accent-foreground" : ""}
+        >
+          <span className="mr-2">{getFlagEmoji("en")}</span>
+          <span>{t("language.en")}</span>
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={() => setLanguage("es")}
+          className={language === "es" ? "bg-accent text-accent-foreground" : ""}
+        >
+          <span className="mr-2">{getFlagEmoji("es")}</span>
+          <span>{t("language.es")}</span>
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={() => setLanguage("fr")}
+          className={language === "fr" ? "bg-accent text-accent-foreground" : ""}
+        >
+          <span className="mr-2">{getFlagEmoji("fr")}</span>
+          <span>{t("language.fr")}</span>
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={() => setLanguage("de")}
+          className={language === "de" ? "bg-accent text-accent-foreground" : ""}
+        >
+          <span className="mr-2">{getFlagEmoji("de")}</span>
+          <span>{t("language.de")}</span>
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={() => setLanguage("sv")}
+          className={language === "sv" ? "bg-accent text-accent-foreground" : ""}
+        >
+          <span className="mr-2">{getFlagEmoji("sv")}</span>
+          <span>{t("language.sv")}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default LanguageSwitcher;

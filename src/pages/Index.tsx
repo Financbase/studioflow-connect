@@ -10,10 +10,12 @@ import StudioMarketplace from "@/components/StudioMarketplace";
 import { Separator } from "@/components/ui/separator";
 import WidgetSection from "@/components/WidgetSection";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Panel } from "@/components/ui/panel";
 
 const Index = () => {
   const { themeVariant } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased`}>
@@ -22,15 +24,15 @@ const Index = () => {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
         <div className="max-w-[1200px] mx-auto space-y-8">
           <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">StudioFlow X</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("dashboard.title")}</h1>
             <p className="text-lg text-muted-foreground">
-              Unified music production platform for legacy integration, multi-DAW workflows, and creative tools
+              {t("dashboard.subtitle")}
             </p>
           </section>
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
-          <WidgetSection id="system" title="StudioFlow System Monitor" isPremiumFeature>
+          <WidgetSection id="system" title={t("widgets.system")} isPremiumFeature>
             <Panel variant={themeVariant === "classic" || themeVariant === "windows" ? "elevated" : "default"}>
               <SystemMonitor />
             </Panel>
@@ -80,11 +82,11 @@ const Index = () => {
       
       <footer className={`border-t py-6 ${themeVariant === "windows" ? "border-t-2" : ""}`}>
         <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2024 StudioFlow X. All rights reserved.</p>
+          <p>{t("footer.copyright")}</p>
           <div className="flex gap-6">
-            <a href="/docs#terms" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="/docs#privacy" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="/docs#contact" className="hover:text-foreground transition-colors">Contact</a>
+            <a href="/docs#terms" className="hover:text-foreground transition-colors">{t("footer.terms")}</a>
+            <a href="/docs#privacy" className="hover:text-foreground transition-colors">{t("footer.privacy")}</a>
+            <a href="/docs#contact" className="hover:text-foreground transition-colors">{t("footer.contact")}</a>
           </div>
         </div>
       </footer>
