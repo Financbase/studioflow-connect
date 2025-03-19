@@ -11,7 +11,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { useEffect } from "react";
 import { useThemeInitializer } from "./hooks/use-theme-initializer";
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
 
@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
       refetchOnWindowFocus: false, // Disable refetching on window focus for better performance
-      cacheTime: 10 * 60 * 1000, // 10 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (replaced cacheTime which is deprecated)
     },
   },
 });
@@ -42,8 +42,8 @@ const App = () => {
   // Initialize themes and language
   useThemeInitializer();
   
-  // Initialize Supabase client
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  // Initialize Supabase client with correct API
+  const [supabaseClient] = useState(() => createClientComponentClient());
 
   return (
     <SessionContextProvider supabaseClient={supabaseClient}>
