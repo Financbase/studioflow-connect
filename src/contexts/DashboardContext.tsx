@@ -10,6 +10,7 @@ interface UserPreferences {
   viewMode: ViewMode;
   customLayout: WidgetId[];
   theme: "dark" | "light";
+  collapsedWidgets: WidgetId[];
 }
 
 interface DashboardContextType {
@@ -17,18 +18,22 @@ interface DashboardContextType {
   pricingTier: PricingTier;
   customLayout: WidgetId[];
   visibleWidgets: WidgetId[];
+  collapsedWidgets: WidgetId[];
   featureAccess: Record<WidgetId, boolean>;
   setViewMode: (mode: ViewMode) => void;
   setPricingTier: (tier: PricingTier) => void;
   updateCustomLayout: (widgets: WidgetId[]) => void;
   isWidgetVisible: (widgetId: WidgetId) => boolean;
   hasFeatureAccess: (widgetId: WidgetId) => boolean;
+  toggleWidgetCollapse: (widgetId: WidgetId) => void;
+  isWidgetCollapsed: (widgetId: WidgetId) => boolean;
 }
 
 const defaultPreferences: UserPreferences = {
   viewMode: "simple",
   customLayout: ["system", "audio", "ai"],
-  theme: "dark"
+  theme: "dark",
+  collapsedWidgets: []
 };
 
 // Define which widgets are visible in each view mode
@@ -110,18 +115,39 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     localStorage.setItem("pricing_tier", tier);
   };
   
+  const toggleWidgetCollapse = (widgetId: WidgetId) => {
+    setPreferences(prev => {
+      const isCurrentlyCollapsed = prev.collapsedWidgets.includes(widgetId);
+      const updatedCollapsedWidgets = isCurrentlyCollapsed
+        ? prev.collapsedWidgets.filter(id => id !== widgetId)
+        : [...prev.collapsedWidgets, widgetId];
+      
+      return {
+        ...prev,
+        collapsedWidgets: updatedCollapsedWidgets
+      };
+    });
+  };
+  
+  const isWidgetCollapsed = (widgetId: WidgetId): boolean => {
+    return preferences.collapsedWidgets.includes(widgetId);
+  };
+  
   return (
     <DashboardContext.Provider value={{
       viewMode: preferences.viewMode,
       pricingTier,
       customLayout: preferences.customLayout,
       visibleWidgets,
+      collapsedWidgets: preferences.collapsedWidgets,
       featureAccess,
       setViewMode,
       setPricingTier: handleSetPricingTier,
       updateCustomLayout,
       isWidgetVisible,
-      hasFeatureAccess
+      hasFeatureAccess,
+      toggleWidgetCollapse,
+      isWidgetCollapsed
     }}>
       {children}
     </DashboardContext.Provider>

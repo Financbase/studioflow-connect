@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,18 +16,24 @@ interface WidgetSectionProps {
 }
 
 const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPremiumFeature }) => {
-  const { isWidgetVisible, hasFeatureAccess, pricingTier } = useDashboard();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { 
+    isWidgetVisible, 
+    hasFeatureAccess, 
+    pricingTier, 
+    isWidgetCollapsed, 
+    toggleWidgetCollapse 
+  } = useDashboard();
   
   const visible = isWidgetVisible(id);
   const hasAccess = hasFeatureAccess(id);
+  const isCollapsed = isWidgetCollapsed(id);
   
   if (!visible) {
     return null;
   }
   
-  const toggleCollapse = () => {
-    setIsCollapsed(prev => !prev);
+  const handleToggleCollapse = () => {
+    toggleWidgetCollapse(id);
   };
   
   if (!hasAccess) {
@@ -64,7 +70,7 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({ id, title, children, isPr
         <Button
           variant="ghost"
           size="sm"
-          onClick={toggleCollapse}
+          onClick={handleToggleCollapse}
           className="h-8 w-8 p-0"
           aria-label={isCollapsed ? "Expand" : "Collapse"}
         >
