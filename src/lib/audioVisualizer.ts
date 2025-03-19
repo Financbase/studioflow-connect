@@ -1,124 +1,119 @@
 
 /**
- * Audio Visualizer implementation
+ * Initialize audio visualizer on a canvas element
  */
 export function initAudioVisualizer(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return () => {};
 
   // Set canvas dimensions
-  const resizeCanvas = () => {
-    const { width, height } = canvas.getBoundingClientRect();
-    canvas.width = width * window.devicePixelRatio;
-    canvas.height = height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const setCanvasDimensions = () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
   };
   
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  // Demo waveform animation
+  // Initialize canvas
+  setCanvasDimensions();
+  window.addEventListener('resize', setCanvasDimensions);
+  
+  // Animation variables
   let animationId: number;
-  const points: { x: number; y: number; originalY: number; speed: number }[] = [];
+  let dataArray: Uint8Array;
+  let analyser: AnalyserNode;
   
-  // Initialize points
-  const initPoints = () => {
-    points.length = 0;
-    const width = canvas.width / window.devicePixelRatio;
-    const height = canvas.height / window.devicePixelRatio;
-    const centerY = height / 2;
-    const segments = Math.max(50, Math.floor(width / 10));
+  // Simulate an audio context and analyzer
+  try {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
     
-    for (let i = 0; i <= segments; i++) {
-      const x = (width * i) / segments;
-      const variance = Math.random() * 15 - 7.5;
-      const y = centerY + variance;
-      points.push({
-        x,
-        y,
-        originalY: y,
-        speed: 0.1 + Math.random() * 0.2,
-      });
-    }
-  };
-  
-  // Animation function
-  const animate = () => {
-    if (!ctx) return;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
     
-    const width = canvas.width / window.devicePixelRatio;
-    const height = canvas.height / window.devicePixelRatio;
+    // For demo: create an oscillator to generate audio data
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+    oscillator.connect(analyser);
+    oscillator.start();
     
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-    
-    // Update points
-    points.forEach(point => {
-      point.y = point.originalY + Math.sin(Date.now() * 0.001 * point.speed) * 15;
-    });
-    
-    // Draw waveform
-    ctx.beginPath();
-    ctx.moveTo(0, height / 2);
-    
-    for (let i = 0; i < points.length; i++) {
-      const current = points[i];
-      const next = points[i + 1];
+    // Drawing function
+    const draw = () => {
+      animationId = requestAnimationFrame(draw);
       
-      if (next) {
-        const xc = (current.x + next.x) / 2;
-        const yc = (current.y + next.y) / 2;
-        ctx.quadraticCurveTo(current.x, current.y, xc, yc);
-      } else {
-        ctx.lineTo(current.x, current.y);
-        ctx.lineTo(width, height / 2);
-      }
-    }
-    
-    // Style for the primary line
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = getComputedStyle(document.documentElement)
-      .getPropertyValue('--primary')
-      .trim() || '#3b82f6';
-    ctx.stroke();
-    
-    // Draw reflection (more subtle)
-    ctx.beginPath();
-    ctx.moveTo(0, height / 2);
-    
-    for (let i = 0; i < points.length; i++) {
-      const current = points[i];
-      const next = points[i + 1];
-      const reflectY = height - current.y + height / 2;
+      analyser.getByteTimeDomainData(dataArray);
       
-      if (next) {
-        const xc = (current.x + next.x) / 2;
-        const yc = height - ((current.y + next.y) / 2) + height / 2;
-        ctx.quadraticCurveTo(current.x, reflectY, xc, yc);
-      } else {
-        ctx.lineTo(current.x, reflectY);
-        ctx.lineTo(width, height / 2);
+      // Clear canvas
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw waveform
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(65, 105, 225, 0.8)';
+      ctx.beginPath();
+      
+      const sliceWidth = canvas.width / dataArray.length;
+      let x = 0;
+      
+      for (let i = 0; i < dataArray.length; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * canvas.height / 2;
+        
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+        
+        x += sliceWidth;
       }
-    }
+      
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.stroke();
+      
+      // Add some randomness for visualization effect
+      for (let i = 0; i < dataArray.length; i++) {
+        dataArray[i] = Math.random() * 50 + 90;
+      }
+    };
     
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = getComputedStyle(document.documentElement)
-      .getPropertyValue('--primary')
-      .trim() || '#3b82f6';
-    ctx.globalAlpha = 0.3;
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+    // Start animation
+    draw();
+  } catch (error) {
+    console.error("Audio visualization failed to initialize:", error);
+    // Fallback to a simple animation if WebAudio is not available
+    const fallbackDraw = () => {
+      animationId = requestAnimationFrame(fallbackDraw);
+      
+      // Clear canvas
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw a simple sine wave
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(65, 105, 225, 0.8)';
+      ctx.beginPath();
+      
+      const amplitude = canvas.height / 4;
+      const frequency = 0.01;
+      const offset = Date.now() * 0.002;
+      
+      ctx.moveTo(0, canvas.height / 2 + Math.sin(offset) * amplitude);
+      
+      for (let x = 0; x < canvas.width; x++) {
+        const y = canvas.height / 2 + Math.sin(x * frequency + offset) * amplitude;
+        ctx.lineTo(x, y);
+      }
+      
+      ctx.stroke();
+    };
     
-    animationId = requestAnimationFrame(animate);
-  };
-  
-  // Start animation
-  initPoints();
-  animate();
+    fallbackDraw();
+  }
   
   // Cleanup function
   return () => {
+    window.removeEventListener('resize', setCanvasDimensions);
     cancelAnimationFrame(animationId);
-    window.removeEventListener('resize', resizeCanvas);
   };
 }
