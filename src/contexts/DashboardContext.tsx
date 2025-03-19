@@ -146,8 +146,12 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           }
           
           // Set pricing tier from profile
-          if (profile) {
-            setPricingTier(profile.plan as PricingTier);
+          if (profile && profile.plan) {
+            // Ensure plan is one of the allowed values
+            const planValue = profile.plan as PricingTier;
+            if (planValue === 'free' || planValue === 'standard' || planValue === 'pro') {
+              setPricingTier(planValue);
+            }
           }
         } catch (err) {
           console.error('Error in loading dashboard settings:', err);

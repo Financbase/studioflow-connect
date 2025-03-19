@@ -46,8 +46,8 @@ export const useAuth = (): UseAuthReturn => {
           return;
         }
 
-        // Ensure plan is one of the allowed values
         if (data) {
+          // Ensure plan is one of the allowed values
           const planValue = data.plan as 'free' | 'standard' | 'pro';
           // Create a properly typed profile object
           setProfile({
