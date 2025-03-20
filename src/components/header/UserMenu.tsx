@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { User, Settings, Shield, HelpCircle, Languages, LogOut } from "lucide-react";
+import { User, Settings, Shield, HelpCircle, Languages, LogOut, TicketPlus } from "lucide-react";
 import { UserProfile } from "@/types/supabase";
 
 interface UserMenuProps {
@@ -23,6 +23,15 @@ interface UserMenuProps {
   currentLanguage: string;
   onLanguageChange: (lang: string) => void;
 }
+
+const UserMenuLabels = {
+  profile: "Profile",
+  settings: "Settings",
+  admin: "Admin Panel",
+  support: "Support Center",
+  help: "Help & Resources",
+  signout: "Sign Out"
+};
 
 const UserMenu: React.FC<UserMenuProps> = ({
   user,
@@ -54,20 +63,26 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <DropdownMenuItem asChild>
           <Link to="/profile" className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
-            <span>{t("nav.profile")}</span>
+            <span>{UserMenuLabels.profile}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/settings" className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>{t("nav.settings")}</span>
+            <span>{UserMenuLabels.settings}</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/support" className="cursor-pointer">
+            <TicketPlus className="mr-2 h-4 w-4" />
+            <span>{UserMenuLabels.support}</span>
           </Link>
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem asChild>
             <Link to="/admin" className="cursor-pointer">
               <Shield className="mr-2 h-4 w-4" />
-              <span>{t("nav.admin")}</span>
+              <span>{UserMenuLabels.admin}</span>
             </Link>
           </DropdownMenuItem>
         )}
@@ -75,7 +90,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <DropdownMenuItem asChild>
           <Link to="/docs" className="cursor-pointer">
             <HelpCircle className="mr-2 h-4 w-4" />
-            <span>{t("nav.help")}</span>
+            <span>{UserMenuLabels.help}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
@@ -96,7 +111,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onSignOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>{t("auth.signout")}</span>
+          <span>{UserMenuLabels.signout}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

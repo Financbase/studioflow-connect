@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Support from "./pages/Support";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -91,6 +92,14 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <Settings />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/support" 
+                        element={
+                          <ProtectedRoute>
+                            <Support />
                           </ProtectedRoute>
                         } 
                       />

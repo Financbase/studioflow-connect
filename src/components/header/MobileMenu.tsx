@@ -3,7 +3,7 @@ import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu, Shield, LogOut } from "lucide-react";
+import { Menu, Shield, LogOut, TicketPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import PlanSwitcher from "@/components/PlanSwitcher";
@@ -22,6 +22,15 @@ interface MobileMenuProps {
   setPricingTier: (tier: PricingTier) => void;
   t: (key: string) => string;
 }
+
+const MobileMenuLabels = {
+  dashboard: "Dashboard",
+  docs: "Documentation",
+  admin: "Admin Panel",
+  support: "Support Center",
+  settings: "Settings",
+  signout: "Sign Out"
+};
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
   isOpen,
@@ -67,14 +76,22 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
               onClick={closeMobileMenu}
             >
-              {t("nav.dashboard")}
+              {MobileMenuLabels.dashboard}
+            </Link>
+            <Link 
+              to="/support" 
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
+              onClick={closeMobileMenu}
+            >
+              <TicketPlus className="h-4 w-4" />
+              {MobileMenuLabels.support}
             </Link>
             <Link 
               to="/docs" 
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
               onClick={closeMobileMenu}
             >
-              {t("nav.docs")}
+              {MobileMenuLabels.docs}
             </Link>
             {isAdmin && (
               <Link 
@@ -83,7 +100,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 onClick={closeMobileMenu}
               >
                 <Shield className="h-4 w-4" />
-                {t("nav.admin")}
+                {MobileMenuLabels.admin}
               </Link>
             )}
           </div>
@@ -91,7 +108,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           <Separator />
           
           <div className="py-4">
-            <p className="px-3 text-sm font-medium mb-2">{t("settings.title")}</p>
+            <p className="px-3 text-sm font-medium mb-2">{MobileMenuLabels.settings}</p>
             <div className="space-y-3 px-3">
               <PlanSwitcher currentPlan={pricingTier} onPlanChange={setPricingTier} />
               <CustomLayoutEditor />
@@ -107,7 +124,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               onClick={onSignOut}
             >
               <LogOut className="h-4 w-4" />
-              {t("auth.signout")}
+              {MobileMenuLabels.signout}
             </Button>
           </div>
         </div>
