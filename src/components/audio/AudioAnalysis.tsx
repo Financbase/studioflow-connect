@@ -1,36 +1,29 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AudioAsset } from "@/types/supabase";
 import FrequencyVisualizer from "./FrequencyVisualizer";
 import WaveformVisualizer from "./WaveformVisualizer";
 import AudioControls from "./AudioControls";
+import { useAudioAnalysis } from "@/hooks/use-audio-analysis";
 
 interface AudioAnalysisProps {
   audioFile: AudioAsset;
 }
 
 const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
-  const [audioData, setAudioData] = useState<Uint8Array | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // These functions would integrate with actual audio processing logic
-  const handlePlay = () => {
-    setIsPlaying(true);
-    // Actual audio play logic would go here
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-    // Actual audio pause logic would go here
-  };
-
-  const handleStop = () => {
-    setIsPlaying(false);
-    // Actual audio stop logic would go here
-  };
+  const {
+    audioData,
+    isPlaying,
+    volume,
+    isMuted,
+    handlePlay,
+    handlePause,
+    handleStop,
+    handleVolumeChange,
+    handleMuteToggle
+  } = useAudioAnalysis(audioFile);
 
   return (
     <div className="space-y-6">
@@ -56,6 +49,10 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
             onPause={handlePause}
             onStop={handleStop}
             audioName={audioFile.name}
+            volume={volume}
+            isMuted={isMuted}
+            onVolumeChange={handleVolumeChange}
+            onMuteToggle={handleMuteToggle}
           />
         </CardContent>
         

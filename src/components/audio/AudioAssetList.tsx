@@ -9,10 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useAudioPlayer } from './AudioPlayer';
-import { downloadAudioAsset, deleteAudioAsset } from './audioAssetUtils';
-import AudioAssetListItem from './AudioAssetListItem';
 import { Music } from 'lucide-react';
+import AudioAssetListItem from './AudioAssetListItem';
+import { useAudioPlayer } from '@/hooks/use-audio-player';
 
 interface AudioAssetListProps {
   assets: AudioAsset[];
@@ -35,14 +34,6 @@ const AudioAssetList: React.FC<AudioAssetListProps> = ({
 
   const handlePlay = (asset: AudioAsset) => {
     playAudio(asset);
-  };
-
-  const handleDownload = (asset: AudioAsset) => {
-    downloadAudioAsset(asset);
-  };
-
-  const handleDelete = (asset: AudioAsset) => {
-    deleteAudioAsset(asset, onRefresh);
   };
 
   if (loading) {
@@ -77,9 +68,8 @@ const AudioAssetList: React.FC<AudioAssetListProps> = ({
               asset={asset}
               isPlaying={currentlyPlaying === asset.id}
               onPlay={handlePlay}
-              onDownload={handleDownload}
-              onDelete={handleDelete}
               onSelect={onSelectAudio}
+              onRefresh={onRefresh}
             />
           ))}
         </TableBody>

@@ -30,10 +30,6 @@ export const downloadAudioAsset = async (asset: AudioAsset) => {
 };
 
 export const deleteAudioAsset = async (asset: AudioAsset, onSuccess: () => void) => {
-  if (!confirm('Are you sure you want to delete this audio file?')) {
-    return;
-  }
-  
   try {
     const { error: storageError } = await supabase.storage
       .from('audio_assets')

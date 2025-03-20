@@ -1,103 +1,78 @@
 
 import React from 'react';
 import { AudioAsset } from '@/types/supabase';
-import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Play, Trash, Download, MoreVertical } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Play, Pause, Download } from 'lucide-react';
+import { downloadAudioAsset } from './audioAssetUtils';
+import DeleteAudioDialog from './DeleteAudioDialog';
+import { formatDistanceToNow } from 'date-fns';
 
 interface AudioAssetListItemProps {
   asset: AudioAsset;
   isPlaying: boolean;
   onPlay: (asset: AudioAsset) => void;
-  onDownload: (asset: AudioAsset) => void;
-  onDelete: (asset: AudioAsset) => void;
   onSelect?: (asset: AudioAsset) => void;
+  onRefresh: () => void;
 }
 
 const AudioAssetListItem: React.FC<AudioAssetListItemProps> = ({
   asset,
   isPlaying,
   onPlay,
-  onDownload,
-  onDelete,
-  onSelect
+  onSelect,
+  onRefresh
 }) => {
-  const formatFileSize = (size: number) => {
-    if (size < 1024) {
-      return `${size} B`;
-    } else if (size < 1024 * 1024) {
-      return `${(size / 1024).toFixed(2)} KB`;
-    } else {
-      return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+  const handlePlay = () => {
+    onPlay(asset);
+  };
+
+  const handleSelect = () => {
+    if (onSelect) {
+      onSelect(asset);
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
+  const handleDownload = () => {
+    downloadAudioAsset(asset);
   };
 
+  const formattedSize = (size: number) => {
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const dateCreated = asset.created_at
+    ? formatDistanceToNow(new Date(asset.created_at), { addSuffix: true })
+    : 'Unknown';
+
   return (
-    <TableRow 
-      className={onSelect ? "cursor-pointer hover:bg-accent/50" : ""}
-      onClick={onSelect ? () => onSelect(asset) : undefined}
+    <TableRow
+      onClick={handleSelect}
+      className={onSelect ? 'cursor-pointer hover:bg-secondary/50' : ''}
     >
-      <TableCell className="font-medium">{asset.name}</TableCell>
+      <TableCell>{asset.name}</TableCell>
       <TableCell>{asset.type.split('/')[1].toUpperCase()}</TableCell>
-      <TableCell>{formatFileSize(asset.size)}</TableCell>
-      <TableCell>{formatDate(asset.created_at)}</TableCell>
+      <TableCell>{formattedSize(asset.size)}</TableCell>
+      <TableCell>{dateCreated}</TableCell>
       <TableCell>
         <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              onPlay(asset);
-            }}
-            className={isPlaying ? "text-primary" : ""}
-          >
-            <Play className="w-4 h-4" />
+          <Button variant="ghost" size="icon" onClick={handlePlay}>
+            {isPlaying ? (
+              <Pause className="h-4 w-4" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
           </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDownload(asset);
-                }}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(asset);
-                }}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash className="w-4 h-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button variant="ghost" size="icon" onClick={handleDownload}>
+            <Download className="h-4 w-4" />
+          </Button>
+          <DeleteAudioDialog 
+            asset={asset} 
+            onDeleted={onRefresh}
+            variant="icon" 
+          />
         </div>
       </TableCell>
     </TableRow>

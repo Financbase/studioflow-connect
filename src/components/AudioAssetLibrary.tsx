@@ -7,7 +7,6 @@ import { toast } from '@/components/ui/use-toast';
 import { Music } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAudioAssets } from '@/hooks/use-audio-assets';
-import { useAudioPlayer } from './audio/AudioPlayer';
 import AudioPlayer from './audio/AudioPlayer';
 import AudioAssetUploader from './AudioAssetUploader';
 import AudioAssetList from './audio/AudioAssetList';
@@ -23,7 +22,6 @@ const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const { assets, loading, refreshAssets } = useAudioAssets(user);
-  const { playAudio } = useAudioPlayer(audioRef);
 
   const handleSelectAudio = (asset: AudioAsset) => {
     if (onSelectAudio) {
@@ -36,9 +34,13 @@ const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) 
     }
   };
 
+  const handleAudioEnded = () => {
+    setCurrentlyPlaying(null);
+  };
+
   return (
     <div className="space-y-6">
-      <AudioPlayer audioRef={audioRef} />
+      <AudioPlayer audioRef={audioRef} onEnded={handleAudioEnded} />
       
       <AudioAssetUploader onUploadComplete={() => refreshAssets()} />
       
