@@ -1,5 +1,5 @@
 
-import React, { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import { type ToastActionElement, type ToastProps } from "@/components/ui/toast";
 import {
   createContext,
   useContext,
