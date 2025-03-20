@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -12,22 +12,24 @@ interface AudioControlsProps {
   onPlay: () => void;
   onPause: () => void;
   onStop: () => void;
-  onVolumeChange: (volume: number) => void;
   isPlaying: boolean;
-  volume: number;
-  isMuted: boolean;
-  onMuteToggle: () => void;
+  audioName?: string; // Added audioName as an optional prop
+  volume?: number;
+  isMuted?: boolean;
+  onVolumeChange?: (volume: number) => void;
+  onMuteToggle?: () => void;
 }
 
 const AudioControls: React.FC<AudioControlsProps> = ({
   onPlay,
   onPause,
   onStop,
-  onVolumeChange,
   isPlaying,
-  volume,
-  isMuted,
-  onMuteToggle,
+  audioName,
+  volume = 50, // Default value if not provided
+  isMuted = false, // Default value if not provided
+  onVolumeChange = () => {}, // Default empty function if not provided
+  onMuteToggle = () => {}, // Default empty function if not provided
 }) => {
   return (
     <Card className="mb-4">
@@ -51,6 +53,7 @@ const AudioControls: React.FC<AudioControlsProps> = ({
               >
                 <SkipBack className="h-4 w-4" />
               </Button>
+              {audioName && <span className="text-sm ml-2">{audioName}</span>}
             </div>
             
             <div className="flex items-center space-x-4">
