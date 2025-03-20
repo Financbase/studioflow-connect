@@ -1,116 +1,70 @@
 
 import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { AudioAsset } from "@/types/supabase";
 import FrequencyVisualizer from "./FrequencyVisualizer";
 import WaveformVisualizer from "./WaveformVisualizer";
 import AudioControls from "./AudioControls";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 interface AudioAnalysisProps {
-  audioFile?: File | null;
+  audioFile: AudioAsset;
 }
 
 const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
+  const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [volume, setVolume] = useState(75);
-  const [isMuted, setIsMuted] = useState(false);
-  const [visualizationType, setVisualizationType] = useState<"waveform" | "frequency">("waveform");
-  const [audioData, setAudioData] = useState<Uint8Array | undefined>(undefined);
 
-  useEffect(() => {
-    // Initialize audio context
-    const context = new (window.AudioContext || (window as any).webkitAudioContext)();
-    setAudioContext(context);
-    
-    // Create demo data for visualizers
-    const demoData = new Uint8Array(128);
-    for (let i = 0; i < demoData.length; i++) {
-      demoData[i] = 128 + Math.sin(i / 10) * 50;
-    }
-    setAudioData(demoData);
-    
-    return () => {
-      context.close();
-    };
-  }, []);
-
+  // These functions would integrate with actual audio processing logic
   const handlePlay = () => {
     setIsPlaying(true);
+    // Actual audio play logic would go here
   };
 
   const handlePause = () => {
     setIsPlaying(false);
+    // Actual audio pause logic would go here
   };
 
   const handleStop = () => {
     setIsPlaying(false);
-  };
-
-  const handleVolumeChange = (newVolume: number) => {
-    setVolume(newVolume);
-    if (isMuted && newVolume > 0) {
-      setIsMuted(false);
-    }
-  };
-
-  const handleMuteToggle = () => {
-    setIsMuted(!isMuted);
+    // Actual audio stop logic would go here
   };
 
   return (
-    <div className="space-y-4">
-      <AudioControls
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onStop={handleStop}
-        onVolumeChange={handleVolumeChange}
-        isPlaying={isPlaying}
-        volume={volume}
-        isMuted={isMuted}
-        onMuteToggle={handleMuteToggle}
-      />
-      
-      <Tabs defaultValue="waveform" onValueChange={(value) => setVisualizationType(value as any)}>
-        <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-4">
-          <TabsTrigger value="waveform">Waveform</TabsTrigger>
-          <TabsTrigger value="frequency">Frequency</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="waveform">
-          <WaveformVisualizer audioData={audioData} />
-        </TabsContent>
-        
-        <TabsContent value="frequency">
-          <FrequencyVisualizer />
-        </TabsContent>
-      </Tabs>
-      
+    <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Audio Statistics</CardTitle>
-          <CardDescription>Detailed information about the selected audio file</CardDescription>
+          <CardTitle>Audio Analysis: {audioFile.name}</CardTitle>
+          <CardDescription>
+            Visualize and analyze frequency spectrum, waveform, and audio characteristics
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Peak amplitude</p>
-              <p className="font-medium">-3.2 dB</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Dynamic range</p>
-              <p className="font-medium">18.4 dB</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Sample rate</p>
-              <p className="font-medium">44.1 kHz</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Channels</p>
-              <p className="font-medium">Stereo</p>
-            </div>
+        
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FrequencyVisualizer />
+            <WaveformVisualizer audioData={audioData} />
           </div>
+          
+          <Separator />
+          
+          <AudioControls
+            isPlaying={isPlaying}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onStop={handleStop}
+            audioName={audioFile.name}
+          />
         </CardContent>
+        
+        <CardFooter>
+          <div className="flex justify-between w-full text-sm text-muted-foreground">
+            <div>Format: {audioFile.type.split('/')[1].toUpperCase()}</div>
+            <div>Size: {(audioFile.size / 1024 / 1024).toFixed(2)} MB</div>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AudioAssetLibrary from "./AudioAssetLibrary";
-import AudioAnalysis from "./audio/AudioAnalysis";
+import AudioAnalysis from "./audio/AudioAnalysis"; 
 import { AudioAsset } from "@/types/supabase";
 
 const AudioAnalyzer = () => {
