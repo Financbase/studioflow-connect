@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 
-type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
-type ThemeMode = "dark" | "light";
+export type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
+export type ThemeMode = "dark" | "light";
 
 interface ThemeContextType {
   themeVariant: ThemeVariant;
