@@ -5,7 +5,7 @@ import { initAudioVisualizer } from "@/lib/audioVisualizer";
 
 interface FrequencyVisualizerProps {
   className?: string;
-  audioSource?: MediaElementAudioSourceNode;
+  audioSource?: MediaElementAudioSourceNode | null;
 }
 
 const FrequencyVisualizer: React.FC<FrequencyVisualizerProps> = ({ 
@@ -17,7 +17,7 @@ const FrequencyVisualizer: React.FC<FrequencyVisualizerProps> = ({
   useEffect(() => {
     if (!canvasRef.current) return;
     
-    const cleanup = initAudioVisualizer(canvasRef.current, audioSource);
+    const cleanup = initAudioVisualizer(canvasRef.current, audioSource || undefined);
     
     return () => {
       cleanup();

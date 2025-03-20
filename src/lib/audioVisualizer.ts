@@ -21,6 +21,7 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement, audioSource?: Med
   let animationId: number;
   let dataArray: Uint8Array;
   let analyser: AnalyserNode;
+  let audioContext: AudioContext | undefined;
   
   // Sample classification markers (for visualization purposes)
   const sampleMarkers = [
@@ -31,7 +32,7 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement, audioSource?: Med
   ];
   
   try {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
     
@@ -152,5 +153,8 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement, audioSource?: Med
   return () => {
     window.removeEventListener('resize', setCanvasDimensions);
     cancelAnimationFrame(animationId);
+    if (audioContext) {
+      audioContext.close().catch(err => console.error("Error closing audio context:", err));
+    }
   };
 }
