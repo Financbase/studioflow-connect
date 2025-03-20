@@ -49,10 +49,10 @@ const App = () => {
   return (
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <TooltipProvider>
-            <ThemeProvider>
-              <LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <TooltipProvider>
                 <BrowserRouter>
                   {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
                   <DashboardProvider>
@@ -113,10 +113,10 @@ const App = () => {
                     </Routes>
                   </DashboardProvider>
                 </BrowserRouter>
-              </LanguageProvider>
-            </ThemeProvider>
-          </TooltipProvider>
-        </ToastProvider>
+              </TooltipProvider>
+            </ToastProvider>
+          </LanguageProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </SessionContextProvider>
   );
