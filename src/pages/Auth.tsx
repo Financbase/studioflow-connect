@@ -27,6 +27,7 @@ const Auth = () => {
   // Redirect to home if already logged in
   useEffect(() => {
     if (session) {
+      console.log("Session exists, redirecting to home");
       navigate("/");
     }
   }, [session, navigate]);
@@ -37,6 +38,8 @@ const Auth = () => {
     setError(null);
     
     try {
+      console.log("Starting sign up process with email:", email);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -44,7 +47,8 @@ const Auth = () => {
           data: {
             username,
             full_name: fullName,
-          }
+          },
+          emailRedirectTo: window.location.origin + "/auth"
         }
       });
       
@@ -52,13 +56,13 @@ const Auth = () => {
         throw error;
       }
       
-      toast.default({
+      console.log("Sign up successful, user data:", data);
+      
+      toast({
         title: "Success",
         description: "Check your email for a confirmation link. Signing you in...",
         duration: 5000,
       });
-      
-      console.log("Sign up successful, attempting sign in");
       
       // Auto-login for development
       const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -68,20 +72,23 @@ const Auth = () => {
       
       if (signInError) {
         console.error("Auto-sign in failed:", signInError);
-        toast.destructive({
+        toast({
           title: "Sign-in failed after registration",
           description: "Please try signing in manually",
+          variant: "destructive"
         });
       } else {
-        console.log("Auto-sign in successful");
+        console.log("Auto-sign in successful, redirecting to home");
+        navigate("/");
       }
       
     } catch (error: any) {
       console.error("Sign up error:", error);
       setError(error.message);
-      toast.destructive({
+      toast({
         title: "Error",
         description: error.message,
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
@@ -105,7 +112,7 @@ const Auth = () => {
       }
       
       console.log("Sign in successful, redirecting");
-      toast.default({
+      toast({
         title: "Welcome back",
         description: "You have successfully logged in",
       });
@@ -115,9 +122,10 @@ const Auth = () => {
     } catch (error: any) {
       console.error("Sign in error:", error);
       setError(error.message);
-      toast.destructive({
+      toast({
         title: "Error",
         description: error.message,
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
@@ -174,25 +182,29 @@ const Auth = () => {
                       type="button"
                       onClick={async () => {
                         if (!email) {
-                          toast.destructive({
+                          toast({
                             title: "Error",
                             description: "Please enter your email address first",
+                            variant: "destructive"
                           });
                           return;
                         }
                         
                         try {
                           setLoading(true);
-                          const { error } = await supabase.auth.resetPasswordForEmail(email);
+                          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                            redirectTo: window.location.origin + "/auth"
+                          });
                           if (error) throw error;
-                          toast.default({
+                          toast({
                             title: "Password Reset",
                             description: "Check your email for a password reset link",
                           });
                         } catch (error: any) {
-                          toast.destructive({
+                          toast({
                             title: "Error",
                             description: error.message,
+                            variant: "destructive"
                           });
                         } finally {
                           setLoading(false);
