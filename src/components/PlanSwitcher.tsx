@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Select,
@@ -23,7 +22,7 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
   const { user, profile } = useAuth();
   
   // Function to simulate a subscription upgrade
-  const handleUpgradeSubscription = async (newPlan: Pric) => {
+  const handleUpgradeSubscription = async (newPlan: PricingTier) => {
     toast({
       title: "Upgrade Required",
       description: "Please subscribe to upgrade your plan. This would typically redirect to a payment page.",
