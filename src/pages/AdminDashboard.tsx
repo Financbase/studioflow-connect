@@ -178,19 +178,26 @@ const AdminDashboard = () => {
   ).length;
   
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased`}>
+    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
       <Header />
       
-      <main className="flex-1 container mx-auto px-4 md:px-6 py-8 animate-fade-in">
+      <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="max-w-[1200px] mx-auto space-y-8">
-          <section className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">Admin Dashboard</h1>
-            <p className="text-lg text-muted-foreground text-balance">
-              Monitor user activity, manage support tickets and provide remote assistance
-            </p>
+          <section className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+              <p className="text-muted-foreground">
+                Monitor user activity and manage support tickets
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <Badge variant="outline" className="py-1">
+                Admin
+              </Badge>
+            </div>
           </section>
           
-          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+          <Separator />
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
             <TabsList className="grid grid-cols-1 sm:grid-cols-4 h-auto">
@@ -549,3 +556,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

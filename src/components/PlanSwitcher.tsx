@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
 
 interface PlanSwitcherProps {
   currentPlan: PricingTier;
@@ -21,64 +22,12 @@ interface PlanSwitcherProps {
 const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }) => {
   const { user, profile } = useAuth();
   
-  // Function to check if plan downgrade attempt is valid
-  const isValidPlanChange = (currentPlan: PricingTier, newPlan: PricingTier): boolean => {
-    // Pro users cannot downgrade to standard or free
-    if (currentPlan === "pro" && (newPlan === "standard" || newPlan === "free")) {
-      return false;
-    }
-    
-    // Standard users cannot downgrade to free
-    if (currentPlan === "standard" && newPlan === "free") {
-      return false;
-    }
-    
-    return true;
-  };
-  
-  const handlePlanChange = async (value: string) => {
-    const newPlan = value as PricingTier;
-    
-    // Prevent downgrades from higher plans
-    if (!isValidPlanChange(currentPlan, newPlan)) {
-      toast({
-        title: "Plan Downgrade Not Allowed",
-        description: `You cannot downgrade from ${currentPlan} plan to ${newPlan} plan.`,
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    try {
-      if (user) {
-        // Update the plan in the database
-        const { error } = await supabase
-          .from('profiles')
-          .update({ 
-            plan: newPlan,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', user.id);
-          
-        if (error) {
-          throw error;
-        }
-      }
-      
-      // Update the state in the context
-      onPlanChange(newPlan);
-      
-      toast({
-        title: "Plan Changed",
-        description: `Your plan has been updated to ${value}`,
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: "Failed to update plan. " + error.message,
-        variant: "destructive"
-      });
-    }
+  // Function to simulate a subscription upgrade
+  const handleUpgradeSubscription = async (newPlan: Pric) => {
+    toast({
+      title: "Upgrade Required",
+      description: "Please subscribe to upgrade your plan. This would typically redirect to a payment page.",
+    });
   };
   
   const getPlanBadge = (plan: PricingTier) => {
@@ -92,43 +41,49 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
     }
   };
 
-  // Generate available plans based on current plan
-  const getAvailablePlans = () => {
-    // Pro users can only see pro plan
+  // Generate upgrade options based on current plan
+  const renderUpgradeOptions = () => {
     if (currentPlan === "pro") {
-      return [
-        <SelectItem key="pro" value="pro">Pro</SelectItem>
-      ];
+      return <div className="text-sm text-muted-foreground">You're on our highest tier plan</div>;
     }
     
-    // Standard users can see standard and pro plans
     if (currentPlan === "standard") {
-      return [
-        <SelectItem key="standard" value="standard">Standard</SelectItem>,
-        <SelectItem key="pro" value="pro">Pro</SelectItem>
-      ];
+      return (
+        <Button 
+          onClick={() => handleUpgradeSubscription("pro")}
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+        >
+          Upgrade to Pro
+        </Button>
+      );
     }
     
-    // Free users can see all plans
-    return [
-      <SelectItem key="free" value="free">Free</SelectItem>,
-      <SelectItem key="standard" value="standard">Standard</SelectItem>,
-      <SelectItem key="pro" value="pro">Pro</SelectItem>
-    ];
+    return (
+      <div className="flex flex-col gap-2">
+        <Button 
+          onClick={() => handleUpgradeSubscription("standard")}
+          variant="secondary"
+        >
+          Upgrade to Standard
+        </Button>
+        <Button 
+          onClick={() => handleUpgradeSubscription("pro")}
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+        >
+          Upgrade to Pro
+        </Button>
+      </div>
+    );
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-muted-foreground mr-1">Plan:</span>
-      <Select value={currentPlan} onValueChange={handlePlanChange}>
-        <SelectTrigger className="w-[130px]">
-          <SelectValue placeholder="Select plan" />
-        </SelectTrigger>
-        <SelectContent>
-          {getAvailablePlans()}
-        </SelectContent>
-      </Select>
-      {getPlanBadge(currentPlan)}
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-muted-foreground mr-1">Current Plan:</span>
+        <span className="font-medium capitalize">{currentPlan}</span>
+        {getPlanBadge(currentPlan)}
+      </div>
+      {renderUpgradeOptions()}
     </div>
   );
 };
