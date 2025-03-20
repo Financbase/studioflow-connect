@@ -65,39 +65,35 @@ export function useToast() {
 
 type ToastOptions = Omit<Toast, 'id'>;
 
-/**
- * Create a toast notification
- */
-export const toast = {
-  create: (opts: Partial<ToastOptions>) => {
-    const { addToast } = useToast();
-    addToast({
-      id: crypto.randomUUID(),
-      variant: "default",
-      ...opts,
-    });
+// Fix: Make the toast object both callable and with methods
+function createToast(opts: Partial<ToastOptions>) {
+  const { addToast } = useToast();
+  addToast({
+    id: crypto.randomUUID(),
+    variant: "default",
+    ...opts,
+  });
+}
+
+// Create an enhanced toast object that can be called directly and has methods
+export const toast = Object.assign(
+  // Main function when called directly
+  (opts: Partial<ToastOptions>) => {
+    createToast(opts);
   },
-  default: (opts: Partial<ToastOptions>) => {
-    const { addToast } = useToast();
-    addToast({
-      id: crypto.randomUUID(),
-      variant: "default",
-      ...opts,
-    });
-  },
-  destructive: (opts: Partial<ToastOptions>) => {
-    const { addToast } = useToast();
-    addToast({
-      id: crypto.randomUUID(),
-      variant: "destructive",
-      ...opts,
-    });
-  },
-  custom: (opts: Partial<ToastOptions>) => {
-    const { addToast } = useToast();
-    addToast({
-      id: crypto.randomUUID(),
-      ...opts,
-    });
+  // Methods for specific toast variants
+  {
+    create: (opts: Partial<ToastOptions>) => {
+      createToast(opts);
+    },
+    default: (opts: Partial<ToastOptions>) => {
+      createToast({ ...opts, variant: "default" });
+    },
+    destructive: (opts: Partial<ToastOptions>) => {
+      createToast({ ...opts, variant: "destructive" });
+    },
+    custom: (opts: Partial<ToastOptions>) => {
+      createToast(opts);
+    }
   }
-};
+);
