@@ -10,8 +10,8 @@ interface ThemeContextType {
   setThemeVariant: (theme: ThemeVariant) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
-  theme: ThemeMode; // Added this property
-  setTheme: (theme: ThemeMode) => void; // Added this property
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
 }
 
 interface ThemeProviderProps {
@@ -27,7 +27,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 }) => {
   const [themeVariant, setThemeVariant] = useState<ThemeVariant>("modern");
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [theme, setTheme] = useState<ThemeMode>("dark"); // Added this state
+  const [theme, setTheme] = useState<ThemeMode>("dark");
   
   // Initialize theme from localStorage
   useEffect(() => {
