@@ -1,3 +1,20 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface UserProfile {
+  id: string;
+  username: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  plan: 'free' | 'standard' | 'pro';
+  created_at: string;
+  updated_at: string;
+}
 
 export interface Profile {
   id: string;

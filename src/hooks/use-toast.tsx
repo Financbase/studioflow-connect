@@ -1,11 +1,9 @@
 
-import { type ToastActionElement, type ToastProps } from "@/components/ui/toast";
+import type { ReactNode, FC } from "react";
 import {
   createContext,
   useContext,
   useState,
-  ReactNode,
-  FC,
   useEffect,
 } from "react";
 
@@ -25,6 +23,14 @@ export interface Toast {
   duration?: number;
   className?: string;
 }
+
+export type ToastActionElement = React.ReactElement<{
+  className?: string;
+  altText: string;
+  onClick: () => void;
+}>;
+
+export type ToastProps = Toast;
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 

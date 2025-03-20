@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import PlanSwitcher from "@/components/PlanSwitcher";
 import CustomLayoutEditor from "@/components/CustomLayoutEditor";
 import { UserProfile } from "@/types/supabase";
+import { PricingTier } from "@/contexts/DashboardContext";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -17,8 +18,8 @@ interface MobileMenuProps {
   profile: UserProfile | null;
   isAdmin: boolean;
   onSignOut: () => void;
-  pricingTier: string;
-  setPricingTier: (tier: any) => void;
+  pricingTier: PricingTier;
+  setPricingTier: (tier: PricingTier) => void;
   t: (key: string) => string;
 }
 
