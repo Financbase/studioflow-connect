@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { ChevronRight, BookOpen, FileText, Lightbulb } from "lucide-react";
+import { ChevronRight, BookOpen, FileText, Lightbulb, Code } from "lucide-react";
 import HelpTip from "@/components/HelpSystem";
 
 const DocumentationGuides = () => {
