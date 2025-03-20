@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,7 +7,7 @@ import { useToast, toast } from '@/hooks/use-toast';
 
 // Type definitions
 export type WidgetId = 'system' | 'audio' | 'ai' | 'vm' | 'daw' | 'marketplace' | 'connect';
-export type PricingTier = 'free' | 'standard' | 'pro';
+export type PricingTier = 'free' | 'standard' | 'pro' | 'enterprise';
 export type ViewMode = 'simple' | 'advanced' | 'custom' | 'mobile';
 
 // Feature access mapping based on pricing tier
@@ -32,6 +31,15 @@ const featureAccessMap: Record<PricingTier, Record<WidgetId, boolean>> = {
     connect: true
   },
   pro: {
+    system: true,
+    audio: true,
+    ai: true,
+    vm: true,
+    daw: true,
+    marketplace: true,
+    connect: true
+  },
+  enterprise: {
     system: true,
     audio: true,
     ai: true,
@@ -106,7 +114,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, [isMobile, viewMode]);
   
   // Pricing tier state - load from profile if available
-  const [pricingTier, setPricingTier] = useState<PricingTier>('pro'); // Default to pro for testing
+  const [pricingTier, setPricingTier] = useState<PricingTier>('free'); // Default to free tier
   
   // Custom layout state - include all widgets by default
   const [customLayout, setCustomLayout] = useState<WidgetId[]>(['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace']);
@@ -149,7 +157,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           if (profile && profile.plan) {
             // Ensure plan is one of the allowed values
             const planValue = profile.plan as PricingTier;
-            if (planValue === 'free' || planValue === 'standard' || planValue === 'pro') {
+            if (planValue === 'free' || planValue === 'standard' || planValue === 'pro' || planValue === 'enterprise') {
               setPricingTier(planValue);
               console.log("Setting pricing tier from profile:", planValue);
             }
@@ -196,6 +204,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   // Function to check if plan change is valid (prevent downgrades from higher tiers)
   const isValidPlanChange = (currentPlan: PricingTier, newPlan: PricingTier): boolean => {
+    // Enterprise users cannot downgrade to any other plan
+    if (currentPlan === "enterprise") {
+      return newPlan === "enterprise";
+    }
+    
     // Pro users cannot downgrade to standard or free
     if (currentPlan === "pro" && (newPlan === "standard" || newPlan === "free")) {
       return false;

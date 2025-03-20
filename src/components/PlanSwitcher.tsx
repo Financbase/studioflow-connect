@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Select,
@@ -37,23 +38,44 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
         return <Badge variant="secondary" className="ml-2">Standard</Badge>;
       case "pro":
         return <Badge variant="default" className="bg-gradient-to-r from-blue-500 to-purple-500 ml-2">Pro</Badge>;
+      case "enterprise":
+        return <Badge variant="default" className="bg-gradient-to-r from-purple-500 to-red-500 ml-2">Enterprise</Badge>;
     }
   };
 
   // Generate upgrade options based on current plan
   const renderUpgradeOptions = () => {
-    if (currentPlan === "pro") {
+    if (currentPlan === "enterprise") {
       return <div className="text-sm text-muted-foreground">You're on our highest tier plan</div>;
+    }
+    
+    if (currentPlan === "pro") {
+      return (
+        <Button 
+          onClick={() => handleUpgradeSubscription("enterprise")}
+          className="bg-gradient-to-r from-purple-500 to-red-500 text-white"
+        >
+          Upgrade to Enterprise
+        </Button>
+      );
     }
     
     if (currentPlan === "standard") {
       return (
-        <Button 
-          onClick={() => handleUpgradeSubscription("pro")}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white"
-        >
-          Upgrade to Pro
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button 
+            onClick={() => handleUpgradeSubscription("pro")}
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+          >
+            Upgrade to Pro
+          </Button>
+          <Button 
+            onClick={() => handleUpgradeSubscription("enterprise")}
+            className="bg-gradient-to-r from-purple-500 to-red-500 text-white"
+          >
+            Upgrade to Enterprise
+          </Button>
+        </div>
       );
     }
     
@@ -70,6 +92,12 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
           className="bg-gradient-to-r from-blue-500 to-purple-500 text-white"
         >
           Upgrade to Pro
+        </Button>
+        <Button 
+          onClick={() => handleUpgradeSubscription("enterprise")}
+          className="bg-gradient-to-r from-purple-500 to-red-500 text-white"
+        >
+          Upgrade to Enterprise
         </Button>
       </div>
     );

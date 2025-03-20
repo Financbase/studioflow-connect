@@ -24,7 +24,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ isAdmin, t }) => {
       {isAdmin && (
         <Link to="/admin" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1">
           <Shield className="h-3.5 w-3.5" />
-          Admin
+          Admin Panel
         </Link>
       )}
     </nav>
