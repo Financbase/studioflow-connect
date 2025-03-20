@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
 import Auth from "./pages/Auth";
+import AdminDashboard from "./pages/AdminDashboard";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -64,6 +65,14 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <Index />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminDashboard />
                           </ProtectedRoute>
                         } 
                       />

@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { MusicIcon, Sliders, Menu, HelpCircle, BookOpen, MoreHorizontal, UserCircle, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,304 +8,228 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { useIsMobile } from "@/hooks/use-mobile";
-import ViewSelector from "@/components/ViewSelector";
-import PlanSwitcher from "@/components/PlanSwitcher";
-import CustomLayoutEditor from "@/components/CustomLayoutEditor";
-import { useDashboard } from "@/contexts/DashboardContext";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import HelpTip from "@/components/HelpSystem";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ModeToggle } from "@/components/mode-toggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Link } from "react-router-dom";
+import { useDashboard } from "@/contexts/DashboardContext";
 import { useAuth } from "@/hooks/use-auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MusicIcon, Menu, User, LogOut, Settings, HelpCircle, Languages, Shield } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import PlanSwitcher from "@/components/PlanSwitcher";
+import CustomLayoutEditor from "@/components/CustomLayoutEditor";
+import { useResponsive } from "@/hooks/use-mobile";
 
 const Header = () => {
-  const isMobile = useIsMobile();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { viewMode, pricingTier, setViewMode, setPricingTier } = useDashboard();
-  const { t } = useLanguage();
   const { themeVariant } = useTheme();
+  const { t, setLanguage, currentLanguage } = useLanguage();
   const { user, profile, signOut, isAuthenticated } = useAuth();
-
-  // Get initials for avatar fallback
-  const getInitials = () => {
-    if (profile?.full_name) {
-      return profile.full_name
-        .split(' ')
-        .map(name => name[0])
-        .join('')
-        .toUpperCase()
-        .substring(0, 2);
-    }
-    
-    if (profile?.username) {
-      return profile.username.substring(0, 2).toUpperCase();
-    }
-    
-    return 'U';
+  const { pricingTier, setPricingTier, viewMode, setViewMode } = useDashboard();
+  const { isMobile } = useResponsive();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Check if user has admin privileges (in a real app, this would check roles)
+  const isAdmin = profile?.username === "admin" || user?.email?.includes("admin");
+  
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
   };
-
+  
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+  
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md transition-all duration-200">
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <MusicIcon className="h-6 w-6 text-primary animate-pulse-soft" />
-            <span className="text-lg font-semibold tracking-tight max-w-[140px] truncate">{t("dashboard.title")}</span>
-          </Link>
-          {pricingTier === "pro" && (
-            <span className="bg-primary/20 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">
-              {t("label.pro")}
-            </span>
-          )}
-          <HelpTip 
-            title={t("header.welcome")}
-            content={
-              <div className="space-y-2">
-                <p>{t("help.welcome_description")}</p>
-                <p>{t("help.navigation_tip")}</p>
-                <Link to="/docs" className="flex items-center text-primary hover:underline mt-2">
-                  <BookOpen className="h-3 w-3 mr-1" />
-                  {t("help.view_documentation")}
-                </Link>
-              </div>
-            }
-            size="small"
-            className="ml-2"
-          />
-        </div>
-
-        {isMobile ? (
-          <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <Menu className="h-5 w-5" />
-          </Button>
-        ) : (
-          <div className="flex items-center gap-2 md:gap-3">
-            {isAuthenticated && (
-              <>
-                <ViewSelector />
-                
-                {viewMode === "custom" && pricingTier === "pro" && (
-                  <CustomLayoutEditor />
-                )}
-                
-                <PlanSwitcher 
-                  currentPlan={pricingTier}
-                  onPlanChange={(plan) => {
-                    setPricingTier(plan);
-                  }}
-                />
-                
-                {pricingTier === "pro" && <ThemeSwitcher />}
-                
-                <LanguageSwitcher />
-              </>
+    <header className={`sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${themeVariant === "windows" ? "border-b-2" : ""}`}>
+      <div className="container flex h-14 items-center">
+        <Link to="/" className="flex items-center gap-2 font-semibold">
+          <MusicIcon className="h-5 w-5 text-primary" />
+          <span className="hidden md:inline-block">StudioFlow</span>
+        </Link>
+        
+        {isAuthenticated && !isMobile && (
+          <nav className="flex items-center gap-4 ml-6">
+            <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
+              {t("nav.dashboard")}
+            </Link>
+            <Link to="/docs" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              {t("nav.docs")}
+            </Link>
+            {isAdmin && (
+              <Link to="/admin" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1">
+                <Shield className="h-3.5 w-3.5" />
+                {t("nav.admin")}
+              </Link>
             )}
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                {isAuthenticated ? (
-                  <Avatar className="h-9 w-9 cursor-pointer border-2 border-transparent hover:border-primary transition-all">
-                    <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.username || "User"} />
-                    <AvatarFallback>{getInitials()}</AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <Button variant="outline" size="icon">
-                    <MoreHorizontal className="h-[1.2rem] w-[1.2rem]" />
-                    <span className="sr-only">{t("dropdown.more")}</span>
-                  </Button>
-                )}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className={`w-[220px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
-                {isAuthenticated ? (
-                  <>
-                    <DropdownMenuLabel className="text-foreground">
+          </nav>
+        )}
+        
+        <div className="flex flex-1 items-center justify-end gap-2">
+          {isAuthenticated && !isMobile && (
+            <>
+              <PlanSwitcher currentPlan={pricingTier} onPlanChange={setPricingTier} />
+              <CustomLayoutEditor />
+            </>
+          )}
+          
+          <ModeToggle />
+          
+          {isAuthenticated ? (
+            <>
+              {isMobile ? (
+                <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="icon" className="ml-1">
+                      <Menu className="h-5 w-5" />
+                      <span className="sr-only">Toggle menu</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-center gap-2 py-4">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={profile?.avatar_url || undefined} />
+                          <AvatarFallback>{profile?.username?.slice(0, 2).toUpperCase() || "U"}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">{profile?.full_name || profile?.username || "User"}</p>
+                          <p className="text-xs text-muted-foreground">{user?.email}</p>
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="flex flex-col gap-1 py-4">
+                        <Link 
+                          to="/" 
+                          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                          onClick={closeMobileMenu}
+                        >
+                          {t("nav.dashboard")}
+                        </Link>
+                        <Link 
+                          to="/docs" 
+                          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                          onClick={closeMobileMenu}
+                        >
+                          {t("nav.docs")}
+                        </Link>
+                        {isAdmin && (
+                          <Link 
+                            to="/admin" 
+                            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                            onClick={closeMobileMenu}
+                          >
+                            <Shield className="h-4 w-4" />
+                            {t("nav.admin")}
+                          </Link>
+                        )}
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="py-4">
+                        <p className="px-3 text-sm font-medium mb-2">{t("settings.title")}</p>
+                        <div className="space-y-3 px-3">
+                          <PlanSwitcher currentPlan={pricingTier} onPlanChange={setPricingTier} />
+                          <CustomLayoutEditor />
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="mt-auto py-4">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start gap-2" 
+                          onClick={handleSignOut}
+                        >
+                          <LogOut className="h-4 w-4" />
+                          {t("auth.signout")}
+                        </Button>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={profile?.avatar_url || undefined} />
+                        <AvatarFallback>{profile?.username?.slice(0, 2).toUpperCase() || "U"}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
                       <div className="flex flex-col space-y-1">
-                        <p className="font-medium">{profile?.full_name || profile?.username}</p>
-                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                        <p className="text-sm font-medium leading-none">{profile?.full_name || profile?.username || "User"}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      className="cursor-pointer hover:bg-accent hover:text-accent-foreground text-foreground"
-                      onClick={() => signOut()}
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      {t("auth.sign_out")}
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <>
-                    <DropdownMenuLabel className="text-foreground">{t("dropdown.actions")}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <Link to="/auth">
-                        <DropdownMenuItem className="cursor-pointer hover:bg-accent hover:text-accent-foreground text-foreground">
-                          <UserCircle className="h-4 w-4 mr-2" />
-                          {t("auth.sign_in")}
-                        </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>{t("nav.profile")}</span>
                       </Link>
-                    </DropdownMenuGroup>
-                  </>
-                )}
-                
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel className="text-foreground">{t("dropdown.resources")}</DropdownMenuLabel>
-                  <Link to="/docs">
-                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      {t("header.documentation")}
                     </DropdownMenuItem>
-                  </Link>
-                  <Link to="/terms">
-                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                      {t("footer.terms")}
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings" className="cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>{t("nav.settings")}</span>
+                      </Link>
                     </DropdownMenuItem>
-                  </Link>
-                  <Link to="/privacy">
-                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                      {t("footer.privacy")}
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="cursor-pointer">
+                          <Shield className="mr-2 h-4 w-4" />
+                          <span>{t("nav.admin")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/docs" className="cursor-pointer">
+                        <HelpCircle className="mr-2 h-4 w-4" />
+                        <span>{t("nav.help")}</span>
+                      </Link>
                     </DropdownMenuItem>
-                  </Link>
-                  <Link to="/contact">
-                    <DropdownMenuItem className="hover:bg-accent hover:text-accent-foreground text-foreground">
-                      {t("footer.contact")}
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Languages className="mr-2 h-4 w-4" />
+                      <select 
+                        value={currentLanguage}
+                        onChange={(e) => setLanguage(e.target.value)}
+                        className="bg-transparent border-none outline-none w-full cursor-pointer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="ja">日本語</option>
+                      </select>
                     </DropdownMenuItem>
-                  </Link>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <HelpTip
-              title={t("header.need_help")}
-              content={
-                <div className="space-y-2">
-                  <p>{t("help.assistance_description")}</p>
-                  <ul className="list-disc pl-4 space-y-1">
-                    <li>{t("help.tip_icons")}</li>
-                    <li>{t("help.tip_docs")}</li>
-                    <li>{t("help.tip_support")}</li>
-                  </ul>
-                </div>
-              }
-              size="small"
-              className="ml-1"
-            />
-          </div>
-        )}
-        
-        {isMobile && isMenuOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-background border-b border-border animate-slide-in z-50">
-            <nav className="flex flex-col p-4 gap-4">
-              {isAuthenticated ? (
-                <>
-                  <div className="flex items-center space-x-4 py-2">
-                    <Avatar>
-                      <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.username || "User"} />
-                      <AvatarFallback>{getInitials()}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">{profile?.full_name || profile?.username}</p>
-                      <p className="text-xs text-muted-foreground">{user?.email}</p>
-                    </div>
-                  </div>
-              
-                  <div className="h-px bg-border my-2"></div>
-                  
-                  <div className="flex items-center justify-between py-2">
-                    <span className="text-sm font-medium">{t("label.dashboardview")}</span>
-                    <ViewSelector />
-                  </div>
-                  
-                  <div className="flex items-center justify-between py-2">
-                    <span className="text-sm font-medium">{t("label.plan")}</span>
-                    <PlanSwitcher 
-                      currentPlan={pricingTier}
-                      onPlanChange={(plan) => {
-                        setPricingTier(plan);
-                      }}
-                    />
-                  </div>
-                  
-                  {pricingTier === "pro" && (
-                    <div className="flex items-center justify-between py-2">
-                      <span className="text-sm font-medium">{t("label.uitheme")}</span>
-                      <ThemeSwitcher />
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center justify-between py-2">
-                    <span className="text-sm font-medium">{t("label.language")}</span>
-                    <LanguageSwitcher />
-                  </div>
-                  
-                  {viewMode === "custom" && pricingTier === "pro" && (
-                    <div className="py-2">
-                      <CustomLayoutEditor />
-                    </div>
-                  )}
-                  
-                  <Button 
-                    className="w-full justify-start" 
-                    variant="outline"
-                    onClick={() => signOut()}
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    {t("auth.sign_out")}
-                  </Button>
-                </>
-              ) : (
-                <Link to="/auth">
-                  <Button className="w-full">
-                    <UserCircle className="h-4 w-4 mr-2" />
-                    {t("auth.sign_in")}
-                  </Button>
-                </Link>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>{t("auth.signout")}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
-              
-              <div className="h-px bg-border my-2"></div>
-              
-              <Link to="/docs" className="text-sm font-medium py-2 transition-colors hover:text-primary flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
-                {t("header.documentation")}
-              </Link>
-              
-              <Link to="/terms" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("footer.terms")}
-              </Link>
-              
-              <Link to="/privacy" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("footer.privacy")}
-              </Link>
-              
-              <Link to="/contact" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("footer.contact")}
-              </Link>
-              
-              <div className="h-px bg-border my-2"></div>
-              
-              <a href="#system" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("widget.systemmonitor")}
-              </a>
-              <a href="#audio" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("widget.audioanalyzer")}
-              </a>
-              <a href="#ai-tools" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("widget.aitools")}
-              </a>
-              <a href="#vm-controller" className="text-sm font-medium py-2 transition-colors hover:text-primary">
-                {t("widget.vmcontroller")}
-              </a>
-            </nav>
-          </div>
-        )}
+            </>
+          ) : (
+            <Button size="sm" onClick={() => navigate("/auth")}>
+              {t("auth.signin")}
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -65,53 +65,48 @@ export function useToast() {
 
 type ToastOptions = Omit<Toast, 'id'>;
 
-// Create a toast function that can be used directly or as an object with methods
-function createToast(opts: Partial<ToastOptions>) {
+/**
+ * Create a toast notification
+ */
+export const toast = ((opts: Partial<ToastOptions>) => {
   const { addToast } = useToast();
   addToast({
     id: crypto.randomUUID(),
     variant: "default",
     ...opts,
   });
-}
+}) as {
+  (opts: Partial<ToastOptions>): void;
+  default: (opts: Partial<ToastOptions>) => void;
+  destructive: (opts: Partial<ToastOptions>) => void;
+  custom: (opts: Partial<ToastOptions>) => void;
+};
 
-// Main toast function
-export const toast = Object.assign(
-  // Main function for toast({...})
-  function(opts: Partial<ToastOptions>) {
-    const { addToast } = useToast();
-    addToast({
-      id: crypto.randomUUID(),
-      variant: "default",
-      ...opts,
-    });
-  },
-  // Variant methods
-  {
-    default: function(opts: Partial<ToastOptions>) {
-      const { addToast } = useToast();
-      addToast({
-        id: crypto.randomUUID(),
-        variant: "default",
-        ...opts,
-      });
-    },
+// Default variant
+toast.default = (opts: Partial<ToastOptions>) => {
+  const { addToast } = useToast();
+  addToast({
+    id: crypto.randomUUID(),
+    variant: "default",
+    ...opts,
+  });
+};
 
-    destructive: function(opts: Partial<ToastOptions>) {
-      const { addToast } = useToast();
-      addToast({
-        id: crypto.randomUUID(),
-        variant: "destructive",
-        ...opts,
-      });
-    },
+// Destructive variant
+toast.destructive = (opts: Partial<ToastOptions>) => {
+  const { addToast } = useToast();
+  addToast({
+    id: crypto.randomUUID(),
+    variant: "destructive",
+    ...opts,
+  });
+};
 
-    custom: function(opts: Partial<ToastOptions>) {
-      const { addToast } = useToast();
-      addToast({
-        id: crypto.randomUUID(),
-        ...opts,
-      });
-    }
-  }
-);
+// Custom variant
+toast.custom = (opts: Partial<ToastOptions>) => {
+  const { addToast } = useToast();
+  addToast({
+    id: crypto.randomUUID(),
+    ...opts,
+  });
+};

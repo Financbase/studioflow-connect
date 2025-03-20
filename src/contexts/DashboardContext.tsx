@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
@@ -44,7 +45,7 @@ const featureAccessMap: Record<PricingTier, Record<WidgetId, boolean>> = {
 // Default visible widgets based on view mode
 const defaultVisibleWidgets: Record<ViewMode, WidgetId[]> = {
   simple: ['connect', 'audio'], // MVP core features
-  advanced: ['connect', 'system', 'audio', 'ai', 'daw', 'marketplace'],
+  advanced: ['connect', 'system', 'audio', 'ai', 'daw', 'marketplace', 'vm'],
   custom: [], // Will be set by user preference
   mobile: ['connect'] // Mobile view focuses on the core MVP
 };
@@ -92,7 +93,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   // View mode state - default to mobile if on mobile device
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    return isMobile ? 'mobile' : 'simple';
+    return isMobile ? 'mobile' : 'advanced'; // Changed default to advanced to show all features
   });
   
   // Update view mode when mobile status changes
@@ -100,15 +101,15 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (isMobile && viewMode !== 'mobile') {
       setViewMode('mobile');
     } else if (!isMobile && viewMode === 'mobile') {
-      setViewMode('simple');
+      setViewMode('advanced'); // Changed default to advanced
     }
   }, [isMobile, viewMode]);
   
   // Pricing tier state - load from profile if available
-  const [pricingTier, setPricingTier] = useState<PricingTier>('free');
+  const [pricingTier, setPricingTier] = useState<PricingTier>('pro'); // Default to pro for testing
   
-  // Custom layout state
-  const [customLayout, setCustomLayout] = useState<WidgetId[]>(['connect', 'audio']);
+  // Custom layout state - include all widgets by default
+  const [customLayout, setCustomLayout] = useState<WidgetId[]>(['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace']);
   
   // Load dashboard settings from Supabase when user is authenticated
   useEffect(() => {
@@ -150,6 +151,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             const planValue = profile.plan as PricingTier;
             if (planValue === 'free' || planValue === 'standard' || planValue === 'pro') {
               setPricingTier(planValue);
+              console.log("Setting pricing tier from profile:", planValue);
             }
           }
         } catch (err) {
@@ -233,6 +235,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   // Determines if a widget should be visible based on current view mode
   const isWidgetVisible = (widgetId: WidgetId): boolean => {
+    // Always show all widgets for Pro users regardless of view mode
+    if (pricingTier === 'pro') {
+      return true;
+    }
+    
     if (viewMode === 'custom') {
       return customLayout.includes(widgetId);
     }
