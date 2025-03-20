@@ -63,22 +63,11 @@ export function useToast() {
   return context;
 }
 
+// Create a standalone toast function that doesn't rely on the hook directly
 type ToastOptions = Omit<Toast, 'id'>;
 
-// Function to create a toast with the hook
-function createToastFunction(opts: Partial<ToastOptions>) {
-  const id = crypto.randomUUID();
-  const { addToast } = useToast();
-  addToast({
-    id,
-    variant: "default",
-    ...opts,
-  });
-  return id;
-}
-
 // Define the toast function type
-type ToastFunction = {
+export type ToastFunction = {
   (opts: Partial<ToastOptions>): string;
   create: (opts: Partial<ToastOptions>) => string;
   default: (opts: Partial<ToastOptions>) => string;
@@ -86,24 +75,79 @@ type ToastFunction = {
   custom: (opts: Partial<ToastOptions>) => string;
 };
 
-// Create the toast function with methods
-export const toast = ((opts: Partial<ToastOptions>) => {
-  return createToastFunction(opts);
-}) as ToastFunction;
+// External toast API that doesn't directly use the hook
+// This allows it to be imported directly in files
+export const toast: ToastFunction = function toast(opts: Partial<ToastOptions>) {
+  // Generate a random ID for this toast
+  const id = crypto.randomUUID();
+  
+  // We'll use setTimeout to push this to the next event loop tick
+  // This allows the toast function to be called outside of React components
+  setTimeout(() => {
+    try {
+      // Get the toast context from wherever it might be available
+      const toastHelpers = window.__TOAST_HELPERS__;
+      if (toastHelpers && toastHelpers.addToast) {
+        toastHelpers.addToast({
+          id,
+          variant: "default",
+          ...opts
+        });
+      } else {
+        console.error("Toast context not available. Make sure ToastProvider is in the component tree.");
+      }
+    } catch (error) {
+      console.error("Failed to show toast:", error);
+    }
+  }, 0);
+  
+  return id;
+} as ToastFunction;
 
 // Add methods to the toast function
 toast.create = (opts: Partial<ToastOptions>) => {
-  return createToastFunction(opts);
+  return toast(opts);
 };
 
 toast.default = (opts: Partial<ToastOptions>) => {
-  return createToastFunction({ ...opts, variant: "default" });
+  return toast({ ...opts, variant: "default" });
 };
 
 toast.destructive = (opts: Partial<ToastOptions>) => {
-  return createToastFunction({ ...opts, variant: "destructive" });
+  return toast({ ...opts, variant: "destructive" });
 };
 
 toast.custom = (opts: Partial<ToastOptions>) => {
-  return createToastFunction(opts);
+  return toast(opts);
+};
+
+// Add global helper to make toast functions available outside React context
+declare global {
+  interface Window {
+    __TOAST_HELPERS__?: {
+      addToast: (toast: Toast) => void;
+      removeToast: (id: string) => void;
+      updateToast: (id: string, toast: Partial<Toast>) => void;
+    }
+  }
+}
+
+// Helper component to connect the React context to the global window object
+export const ToastGlobalHelper: FC = () => {
+  const { addToast, removeToast, updateToast } = useToast();
+  
+  // Make toast functions globally available
+  React.useEffect(() => {
+    window.__TOAST_HELPERS__ = {
+      addToast,
+      removeToast,
+      updateToast
+    };
+    
+    return () => {
+      window.__TOAST_HELPERS__ = undefined;
+    };
+  }, [addToast, removeToast, updateToast]);
+  
+  return null;
 };

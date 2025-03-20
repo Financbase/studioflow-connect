@@ -22,7 +22,7 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => toggleDarkMode()}>
+        <DropdownMenuItem onClick={toggleDarkMode}>
           {isDarkMode ? "Light" : "Dark"}
         </DropdownMenuItem>
       </DropdownMenuContent>
