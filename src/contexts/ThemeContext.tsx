@@ -2,13 +2,16 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 
-type ThemeVariant = "modern" | "legacy" | "classic" | "windows";
+type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
+type ThemeMode = "dark" | "light";
 
 interface ThemeContextType {
   themeVariant: ThemeVariant;
   setThemeVariant: (theme: ThemeVariant) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  theme: ThemeMode; // Added this property
+  setTheme: (theme: ThemeMode) => void; // Added this property
 }
 
 interface ThemeProviderProps {
@@ -24,11 +27,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 }) => {
   const [themeVariant, setThemeVariant] = useState<ThemeVariant>("modern");
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [theme, setTheme] = useState<ThemeMode>("dark"); // Added this state
   
   // Initialize theme from localStorage
   useEffect(() => {
     const storedTheme = localStorage.getItem("ui_theme_variant") as ThemeVariant;
-    if (storedTheme && ["modern", "legacy", "classic", "windows"].includes(storedTheme)) {
+    if (storedTheme && ["modern", "legacy", "classic", "windows", "default", "retro"].includes(storedTheme)) {
       setThemeVariant(storedTheme);
     }
     
@@ -36,13 +40,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
     
     setIsDarkMode(isDark);
+    setTheme(isDark ? "dark" : "light");
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
   
   // Apply theme classes when the theme changes
   useEffect(() => {
     // Clean up existing theme classes first
-    document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows");
+    document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows", "theme-default", "theme-retro");
     // Add the new theme class
     document.documentElement.classList.add(`theme-${themeVariant}`);
     
@@ -64,6 +69,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
+    setTheme(newMode ? "dark" : "light");
     document.documentElement.classList.toggle("dark", newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
     
@@ -73,12 +79,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     });
   };
   
+  // A specific setter for theme mode
+  const handleSetTheme = (mode: ThemeMode) => {
+    const isDark = mode === "dark";
+    setIsDarkMode(isDark);
+    setTheme(mode);
+    document.documentElement.classList.toggle("dark", isDark);
+    localStorage.setItem("theme", mode);
+    
+    toast({
+      title: isDark ? "Dark Mode Enabled" : "Light Mode Enabled",
+      description: "Theme mode has been changed",
+    });
+  };
+  
   return (
     <ThemeContext.Provider value={{
       themeVariant,
       setThemeVariant: handleSetThemeVariant,
       isDarkMode,
-      toggleDarkMode
+      toggleDarkMode,
+      theme,
+      setTheme: handleSetTheme
     }}>
       {children}
     </ThemeContext.Provider>

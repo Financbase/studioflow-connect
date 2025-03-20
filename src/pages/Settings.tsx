@@ -71,7 +71,10 @@ const Settings = () => {
 
                 <div className="space-y-2">
                   <Label>Theme Variant</Label>
-                  <Select value={themeVariant} onValueChange={(value: 'default' | 'modern' | 'windows' | 'retro') => setThemeVariant(value)}>
+                  <Select 
+                    value={themeVariant} 
+                    onValueChange={(value: "modern" | "legacy" | "classic" | "windows" | "default" | "retro") => setThemeVariant(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select theme variant" />
                     </SelectTrigger>
@@ -143,14 +146,17 @@ const Settings = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label>View Mode</Label>
-                  <Select value={viewMode} onValueChange={(value: 'simple' | 'advanced' | 'compact') => setViewMode(value)}>
+                  <Select 
+                    value={viewMode} 
+                    onValueChange={(value: "simple" | "advanced" | "custom" | "mobile") => setViewMode(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select view mode" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="simple">Simple</SelectItem>
                       <SelectItem value="advanced">Advanced</SelectItem>
-                      <SelectItem value="compact">Compact</SelectItem>
+                      <SelectItem value="custom">Custom</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-sm text-muted-foreground">
