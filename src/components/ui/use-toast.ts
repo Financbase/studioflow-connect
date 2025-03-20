@@ -1,6 +1,6 @@
 
 // Re-export the toast hooks and functions from the main implementation
-import { useToast, toast, ToastFunction, ToastProvider, ToastGlobalHelper } from "@/hooks/use-toast";
+import { useToast, toast, ToastFunction, ToastProvider, ToastGlobalHelper, Toast } from "@/hooks/use-toast";
 
-export { useToast, toast, ToastProvider, ToastGlobalHelper };
+export { useToast, toast, ToastProvider, ToastGlobalHelper, Toast };
 export type { ToastFunction };

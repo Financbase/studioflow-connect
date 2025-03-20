@@ -16,7 +16,7 @@ type ToastContextType = {
   updateToast: (id: string, toast: Partial<Toast>) => void;
 };
 
-interface Toast {
+export interface Toast {
   id: string;
   variant?: "default" | "destructive";
   title?: ReactNode;
