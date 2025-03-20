@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -73,6 +75,22 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <AdminDashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/profile" 
+                        element={
+                          <ProtectedRoute>
+                            <Profile />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/settings" 
+                        element={
+                          <ProtectedRoute>
+                            <Settings />
                           </ProtectedRoute>
                         } 
                       />
