@@ -6,18 +6,23 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Play, Pause, SkipBack, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 
 interface AudioControlsProps {
   onPlay: () => void;
   onPause: () => void;
   onStop: () => void;
   isPlaying: boolean;
-  audioName?: string; // Added audioName as an optional prop
-  volume?: number;
-  isMuted?: boolean;
-  onVolumeChange?: (volume: number) => void;
-  onMuteToggle?: () => void;
+  audioName?: string;
+  volume: number;
+  isMuted: boolean;
+  onVolumeChange: (volume: number) => void;
+  onMuteToggle: () => void;
+  onVisualizationTypeChange?: (type: string) => void;
+  currentVisualizationType?: string;
+  duration?: number;
+  currentTime?: number;
+  onSeek?: (time: number) => void;
 }
 
 const AudioControls: React.FC<AudioControlsProps> = ({
@@ -26,15 +31,33 @@ const AudioControls: React.FC<AudioControlsProps> = ({
   onStop,
   isPlaying,
   audioName,
-  volume = 50, // Default value if not provided
-  isMuted = false, // Default value if not provided
-  onVolumeChange = () => {}, // Default empty function if not provided
-  onMuteToggle = () => {}, // Default empty function if not provided
+  volume,
+  isMuted,
+  onVolumeChange,
+  onMuteToggle,
+  onVisualizationTypeChange,
+  currentVisualizationType = "waveform",
+  duration = 0,
+  currentTime = 0,
+  onSeek,
 }) => {
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const handleSeek = (value: number[]) => {
+    if (onSeek) {
+      onSeek(value[0]);
+    }
+  };
+
   return (
     <Card className="mb-4">
       <CardContent className="pt-6">
         <div className="flex flex-col space-y-4">
+          {/* Playback Controls */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Button
@@ -56,6 +79,7 @@ const AudioControls: React.FC<AudioControlsProps> = ({
               {audioName && <span className="text-sm ml-2">{audioName}</span>}
             </div>
             
+            {/* Volume Control */}
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
@@ -83,20 +107,46 @@ const AudioControls: React.FC<AudioControlsProps> = ({
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
+          {/* Time Scrubber */}
+          {duration > 0 && onSeek && (
+            <div className="space-y-1">
+              <Slider
+                value={[currentTime]}
+                min={0}
+                max={duration}
+                step={0.1}
+                onValueChange={handleSeek}
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>{formatTime(currentTime)}</span>
+                <span>{formatTime(duration)}</span>
+              </div>
+            </div>
+          )}
+          
+          {/* Settings Controls */}
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-2">
               <Label htmlFor="auto-gain" className="text-sm">Auto Gain</Label>
               <Switch id="auto-gain" />
             </div>
             
-            <div>
-              <Label className="text-sm mb-1 block">Visualization Type</Label>
-              <ToggleGroup type="single" defaultValue="waveform">
-                <ToggleGroupItem value="waveform" size="sm">Waveform</ToggleGroupItem>
-                <ToggleGroupItem value="frequency" size="sm">Frequency</ToggleGroupItem>
-                <ToggleGroupItem value="spectrogram" size="sm">Spectrogram</ToggleGroupItem>
-              </ToggleGroup>
-            </div>
+            {onVisualizationTypeChange && (
+              <div>
+                <Label className="text-sm mb-1 block">Visualization Type</Label>
+                <ToggleGroup 
+                  type="single" 
+                  value={currentVisualizationType}
+                  onValueChange={(value) => {
+                    if (value) onVisualizationTypeChange(value);
+                  }}
+                >
+                  <ToggleGroupItem value="waveform" size="sm">Waveform</ToggleGroupItem>
+                  <ToggleGroupItem value="frequency" size="sm">Frequency</ToggleGroupItem>
+                  <ToggleGroupItem value="spectrogram" size="sm">Spectrogram</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

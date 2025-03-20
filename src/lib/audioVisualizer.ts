@@ -3,7 +3,7 @@
  * Initialize audio visualizer on a canvas element with enhanced features
  * for sample analysis and categorization
  */
-export function initAudioVisualizer(canvas: HTMLCanvasElement) {
+export function initAudioVisualizer(canvas: HTMLCanvasElement, audioSource?: MediaElementAudioSourceNode) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return () => {};
 
@@ -24,10 +24,10 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
   
   // Sample classification markers (for visualization purposes)
   const sampleMarkers = [
-    { position: 0.2, label: "Kick", color: "rgba(255, 100, 100, 0.8)" },
-    { position: 0.4, label: "Snare", color: "rgba(100, 255, 100, 0.8)" },
-    { position: 0.6, label: "Hi-hat", color: "rgba(100, 100, 255, 0.8)" },
-    { position: 0.8, label: "Percussion", color: "rgba(255, 255, 100, 0.8)" },
+    { position: 0.2, label: "Low", color: "rgba(255, 100, 100, 0.8)" },
+    { position: 0.4, label: "Mid", color: "rgba(100, 255, 100, 0.8)" },
+    { position: 0.6, label: "High", color: "rgba(100, 100, 255, 0.8)" },
+    { position: 0.8, label: "Ultra", color: "rgba(255, 255, 100, 0.8)" },
   ];
   
   try {
@@ -38,46 +38,45 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
     
-    // For demo: create an oscillator to generate audio data
-    const oscillator = audioContext.createOscillator();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-    oscillator.connect(analyser);
-    oscillator.start();
+    // Connect to audio source if provided
+    if (audioSource) {
+      audioSource.connect(analyser);
+    } else {
+      // For demo: create an oscillator to generate audio data
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+      oscillator.connect(analyser);
+      oscillator.start();
+    }
     
     // Drawing function
     const draw = () => {
       animationId = requestAnimationFrame(draw);
       
-      analyser.getByteTimeDomainData(dataArray);
+      // Use frequency data for a frequency visualizer
+      analyser.getByteFrequencyData(dataArray);
       
       // Clear canvas
       ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw waveform
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = 'rgba(65, 105, 225, 0.8)';
-      ctx.beginPath();
-      
-      const sliceWidth = canvas.width / dataArray.length;
+      // Draw frequency bars
+      const barWidth = (canvas.width / bufferLength) * 2.5;
       let x = 0;
       
-      for (let i = 0; i < dataArray.length; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = v * canvas.height / 2;
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (dataArray[i] / 255) * canvas.height;
         
-        if (i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
+        // Create a gradient effect based on frequency
+        const hue = i / bufferLength * 360;
+        ctx.fillStyle = `hsla(${hue}, 100%, 50%, 0.8)`;
         
-        x += sliceWidth;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        
+        x += barWidth + 1;
+        if (x > canvas.width) break;
       }
-      
-      ctx.lineTo(canvas.width, canvas.height / 2);
-      ctx.stroke();
       
       // Draw sample classification markers
       sampleMarkers.forEach(marker => {
@@ -99,9 +98,11 @@ export function initAudioVisualizer(canvas: HTMLCanvasElement) {
         ctx.fillText(marker.label, markerX + 4, 16);
       });
       
-      // Add some randomness for visualization effect
-      for (let i = 0; i < dataArray.length; i++) {
-        dataArray[i] = Math.random() * 50 + 90;
+      // If no audio source, add some randomness for visualization effect
+      if (!audioSource) {
+        for (let i = 0; i < dataArray.length; i++) {
+          dataArray[i] = Math.random() * 50 + 90;
+        }
       }
     };
     
