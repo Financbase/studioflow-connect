@@ -55,7 +55,7 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
             onPlay={handlePlay}
             onPause={handlePause}
             onStop={handleStop}
-            title={audioFile.name}
+            audioName={audioFile.name}
           />
         </CardContent>
         
