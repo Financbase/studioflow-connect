@@ -69,7 +69,7 @@ type ToastOptions = Omit<Toast, 'id'>;
  * Create a toast notification
  */
 export const toast = {
-  (opts: Partial<ToastOptions>) {
+  create: (opts: Partial<ToastOptions>) => {
     const { addToast } = useToast();
     addToast({
       id: crypto.randomUUID(),
@@ -77,7 +77,7 @@ export const toast = {
       ...opts,
     });
   },
-  default(opts: Partial<ToastOptions>) {
+  default: (opts: Partial<ToastOptions>) => {
     const { addToast } = useToast();
     addToast({
       id: crypto.randomUUID(),
@@ -85,7 +85,7 @@ export const toast = {
       ...opts,
     });
   },
-  destructive(opts: Partial<ToastOptions>) {
+  destructive: (opts: Partial<ToastOptions>) => {
     const { addToast } = useToast();
     addToast({
       id: crypto.randomUUID(),
@@ -93,11 +93,11 @@ export const toast = {
       ...opts,
     });
   },
-  custom(opts: Partial<ToastOptions>) {
+  custom: (opts: Partial<ToastOptions>) => {
     const { addToast } = useToast();
     addToast({
       id: crypto.randomUUID(),
       ...opts,
     });
-  },
+  }
 };
