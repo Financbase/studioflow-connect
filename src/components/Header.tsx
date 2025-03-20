@@ -42,6 +42,13 @@ const Header = () => {
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
+
+  // Type-safe language selection handler
+  const handleLanguageChange = (lang: string) => {
+    if (lang === "en" || lang === "es" || lang === "fr" || lang === "de" || lang === "sv") {
+      setLanguage(lang);
+    }
+  };
   
   return (
     <header className={`sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${themeVariant === "windows" ? "border-b-2" : ""}`}>
@@ -204,7 +211,7 @@ const Header = () => {
                       <Languages className="mr-2 h-4 w-4" />
                       <select 
                         value={currentLanguage}
-                        onChange={(e) => setLanguage(e.target.value)}
+                        onChange={(e) => handleLanguageChange(e.target.value)}
                         className="bg-transparent border-none outline-none w-full cursor-pointer"
                         onClick={(e) => e.stopPropagation()}
                       >

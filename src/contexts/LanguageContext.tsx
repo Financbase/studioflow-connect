@@ -1,11 +1,12 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 export type Language = "en" | "es" | "fr" | "de" | "sv";
 
 interface LanguageContextType {
   language: Language;
+  currentLanguage: Language; // Add this property
   setLanguage: (lang: Language) => void;
   translations: Record<string, Record<Language, string>>;
   t: (key: string) => string;
@@ -602,6 +603,7 @@ export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ childr
     <LanguageContext.Provider 
       value={{ 
         language, 
+        currentLanguage: language, // Add this property
         setLanguage,
         translations,
         t

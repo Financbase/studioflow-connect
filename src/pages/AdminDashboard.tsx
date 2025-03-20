@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
@@ -70,9 +69,7 @@ const AdminDashboard = () => {
   const [userSessions, setUserSessions] = useState<UserSession[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
   
-  // Redirect if not authenticated or not an admin
   useEffect(() => {
-    // In a real application, you would check if the user has admin role
     if (!isAuthenticated) {
       navigate("/auth");
       toast({
@@ -83,9 +80,7 @@ const AdminDashboard = () => {
     }
   }, [isAuthenticated, navigate, toast]);
   
-  // Mock data for demonstration
   useEffect(() => {
-    // These would be real API calls in a complete implementation
     const mockTickets: Ticket[] = [
       {
         id: "ticket-001",
@@ -170,14 +165,12 @@ const AdminDashboard = () => {
   };
   
   const handleRemoteAssistance = (sessionId: string) => {
-    // In a real implementation, this would initiate a remote assistance connection
     toast({
       title: "Remote Assistance Initiated",
       description: `Connecting to session #${sessionId}...`,
     });
   };
   
-  // Dashboard metrics calculation
   const openTickets = tickets.filter(t => t.status === "open").length;
   const activeUsers = userSessions.length;
   const criticalTickets = tickets.filter(t => t.priority === "critical").length;
@@ -245,7 +238,7 @@ const AdminDashboard = () => {
                       </div>
                       <MessageSquareText className="h-8 w-8 text-orange-500 opacity-80" />
                     </div>
-                    <Progress value={openTickets > 0 ? 100 : 0} className="h-1 mt-4 bg-orange-100" indicator="bg-orange-500" />
+                    <Progress value={openTickets > 0 ? 100 : 0} className="h-1 mt-4 bg-orange-100" />
                   </CardContent>
                 </Card>
                 
@@ -258,7 +251,7 @@ const AdminDashboard = () => {
                       </div>
                       <ShieldAlert className="h-8 w-8 text-destructive opacity-80" />
                     </div>
-                    <Progress value={criticalTickets > 0 ? 100 : 0} className="h-1 mt-4 bg-red-100" indicator="bg-red-500" />
+                    <Progress value={criticalTickets > 0 ? 100 : 0} className="h-1 mt-4 bg-red-100" />
                   </CardContent>
                 </Card>
                 
@@ -271,7 +264,7 @@ const AdminDashboard = () => {
                       </div>
                       <CheckSquare className="h-8 w-8 text-green-500 opacity-80" />
                     </div>
-                    <Progress value={resolvedToday > 0 ? (resolvedToday / (resolvedToday + openTickets)) * 100 : 0} className="h-1 mt-4 bg-green-100" indicator="bg-green-500" />
+                    <Progress value={resolvedToday > 0 ? (resolvedToday / (resolvedToday + openTickets)) * 100 : 0} className="h-1 mt-4 bg-green-100" />
                   </CardContent>
                 </Card>
               </div>

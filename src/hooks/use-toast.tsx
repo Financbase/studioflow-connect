@@ -68,45 +68,36 @@ type ToastOptions = Omit<Toast, 'id'>;
 /**
  * Create a toast notification
  */
-export const toast = ((opts: Partial<ToastOptions>) => {
-  const { addToast } = useToast();
-  addToast({
-    id: crypto.randomUUID(),
-    variant: "default",
-    ...opts,
-  });
-}) as {
-  (opts: Partial<ToastOptions>): void;
-  default: (opts: Partial<ToastOptions>) => void;
-  destructive: (opts: Partial<ToastOptions>) => void;
-  custom: (opts: Partial<ToastOptions>) => void;
-};
-
-// Default variant
-toast.default = (opts: Partial<ToastOptions>) => {
-  const { addToast } = useToast();
-  addToast({
-    id: crypto.randomUUID(),
-    variant: "default",
-    ...opts,
-  });
-};
-
-// Destructive variant
-toast.destructive = (opts: Partial<ToastOptions>) => {
-  const { addToast } = useToast();
-  addToast({
-    id: crypto.randomUUID(),
-    variant: "destructive",
-    ...opts,
-  });
-};
-
-// Custom variant
-toast.custom = (opts: Partial<ToastOptions>) => {
-  const { addToast } = useToast();
-  addToast({
-    id: crypto.randomUUID(),
-    ...opts,
-  });
+export const toast = {
+  (opts: Partial<ToastOptions>) {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      variant: "default",
+      ...opts,
+    });
+  },
+  default(opts: Partial<ToastOptions>) {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      variant: "default",
+      ...opts,
+    });
+  },
+  destructive(opts: Partial<ToastOptions>) {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      variant: "destructive",
+      ...opts,
+    });
+  },
+  custom(opts: Partial<ToastOptions>) {
+    const { addToast } = useToast();
+    addToast({
+      id: crypto.randomUUID(),
+      ...opts,
+    });
+  },
 };
