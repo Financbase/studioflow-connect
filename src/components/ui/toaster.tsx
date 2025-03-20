@@ -13,7 +13,7 @@ export function Toaster() {
   const { toasts } = useToast()
 
   return (
-    <ToastProvider>
+    <>
       <ToastGlobalHelper />
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
@@ -30,6 +30,6 @@ export function Toaster() {
         )
       })}
       <ToastViewport />
-    </ToastProvider>
+    </>
   )
 }

@@ -49,8 +49,8 @@ const App = () => {
   return (
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <ToastProvider>
+        <ToastProvider>
+          <TooltipProvider>
             <ThemeProvider>
               <LanguageProvider>
                 <BrowserRouter>
@@ -115,8 +115,8 @@ const App = () => {
                 </BrowserRouter>
               </LanguageProvider>
             </ThemeProvider>
-          </ToastProvider>
-        </TooltipProvider>
+          </TooltipProvider>
+        </ToastProvider>
       </QueryClientProvider>
     </SessionContextProvider>
   );
