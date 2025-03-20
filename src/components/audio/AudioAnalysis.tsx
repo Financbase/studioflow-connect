@@ -8,6 +8,8 @@ import WaveformVisualizer from "./WaveformVisualizer";
 import AudioControls from "./AudioControls";
 import AudioPlayer from "./AudioPlayer";
 import { useAudioAnalysis } from "@/hooks/use-audio-analysis";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect as useEffectReact } from "react";
 
 interface AudioAnalysisProps {
   audioFile: AudioAsset;
@@ -30,6 +32,29 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [audioUrl, setAudioUrl] = useState<string>("");
+
+  // Get signed URL from Supabase
+  useEffectReact(() => {
+    const getSignedUrl = async () => {
+      try {
+        const { data, error } = await supabase.storage
+          .from('audio_assets')
+          .createSignedUrl(audioFile.storage_path, 60); // 60 seconds expiry
+          
+        if (error) {
+          console.error("Error getting signed URL:", error);
+          return;
+        }
+        
+        setAudioUrl(data.signedUrl);
+      } catch (error) {
+        console.error("Error in getSignedUrl:", error);
+      }
+    };
+    
+    getSignedUrl();
+  }, [audioFile]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -65,12 +90,12 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
         <CardContent className="space-y-6">
           <AudioPlayer 
             audioRef={audioRef} 
-            src={audioFile.url}
+            src={audioUrl}
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {visualizationType === "frequency" ? (
-              <FrequencyVisualizer className="col-span-full" />
+              <FrequencyVisualizer className="col-span-full" audioSource={isPlaying ? audioRef.current : undefined} />
             ) : (
               <WaveformVisualizer audioData={audioData} className="col-span-full" />
             )}
