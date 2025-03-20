@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Users,
@@ -34,7 +34,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-// Types for the Admin Dashboard
 interface Ticket {
   id: string;
   user_id: string;
@@ -63,7 +62,6 @@ const AdminDashboard = () => {
   const { t } = useLanguage();
   const { user, profile, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [userSessions, setUserSessions] = useState<UserSession[]>([]);
@@ -78,7 +76,7 @@ const AdminDashboard = () => {
         variant: "destructive"
       });
     }
-  }, [isAuthenticated, navigate, toast]);
+  }, [isAuthenticated, navigate]);
   
   useEffect(() => {
     const mockTickets: Ticket[] = [
