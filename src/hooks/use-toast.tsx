@@ -65,35 +65,45 @@ export function useToast() {
 
 type ToastOptions = Omit<Toast, 'id'>;
 
-// Fix: Make the toast object both callable and with methods
-function createToast(opts: Partial<ToastOptions>) {
+// Function to create a toast with the hook
+function createToastFunction(opts: Partial<ToastOptions>) {
+  const id = crypto.randomUUID();
   const { addToast } = useToast();
   addToast({
-    id: crypto.randomUUID(),
+    id,
     variant: "default",
     ...opts,
   });
+  return id;
 }
 
-// Create an enhanced toast object that can be called directly and has methods
-export const toast = Object.assign(
-  // Main function when called directly
-  (opts: Partial<ToastOptions>) => {
-    createToast(opts);
-  },
-  // Methods for specific toast variants
-  {
-    create: (opts: Partial<ToastOptions>) => {
-      createToast(opts);
-    },
-    default: (opts: Partial<ToastOptions>) => {
-      createToast({ ...opts, variant: "default" });
-    },
-    destructive: (opts: Partial<ToastOptions>) => {
-      createToast({ ...opts, variant: "destructive" });
-    },
-    custom: (opts: Partial<ToastOptions>) => {
-      createToast(opts);
-    }
-  }
-);
+// Define the toast function type
+type ToastFunction = {
+  (opts: Partial<ToastOptions>): string;
+  create: (opts: Partial<ToastOptions>) => string;
+  default: (opts: Partial<ToastOptions>) => string;
+  destructive: (opts: Partial<ToastOptions>) => string;
+  custom: (opts: Partial<ToastOptions>) => string;
+};
+
+// Create the toast function with methods
+export const toast = ((opts: Partial<ToastOptions>) => {
+  return createToastFunction(opts);
+}) as ToastFunction;
+
+// Add methods to the toast function
+toast.create = (opts: Partial<ToastOptions>) => {
+  return createToastFunction(opts);
+};
+
+toast.default = (opts: Partial<ToastOptions>) => {
+  return createToastFunction({ ...opts, variant: "default" });
+};
+
+toast.destructive = (opts: Partial<ToastOptions>) => {
+  return createToastFunction({ ...opts, variant: "destructive" });
+};
+
+toast.custom = (opts: Partial<ToastOptions>) => {
+  return createToastFunction(opts);
+};
