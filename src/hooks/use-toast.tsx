@@ -6,6 +6,7 @@ import {
   useState,
   ReactNode,
   FC,
+  useEffect,
 } from "react";
 
 type ToastContextType = {
@@ -137,7 +138,7 @@ export const ToastGlobalHelper: FC = () => {
   const { addToast, removeToast, updateToast } = useToast();
   
   // Make toast functions globally available
-  React.useEffect(() => {
+  useEffect(() => {
     window.__TOAST_HELPERS__ = {
       addToast,
       removeToast,
