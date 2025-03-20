@@ -16,7 +16,7 @@ import { useThemeInitializer } from "./hooks/use-theme-initializer";
 import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
-import { ToastProvider } from "./hooks/use-toast";
+import { ToastProvider } from "@/hooks/use-toast";
 
 // Initialize query client with optimized settings
 const queryClient = new QueryClient({
@@ -50,9 +50,9 @@ const App = () => {
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <ThemeProvider>
-            <LanguageProvider>
-              <ToastProvider>
+          <ToastProvider>
+            <ThemeProvider>
+              <LanguageProvider>
                 <BrowserRouter>
                   {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
                   <DashboardProvider>
@@ -113,9 +113,9 @@ const App = () => {
                     </Routes>
                   </DashboardProvider>
                 </BrowserRouter>
-              </ToastProvider>
-            </LanguageProvider>
-          </ThemeProvider>
+              </LanguageProvider>
+            </ThemeProvider>
+          </ToastProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </SessionContextProvider>

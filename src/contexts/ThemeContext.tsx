@@ -69,7 +69,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     
     toast({
       title: newMode ? "Dark Mode Enabled" : "Light Mode Enabled",
-      description: `Theme mode has been changed`,
+      description: "Theme mode has been changed",
     });
   };
   

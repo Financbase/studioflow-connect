@@ -70,20 +70,18 @@ type ToastOptions = Omit<Toast, 'id'>;
 // Define the toast function type
 export type ToastFunction = {
   (opts: Partial<ToastOptions>): string;
-  create: (opts: Partial<ToastOptions>) => string;
   default: (opts: Partial<ToastOptions>) => string;
   destructive: (opts: Partial<ToastOptions>) => string;
-  custom: (opts: Partial<ToastOptions>) => string;
+  success: (opts: Partial<ToastOptions>) => string;
+  error: (opts: Partial<ToastOptions>) => string;
 };
 
 // External toast API that doesn't directly use the hook
-// This allows it to be imported directly in files
 export const toast: ToastFunction = function toast(opts: Partial<ToastOptions>) {
   // Generate a random ID for this toast
   const id = crypto.randomUUID();
   
   // We'll use setTimeout to push this to the next event loop tick
-  // This allows the toast function to be called outside of React components
   setTimeout(() => {
     try {
       // Get the toast context from wherever it might be available
@@ -106,10 +104,6 @@ export const toast: ToastFunction = function toast(opts: Partial<ToastOptions>) 
 } as ToastFunction;
 
 // Add methods to the toast function
-toast.create = (opts: Partial<ToastOptions>) => {
-  return toast(opts);
-};
-
 toast.default = (opts: Partial<ToastOptions>) => {
   return toast({ ...opts, variant: "default" });
 };
@@ -118,8 +112,20 @@ toast.destructive = (opts: Partial<ToastOptions>) => {
   return toast({ ...opts, variant: "destructive" });
 };
 
-toast.custom = (opts: Partial<ToastOptions>) => {
-  return toast(opts);
+toast.success = (opts: Partial<ToastOptions>) => {
+  return toast({ 
+    ...opts, 
+    variant: "default",
+    title: opts.title || "Success",
+  });
+};
+
+toast.error = (opts: Partial<ToastOptions>) => {
+  return toast({ 
+    ...opts, 
+    variant: "destructive",
+    title: opts.title || "Error",
+  });
 };
 
 // Add global helper to make toast functions available outside React context
