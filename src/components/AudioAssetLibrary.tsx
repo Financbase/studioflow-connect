@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/use-auth';
@@ -24,7 +23,11 @@ import { Play, Trash, Music, Download, MoreVertical } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import AudioAssetUploader from './AudioAssetUploader';
 
-const AudioAssetLibrary = () => {
+interface AudioAssetLibraryProps {
+  onSelectAudio?: (asset: AudioAsset) => void;
+}
+
+const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) => {
   const { user } = useAuth();
   const { themeVariant } = useTheme();
   const [assets, setAssets] = useState<AudioAsset[]>([]);
@@ -64,7 +67,6 @@ const AudioAssetLibrary = () => {
   useEffect(() => {
     fetchAssets();
     
-    // Subscribe to changes in the audio_assets table
     const channel = supabase
       .channel('table-db-changes')
       .on(
@@ -121,7 +123,6 @@ const AudioAssetLibrary = () => {
         throw error;
       }
       
-      // Create a temporary link element to trigger the download
       const link = document.createElement('a');
       link.href = data.signedUrl;
       link.download = asset.name;
@@ -144,7 +145,6 @@ const AudioAssetLibrary = () => {
     }
     
     try {
-      // Delete from storage
       const { error: storageError } = await supabase.storage
         .from('audio_assets')
         .remove([asset.storage_path]);
@@ -153,7 +153,6 @@ const AudioAssetLibrary = () => {
         throw storageError;
       }
       
-      // Delete from database
       const { error: dbError } = await supabase
         .from('audio_assets')
         .delete()
@@ -163,7 +162,6 @@ const AudioAssetLibrary = () => {
         throw dbError;
       }
       
-      // Update local state
       setAssets(assets.filter(a => a.id !== asset.id));
       
       toast({
@@ -176,6 +174,16 @@ const AudioAssetLibrary = () => {
         title: 'Error deleting asset',
         description: error.message,
         variant: 'destructive',
+      });
+    }
+  };
+
+  const handleSelectAudio = (asset: AudioAsset) => {
+    if (onSelectAudio) {
+      onSelectAudio(asset);
+      toast({
+        title: "Audio selected",
+        description: `Selected "${asset.name}" for analysis`,
       });
     }
   };
@@ -240,7 +248,11 @@ const AudioAssetLibrary = () => {
                 
                 <TableBody>
                   {assets.map((asset) => (
-                    <TableRow key={asset.id}>
+                    <TableRow 
+                      key={asset.id}
+                      className={onSelectAudio ? "cursor-pointer hover:bg-accent/50" : ""}
+                      onClick={onSelectAudio ? () => handleSelectAudio(asset) : undefined}
+                    >
                       <TableCell className="font-medium">{asset.name}</TableCell>
                       <TableCell>{asset.type.split('/')[1].toUpperCase()}</TableCell>
                       <TableCell>{formatFileSize(asset.size)}</TableCell>
@@ -250,7 +262,10 @@ const AudioAssetLibrary = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handlePlay(asset)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePlay(asset);
+                            }}
                             className={currentlyPlaying === asset.id ? "text-primary" : ""}
                           >
                             <Play className="w-4 h-4" />
@@ -258,17 +273,29 @@ const AudioAssetLibrary = () => {
                           
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleDownload(asset)}>
+                              <DropdownMenuItem 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDownload(asset);
+                                }}
+                              >
                                 <Download className="w-4 h-4 mr-2" />
                                 Download
                               </DropdownMenuItem>
                               <DropdownMenuItem 
-                                onClick={() => handleDelete(asset)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(asset);
+                                }}
                                 className="text-destructive focus:text-destructive"
                               >
                                 <Trash className="w-4 h-4 mr-2" />
