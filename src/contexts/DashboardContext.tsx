@@ -194,10 +194,37 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, [viewMode, customLayout, collapsedWidgets, user]);
   
+  // Function to check if plan change is valid (prevent downgrades from higher tiers)
+  const isValidPlanChange = (currentPlan: PricingTier, newPlan: PricingTier): boolean => {
+    // Pro users cannot downgrade to standard or free
+    if (currentPlan === "pro" && (newPlan === "standard" || newPlan === "free")) {
+      return false;
+    }
+    
+    // Standard users cannot downgrade to free
+    if (currentPlan === "standard" && newPlan === "free") {
+      return false;
+    }
+    
+    return true;
+  };
+  
   // Update user profile when pricing tier changes
   useEffect(() => {
     const updatePricingTier = async () => {
       if (user && profile && profile.plan !== pricingTier) {
+        // Check if the plan change is valid
+        if (!isValidPlanChange(profile.plan as PricingTier, pricingTier)) {
+          toast.destructive({
+            title: 'Plan Downgrade Not Allowed',
+            description: `You cannot downgrade from ${profile.plan} plan to ${pricingTier} plan.`
+          });
+          
+          // Reset to the current plan in profile
+          setPricingTier(profile.plan as PricingTier);
+          return;
+        }
+        
         try {
           const { error } = await supabase
             .from('profiles')

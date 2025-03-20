@@ -19,10 +19,35 @@ interface PlanSwitcherProps {
 }
 
 const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+  
+  // Function to check if plan downgrade attempt is valid
+  const isValidPlanChange = (currentPlan: PricingTier, newPlan: PricingTier): boolean => {
+    // Pro users cannot downgrade to standard or free
+    if (currentPlan === "pro" && (newPlan === "standard" || newPlan === "free")) {
+      return false;
+    }
+    
+    // Standard users cannot downgrade to free
+    if (currentPlan === "standard" && newPlan === "free") {
+      return false;
+    }
+    
+    return true;
+  };
   
   const handlePlanChange = async (value: string) => {
     const newPlan = value as PricingTier;
+    
+    // Prevent downgrades from higher plans
+    if (!isValidPlanChange(currentPlan, newPlan)) {
+      toast({
+        title: "Plan Downgrade Not Allowed",
+        description: `You cannot downgrade from ${currentPlan} plan to ${newPlan} plan.`,
+        variant: "destructive"
+      });
+      return;
+    }
     
     try {
       if (user) {
@@ -67,6 +92,31 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
     }
   };
 
+  // Generate available plans based on current plan
+  const getAvailablePlans = () => {
+    // Pro users can only see pro plan
+    if (currentPlan === "pro") {
+      return [
+        <SelectItem key="pro" value="pro">Pro</SelectItem>
+      ];
+    }
+    
+    // Standard users can see standard and pro plans
+    if (currentPlan === "standard") {
+      return [
+        <SelectItem key="standard" value="standard">Standard</SelectItem>,
+        <SelectItem key="pro" value="pro">Pro</SelectItem>
+      ];
+    }
+    
+    // Free users can see all plans
+    return [
+      <SelectItem key="free" value="free">Free</SelectItem>,
+      <SelectItem key="standard" value="standard">Standard</SelectItem>,
+      <SelectItem key="pro" value="pro">Pro</SelectItem>
+    ];
+  };
+
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm font-medium text-muted-foreground mr-1">Plan:</span>
@@ -75,9 +125,7 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
           <SelectValue placeholder="Select plan" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="free">Free</SelectItem>
-          <SelectItem value="standard">Standard</SelectItem>
-          <SelectItem value="pro">Pro</SelectItem>
+          {getAvailablePlans()}
         </SelectContent>
       </Select>
       {getPlanBadge(currentPlan)}
