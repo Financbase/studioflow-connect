@@ -2,12 +2,10 @@
 import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import { toast } from '@/hooks/use-toast';
-import { Upload, X, File, Music } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import UploadForm from './audio/UploadForm';
+import FilePreview from './audio/FilePreview';
 
 interface AudioAssetUploaderProps {
   onUploadComplete?: (asset: any) => void;
@@ -60,7 +58,7 @@ const AudioAssetUploader: React.FC<AudioAssetUploaderProps> = ({ onUploadComplet
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
       
-      // Upload file to Supabase Storage - Fixed: Removed onUploadProgress
+      // Upload file to Supabase Storage
       const { data: storageData, error: storageError } = await supabase.storage
         .from('audio_assets')
         .upload(filePath, file, {
@@ -114,86 +112,28 @@ const AudioAssetUploader: React.FC<AudioAssetUploaderProps> = ({ onUploadComplet
     }
   };
 
+  const handleCancelUpload = () => {
+    setFile(null);
+  };
+
   return (
     <div className={`p-4 border rounded-md bg-card ${themeVariant === "windows" ? "rounded-none" : ""}`}>
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Upload Audio</h3>
         
         {!file ? (
-          <div className="flex items-center justify-center w-full">
-            <label
-              htmlFor="audio-upload"
-              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md border-muted cursor-pointer hover:border-primary transition-colors"
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6 space-y-1">
-                <Music className="w-8 h-8 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
-                  Drag and drop an audio file, or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  MP3, WAV, FLAC (max 10MB)
-                </p>
-              </div>
-              <Input
-                id="audio-upload"
-                type="file"
-                accept="audio/*"
-                className="hidden"
-                onChange={handleFileChange}
-                disabled={uploading}
-              />
-            </label>
-          </div>
+          <UploadForm 
+            onFileChange={handleFileChange}
+            uploading={uploading}
+          />
         ) : (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 border rounded bg-muted/50">
-              <div className="flex items-center space-x-3">
-                <File className="w-5 h-5 text-muted-foreground" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium truncate max-w-[200px]">
-                    {file.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setFile(null)}
-                disabled={uploading}
-              >
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            {uploading && (
-              <div className="space-y-2">
-                <Progress value={progress} className="h-2" />
-                <p className="text-xs text-center text-muted-foreground">
-                  Uploading... {progress}%
-                </p>
-              </div>
-            )}
-            
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setFile(null)}
-                disabled={uploading}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={uploadFile}
-                disabled={uploading}
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Upload
-              </Button>
-            </div>
-          </div>
+          <FilePreview
+            file={file}
+            progress={progress}
+            uploading={uploading}
+            onCancelClick={handleCancelUpload}
+            onUploadClick={uploadFile}
+          />
         )}
       </div>
     </div>
