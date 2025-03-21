@@ -30,8 +30,8 @@ export function useRecommendations(pricingTier: string = 'free') {
         item =>
           item.title.toLowerCase().includes(query) ||
           item.description.toLowerCase().includes(query) ||
-          item.category.toLowerCase().includes(query) ||
-          item.tags?.some(tag => tag.toLowerCase().includes(query))
+          item.category.toLowerCase().includes(query)
+          // Remove the reference to item.tags since it doesn't exist in the Recommendation type
       );
       
       if (filtered.length > 0) {
