@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
@@ -8,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Plus, FolderPlus, Clock, FileMusic, Edit, Filter, Search, Trash2, Copy, Share2 } from "lucide-react";
 
 interface Project {
@@ -21,7 +22,6 @@ interface Project {
 }
 
 const Projects = () => {
-  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [newProject, setNewProject] = useState({ name: "", description: "" });
