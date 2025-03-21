@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   Select,
   SelectContent,
@@ -12,6 +12,8 @@ import { toast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Award, Zap, Building } from "lucide-react";
+import DowngradeWorkflow from "./subscription/DowngradeWorkflow";
+import { isValidPlanChange } from "@/contexts/dashboard/utils";
 
 interface PlanSwitcherProps {
   currentPlan: PricingTier;
@@ -19,12 +21,28 @@ interface PlanSwitcherProps {
 }
 
 const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }) => {
+  const [showDowngradeDialog, setShowDowngradeDialog] = useState(false);
+  const [targetPlan, setTargetPlan] = useState<PricingTier>("free");
+  
   // Function to simulate a subscription upgrade
   const handleUpgradeSubscription = async (newPlan: PricingTier) => {
     toast({
       title: "Upgrade Required",
       description: "Please subscribe to upgrade your plan. This would typically redirect to a payment page.",
     });
+  };
+  
+  // Handle plan switch with downgrades requiring confirmation
+  const handlePlanSwitch = (newPlan: PricingTier) => {
+    // Check if this is a downgrade
+    if (isValidPlanChange(currentPlan, newPlan)) {
+      // Direct change if not a downgrade
+      onPlanChange(newPlan);
+    } else {
+      // Show confirmation dialog for downgrades
+      setTargetPlan(newPlan);
+      setShowDowngradeDialog(true);
+    }
   };
   
   const getPlanBadge = (plan: PricingTier) => {
@@ -117,6 +135,113 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
         </Button>
       </div>
     );
+  };
+  
+  // Add plan downgrade options
+  const renderDowngradeOptions = () => {
+    if (currentPlan === "free") {
+      return null; // Already on lowest plan
+    }
+    
+    const downgradeOptions = [];
+    
+    if (currentPlan === "enterprise") {
+      downgradeOptions.push(
+        <Button
+          key="pro"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("pro")}
+        >
+          <Zap className="mr-2 h-4 w-4" />
+          Switch to Pro
+        </Button>
+      );
+      
+      downgradeOptions.push(
+        <Button
+          key="standard"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("standard")}
+        >
+          <Award className="mr-2 h-4 w-4" />
+          Switch to Standard
+        </Button>
+      );
+      
+      downgradeOptions.push(
+        <Button
+          key="free"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("free")}
+        >
+          <CreditCard className="mr-2 h-4 w-4" />
+          Switch to Free
+        </Button>
+      );
+    } 
+    else if (currentPlan === "pro") {
+      downgradeOptions.push(
+        <Button
+          key="standard"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("standard")}
+        >
+          <Award className="mr-2 h-4 w-4" />
+          Switch to Standard
+        </Button>
+      );
+      
+      downgradeOptions.push(
+        <Button
+          key="free"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("free")}
+        >
+          <CreditCard className="mr-2 h-4 w-4" />
+          Switch to Free
+        </Button>
+      );
+    }
+    else if (currentPlan === "standard") {
+      downgradeOptions.push(
+        <Button
+          key="free"
+          variant="outline"
+          size="sm"
+          className="mt-2"
+          onClick={() => handlePlanSwitch("free")}
+        >
+          <CreditCard className="mr-2 h-4 w-4" />
+          Switch to Free
+        </Button>
+      );
+    }
+    
+    if (downgradeOptions.length > 0) {
+      return (
+        <div className="mt-4 pt-4 border-t">
+          <h4 className="text-sm font-medium mb-2 text-muted-foreground">Downgrade Options</h4>
+          <div className="flex flex-col gap-2">
+            {downgradeOptions}
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Note: Downgrading may result in loss of features and data
+          </p>
+        </div>
+      );
+    }
+    
+    return null;
   };
 
   return (
@@ -214,7 +339,16 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
         )}
         
         {renderUpgradeOptions()}
+        {renderDowngradeOptions()}
       </div>
+      
+      <DowngradeWorkflow
+        isOpen={showDowngradeDialog}
+        onClose={() => setShowDowngradeDialog(false)}
+        currentPlan={currentPlan}
+        targetPlan={targetPlan}
+        onConfirm={onPlanChange}
+      />
     </div>
   );
 };

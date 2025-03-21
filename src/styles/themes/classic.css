@@ -31,6 +31,8 @@
   --secondary: 230 230 230; /* #E6E6E6 */
   --muted: 230 230 230; /* #E6E6E6 */
   --accent: 100 100 100; /* #646464 */
+  --foreground: 30 30 30; /* #1E1E1E */
+  --muted-foreground: 120 120 120; /* #787878 */
   --sidebar-background: 240 240 240; /* Match main background */
   --sidebar-highlight: 220 220 220; /* Subtle highlight */
 }
@@ -44,6 +46,8 @@
   --secondary: 40 40 40; /* #282828 */
   --muted: 40 40 40; /* #282828 */
   --accent: 70 70 70; /* #464646 */
+  --foreground: 240 240 240; /* #F0F0F0 */
+  --muted-foreground: 180 180 180; /* #B4B4B4 */
   --sidebar-background: 25 25 25; /* Match main background */
   --sidebar-highlight: 45 45 45; /* Subtle highlight */
 }

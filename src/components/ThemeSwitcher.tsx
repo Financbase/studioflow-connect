@@ -102,9 +102,9 @@ const ThemeSwitcher = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
               {isDarkMode ? (
-                <Sun className="h-[1.2rem] w-[1.2rem]" />
-              ) : (
                 <Moon className="h-[1.2rem] w-[1.2rem]" />
+              ) : (
+                <Sun className="h-[1.2rem] w-[1.2rem]" />
               )}
               <span className="sr-only">Toggle dark mode</span>
             </Button>
