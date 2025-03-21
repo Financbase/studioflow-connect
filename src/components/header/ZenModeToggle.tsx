@@ -19,7 +19,7 @@ const ZenModeToggle: React.FC<ZenModeToggleProps> = ({ onClick, isActive = false
             size="icon" 
             onClick={onClick} 
             className={isActive 
-              ? "bg-accent-primary hover:bg-accent-primary/90 text-background" 
+              ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
               : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
             }
             aria-label={isActive ? "Exit Zen Mode" : "Enter Zen Mode"}

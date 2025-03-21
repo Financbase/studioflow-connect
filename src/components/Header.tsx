@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import UserMenu from "./header/UserMenu";
 import MobileMenu from "./header/MobileMenu";
 import ZenModeToggle from "./header/ZenModeToggle";
 import ZenMode from "./zen/ZenMode";
-import { useZenMode, ZenModeOptions } from "@/hooks/use-zen-mode";
+import { useZenMode } from "@/hooks/use-zen-mode";
 
 const Header = () => {
   const { themeVariant } = useTheme();
@@ -58,7 +59,10 @@ const Header = () => {
           <div className="flex flex-1 items-center justify-end gap-2">
             {isAuthenticated && !isMobile && (
               <>
-                <ZenModeToggle onClick={toggleZenMode} isActive={isZenModeActive} />
+                <ZenModeToggle 
+                  onClick={toggleZenMode} 
+                  isActive={isZenModeActive} 
+                />
                 <ViewSelector />
                 <CustomLayoutEditor />
               </>

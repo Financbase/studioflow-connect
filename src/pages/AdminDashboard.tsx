@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/hooks/use-auth";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, BarChart2, TicketPlus, Activity, Share2, LineChart } from "lucide-react";
@@ -69,70 +68,74 @@ const AdminDashboard = () => {
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
           
           <div className="flex items-center justify-between">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
-                <TabsTrigger value="overview" className="text-sm h-10">
-                  <BarChart2 className="mr-2 h-4 w-4" />
-                  <span className="hidden xs:inline">Overview</span>
-                </TabsTrigger>
-                <TabsTrigger value="tickets" className="text-sm h-10">
-                  <TicketPlus className="mr-2 h-4 w-4" />
-                  <span className="hidden xs:inline">Support Tickets</span>
-                </TabsTrigger>
-                <TabsTrigger value="sessions" className="text-sm h-10">
-                  <Activity className="mr-2 h-4 w-4" />
-                  <span className="hidden xs:inline">User Sessions</span>
-                </TabsTrigger>
-                <TabsTrigger value="remote" className="text-sm h-10">
-                  <Share2 className="mr-2 h-4 w-4" />
-                  <span className="hidden xs:inline">Remote Assistance</span>
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="text-sm h-10">
-                  <LineChart className="mr-2 h-4 w-4" />
-                  <span className="hidden xs:inline">System Analytics</span>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="ml-2 flex gap-1 items-center" 
-              onClick={refreshMetrics}
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
+            <div className="flex-1">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <div className="flex justify-between items-center">
+                  <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+                    <TabsTrigger value="overview" className="text-sm h-10">
+                      <BarChart2 className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">Overview</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="tickets" className="text-sm h-10">
+                      <TicketPlus className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">Support Tickets</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="sessions" className="text-sm h-10">
+                      <Activity className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">User Sessions</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="remote" className="text-sm h-10">
+                      <Share2 className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">Remote Assistance</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="analytics" className="text-sm h-10">
+                      <LineChart className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">System Analytics</span>
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="ml-2 flex gap-1 items-center" 
+                    onClick={refreshMetrics}
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Refresh</span>
+                  </Button>
+                </div>
+                
+                <TabsContent value="overview" className="space-y-4 mt-0">
+                  <OverviewTab 
+                    activeUsers={activeUsers} 
+                    totalUsers={systemMetrics.totalUsers}
+                    openTickets={openTickets} 
+                    criticalTickets={criticalTickets}
+                    resolvedToday={resolvedToday}
+                    systemMetrics={systemMetrics}
+                    userSessions={userSessions}
+                    tickets={tickets}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="tickets" className="space-y-4 mt-0">
+                  <TicketsTab tickets={tickets} />
+                </TabsContent>
+                
+                <TabsContent value="sessions" className="space-y-4 mt-0">
+                  <SessionsTab userSessions={userSessions} />
+                </TabsContent>
+                
+                <TabsContent value="remote" className="space-y-4 mt-0">
+                  <RemoteAssistanceTab />
+                </TabsContent>
+                
+                <TabsContent value="analytics" className="space-y-4 mt-0">
+                  <AnalyticsTab systemMetrics={systemMetrics} openTickets={openTickets} resolvedToday={resolvedToday} />
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
-          
-          <TabsContent value="overview" className="space-y-4 mt-0">
-            <OverviewTab 
-              activeUsers={activeUsers} 
-              totalUsers={systemMetrics.totalUsers}
-              openTickets={openTickets} 
-              criticalTickets={criticalTickets}
-              resolvedToday={resolvedToday}
-              systemMetrics={systemMetrics}
-              userSessions={userSessions}
-              tickets={tickets}
-            />
-          </TabsContent>
-          
-          <TabsContent value="tickets" className="space-y-4 mt-0">
-            <TicketsTab tickets={tickets} />
-          </TabsContent>
-          
-          <TabsContent value="sessions" className="space-y-4 mt-0">
-            <SessionsTab userSessions={userSessions} />
-          </TabsContent>
-          
-          <TabsContent value="remote" className="space-y-4 mt-0">
-            <RemoteAssistanceTab />
-          </TabsContent>
-          
-          <TabsContent value="analytics" className="space-y-4 mt-0">
-            <AnalyticsTab systemMetrics={systemMetrics} openTickets={openTickets} resolvedToday={resolvedToday} />
-          </TabsContent>
         </div>
       </main>
     </div>
