@@ -1,7 +1,8 @@
 
-import { toast } from "@/components/ui/use-toast";
+import { useState } from 'react';
 import { ColorVersion } from './types';
-import { extractPreviewColors, applyThemeVersion } from './versionUtils';
+import { toast } from "@/components/ui/use-toast";
+import { extractPreviewColors } from './versionUtils';
 
 export function useVersionOperations(
   versions: ColorVersion[],
@@ -9,65 +10,61 @@ export function useVersionOperations(
   persistVersions: (updatedVersions: ColorVersion[]) => void,
   persistCurrentVersionId: (versionId: string) => void
 ) {
-  // Save a new version
+  // Save a new theme version
   const saveVersion = (
     name: string, 
     themeData: Record<string, string>, 
     description?: string,
     tags?: string[]
   ) => {
-    const previewColors = extractPreviewColors(themeData);
-    
+    const id = Date.now().toString();
     const newVersion: ColorVersion = {
-      id: Date.now().toString(),
+      id,
       timestamp: Date.now(),
       name,
       themeData,
       description,
-      previewColors,
+      previewColors: extractPreviewColors(themeData),
       tags,
       isFavorite: false
     };
     
     const updatedVersions = [...versions, newVersion];
     persistVersions(updatedVersions);
-    persistCurrentVersionId(newVersion.id);
-    
-    toast({
-      title: "Theme version saved",
-      description: `"${name}" has been saved as a new version`
-    });
+    persistCurrentVersionId(id);
     
     return newVersion;
   };
   
-  // Switch to a different version
+  // Switch to another saved version
   const switchToVersion = (versionId: string) => {
     const version = versions.find(v => v.id === versionId);
-    if (!version) return false;
+    
+    if (!version) {
+      toast({
+        title: "Version not found",
+        description: "The selected theme version could not be found",
+        variant: "destructive"
+      });
+      return false;
+    }
     
     persistCurrentVersionId(versionId);
     
-    // Apply the theme from this version
-    const success = applyThemeVersion(version);
+    toast({
+      title: "Theme Switched",
+      description: `Applied theme version: ${version.name}`
+    });
     
-    if (success) {
-      toast({
-        title: "Theme version restored",
-        description: `Switched to "${version.name}" theme version`
-      });
-    }
-    
-    return success;
+    return true;
   };
   
   // Delete a version
   const deleteVersion = (versionId: string) => {
-    // Don't allow deleting the current version
     if (versionId === currentVersionId) {
       toast({
-        title: "Cannot delete active version",
-        description: "Please switch to another version before deleting this one",
+        title: "Cannot Delete",
+        description: "You cannot delete the currently active theme version",
         variant: "destructive"
       });
       return false;
@@ -77,38 +74,40 @@ export function useVersionOperations(
     persistVersions(updatedVersions);
     
     toast({
-      title: "Theme version deleted",
-      description: "The selected theme version has been removed"
+      title: "Version Deleted",
+      description: "The theme version has been removed"
     });
     
     return true;
   };
   
-  // Update an existing version
-  const updateVersion = (versionId: string, updates: Partial<Omit<ColorVersion, 'id'>>) => {
+  // Update a version's properties
+  const updateVersion = (
+    versionId: string, 
+    updates: Partial<Omit<ColorVersion, 'id' | 'timestamp'>>
+  ) => {
     const versionIndex = versions.findIndex(v => v.id === versionId);
-    if (versionIndex === -1) return false;
+    
+    if (versionIndex === -1) {
+      toast({
+        title: "Version not found",
+        description: "The theme version could not be found",
+        variant: "destructive"
+      });
+      return false;
+    }
     
     const updatedVersions = [...versions];
     updatedVersions[versionIndex] = {
       ...updatedVersions[versionIndex],
-      ...updates,
-      // If theme data was updated, recalculate preview colors
-      ...(updates.themeData ? { 
-        previewColors: extractPreviewColors(updates.themeData) 
-      } : {})
+      ...updates
     };
     
     persistVersions(updatedVersions);
     
-    // If this is the current version and theme data was updated, apply changes
-    if (versionId === currentVersionId && updates.themeData) {
-      switchToVersion(versionId);
-    }
-    
     toast({
-      title: "Theme version updated",
-      description: `"${updatedVersions[versionIndex].name}" has been updated`
+      title: "Version Updated",
+      description: "The theme version has been updated"
     });
     
     return true;
@@ -117,15 +116,26 @@ export function useVersionOperations(
   // Toggle favorite status
   const toggleFavorite = (versionId: string) => {
     const versionIndex = versions.findIndex(v => v.id === versionId);
-    if (versionIndex === -1) return false;
+    
+    if (versionIndex === -1) {
+      return false;
+    }
     
     const updatedVersions = [...versions];
+    const currentVersion = updatedVersions[versionIndex];
+    const isFavorite = !currentVersion.isFavorite;
+    
     updatedVersions[versionIndex] = {
-      ...updatedVersions[versionIndex],
-      isFavorite: !updatedVersions[versionIndex].isFavorite
+      ...currentVersion,
+      isFavorite
     };
     
     persistVersions(updatedVersions);
+    
+    toast({
+      title: isFavorite ? "Added to Favorites" : "Removed from Favorites",
+      description: `"${currentVersion.name}" has been ${isFavorite ? 'added to' : 'removed from'} favorites`
+    });
     
     return true;
   };

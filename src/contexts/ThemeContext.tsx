@@ -12,7 +12,7 @@ interface ThemeContextType {
   toggleDarkMode: () => void;
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
-  saveCurrentTheme: (name: string, description?: string) => void;
+  saveCurrentTheme: (name: string, description?: string, tags?: string[]) => void;
   versionManager: ReturnType<typeof useColorVersionManager>;
 }
 
@@ -116,14 +116,19 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   };
   
   // Save current theme as a version
-  const saveCurrentTheme = (name: string, description?: string) => {
+  const saveCurrentTheme = (name: string, description?: string, tags?: string[]) => {
     const themeData = {
       themeVariant,
       themeMode: theme,
       isDarkMode: isDarkMode.toString()
     };
     
-    versionManager.saveVersion(name, themeData, description);
+    versionManager.saveVersion(name, themeData, description, tags);
+    
+    toast({
+      title: "Theme Version Saved",
+      description: `"${name}" has been saved to your versions`
+    });
   };
   
   return (

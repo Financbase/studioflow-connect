@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Download, Upload, Copy, Check } from "lucide-react";
+import { Download, Upload, Copy, Check, Table } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useColorPalette } from "@/contexts/ColorPaletteContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface PaletteImportExportProps {
   onImport?: () => void;
@@ -14,8 +15,10 @@ interface PaletteImportExportProps {
 
 const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) => {
   const { colorPalettes, saveCurrentColorPalette, getCurrentPaletteColors } = useColorPalette();
+  const { versionManager } = useTheme();
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [themesDialogOpen, setThemesDialogOpen] = useState(false);
   const [exportData, setExportData] = useState("");
   const [importData, setImportData] = useState("");
   const [isCopied, setIsCopied] = useState(false);
@@ -34,30 +37,56 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
     setExportDialogOpen(true);
   };
   
+  // Export the current theme version
+  const handleExportThemeVersion = (versionId: string) => {
+    const exportData = versionManager.exportVersion(versionId);
+    if (exportData) {
+      navigator.clipboard.writeText(exportData);
+      toast({
+        title: "Theme Copied to Clipboard",
+        description: "The theme version data has been copied to your clipboard"
+      });
+    }
+  };
+  
   // Handle the import of palette data
   const handleImport = () => {
     try {
       const importedData = JSON.parse(importData);
       
-      // Validate the imported data
-      if (!importedData.data || importedData.type !== "studioflow-color-palette") {
-        throw new Error("Invalid palette data format");
+      // Check if this is a color palette or a theme version
+      if (importedData.type === "studioflow-color-palette") {
+        // Import color palette
+        if (!importedData.data) {
+          throw new Error("Invalid palette data format");
+        }
+        
+        saveCurrentColorPalette(
+          `Imported Palette ${new Date().toLocaleString()}`,
+          importedData.data,
+          `Imported on ${new Date().toLocaleString()}`
+        );
+        
+        toast({
+          title: "Palette Imported",
+          description: "The color palette has been successfully imported and applied"
+        });
+      } else if (importedData.id && importedData.themeData) {
+        // Import theme version
+        const importedVersion = versionManager.importVersion(importData);
+        
+        if (importedVersion) {
+          toast({
+            title: "Theme Version Imported",
+            description: `"${importedVersion.name}" has been imported to your themes`
+          });
+        }
+      } else {
+        throw new Error("Unrecognized import format");
       }
-      
-      // Save the imported palette
-      saveCurrentColorPalette(
-        `Imported Palette ${new Date().toLocaleString()}`,
-        importedData.data,
-        `Imported on ${new Date().toLocaleString()}`
-      );
       
       setImportDialogOpen(false);
       setImportData("");
-      
-      toast({
-        title: "Palette Imported",
-        description: "The color palette has been successfully imported and applied"
-      });
       
       if (onImport) {
         onImport();
@@ -65,7 +94,7 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
     } catch (error) {
       toast({
         title: "Import Failed",
-        description: "The provided data is not a valid color palette",
+        description: "The provided data is not a valid color palette or theme",
         variant: "destructive"
       });
     }
@@ -105,7 +134,7 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Import & Export Palettes</CardTitle>
+        <CardTitle>Import & Export</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row gap-4">
@@ -164,6 +193,53 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
             </DialogContent>
           </Dialog>
           
+          <Dialog open={themesDialogOpen} onOpenChange={setThemesDialogOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="w-full sm:w-auto"
+              >
+                <Table className="h-4 w-4 mr-2" />
+                Manage Theme Versions
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Theme Versions</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                {versionManager.versions.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No theme versions have been saved yet.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {versionManager.versions.map(version => (
+                      <div 
+                        key={version.id}
+                        className="p-3 border rounded-md flex justify-between items-center"
+                      >
+                        <div>
+                          <p className="font-medium">{version.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(version.timestamp).toLocaleString()}
+                          </p>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleExportThemeVersion(version.id)}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+          
           <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
             <DialogTrigger asChild>
               <Button 
@@ -171,16 +247,16 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
                 className="w-full sm:w-auto"
               >
                 <Upload className="h-4 w-4 mr-2" />
-                Import Palette
+                Import Data
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle>Import Palette</DialogTitle>
+                <DialogTitle>Import Data</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Paste the palette JSON data below to import it into your collection.
+                  Paste palette or theme JSON data below to import it.
                 </p>
                 <Textarea 
                   value={importData} 
@@ -194,7 +270,7 @@ const PaletteImportExport: React.FC<PaletteImportExportProps> = ({ onImport }) =
                   className="w-full"
                 >
                   <Upload className="h-4 w-4 mr-2" />
-                  Import Palette
+                  Import Data
                 </Button>
               </div>
             </DialogContent>
