@@ -23,7 +23,8 @@ export function useColorVersionManager() {
     switchToVersion, 
     deleteVersion, 
     updateVersion, 
-    toggleFavorite 
+    toggleFavorite,
+    duplicateVersion
   } = useVersionOperations(versions, currentVersionId, persistVersions, persistCurrentVersionId);
   
   const { 
@@ -50,6 +51,7 @@ export function useColorVersionManager() {
     deleteVersion,
     updateVersion,
     toggleFavorite,
+    duplicateVersion,
     getCurrentVersion,
     
     // Filtering

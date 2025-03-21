@@ -140,11 +140,47 @@ export function useVersionOperations(
     return true;
   };
   
+  // Duplicate a version
+  const duplicateVersion = (versionId: string) => {
+    const versionToDuplicate = versions.find(v => v.id === versionId);
+    
+    if (!versionToDuplicate) {
+      toast({
+        title: "Version not found",
+        description: "The theme version to duplicate could not be found",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    const newVersion: ColorVersion = {
+      id: Date.now().toString(),
+      timestamp: Date.now(),
+      name: `${versionToDuplicate.name} (Copy)`,
+      themeData: { ...versionToDuplicate.themeData },
+      description: versionToDuplicate.description,
+      previewColors: versionToDuplicate.previewColors,
+      tags: versionToDuplicate.tags,
+      isFavorite: false
+    };
+    
+    const updatedVersions = [...versions, newVersion];
+    persistVersions(updatedVersions);
+    
+    toast({
+      title: "Version Duplicated",
+      description: `"${versionToDuplicate.name}" has been duplicated`
+    });
+    
+    return newVersion;
+  };
+  
   return {
     saveVersion,
     switchToVersion,
     deleteVersion,
     updateVersion,
-    toggleFavorite
+    toggleFavorite,
+    duplicateVersion
   };
 }

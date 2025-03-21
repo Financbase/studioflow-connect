@@ -63,6 +63,14 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
         setIsDarkMode(mode === 'dark');
         document.documentElement.classList.toggle("dark", mode === 'dark');
       }
+      
+      // Add theme transition animation
+      document.documentElement.classList.add('animate-theme-transition');
+      
+      // Remove animation class after it completes
+      setTimeout(() => {
+        document.documentElement.classList.remove('animate-theme-transition');
+      }, 500);
     }
   }, [versionManager.currentVersionId]);
   
@@ -81,6 +89,14 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   
   const handleSetThemeVariant = (theme: ThemeVariant) => {
     setThemeVariant(theme);
+    // Add theme transition animation
+    document.documentElement.classList.add('animate-theme-transition');
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('animate-theme-transition');
+    }, 500);
+    
     // Add a toast notification for feedback
     toast({
       title: "Theme Updated",
@@ -95,6 +111,14 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     document.documentElement.classList.toggle("dark", newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
     
+    // Add theme transition animation
+    document.documentElement.classList.add('animate-theme-transition');
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('animate-theme-transition');
+    }, 500);
+    
     toast({
       title: newMode ? "Dark Mode Enabled" : "Light Mode Enabled",
       description: "Theme mode has been changed",
@@ -108,6 +132,14 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     setTheme(mode);
     document.documentElement.classList.toggle("dark", isDark);
     localStorage.setItem("theme", mode);
+    
+    // Add theme transition animation
+    document.documentElement.classList.add('animate-theme-transition');
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('animate-theme-transition');
+    }, 500);
     
     toast({
       title: isDark ? "Dark Mode Enabled" : "Light Mode Enabled",
