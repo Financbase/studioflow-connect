@@ -61,5 +61,45 @@ export const musicProductionFAQs: FAQ[] = [
     question: "How do I eliminate ground loops and noise?",
     answer: "To eliminate ground loops, ensure all equipment is plugged into the same power strip or outlet. Use balanced connections when possible. Try a ground lift adapter or DI box with ground lift for problem equipment. For general noise reduction, use proper shielded cables, keep audio cables away from power cables, turn off unnecessary electronic devices, and use a power conditioner for clean power.",
     category: "technical"
+  },
+  {
+    question: "What's the difference between limiting and compression?",
+    answer: "While both reduce dynamic range, limiters have higher ratios (typically 10:1 or higher) and faster attack times than compressors. Limiters are designed to catch and prevent peaks from exceeding a ceiling, making them ideal for mastering and preventing clipping. Compressors (with lower ratios like 2:1 to 8:1) are more musical tools for controlling dynamics and shaping the envelope of sounds throughout the mix.",
+    category: "mastering"
+  },
+  {
+    question: "How should I organize my mix session?",
+    answer: "Create a logical track order with instruments grouped by type (drums, bass, guitars, keys, vocals). Use color coding for visual organization. Group related tracks with busses/aux sends. Label everything clearly. Create templates for future sessions. Use markers for song sections. Consider a top-down mixing approach, starting with the most important elements. Keep your session tidy by hiding unused tracks and removing unused plugins.",
+    category: "technical"
+  },
+  {
+    question: "What's the Haas effect and how can I use it?",
+    answer: "The Haas effect occurs when two identical sounds are played with a delay between them of roughly 1-40ms. The human ear perceives this not as an echo but as a single sound with directional information. You can use this to create width by panning two versions of a sound hard left and right, delaying one side by 10-30ms. This creates a sense of width without phase cancellation issues that can occur with traditional stereo widening.",
+    category: "mixing"
+  },
+  {
+    question: "How do I approach microphone placement for acoustic guitar?",
+    answer: "For a balanced sound, position a condenser mic about 8-12 inches from where the neck meets the body, angled slightly toward the sound hole. For more low-end, move closer to the sound hole; for more definition, aim toward the 12th fret. To capture more room ambience, add a second mic 3-6 feet away. For stereo recording, try an XY configuration or spaced pair technique. Always check for phase issues when using multiple mics.",
+    category: "recording"
+  },
+  {
+    question: "What's the best way to use reference tracks?",
+    answer: "Choose 3-5 professional tracks in a similar style to your project. Import them to your DAW at the same level as your mix (match perceived loudness, not peak levels). Use a plugin to match their spectrum and dynamics as a reference. A/B between your mix and references frequently throughout mixing. Focus on specific elements like kick/bass relationship, vocal presence, or overall balance rather than trying to copy exactly. Use reference tracks early in the mixing process, not just at the end.",
+    category: "mixing"
+  },
+  {
+    question: "How should I prepare my tracks for mastering?",
+    answer: "Leave at least 6dB of headroom on your mix bus. Don't apply limiting or heavy compression on the master bus. Keep all tracks at their original sample rate and bit depth. Export as WAV or AIFF files. Include any specific references or notes for the mastering engineer. Consider removing any master bus processing or providing both processed and unprocessed versions. Check the mix on multiple systems to ensure translation before submitting for mastering.",
+    category: "mastering"
+  },
+  {
+    question: "What's the difference between reverb types (plate, hall, room, etc.)?",
+    answer: "Plate reverbs have bright, dense reflections good for vocals and snares. Hall reverbs simulate large spaces with long decay times (2+ seconds), ideal for orchestral music or creating atmosphere. Room reverbs mimic medium-sized spaces with shorter tails (0.5-1.5s), good for creating cohesion without washing out the mix. Chamber reverbs are between room and hall, with a unique character. Spring reverbs (common in guitar amps) have a distinctive 'boingy' sound great for vintage effects.",
+    category: "mixing"
+  },
+  {
+    question: "How do I record drums with limited microphones?",
+    answer: "With just one mic, place a large-diaphragm condenser at head height, 3-6 feet in front of the kit, angled down. With two mics, add a dynamic mic inside the kick. With three, add an overhead. With four, use a kick mic, snare mic, and stereo overheads in an XY or ORTF pattern. The Glyn Johns technique uses four mics: kick, snare, and two overheads in a specific arrangement to capture the entire kit with excellent phase coherence.",
+    category: "recording"
   }
 ];

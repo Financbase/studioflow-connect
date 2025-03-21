@@ -37,12 +37,20 @@ const MainDashboardContent = () => {
     navigate(path);
   };
 
+  const handleViewAnalytics = () => {
+    navigate('/analytics');
+  };
+
+  const handleViewActivity = () => {
+    navigate('/activity');
+  };
+
   return (
     <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Activity and Charts Section */}
       <div className="lg:col-span-2 space-y-6">
-        <AnalyticsCard />
-        <RecentActivityCard />
+        <AnalyticsCard onViewMore={handleViewAnalytics} />
+        <RecentActivityCard onViewActivity={handleViewActivity} />
         
         {/* Knowledge Base Section */}
         <div className="bg-card border rounded-lg p-4 shadow-sm">

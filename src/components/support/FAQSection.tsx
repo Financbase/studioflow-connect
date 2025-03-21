@@ -69,7 +69,7 @@ const FAQSection = ({ searchQuery, setSearchQuery, faqType = 'general' }: FAQSec
       case 'mixing':
         return <Sliders className="h-3 w-3" />;
       case 'mastering':
-        return <Activity className="h-3 w-3" />; // Changed from Waveform to Activity
+        return <Activity className="h-3 w-3" />; // Using Activity instead of Waveform
       case 'recording':
         return <Mic className="h-3 w-3" />;
       case 'composition':

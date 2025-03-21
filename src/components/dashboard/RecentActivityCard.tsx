@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ interface RecentActivityCardProps {
   onViewActivity?: () => void;
 }
 
-const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps = {}) => {
+const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps) => {
   // Recent activity for timeline with icons
   const recentActivity: ActivityItem[] = [
     { 

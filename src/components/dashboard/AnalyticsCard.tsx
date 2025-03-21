@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +9,7 @@ interface AnalyticsCardProps {
   onViewMore?: () => void;
 }
 
-const AnalyticsCard = ({ onViewMore }: AnalyticsCardProps = {}) => {
+const AnalyticsCard = ({ onViewMore }: AnalyticsCardProps) => {
   // Sample data for charts
   const activityData = [
     { name: "Mon", value: 12 },
