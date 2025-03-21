@@ -16,12 +16,15 @@ const SubscriptionSettings = () => {
   
   const handlePlanChange = (plan: PricingTier) => {
     try {
-      setPricingTier(plan);
-      
-      toast({
-        title: "Subscription updated",
-        description: `Your plan has been updated to ${plan.charAt(0).toUpperCase() + plan.slice(1)}`,
-      });
+      // Only show toast if the plan actually changes
+      if (plan !== pricingTier) {
+        setPricingTier(plan);
+        
+        toast({
+          title: "Subscription updated",
+          description: `Your plan has been updated to ${plan.charAt(0).toUpperCase() + plan.slice(1)}`,
+        });
+      }
       
       // Clear any existing errors
       setError(null);

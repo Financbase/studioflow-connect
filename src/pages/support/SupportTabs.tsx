@@ -1,140 +1,110 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { MailOpen, CheckCircle, TicketPlus, HelpCircle, Music, AlertTriangle } from "lucide-react";
 import TicketList from "@/components/support/TicketList";
-import NewTicketForm from "@/components/support/NewTicketForm";
 import FAQSection from "@/components/support/FAQSection";
+import { Ticket } from "@/components/support/ticket/types";
+import ContactCard from "@/components/support/ContactCard";
+import NotificationsTab from "@/components/support/NotificationsTab";
+import { Bell } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-interface Ticket {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  status: "open" | "in_progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "critical";
-  created_at: string;
-  updated_at: string;
-  response?: string;
-}
+const mockTickets: Ticket[] = [
+  {
+    id: "ticket-123-456",
+    user_id: "user-789",
+    title: "DAW Integration Issue",
+    description: "I'm having trouble connecting my DAW with the audio interface. The connection drops intermittently during recording sessions.",
+    status: "open",
+    priority: "high",
+    created_at: "2025-03-01T10:30:00Z",
+    updated_at: "2025-03-02T14:20:00Z"
+  },
+  {
+    id: "ticket-456-789",
+    user_id: "user-789",
+    title: "Billing Question",
+    description: "I was charged twice for my monthly subscription. Could you please help me resolve this issue?",
+    status: "in_progress",
+    priority: "medium",
+    created_at: "2025-02-28T15:45:00Z",
+    updated_at: "2025-03-01T09:10:00Z",
+    response: "We're looking into this issue and will get back to you shortly."
+  },
+  {
+    id: "ticket-789-012",
+    user_id: "user-789",
+    title: "Feature Request",
+    description: "I would love to see integration with virtual instruments. This would streamline my workflow significantly.",
+    status: "open",
+    priority: "low",
+    created_at: "2025-02-25T11:20:00Z",
+    updated_at: "2025-02-25T11:20:00Z"
+  },
+  {
+    id: "ticket-012-345",
+    user_id: "user-789",
+    title: "Resolved Audio Latency",
+    description: "I was experiencing high latency during recording. The support team helped me optimize my buffer settings and it's now working perfectly.",
+    status: "resolved",
+    priority: "high",
+    created_at: "2025-02-20T09:15:00Z",
+    updated_at: "2025-02-22T16:30:00Z",
+    response: "Glad we could help resolve your latency issues. Let us know if you need any further assistance!"
+  },
+  {
+    id: "ticket-345-678",
+    user_id: "user-789",
+    title: "Closed Account Deletion Request",
+    description: "I'd like to delete my account and remove all my data from your servers.",
+    status: "closed",
+    priority: "medium",
+    created_at: "2025-02-15T14:20:00Z",
+    updated_at: "2025-02-17T11:05:00Z",
+    response: "Your account has been successfully deleted and all data has been removed from our servers as requested."
+  }
+];
 
 interface SupportTabsProps {
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-  activeTickets: Ticket[];
-  resolvedTickets: Ticket[];
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  newTicketTitle: string;
-  setNewTicketTitle: (title: string) => void;
-  newTicketDescription: string;
-  setNewTicketDescription: (description: string) => void;
-  newTicketPriority: "low" | "medium" | "high";
-  setNewTicketPriority: (priority: "low" | "medium" | "high") => void;
-  onCreateTicket: () => void;
+  className?: string;
 }
 
-const SupportTabs = ({
-  activeTab,
-  setActiveTab,
-  activeTickets,
-  resolvedTickets,
-  searchQuery,
-  setSearchQuery,
-  newTicketTitle,
-  setNewTicketTitle,
-  newTicketDescription,
-  setNewTicketDescription,
-  newTicketPriority,
-  setNewTicketPriority,
-  onCreateTicket
-}: SupportTabsProps) => {
+const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
+  const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
+  
+  // Calculate unread notification count (for the badge)
+  const notificationCount = 3; // This would come from your notification system
+
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <TabsList className="grid grid-cols-1 sm:grid-cols-6 h-auto">
-        <TabsTrigger value="active" className="text-sm h-10">
-          <MailOpen className="mr-2 h-4 w-4" />
-          Active Tickets
-          {activeTickets.length > 0 && (
-            <Badge variant="default" className="ml-2">{activeTickets.length}</Badge>
+    <Tabs defaultValue="tickets" className={className}>
+      <TabsList className="mb-4">
+        <TabsTrigger value="tickets">My Tickets</TabsTrigger>
+        <TabsTrigger value="notifications" className="relative">
+          Notifications
+          {notificationCount > 0 && (
+            <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center">
+              {notificationCount}
+            </Badge>
           )}
         </TabsTrigger>
-        <TabsTrigger value="resolved" className="text-sm h-10">
-          <CheckCircle className="mr-2 h-4 w-4" />
-          Resolved
-          {resolvedTickets.length > 0 && (
-            <Badge variant="outline" className="ml-2">{resolvedTickets.length}</Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="new" className="text-sm h-10">
-          <TicketPlus className="mr-2 h-4 w-4" />
-          New Ticket
-        </TabsTrigger>
-        <TabsTrigger value="faq" className="text-sm h-10">
-          <HelpCircle className="mr-2 h-4 w-4" />
-          General FAQ
-        </TabsTrigger>
-        <TabsTrigger value="music-faq" className="text-sm h-10 sm:col-span-2">
-          <Music className="mr-2 h-4 w-4" />
-          Music Production Knowledge
-        </TabsTrigger>
+        <TabsTrigger value="faq">FAQs</TabsTrigger>
+        <TabsTrigger value="contact">Contact</TabsTrigger>
       </TabsList>
       
-      <TabsContent value="active">
-        <TicketList 
-          tickets={activeTickets} 
-          emptyMessage={
-            <>
-              <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-              <p className="text-muted-foreground">You don't have any active support tickets</p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Need help with something? Create a new support ticket.
-              </p>
-            </>
-          }
-          onNewTicket={() => setActiveTab("new")}
-        />
+      <TabsContent value="tickets">
+        <TicketList tickets={tickets} setTickets={setTickets} />
       </TabsContent>
       
-      <TabsContent value="resolved">
-        <TicketList 
-          tickets={resolvedTickets} 
-          emptyMessage={
-            <>
-              <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-              <p className="text-muted-foreground">You don't have any resolved support tickets</p>
-            </>
-          }
-        />
+      <TabsContent value="notifications">
+        <NotificationsTab />
       </TabsContent>
       
-      <TabsContent value="new">
-        <NewTicketForm 
-          newTicketTitle={newTicketTitle}
-          setNewTicketTitle={setNewTicketTitle}
-          newTicketDescription={newTicketDescription}
-          setNewTicketDescription={setNewTicketDescription}
-          newTicketPriority={newTicketPriority}
-          setNewTicketPriority={setNewTicketPriority}
-          onSubmit={onCreateTicket}
-        />
-      </TabsContent>
-
       <TabsContent value="faq">
-        <FAQSection 
-          faqType="general"
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <FAQSection />
       </TabsContent>
       
-      <TabsContent value="music-faq">
-        <FAQSection 
-          faqType="musicProduction"
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+      <TabsContent value="contact">
+        <ContactCard />
       </TabsContent>
     </Tabs>
   );
