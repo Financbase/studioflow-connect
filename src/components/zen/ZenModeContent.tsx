@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -16,12 +17,19 @@ import {
   EyeOff, 
   Gauge 
 } from "lucide-react";
+import ZenModeBrainstorm from "./ZenModeBrainstorm";
 
 interface ZenModeContentProps {
   themeMode: "minimal" | "ambient" | "focus";
 }
 
 const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
+  const [activeFeature, setActiveFeature] = useState<"none" | "writing" | "audio">("none");
+
+  const handleFeatureClick = (feature: "writing" | "audio") => {
+    setActiveFeature(activeFeature === feature ? "none" : feature);
+  };
+
   // Different content layouts based on theme
   if (themeMode === "minimal") {
     return (
@@ -33,7 +41,11 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
             <p className="text-center text-sm text-white/70">
               Focus on your audio production with minimal distractions.
             </p>
-            <Button variant="outline" className="mt-4 border-white/20 bg-white/5 hover:bg-white/10">
+            <Button 
+              variant="outline" 
+              className="mt-4 border-white/20 bg-white/5 hover:bg-white/10"
+              onClick={() => handleFeatureClick("audio")}
+            >
               Enter Space
             </Button>
           </CardContent>
@@ -46,11 +58,21 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
             <p className="text-center text-sm text-white/70">
               Capture your creative ideas in a distraction-free environment.
             </p>
-            <Button variant="outline" className="mt-4 border-white/20 bg-white/5 hover:bg-white/10">
+            <Button 
+              variant="outline" 
+              className="mt-4 border-white/20 bg-white/5 hover:bg-white/10"
+              onClick={() => handleFeatureClick("writing")}
+            >
               Start Writing
             </Button>
           </CardContent>
         </Card>
+        
+        {activeFeature === "writing" && (
+          <div className="col-span-1 md:col-span-2 mt-4">
+            <ZenModeBrainstorm isVisible={true} themeMode={themeMode} />
+          </div>
+        )}
       </div>
     );
   }
@@ -66,19 +88,30 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-            <Button variant="ghost" className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 transition-all duration-300">
+            <Button 
+              variant="ghost" 
+              className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 transition-all duration-300"
+              onClick={() => handleFeatureClick("audio")}
+            >
               <div className="flex flex-col items-center">
                 <MusicIcon className="h-8 w-8 mb-3" />
                 <span>Audio Creation</span>
               </div>
             </Button>
-            <Button variant="ghost" className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 border-x border-white/10 transition-all duration-300">
+            <Button 
+              variant="ghost" 
+              className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 border-x border-white/10 transition-all duration-300"
+              onClick={() => handleFeatureClick("writing")}
+            >
               <div className="flex flex-col items-center">
                 <Pencil className="h-8 w-8 mb-3" />
                 <span>Visual Design</span>
               </div>
             </Button>
-            <Button variant="ghost" className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 transition-all duration-300">
+            <Button 
+              variant="ghost" 
+              className="rounded-none p-8 h-auto text-white/80 hover:bg-white/10 transition-all duration-300"
+            >
               <div className="flex flex-col items-center">
                 <FileText className="h-8 w-8 mb-3" />
                 <span>Documentation</span>
@@ -115,9 +148,23 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
               <p className="text-center text-sm text-white/70">
                 Clear your mind and focus on the present moment.
               </p>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="mt-3 text-white/70 hover:text-white hover:bg-white/10"
+                onClick={() => handleFeatureClick("writing")}
+              >
+                Start Brainstorming
+              </Button>
             </CardContent>
           </Card>
         </div>
+        
+        {activeFeature === "writing" && (
+          <div className="mt-4">
+            <ZenModeBrainstorm isVisible={true} themeMode={themeMode} />
+          </div>
+        )}
       </div>
     );
   }
@@ -136,11 +183,18 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
               Eliminate distractions and optimize your environment for maximum productivity and concentration.
             </p>
             <div className="grid grid-cols-2 gap-4 mt-8 w-full max-w-md">
-              <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
+              <Button 
+                variant="outline" 
+                className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300"
+              >
                 <Clock className="mr-2 h-4 w-4" />
                 Start Timer
               </Button>
-              <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
+              <Button 
+                variant="outline" 
+                className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300"
+                onClick={() => handleFeatureClick("writing")}
+              >
                 <ClipboardList className="mr-2 h-4 w-4" />
                 Task List
               </Button>
@@ -180,6 +234,12 @@ const ZenModeContent: React.FC<ZenModeContentProps> = ({ themeMode }) => {
           </CardContent>
         </Card>
       </div>
+      
+      {activeFeature === "writing" && (
+        <div className="mt-4">
+          <ZenModeBrainstorm isVisible={true} themeMode={themeMode} />
+        </div>
+      )}
     </div>
   );
 };

@@ -7,6 +7,7 @@ export interface ZenModeOptions {
   soundscape: 'silence' | 'lofi' | 'nature' | 'analog';
   enableTimers: boolean;
   hideNotifications: boolean;
+  enableBrainstorming?: boolean;
 }
 
 interface UseZenModeProps {
@@ -19,6 +20,7 @@ const DEFAULT_OPTIONS: ZenModeOptions = {
   soundscape: 'silence',
   enableTimers: false,
   hideNotifications: true,
+  enableBrainstorming: true,
 };
 
 // Map of soundscape names to their audio URLs
@@ -48,6 +50,7 @@ export const useZenMode = (props?: UseZenModeProps) => {
 
   const [isActive, setIsActive] = useState(false);
   const [options, setOptions] = useState<ZenModeOptions>(getSavedOptions());
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
@@ -75,6 +78,8 @@ export const useZenMode = (props?: UseZenModeProps) => {
       }
     } else {
       document.body.classList.remove('zen-mode-active');
+      // Reset active feature when exiting zen mode
+      setActiveFeature(null);
     }
     
     // Call onStateChange if provided
@@ -161,13 +166,19 @@ export const useZenMode = (props?: UseZenModeProps) => {
   const activate = useCallback(() => setIsActive(true), []);
   const deactivate = useCallback(() => setIsActive(false), []);
   
+  const setFeature = useCallback((feature: string | null) => {
+    setActiveFeature(feature);
+  }, []);
+  
   return {
     isActive,
     options,
+    activeFeature,
     toggle,
     activate,
     deactivate,
     updateOptions,
+    setFeature,
   };
 };
 

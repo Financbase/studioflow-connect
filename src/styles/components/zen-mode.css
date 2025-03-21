@@ -116,3 +116,47 @@
   animation: equalizer-bar 1.5s ease infinite;
   animation-delay: calc(var(--bar-index) * 0.1s);
 }
+
+/* Message typing animation */
+.typing-indicator::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  display: inline-block;
+  margin-left: 4px;
+  animation: typing-dot 1.5s infinite;
+  border-radius: 50%;
+}
+
+@keyframes typing-dot {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* Brainstorm input animation */
+.zen-brainstorm-input:focus {
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.3);
+}
+
+/* Chat message animation */
+@keyframes message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-appear {
+  animation: message-appear 0.3s ease forwards;
+}
+
+/* Hover highlight for zen buttons */
+.zen-button-highlight:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.3);
+}

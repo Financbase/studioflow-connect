@@ -21,7 +21,8 @@ const ZenMode: React.FC<ZenModeProps> = ({
     theme: 'minimal',
     soundscape: 'silence',
     enableTimers: false,
-    hideNotifications: true
+    hideNotifications: true,
+    enableBrainstorming: true
   },
   onOptionsChange = () => {}
 }) => {

@@ -26,7 +26,8 @@ const Dashboard = () => {
       theme: 'minimal',
       soundscape: 'silence',
       enableTimers: false,
-      hideNotifications: true
+      hideNotifications: true,
+      enableBrainstorming: true
     }
   });
   
