@@ -15,6 +15,7 @@ interface SidebarLayoutProps {
 
 export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const location = useLocation();
   const isMobile = useIsMobile();
   const { pricingTier } = useDashboard();
@@ -30,6 +31,18 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
       setIsOpen(false);
     }
   }, [location.pathname, isMobile]);
+
+  // Toggle sidebar open/closed
+  const toggleSidebar = () => {
+    if (!isLocked || isMobile) {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  // Toggle sidebar lock state
+  const toggleLock = () => {
+    setIsLocked(!isLocked);
+  };
 
   const sidebarItems = [
     { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -74,19 +87,26 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
           isMobile && !isOpen ? "-translate-x-full" : "translate-x-0"
         )}
       >
-        <SidebarHeader isCollapsed={!isOpen} />
+        <SidebarHeader 
+          isCollapsed={!isOpen} 
+          isLocked={isLocked}
+          toggleSidebar={toggleSidebar}
+          toggleLock={toggleLock}
+        />
 
         <div className="flex flex-col justify-between h-full">
           <SidebarNav 
-            items={filteredSidebarItems} 
+            links={filteredSidebarItems} 
             isCollapsed={!isOpen} 
             className="px-2 py-2"
+            pricingTier={pricingTier}
           />
           
           <SidebarNav 
-            items={filteredBottomItems} 
+            links={filteredBottomItems} 
             isCollapsed={!isOpen} 
             className="px-2 mt-auto"
+            pricingTier={pricingTier}
           />
         </div>
       </aside>
