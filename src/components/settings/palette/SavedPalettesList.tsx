@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Trash2 } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { ColorPalette } from "@/contexts/ThemeContext";
+import { ColorPalette } from "@/contexts/ThemeTypes";
 
 interface SavedPalettesListProps {
   colorPalettes: ColorPalette[];

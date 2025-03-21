@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useColorPalette } from "@/contexts/ColorPaletteContext";
 import { toast } from "@/components/ui/use-toast";
 import { rgbToHex, hexToRgb, generateThemePalette, generateAnalogous, generateComplementary, generateTriadic } from "@/lib/colorUtils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ColorSetting } from "./types/colorSettings";
 
-// Import our new components
+// Import our components
 import ColorGroupEditor from "./palette/ColorGroupEditor";
 import PaletteGenerator from "./palette/PaletteGenerator";
 import PalettePreviewSection from "./palette/PalettePreviewSection";
@@ -15,7 +16,8 @@ import SavePaletteForm from "./palette/SavePaletteForm";
 import SavedPalettesList from "./palette/SavedPalettesList";
 
 const ColorPaletteEditor: React.FC = () => {
-  const { theme, themeVariant, saveCurrentColorPalette, colorPalettes, applyColorPalette, deleteColorPalette, currentPaletteId } = useTheme();
+  const { theme, themeVariant } = useTheme();
+  const { saveCurrentColorPalette, colorPalettes, applyColorPalette, deleteColorPalette, currentPaletteId } = useColorPalette();
   const [paletteName, setPaletteName] = useState("");
   const [paletteDescription, setPaletteDescription] = useState("");
   const [currentColors, setCurrentColors] = useState<ColorSetting[]>([]);

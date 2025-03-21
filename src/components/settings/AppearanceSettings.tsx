@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useColorPalette } from "@/contexts/ColorPaletteContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
 const AppearanceSettings = () => {
-  const { themeVariant, isDarkMode, colorPalettes, currentPaletteId, applyColorPalette } = useTheme();
+  const { themeVariant, isDarkMode } = useTheme();
+  const { colorPalettes, currentPaletteId, applyColorPalette } = useColorPalette();
   const [activeTab, setActiveTab] = useState("theme");
   
   // Get predefined palettes for quick selection
