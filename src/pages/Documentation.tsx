@@ -575,7 +575,7 @@ studioflow.connect.toDaw({
                       <div>
                         <h4 className="font-medium">How do I upgrade my subscription?</h4>
                         <p className="text-sm text-muted-foreground">
-                          You can upgrade your subscription at any time by going to Settings > Subscription and selecting your desired plan.
+                          You can upgrade your subscription at any time by going to Settings {'>'}  Subscription and selecting your desired plan.
                         </p>
                       </div>
                       
@@ -757,3 +757,4 @@ const LinkedinIcon = ({ className }: { className?: string }) => (
 );
 
 export default Documentation;
+
