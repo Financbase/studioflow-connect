@@ -31,7 +31,14 @@
   --sidebar-foreground: 240 10% 3.9%;
   --sidebar-muted: 240 3.8% 46.1%;
   --sidebar-accent: 260 40% 96%;
-  --sidebar-highlight: 260 60% 55%;
+  --sidebar-highlight: 260 40% 95%;
+  --sidebar-highlight-foreground: 260 60% 55%;
+  --sidebar-border: 240 5.9% 90%;
+  
+  /* Dashboard specific colors */
+  --dashboard-card-gradient-from: 260 60% 99%;
+  --dashboard-card-gradient-to: 260 30% 97%;
+  --dashboard-highlight: 260 60% 55%;
 }
 
 /* Dark Mode */
@@ -57,11 +64,18 @@
   --ring: 260 60% 55%;
 
   /* Sidebar specific colors */
-  --sidebar-background: 240 6% 10%;
+  --sidebar-background: 240 6% 12%;
   --sidebar-foreground: 0 0% 98%;
   --sidebar-muted: 240 5% 64.9%;
   --sidebar-accent: 260 40% 20%;
-  --sidebar-highlight: 260 60% 55%;
+  --sidebar-highlight: 260 40% 25%;
+  --sidebar-highlight-foreground: 260 60% 80%;
+  --sidebar-border: 240 3.7% 15.9%;
+  
+  /* Dashboard specific colors */
+  --dashboard-card-gradient-from: 240 10% 14%;
+  --dashboard-card-gradient-to: 240 8% 12%;
+  --dashboard-highlight: 260 60% 55%;
 }
 
 /* Enhanced Element Styling */
@@ -70,10 +84,17 @@
   border-width: 1px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.theme-modern .card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 
 .theme-modern button {
   border-radius: var(--radius);
+  transition: all 0.2s ease;
 }
 
 .theme-modern input,
@@ -86,4 +107,54 @@
 .theme-modern h2, 
 .theme-modern h3 {
   letter-spacing: -0.025em;
+}
+
+/* Dashboard Specific Styles */
+.theme-modern .dashboard-stat-card {
+  background: linear-gradient(to bottom right, hsl(var(--dashboard-card-gradient-from)), hsl(var(--dashboard-card-gradient-to)));
+}
+
+.theme-modern .progress-gradient-purple {
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+}
+
+.theme-modern .progress-gradient-blue {
+  background: linear-gradient(90deg, rgb(59, 130, 246), rgb(37, 99, 235));
+}
+
+.theme-modern .progress-gradient-amber {
+  background: linear-gradient(90deg, rgb(245, 158, 11), rgb(217, 119, 6));
+}
+
+/* Glass Effects for Cards */
+.theme-modern .glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.dark.theme-modern .glass-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Sidebar Improvements */
+.theme-modern aside {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--sidebar-border));
+}
+
+.theme-modern [data-sidebar="sidebar"] {
+  background-color: hsl(var(--sidebar-background));
+  color: hsl(var(--sidebar-foreground));
+}
+
+.theme-modern [data-sidebar="item"].active {
+  background-color: hsl(var(--sidebar-highlight));
+  color: hsl(var(--sidebar-highlight-foreground));
+}
+
+.theme-modern [data-sidebar="item"]:hover {
+  background-color: hsl(var(--sidebar-highlight) / 0.7);
 }

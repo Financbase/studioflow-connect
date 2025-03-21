@@ -1,178 +1,335 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import SystemMonitor from "@/components/SystemMonitor";
-import AudioAnalyzer from "@/components/AudioAnalyzer";
-import AITools from "@/components/AITools";
-import StudioFlowConnect from "@/components/StudioFlowConnect";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
-import { useIsMobile } from "@/hooks/use-mobile";
-import DashboardWidget from "@/components/DashboardWidget";
-import { Card, CardContent } from "@/components/ui/card";
-import { Music, Sparkles, Clock, Users, FileAudio, Zap, ArrowUp } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import { Badge } from "@/components/ui/badge";
+import { BarChart2, Music, Headphones, Share2, Sparkles, PieChart, BarChart, Activity } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Link } from "react-router-dom";
+import ZenMode from "@/components/zen/ZenMode";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Dashboard = () => {
-  const { user, profile } = useAuth();
-  const { isWidgetVisible, hasFeatureAccess, pricingTier } = useDashboard();
+  const { pricingTier, hasFeatureAccess } = useDashboard();
+  const { themeVariant } = useTheme();
   const isMobile = useIsMobile();
+  const [zenModeActive, setZenModeActive] = useState(false);
+  const [zenModeOptions, setZenModeOptions] = useState({
+    theme: 'minimal',
+    soundscape: 'silence',
+    enableTimers: false,
+    hideNotifications: true
+  });
 
+  // Quick stats for the dashboard
   const quickStats = [
     { 
-      title: "Active Projects", 
+      title: "Audio Projects", 
       value: "12", 
-      icon: <Music className="h-5 w-5 text-purple-500" />,
+      description: "Active projects", 
       change: "+2",
-      isPositive: true
+      color: "progress-gradient-purple"
     },
     { 
-      title: "Collaborators", 
-      value: "8", 
-      icon: <Users className="h-5 w-5 text-orange-500" />,
-      change: "+3",
-      isPositive: true
+      title: "Connected Devices", 
+      value: "3", 
+      description: "Available devices", 
+      change: "+1",
+      color: "progress-gradient-blue"
     },
     { 
-      title: "Recent Sessions", 
+      title: "Storage Used", 
+      value: "45%", 
+      description: "15GB of 30GB", 
+      change: "+5%",
+      color: "progress-gradient-amber"
+    },
+    { 
+      title: "Recent Activity", 
       value: "24", 
-      icon: <Clock className="h-5 w-5 text-blue-500" />,
-      change: "+5",
-      isPositive: true
-    },
-    { 
-      title: "Audio Files", 
-      value: "156", 
-      icon: <FileAudio className="h-5 w-5 text-green-500" />,
-      change: "+12",
-      isPositive: true
-    },
+      description: "Actions this week", 
+      change: "+10",
+      color: "progress-gradient-purple"
+    }
   ];
 
+  // Recent activity for timeline
   const recentActivity = [
-    { id: 1, action: "Project updated", target: "Summer EP", time: "2h ago", user: "You" },
-    { id: 2, action: "Audio uploaded", target: "Vocals_Final.wav", time: "5h ago", user: "Alex" },
-    { id: 3, action: "Comment added", target: "Bassline Project", time: "1d ago", user: "Sarah" },
-    { id: 4, action: "Session scheduled", target: "Mixing Session", time: "2d ago", user: "You" },
+    { id: 1, action: "Project Created", name: "Ambient Soundscape", time: "2 hours ago" },
+    { id: 2, action: "File Uploaded", name: "vocal_take_final.wav", time: "Yesterday" },
+    { id: 3, action: "Device Connected", name: "Focusrite Scarlett 2i2", time: "3 days ago" },
+    { id: 4, action: "Project Shared", name: "Summer Beats EP", time: "1 week ago" }
   ];
 
   return (
     <SidebarLayout>
       <Header />
       
-      <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
-        <div className="max-w-[1200px] mx-auto space-y-8 animate-fade-in">
-          {/* Welcome Section */}
-          <section className="bg-gradient-to-r from-purple-600/10 via-indigo-600/10 to-blue-600/5 p-6 rounded-2xl border border-purple-100 dark:border-purple-900/20">
-            <div className="flex flex-col md:flex-row justify-between">
-              <div>
-                <Badge variant="outline" className="bg-purple-500/10 text-purple-700 dark:text-purple-300 mb-2">
-                  {pricingTier.charAt(0).toUpperCase() + pricingTier.slice(1)} Plan
-                </Badge>
-                <h1 className="text-3xl font-bold">Welcome back, {profile?.username || "Producer"}</h1>
-                <p className="text-muted-foreground mt-1">Your creative studio is looking good today.</p>
-              </div>
-              <div className="mt-4 md:mt-0 flex items-center space-x-4">
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Storage Usage</p>
-                  <div className="flex items-center mt-1 justify-end">
-                    <span className="text-sm font-medium">7.2 GB</span>
-                    <span className="text-xs text-muted-foreground ml-1">/ 10 GB</span>
-                  </div>
-                  <Progress value={72} className="h-1.5 w-32 mt-1" />
-                </div>
-              </div>
+      <main className="flex-1 container mx-auto px-4 py-8 bg-background animate-fade-in">
+        <div className="max-w-[1200px] mx-auto space-y-6">
+          {/* Dashboard Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-muted-foreground">Welcome to your StudioFlow dashboard.</p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button onClick={() => setZenModeActive(true)} variant="outline" className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                <span>Zen Mode</span>
+              </Button>
+              
+              <Button asChild variant="default">
+                <Link to="/connect">
+                  <Share2 className="h-4 w-4 mr-2" />
+                  <span>Connect Device</span>
+                </Link>
+              </Button>
+            </div>
+          </div>
+          
+          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+          
+          {/* Quick Stats Section */}
+          <section>
+            <h2 className="text-xl font-semibold mb-4">Quick Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {quickStats.map((stat, index) => (
+                <Card key={index} className="dashboard-stat-card">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{stat.title}</CardTitle>
+                    <CardDescription>{stat.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between items-end mb-2">
+                      <span className="text-3xl font-bold">{stat.value}</span>
+                      <span className="text-sm text-green-500">{stat.change}</span>
+                    </div>
+                    <Progress value={65} className={stat.color} />
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </section>
           
-          {/* Stats Section */}
-          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickStats.map((stat, index) => (
-              <Card key={index} className="overflow-hidden border border-purple-100/50 dark:border-purple-900/20 hover:shadow-md hover:border-purple-200 dark:hover:border-purple-800/30 transition-all duration-300">
-                <CardContent className="p-6 flex justify-between items-center">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                    <p className="text-2xl font-bold mt-1">{stat.value}</p>
-                    <div className="flex items-center mt-1">
-                      {stat.isPositive ? (
-                        <ArrowUp className="h-3 w-3 text-green-500 mr-1" />
-                      ) : (
-                        <ArrowUp className="h-3 w-3 text-red-500 mr-1 rotate-180" />
-                      )}
-                      <span className={`text-xs ${stat.isPositive ? 'text-green-500' : 'text-red-500'}`}>
-                        {stat.change} this week
-                      </span>
+          {/* Main Dashboard Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Activity and Charts Section */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Charts Tab */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analytics</CardTitle>
+                  <CardDescription>Your audio production activity</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="activity">
+                    <TabsList className="mb-4">
+                      <TabsTrigger value="activity">Activity</TabsTrigger>
+                      <TabsTrigger value="storage">Storage</TabsTrigger>
+                      <TabsTrigger value="performance">Performance</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="activity" className="space-y-4">
+                      <div className="flex items-center justify-center h-[200px] border rounded-md">
+                        {/* Placeholder for activity chart */}
+                        <div className="text-center">
+                          <Activity className="h-16 w-16 mx-auto text-muted-foreground" />
+                          <p className="mt-2 text-muted-foreground">Activity data visualization</p>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="storage" className="space-y-4">
+                      <div className="flex items-center justify-center h-[200px] border rounded-md">
+                        {/* Placeholder for storage chart */}
+                        <div className="text-center">
+                          <PieChart className="h-16 w-16 mx-auto text-muted-foreground" />
+                          <p className="mt-2 text-muted-foreground">Storage usage breakdown</p>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="performance" className="space-y-4">
+                      <div className="flex items-center justify-center h-[200px] border rounded-md">
+                        {/* Placeholder for performance chart */}
+                        <div className="text-center">
+                          <BarChart className="h-16 w-16 mx-auto text-muted-foreground" />
+                          <p className="mt-2 text-muted-foreground">System performance metrics</p>
+                        </div>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+              
+              {/* Recent Activity */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activity</CardTitle>
+                  <CardDescription>Your latest actions and updates</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-4">
+                    {recentActivity.map((item) => (
+                      <li key={item.id} className="flex items-start gap-4 pb-4 border-b last:border-0">
+                        <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
+                        <div className="flex-1">
+                          <p className="font-medium">{item.action}</p>
+                          <p className="text-sm text-muted-foreground">{item.name}</p>
+                        </div>
+                        <div className="text-sm text-muted-foreground">{item.time}</div>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Quick Actions and Recommendations */}
+            <div className="space-y-6">
+              {/* Quick Links */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                  <CardDescription>Frequently used features</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center" asChild>
+                    <Link to="/projects">
+                      <Music className="h-5 w-5 mb-1" />
+                      <span>New Project</span>
+                    </Link>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center" asChild>
+                    <Link to="/library">
+                      <Headphones className="h-5 w-5 mb-1" />
+                      <span>My Library</span>
+                    </Link>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center" asChild>
+                    <Link to="/connect">
+                      <Share2 className="h-5 w-5 mb-1" />
+                      <span>Connect</span>
+                    </Link>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className={`h-auto py-4 justify-start flex-col items-center ${!hasFeatureAccess('ai') ? 'opacity-50' : ''}`}
+                    disabled={!hasFeatureAccess('ai')}
+                    asChild={hasFeatureAccess('ai')}
+                  >
+                    {hasFeatureAccess('ai') ? (
+                      <Link to="/ai-tools">
+                        <Sparkles className="h-5 w-5 mb-1" />
+                        <span>AI Tools</span>
+                      </Link>
+                    ) : (
+                      <div>
+                        <Sparkles className="h-5 w-5 mb-1" />
+                        <span>AI Tools</span>
+                      </div>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              {/* Usage Stats */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Usage Stats</CardTitle>
+                  <CardDescription>This month's activity</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>CPU Usage</span>
+                      <span className="font-medium">65%</span>
                     </div>
+                    <Progress value={65} className="h-2" />
                   </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-full p-3">
-                    {stat.icon}
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Storage</span>
+                      <span className="font-medium">45%</span>
+                    </div>
+                    <Progress value={45} className="h-2" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Projects</span>
+                      <span className="font-medium">12/20</span>
+                    </div>
+                    <Progress value={60} className="h-2" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>AI Credits</span>
+                      <span className="font-medium">38%</span>
+                    </div>
+                    <Progress value={38} className="h-2" />
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </section>
-          
-          {/* Recent Activity */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="col-span-1 lg:col-span-1 border border-purple-100/50 dark:border-purple-900/20">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center">
-                  <Zap className="h-5 w-5 mr-2 text-amber-500" />
-                  Recent Activity
-                </h2>
-                <div className="space-y-4">
-                  {recentActivity.map((item) => (
-                    <div key={item.id} className="flex items-start space-x-3 pb-3 border-b border-border last:border-0 last:pb-0">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{item.action}: <span className="text-purple-600 dark:text-purple-400">{item.target}</span></p>
-                        <p className="text-xs text-muted-foreground mt-1">{item.time} by {item.user}</p>
-                      </div>
+              
+              {/* Plan Info */}
+              <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+                <CardHeader>
+                  <CardTitle>Your Plan</CardTitle>
+                  <CardDescription>Current subscription details</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl font-bold capitalize">{pricingTier} Plan</span>
+                    {pricingTier !== 'enterprise' && (
+                      <Button size="sm" variant="outline" className="border-primary/30" asChild>
+                        <Link to="/subscription">Upgrade</Link>
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <Separator />
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Projects</span>
+                      <span>{pricingTier === 'free' ? '5' : pricingTier === 'standard' ? '20' : 'Unlimited'}</span>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="col-span-1 lg:col-span-2 border border-purple-100/50 dark:border-purple-900/20">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center">
-                  <Sparkles className="h-5 w-5 mr-2 text-purple-500" />
-                  Studio Hub
-                </h2>
-                
-                <div className="space-y-6">
-                  {/* Always show StudioFlow Connect as the main MVP feature */}
-                  {isWidgetVisible('connect') && (
-                    <DashboardWidget id="connect" title="StudioFlow Connect">
-                      <StudioFlowConnect />
-                    </DashboardWidget>
-                  )}
-                  
-                  {isWidgetVisible('audio') && hasFeatureAccess('audio') && (
-                    <DashboardWidget id="audio" title="Audio Analysis">
-                      <AudioAnalyzer />
-                    </DashboardWidget>
-                  )}
-                  
-                  {isWidgetVisible('ai') && hasFeatureAccess('ai') && (
-                    <DashboardWidget id="ai" title="AI-Powered Tools" isPremiumFeature>
-                      <AITools />
-                    </DashboardWidget>
-                  )}
-                  
-                  {isWidgetVisible('system') && hasFeatureAccess('system') && (
-                    <DashboardWidget id="system" title="System Monitor" isPremiumFeature>
-                      <SystemMonitor />
-                    </DashboardWidget>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </section>
+                    <div className="flex justify-between">
+                      <span>Storage</span>
+                      <span>{pricingTier === 'free' ? '5GB' : pricingTier === 'standard' ? '30GB' : '100GB'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>AI Features</span>
+                      <span>{pricingTier === 'free' ? 'Limited' : 'Full Access'}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </main>
+      
+      {/* Zen Mode Component */}
+      <ZenMode 
+        isActive={zenModeActive} 
+        onToggle={() => setZenModeActive(!zenModeActive)}
+        options={zenModeOptions}
+        onOptionsChange={(options) => setZenModeOptions({...zenModeOptions, ...options})}
+      />
     </SidebarLayout>
   );
 };
