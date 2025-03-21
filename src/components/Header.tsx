@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,9 +24,9 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Check if user has admin privileges - look for "admin" in username or email
-  const isAdmin = profile?.role === "admin" || 
+  const isAdmin = user?.email?.includes("admin") || 
                  profile?.username === "admin" || 
-                 (user?.email && user.email.includes("admin"));
+                 profile?.plan === "pro";
   
   const handleSignOut = async () => {
     await signOut();
