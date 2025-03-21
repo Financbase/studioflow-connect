@@ -24,7 +24,11 @@ interface FAQSectionProps {
   faqType?: 'general' | 'musicProduction';
 }
 
-const FAQSection = ({ searchQuery, setSearchQuery, faqType = 'general' }: FAQSectionProps) => {
+const FAQSection = ({ 
+  searchQuery = "", 
+  setSearchQuery = () => {}, 
+  faqType = 'general' 
+}: FAQSectionProps) => {
   const { t, language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [faqData, setFaqData] = useState<FAQ[]>(faqType === 'musicProduction' ? musicProductionFAQs : faqs);

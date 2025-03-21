@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TicketList from "@/components/support/TicketList";
@@ -6,7 +5,6 @@ import FAQSection from "@/components/support/FAQSection";
 import { Ticket } from "@/components/support/ticket/types";
 import ContactCard from "@/components/support/ContactCard";
 import NotificationsTab from "@/components/support/NotificationsTab";
-import { Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const mockTickets: Ticket[] = [
@@ -71,6 +69,7 @@ interface SupportTabsProps {
 
 const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
   const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
+  const [searchQuery, setSearchQuery] = useState("");
   
   // Calculate unread notification count (for the badge)
   const notificationCount = 3; // This would come from your notification system
@@ -92,7 +91,11 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
       </TabsList>
       
       <TabsContent value="tickets">
-        <TicketList tickets={tickets} setTickets={setTickets} />
+        <TicketList 
+          tickets={tickets} 
+          emptyMessage="You don't have any support tickets yet."
+          onNewTicket={() => {}} // Empty function since we're not handling new tickets here
+        />
       </TabsContent>
       
       <TabsContent value="notifications">
@@ -100,7 +103,10 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
       </TabsContent>
       
       <TabsContent value="faq">
-        <FAQSection />
+        <FAQSection 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery} 
+        />
       </TabsContent>
       
       <TabsContent value="contact">

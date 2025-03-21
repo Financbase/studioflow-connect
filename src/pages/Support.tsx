@@ -12,8 +12,6 @@ import { useTickets } from "./support/useTickets";
 
 const Support = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState("active");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
   
@@ -60,9 +58,6 @@ const Support = () => {
       title: "Ticket Created",
       description: "Your support ticket has been submitted successfully."
     });
-    
-    // Switch to active tickets tab to show the new ticket
-    setActiveTab("active");
   };
 
   const handleSendChatMessage = () => {
@@ -84,26 +79,12 @@ const Support = () => {
       chatMessage={chatMessage}
       setChatMessage={setChatMessage}
       onSendMessage={handleSendChatMessage}
-      onNewTicket={() => setActiveTab("new")}
+      onNewTicket={handleCreateTicket}
     />
   );
   
   const tabsComponent = (
-    <SupportTabs
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-      activeTickets={activeTickets}
-      resolvedTickets={resolvedTickets}
-      searchQuery={searchQuery}
-      setSearchQuery={setSearchQuery}
-      newTicketTitle={newTicketTitle}
-      setNewTicketTitle={setNewTicketTitle}
-      newTicketDescription={newTicketDescription}
-      setNewTicketDescription={setNewTicketDescription}
-      newTicketPriority={newTicketPriority}
-      setNewTicketPriority={setNewTicketPriority}
-      onCreateTicket={handleCreateTicket}
-    />
+    <SupportTabs className="w-full" />
   );
 
   return (
