@@ -26,8 +26,8 @@ const ZenModeToggle: React.FC<ZenModeToggleProps> = ({ onClick, isActive = false
           >
             {isActive ? (
               <>
-                <Sparkles className="h-5 w-5 relative z-10 animate-pulse-soft" />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-accent/80 opacity-70"></div>
+                <Sparkles className="h-5 w-5 relative z-10 animate-glow text-primary-foreground" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-accent/50 to-primary/80 opacity-80 animate-pulse-soft"></div>
               </>
             ) : (
               <MoonStar className="h-5 w-5" />

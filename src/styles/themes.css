@@ -1,3 +1,4 @@
+
 /* Theme-specific styles */
 :root {
   --radius: 0.5rem;
@@ -17,36 +18,36 @@
 
 /* Dark mode specific styles for StudioFlow Modern Theme */
 .dark.theme-modern {
-  --background: 25 25 40; /* #19192B - Deeper, richer background */
-  --card: 32 32 48; /* #202030 - Slightly lighter card background */
-  --foreground: 245 245 245; /* #F5F5F5 - Crisp white text */
-  --muted-foreground: 190 190 200; /* #BEBEC8 - Softer muted text */
+  --background: 20 20 35; /* #141423 - Deeper, richer background */
+  --card: 25 25 40; /* #19192B - Deeper card background */
+  --foreground: 245 245 255; /* #F5F5FF - Crisp white text */
+  --muted-foreground: 190 190 210; /* #BEBED2 - Softer muted text */
   --primary: 130 110 250; /* #826AFA - Vibrant purple */
-  --primary-foreground: 25 25 40; /* #19192B - Dark text on primary */
-  --secondary: 42 42 60; /* #2A2A3C - Lighter accent background */
-  --border: 50 50 70; /* #323246 - More visible borders */
+  --primary-foreground: 20 20 35; /* #141423 - Dark text on primary */
+  --secondary: 35 35 55; /* #232337 - Lighter accent background */
+  --border: 40 40 60; /* #28283C - More visible borders */
   --ring: 130 110 250; /* #826AFA - Primary color ring */
   --accent: 88 193 201; /* #58C1C9 - Teal accent */
   
-  --zen-background: 20 20 35; /* #141423 - Deeper zen mode */
-  --zen-background-alt: 35 35 55; /* #232337 - Zen mode accent */
-  --zen-focus: 45 45 65; /* #2D2D41 - Zen mode focus area */
+  --zen-background: 15 15 30; /* #0F0F1E - Deeper zen mode */
+  --zen-background-alt: 30 30 50; /* #1E1E32 - Zen mode accent */
+  --zen-focus: 40 40 60; /* #28283C - Zen mode focus area */
   
-  --sidebar-background: 20 20 35; /* #141423 - Matching sidebar */
-  --sidebar-highlight: 40 40 60; /* #28283C - Subtle sidebar highlight */
+  --sidebar-background: 15 15 30; /* #0F0F1E - Matching sidebar */
+  --sidebar-highlight: 35 35 55; /* #232337 - Subtle sidebar highlight */
 }
 
 /* Light mode specific styles for StudioFlow Modern Theme */
 :not(.dark).theme-modern {
-  --background: 250 250 255; /* #FAFAFF - Light but not harsh white */
+  --background: 248 248 255; /* #F8F8FF - Light but not harsh white */
   --card: 255 255 255; /* #FFFFFF */
-  --border: 230 230 245; /* #E6E6F5 - Subtle border */
+  --foreground: 35 35 55; /* #232337 - Darker text for better contrast */
+  --muted-foreground: 90 90 120; /* #5A5A78 - More readable muted text */
+  --border: 220 220 240; /* #DCDCF0 - Subtle border */
   --primary: 130 110 250; /* #826AFA - Matching primary */
-  --secondary: 245 245 255; /* #F5F5FF - Very light purple secondary */
-  --muted: 240 240 250; /* #F0F0FA */
+  --secondary: 240 240 255; /* #F0F0FF - Very light purple secondary */
+  --muted: 235 235 250; /* #EBEBFA */
   --accent: 88 193 201; /* #58C1C9 - Matching accent */
-  --foreground: 40 40 60; /* #28283C - Dark text for contrast */
-  --muted-foreground: 100 100 130; /* #646482 - Muted but readable text */
 }
 
 /* Legacy Theme */
@@ -183,40 +184,22 @@
   --accent: 221 83% 53%;
 }
 
-/* Modern Theme Light Mode */
-:not(.dark).theme-modern {
-  --background: 250 250 255; /* #FAFAFF - light but not harsh white */
-  --card: 255 255 255; /* #FFFFFF */
-  --border: 230 230 240; /* #E6E6F0 */
-  --primary: 164 140 255; /* #A48CFF */
-  --secondary: 240 240 250; /* #F0F0FA */
-  --muted: 240 240 250; /* #F0F0FA */
-  --accent: 88 193 201; /* #58C1C9 */
-}
-
-/* Modern Theme Dark Mode - Custom Enhancements */
-.dark.theme-modern {
-  --background: 28 28 46; /* #1C1C2E */
-  --foreground: 236 236 236; /* #ECECEC */
-  --muted-foreground: 177 177 179; /* #B1B1B3 */
-  
-  --accent-primary: 164 140 255; /* #A48CFF */
-  --accent-cta: 88 193 201; /* #58C1C9 */
-  --highlight: 246 190 68; /* #F6BE44 */
-  
-  --zen-background: 28 28 46; /* #1C1C2E */
-  --zen-background-alt: 42 42 78; /* #2A2A4E */
-  --zen-focus: 45 45 58; /* #2D2D3A */
-  
-  --sidebar-background: 24 24 40; /* #18182A */
-  --sidebar-highlight: 36 36 54; /* #242436 */
-}
-
 /* Zen Mode specific styles */
 .zen-mode-active {
   * {
     transition-duration: 0.15s !important;
   }
+}
+
+.zen-mode-active .header,
+.zen-mode-active .sidebar {
+  opacity: 0.2 !important;
+  transition: opacity 0.3s ease;
+}
+
+.zen-mode-active .header:hover,
+.zen-mode-active .sidebar:hover {
+  opacity: 0.9 !important;
 }
 
 /* Card hover effects */
@@ -251,29 +234,27 @@ button:hover {
   background: linear-gradient(90deg, rgb(255, 85, 85) 0%, rgb(255, 115, 115) 100%);
 }
 
-/* Badge animation */
-.animate-badge {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.8;
-  }
-}
-
 /* Font improvements */
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
+  color: hsl(var(--foreground));
 }
 
 .font-heading {
   letter-spacing: -0.03em;
   font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+/* Added custom progress colors */
+.progress-gradient-blue {
+  background: linear-gradient(90deg, #58C1C9 0%, #4DB8C0 100%);
+}
+
+.progress-gradient-purple {
+  background: linear-gradient(90deg, #826AFA 0%, #9B87F5 100%);
+}
+
+.progress-gradient-amber {
+  background: linear-gradient(90deg, #FFB86C 0%, #FFCA8C 100%);
 }
