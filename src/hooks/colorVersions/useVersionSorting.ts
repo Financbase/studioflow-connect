@@ -1,44 +1,50 @@
-
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ColorVersion } from './types';
 
-export type SortOption = 'newest' | 'oldest' | 'alphabetical' | 'favorites' | 'recent';
+export type SortOption = 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'last-used';
 
-export function useVersionSorting(versions: ColorVersion[], currentVersionId: string | null) {
+export function useVersionSorting(
+  versions: ColorVersion[], 
+  currentVersionId: string | null
+) {
+  // Sort state
   const [sortOption, setSortOption] = useState<SortOption>('newest');
   
-  // Sort versions based on selected criteria
-  const sortedVersions = [...versions].sort((a, b) => {
-    // First prioritize active version
-    if (a.id === currentVersionId) return -1;
-    if (b.id === currentVersionId) return 1;
+  // Sort versions based on the selected sort option
+  const sortedVersions = useMemo(() => {
+    // Make a copy to avoid mutating the original array
+    const versionsToSort = [...versions];
     
+    // Sort based on the selected option
     switch (sortOption) {
       case 'newest':
-        return b.timestamp - a.timestamp;
-        
+        return versionsToSort.sort((a, b) => b.timestamp - a.timestamp);
+      
       case 'oldest':
-        return a.timestamp - b.timestamp;
-        
-      case 'alphabetical':
-        return a.name.localeCompare(b.name);
-        
-      case 'favorites':
-        // Sort by favorite status then by date
-        if (a.isFavorite && !b.isFavorite) return -1;
-        if (!a.isFavorite && b.isFavorite) return 1;
-        return b.timestamp - a.timestamp;
-        
-      case 'recent':
-        // Sort by lastUsed timestamp if available, otherwise use creation timestamp
-        const aLastUsed = a.lastUsed || a.timestamp;
-        const bLastUsed = b.lastUsed || b.timestamp;
-        return bLastUsed - aLastUsed;
-        
+        return versionsToSort.sort((a, b) => a.timestamp - b.timestamp);
+      
+      case 'name-asc':
+        return versionsToSort.sort((a, b) => a.name.localeCompare(b.name));
+      
+      case 'name-desc':
+        return versionsToSort.sort((a, b) => b.name.localeCompare(a.name));
+      
+      case 'last-used':
+        return versionsToSort.sort((a, b) => {
+          // If this is the current version, it should be first
+          if (a.id === currentVersionId) return -1;
+          if (b.id === currentVersionId) return 1;
+          
+          // Otherwise sort by lastUsed timestamp
+          const aLastUsed = a.lastUsed || a.timestamp;
+          const bLastUsed = b.lastUsed || b.timestamp;
+          return bLastUsed - aLastUsed;
+        });
+      
       default:
-        return 0;
+        return versionsToSort;
     }
-  });
+  }, [versions, sortOption, currentVersionId]);
   
   return {
     sortOption,

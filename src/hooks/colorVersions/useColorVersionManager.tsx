@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { useVersionFiltering } from './useVersionFiltering';
 import { useVersionSorting } from './useVersionSorting';
 import {
@@ -11,6 +11,7 @@ import {
   ThemeMode,
   ThemeVariant
 } from './types';
+import { generateThemePalette } from '@/lib/colorUtils/themeGenerator';
 
 // Default versions for initial setup
 const defaultVersions: ColorVersion[] = [
@@ -242,6 +243,87 @@ export function useColorVersionManager() {
     ));
   }, [setVersions]);
 
+  // Export a version as a JSON string
+  const exportVersionAsString = useCallback((id: string): string | null => {
+    const version = versions.find(v => v.id === id);
+    
+    if (!version) {
+      toast({
+        title: "Export Failed",
+        description: "The selected theme version could not be found",
+        variant: "destructive"
+      });
+      return null;
+    }
+    
+    // Create a export-friendly object
+    const exportData = {
+      id: version.id,
+      name: version.name,
+      description: version.description,
+      themeData: version.themeData,
+      tags: version.tags,
+      timestamp: version.timestamp,
+      type: "studioflow-theme-version",
+      version: "1.0"
+    };
+    
+    return JSON.stringify(exportData, null, 2);
+  }, [versions]);
+  
+  // Import a version from a JSON string
+  const importVersionFromString = useCallback((jsonString: string): ColorVersion | null => {
+    try {
+      const importedData = JSON.parse(jsonString);
+      
+      // Verify this is a valid theme version
+      if (!importedData.themeData || !importedData.name) {
+        throw new Error("Invalid theme version format");
+      }
+      
+      // Check if a version with this ID already exists
+      const existingVersion = versions.find(v => v.id === importedData.id);
+      
+      // Create a new version with a new ID to avoid conflicts
+      const newVersion: ColorVersion = {
+        id: existingVersion ? Date.now().toString() : importedData.id,
+        name: existingVersion ? `${importedData.name} (Imported)` : importedData.name,
+        themeData: importedData.themeData,
+        description: importedData.description,
+        timestamp: Date.now(),
+        previewColors: importedData.previewColors || Object.values(importedData.themeData).slice(0, 4),
+        tags: importedData.tags || [],
+        isFavorite: false
+      };
+      
+      // Add to versions list
+      const updatedVersions = [...versions, newVersion];
+      setVersions(updatedVersions);
+      
+      toast({
+        title: "Import Successful",
+        description: `Theme version "${newVersion.name}" has been imported`
+      });
+      
+      return newVersion;
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Import Failed",
+        description: "The provided data is not a valid theme version"
+      });
+      return null;
+    }
+  }, [versions, setVersions]);
+
+  // Generate a theme variation
+  const generateThemeVariation = useCallback((
+    baseColor: string, 
+    isDark: boolean = false
+  ): Record<string, string> => {
+    return generateThemePalette(baseColor, isDark);
+  }, []);
+
   // Filter-related methods for ThemeVersionControl
   const [filters, setFilters] = useState<VersionFilter>({
     search: '',
@@ -293,11 +375,11 @@ export function useColorVersionManager() {
 
   // Export version (wrapper for exportVersionAsString)
   const exportVersion = useCallback((id: string): string | null => {
-    return exportVersionAsString(id) || null;
+    return exportVersionAsString(id);
   }, [exportVersionAsString]);
 
   // Import version (wrapper for importVersionFromString)
-  const importVersion = useCallback((data: string): boolean => {
+  const importVersion = useCallback((data: string): ColorVersion | null => {
     return importVersionFromString(data);
   }, [importVersionFromString]);
 
@@ -313,8 +395,30 @@ export function useColorVersionManager() {
 
   // For ThemeVersionControl
   const switchToVersion = useCallback((id: string) => {
-    setActiveVersion(id);
-  }, [setActiveVersion]);
+    // Find the version with this ID
+    const version = versions.find(v => v.id === id);
+    
+    if (!version) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Could not find version to activate."
+      });
+      return;
+    }
+
+    // Update lastUsed timestamp
+    setVersions(prev => prev.map(v => 
+      v.id === id ? { ...v, lastUsed: Date.now() } : v
+    ));
+
+    setCurrentVersionId(id);
+    
+    toast({
+      title: "Theme Changed",
+      description: `Switched to "${version.name}" theme.`,
+    });
+  }, [versions, setCurrentVersionId, setVersions]);
 
   // Get all available tags across all versions
   const allTags = useMemo(() => {
