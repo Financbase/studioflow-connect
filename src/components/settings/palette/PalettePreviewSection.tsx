@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useColorPalette } from "@/contexts/ColorPaletteContext";
@@ -6,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import PalettePreview from "../PalettePreview";
 import ColorPaletteVisualizer from "./ColorPaletteVisualizer";
 import ColorSchemeGenerator from "./ColorSchemeGenerator";
+import ColorContrastChecker from "./ColorContrastChecker";
 
 const PalettePreviewSection: React.FC = () => {
   const { currentPaletteId, colorPalettes, getCurrentPaletteColors } = useColorPalette();
@@ -25,10 +25,11 @@ const PalettePreviewSection: React.FC = () => {
   return (
     <div className="space-y-4">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="visualizer">Visualizer</TabsTrigger>
           <TabsTrigger value="generator">Scheme Generator</TabsTrigger>
+          <TabsTrigger value="contrast">Contrast Check</TabsTrigger>
         </TabsList>
         
         <TabsContent value="preview" className="space-y-4">
@@ -180,6 +181,10 @@ const PalettePreviewSection: React.FC = () => {
               </div>
             </div>
           )}
+        </TabsContent>
+        
+        <TabsContent value="contrast">
+          <ColorContrastChecker colors={currentColors} />
         </TabsContent>
       </Tabs>
     </div>
