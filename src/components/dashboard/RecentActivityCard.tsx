@@ -12,7 +12,11 @@ interface ActivityItem {
   icon: React.ReactNode;
 }
 
-const RecentActivityCard = () => {
+interface RecentActivityCardProps {
+  onViewActivity?: () => void;
+}
+
+const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps = {}) => {
   // Recent activity for timeline with icons
   const recentActivity: ActivityItem[] = [
     { 
@@ -52,7 +56,9 @@ const RecentActivityCard = () => {
           <CardTitle>Recent Activity</CardTitle>
           <CardDescription>Your latest actions and updates</CardDescription>
         </div>
-        <Button variant="ghost" size="sm">View all</Button>
+        {onViewActivity && (
+          <Button variant="ghost" size="sm" onClick={onViewActivity}>View all</Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="relative">

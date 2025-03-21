@@ -4,8 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, PieChart, BarChart } from "lucide-react";
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
+import { Button } from "@/components/ui/button";
 
-const AnalyticsCard = () => {
+interface AnalyticsCardProps {
+  onViewMore?: () => void;
+}
+
+const AnalyticsCard = ({ onViewMore }: AnalyticsCardProps = {}) => {
   // Sample data for charts
   const activityData = [
     { name: "Mon", value: 12 },
@@ -36,8 +41,15 @@ const AnalyticsCard = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Analytics</CardTitle>
-        <CardDescription>Your audio production activity</CardDescription>
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>Your audio production activity</CardDescription>
+          </div>
+          {onViewMore && (
+            <Button variant="ghost" size="sm" onClick={onViewMore}>View More</Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="activity">

@@ -6,11 +6,12 @@ import { Music, Headphones, Share2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { toast } from "@/hooks/use-toast";
+import { WidgetId } from "@/contexts/dashboard/types";
 
 const QuickActionsCard = () => {
   const { hasFeatureAccess } = useDashboard();
 
-  const handlePremiumFeature = (e: React.MouseEvent, featureId: string) => {
+  const handlePremiumFeature = (e: React.MouseEvent, featureId: WidgetId) => {
     if (!hasFeatureAccess(featureId)) {
       e.preventDefault();
       toast({

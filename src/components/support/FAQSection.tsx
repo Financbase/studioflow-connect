@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, Info, ChevronDown, Tag as TagIcon, Music, Mic, Sliders, Waveform } from "lucide-react";
+import { Search, Info, ChevronDown, Tag as TagIcon, Music, Mic, Sliders, Activity } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -69,7 +69,7 @@ const FAQSection = ({ searchQuery, setSearchQuery, faqType = 'general' }: FAQSec
       case 'mixing':
         return <Sliders className="h-3 w-3" />;
       case 'mastering':
-        return <Waveform className="h-3 w-3" />;
+        return <Activity className="h-3 w-3" />; // Changed from Waveform to Activity
       case 'recording':
         return <Mic className="h-3 w-3" />;
       case 'composition':

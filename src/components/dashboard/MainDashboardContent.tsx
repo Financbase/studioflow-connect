@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { WidgetId } from "@/contexts/dashboard/types";
 
 const MainDashboardContent = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -24,7 +25,7 @@ const MainDashboardContent = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleNavigate = (path: string, featureId?: string) => {
+  const handleNavigate = (path: string, featureId?: WidgetId) => {
     if (featureId && !hasFeatureAccess(featureId)) {
       toast({
         title: "Premium Feature",
@@ -40,8 +41,8 @@ const MainDashboardContent = () => {
     <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Activity and Charts Section */}
       <div className="lg:col-span-2 space-y-6">
-        <AnalyticsCard onViewMore={() => handleNavigate('/connect')} />
-        <RecentActivityCard onViewActivity={() => handleNavigate('/projects')} />
+        <AnalyticsCard />
+        <RecentActivityCard />
         
         {/* Knowledge Base Section */}
         <div className="bg-card border rounded-lg p-4 shadow-sm">
