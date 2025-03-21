@@ -1,32 +1,54 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lightbulb, ThumbsUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search, X } from "lucide-react";
 
 interface RecommendationHeaderProps {
-  pricingTier: string;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
-const RecommendationHeader: React.FC<RecommendationHeaderProps> = ({ pricingTier }) => {
+export const RecommendationHeader: React.FC<RecommendationHeaderProps> = ({
+  searchQuery,
+  setSearchQuery
+}) => {
   return (
-    <Card className="border-blue-500/30 bg-blue-500/5">
-      <CardHeader className="pb-2">
-        <div className="flex items-center gap-2">
-          <Lightbulb className="h-5 w-5 text-blue-500" />
-          <CardTitle>Tailored for You</CardTitle>
+    <div className="space-y-4">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Recommendations</h1>
+          <p className="text-muted-foreground">
+            Discover features and tools to enhance your workflow
+          </p>
         </div>
-        <CardDescription>
-          Based on your {pricingTier} subscription and usage patterns
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-2 text-sm">
-          <ThumbsUp className="h-4 w-4 text-blue-500" />
-          <span>We've analyzed your workflow and found these recommendations just for you.</span>
+        <div className="relative flex w-full md:w-[300px]">
+          <Input
+            placeholder="Search recommendations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pr-10"
+          />
+          {searchQuery ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-0 top-0 h-full"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-0 top-0 h-full pointer-events-none"
+            >
+              <Search className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
-
-export default RecommendationHeader;

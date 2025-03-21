@@ -1,82 +1,72 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, BookOpen, FileCode } from "lucide-react";
-import { Recommendation } from "@/types/recommendation";
-import RecommendationSection from "./RecommendationSection";
-import FeatureRecommendation from "@/components/FeatureRecommendation";
+import { RecommendationHeader } from "./RecommendationHeader";
+import { RecommendationList } from "./RecommendationList";
+import { recommendations } from "@/data/recommendations";
 
 interface RecommendationsContentProps {
-  workflowRecommendations: Recommendation[];
-  learningRecommendations: Recommendation[];
-  aiRecommendations: Recommendation[];
-  filterRecommendations: (recommendations: Recommendation[]) => Recommendation[];
   pricingTier: string;
+  embedded?: boolean;
 }
 
-const RecommendationsContent: React.FC<RecommendationsContentProps> = ({
-  workflowRecommendations,
-  learningRecommendations,
-  aiRecommendations,
-  filterRecommendations,
-  pricingTier
+export const RecommendationsContent: React.FC<RecommendationsContentProps> = ({
+  pricingTier = "free",
+  embedded = false
 }) => {
+  const [activeCategory, setActiveCategory] = useState("system");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+  };
+
+  // Filter recommendations based on search query
+  const filteredRecommendations = searchQuery
+    ? Object.entries(recommendations).reduce((acc, [key, items]) => {
+        const filtered = items.filter(
+          item =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        if (filtered.length > 0) {
+          acc[key] = filtered;
+        }
+        return acc;
+      }, {} as Record<string, any[]>)
+    : recommendations;
+
   return (
-    <Tabs defaultValue="all">
-      <TabsList className="mb-4">
-        <TabsTrigger value="all">All Recommendations</TabsTrigger>
-        <TabsTrigger value="workflow">Workflow</TabsTrigger>
-        <TabsTrigger value="learning">Learning</TabsTrigger>
-        <TabsTrigger value="ai">AI Tools</TabsTrigger>
-      </TabsList>
-      
-      <TabsContent value="all">
-        <div className="space-y-6">
-          <RecommendationSection 
-            title="Workflow Improvements"
-            icon={<Settings className="h-5 w-5 text-primary" />}
-            recommendations={filterRecommendations(workflowRecommendations)}
-            pricingTier={pricingTier}
-          />
-          
-          <RecommendationSection 
-            title="Learning Resources"
-            icon={<BookOpen className="h-5 w-5 text-primary" />}
-            recommendations={filterRecommendations(learningRecommendations)}
-            pricingTier={pricingTier}
-          />
-          
-          <RecommendationSection 
-            title="AI-Powered Features"
-            icon={<FileCode className="h-5 w-5 text-primary" />}
-            recommendations={filterRecommendations(aiRecommendations)}
-            pricingTier={pricingTier}
-          />
-        </div>
-      </TabsContent>
-      
-      <TabsContent value="workflow">
-        <FeatureRecommendation 
-          recommendations={filterRecommendations(workflowRecommendations)} 
-          category="Workflow" 
-        />
-      </TabsContent>
-      
-      <TabsContent value="learning">
-        <FeatureRecommendation 
-          recommendations={filterRecommendations(learningRecommendations)} 
-          category="Learning" 
-        />
-      </TabsContent>
-      
-      <TabsContent value="ai">
-        <FeatureRecommendation 
-          recommendations={filterRecommendations(aiRecommendations)} 
-          category="AI Tools" 
-        />
-      </TabsContent>
-    </Tabs>
+    <div className={embedded ? "" : "container mx-auto px-4 py-8"}>
+      <RecommendationHeader 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery} 
+      />
+
+      <Tabs
+        defaultValue="system"
+        value={activeCategory}
+        onValueChange={handleCategoryChange}
+        className="mt-8"
+      >
+        <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-2">
+          <TabsTrigger value="system" className="px-3 py-2">System</TabsTrigger>
+          <TabsTrigger value="vm" className="px-3 py-2">VM</TabsTrigger>
+          <TabsTrigger value="daw" className="px-3 py-2">DAW</TabsTrigger>
+          <TabsTrigger value="audio" className="px-3 py-2">Audio</TabsTrigger>
+          <TabsTrigger value="ai" className="px-3 py-2">AI</TabsTrigger>
+          <TabsTrigger value="marketplace" className="px-3 py-2">Marketplace</TabsTrigger>
+        </TabsList>
+
+        {Object.entries(filteredRecommendations).map(([category, items]) => (
+          <TabsContent key={category} value={category} className="mt-6 animate-in slide-in-from-bottom-1">
+            <RecommendationList 
+              recommendations={items} 
+              pricingTier={pricingTier} 
+            />
+          </TabsContent>
+        ))}
+      </Tabs>
+    </div>
   );
 };
-
-export default RecommendationsContent;

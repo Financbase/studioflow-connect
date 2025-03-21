@@ -6,7 +6,7 @@ import SidebarItem from "./SidebarItem";
 import { 
   LayoutDashboard, PlugZap, Headphones, 
   Settings, Package, MessageSquare, HelpCircle,
-  CreditCard, Lightbulb, Home, Component
+  CreditCard, Lightbulb, Home, Component, Sparkles
 } from "lucide-react";
 
 interface SidebarNavProps {
@@ -63,7 +63,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     {
       title: "Recommendations",
       href: "/recommendations",
-      icon: <MessageSquare className="w-5 h-5" />,
+      icon: <Sparkles className="w-5 h-5" />,
     },
     {
       title: "Contribution",

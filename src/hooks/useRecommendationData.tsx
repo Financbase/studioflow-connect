@@ -1,114 +1,78 @@
 
-import { useState } from "react";
-import { 
-  Music, 
-  Settings, 
-  BookOpen, 
-  FileCode, 
-  Headphones, 
-  Zap 
-} from "lucide-react";
-import { Recommendation } from "@/types/recommendation";
+import { useMemo } from 'react';
+import { recommendations } from '@/data/recommendations';
+import { Recommendation } from '@/types/recommendation';
 
-export const useRecommendationData = () => {
-  // Sample recommendation data
-  const workflowRecommendations: Recommendation[] = [
-    {
-      id: "rec1",
-      title: "Try the Template System",
-      description: "Speed up your workflow by using our pre-made project templates",
-      category: "workflow",
-      requiredTier: "free",
-      icon: Music,
-      actionLabel: "Explore Templates",
-      actionUrl: "/templates"
-    },
-    {
-      id: "rec2",
-      title: "Set Up Key Commands",
-      description: "Customize your keyboard shortcuts for faster editing",
-      category: "workflow",
-      requiredTier: "free",
-      icon: Settings,
-      actionLabel: "Setup Shortcuts",
-      actionUrl: "/settings/shortcuts"
-    },
-    {
-      id: "rec3",
-      title: "Try AI Mastering",
-      description: "Let our AI handle the final touches on your track",
-      category: "workflow",
-      requiredTier: "pro",
-      icon: Zap,
-      actionLabel: "Try AI Mastering",
-      actionUrl: "/ai/mastering"
-    }
-  ];
+interface UseRecommendationDataProps {
+  category?: string;
+  id?: string;
+  pricingTier?: string;
+  limit?: number;
+  filterByTier?: boolean;
+}
+
+export const useRecommendationData = ({
+  category,
+  id,
+  pricingTier = 'free',
+  limit,
+  filterByTier = false
+}: UseRecommendationDataProps = {}) => {
   
-  const learningRecommendations: Recommendation[] = [
-    {
-      id: "rec4",
-      title: "Mixing Basics Course",
-      description: "Learn the fundamentals of audio mixing in our free course",
-      category: "learning",
-      requiredTier: "free",
-      icon: BookOpen,
-      actionLabel: "Start Learning",
-      actionUrl: "/learn/mixing-basics"
-    },
-    {
-      id: "rec5",
-      title: "Advanced Production Techniques",
-      description: "Take your productions to the next level with advanced techniques",
-      category: "learning",
-      requiredTier: "standard",
-      icon: Headphones,
-      actionLabel: "Start Course",
-      actionUrl: "/learn/advanced-production"
-    }
-  ];
+  const tierLevel = useMemo(() => ({
+    'free': 0,
+    'standard': 1,
+    'pro': 2
+  }), []);
   
-  const aiRecommendations: Recommendation[] = [
-    {
-      id: "rec6",
-      title: "AI Stem Separation",
-      description: "Extract vocals, drums, bass and more from any track",
-      category: "ai",
-      requiredTier: "pro",
-      icon: FileCode,
-      actionLabel: "Try Stem Separation",
-      actionUrl: "/ai/stem-separation"
-    },
-    {
-      id: "rec7",
-      title: "AI Vocal Enhancement",
-      description: "Clean up and enhance your vocal recordings",
-      category: "ai",
-      requiredTier: "pro",
-      icon: Zap,
-      actionLabel: "Enhance Vocals",
-      actionUrl: "/ai/vocal-enhancement"
+  const userTierLevel = useMemo(() => 
+    tierLevel[pricingTier as keyof typeof tierLevel] || 0, 
+  [pricingTier, tierLevel]);
+  
+  // Get all recommendations or filter by category
+  const categoryRecommendations = useMemo(() => {
+    if (category && recommendations[category]) {
+      return recommendations[category];
     }
-  ];
-
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filterRecommendations = (recommendations: Recommendation[]) => {
-    if (!searchQuery) return recommendations;
+    return Object.values(recommendations).flat();
+  }, [category]);
+  
+  // Filter by tier if needed
+  const availableRecommendations = useMemo(() => {
+    if (!filterByTier) return categoryRecommendations;
     
-    return recommendations.filter(rec => 
-      rec.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      rec.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      rec.category.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  };
-
+    return categoryRecommendations.filter(rec => {
+      const recTierLevel = tierLevel[rec.requiredTier as keyof typeof tierLevel] || 0;
+      return recTierLevel <= userTierLevel;
+    });
+  }, [categoryRecommendations, filterByTier, tierLevel, userTierLevel]);
+  
+  // Apply limit if provided
+  const limitedRecommendations = useMemo(() => {
+    if (limit && limit > 0) {
+      return availableRecommendations.slice(0, limit);
+    }
+    return availableRecommendations;
+  }, [availableRecommendations, limit]);
+  
+  // Get specific recommendation by ID
+  const recommendation = useMemo(() => {
+    if (!id) return null;
+    return categoryRecommendations.find(rec => rec.id === id) || null;
+  }, [id, categoryRecommendations]);
+  
+  // Check if a recommendation is available for the user's tier
+  const isRecommendationAvailable = useMemo(() => {
+    if (!recommendation) return false;
+    const recTierLevel = tierLevel[recommendation.requiredTier as keyof typeof tierLevel] || 0;
+    return recTierLevel <= userTierLevel;
+  }, [recommendation, tierLevel, userTierLevel]);
+  
   return {
-    workflowRecommendations,
-    learningRecommendations,
-    aiRecommendations,
-    searchQuery,
-    setSearchQuery,
-    filterRecommendations
+    recommendations: limitedRecommendations,
+    recommendation,
+    isAvailable: isRecommendationAvailable,
+    categories: Object.keys(recommendations),
+    allRecommendations: recommendations
   };
 };

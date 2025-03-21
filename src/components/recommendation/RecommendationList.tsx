@@ -1,33 +1,34 @@
 
 import React from "react";
-import RecommendationCard from "./RecommendationCard";
 import { Recommendation } from "@/types/recommendation";
+import { RecommendationCard } from "./RecommendationCard";
 
 interface RecommendationListProps {
   recommendations: Recommendation[];
-  isLocked: boolean;
-  title?: string;
+  pricingTier: string;
 }
 
-const RecommendationList: React.FC<RecommendationListProps> = ({
+export const RecommendationList: React.FC<RecommendationListProps> = ({
   recommendations,
-  isLocked,
-  title
+  pricingTier
 }) => {
-  if (recommendations.length === 0) return null;
-  
+  if (!recommendations || recommendations.length === 0) {
+    return (
+      <div className="text-center p-8">
+        <p className="text-muted-foreground">No recommendations found</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-2">
-      {title && <p className="text-xs text-muted-foreground">{title}</p>}
-      {recommendations.map((rec) => (
-        <RecommendationCard 
-          key={rec.id} 
-          recommendation={rec} 
-          isLocked={isLocked} 
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      {recommendations.map((recommendation) => (
+        <RecommendationCard
+          key={recommendation.id}
+          recommendation={recommendation}
+          pricingTier={pricingTier}
         />
       ))}
     </div>
   );
 };
-
-export default RecommendationList;

@@ -1,81 +1,71 @@
 
-import { useMemo } from 'react';
-import { recommendations } from '@/data/featureRecommendations';
-import { Recommendation } from '@/types/recommendation';
-import { PricingTier } from '@/contexts/DashboardContext';
+import { useState, useEffect } from 'react';
+import { recommendations } from '@/data/recommendations';
+import { useDashboard } from '@/contexts/dashboard/useDashboard';
 
-type FilterOptions = {
-  category?: string;
-  tier?: PricingTier;
-  searchQuery?: string;
-};
-
-export const useFeatureRecommendations = () => {
-  const getAllRecommendations = (): Recommendation[] => {
-    return Object.values(recommendations).flat();
-  };
-
-  const getRecommendationsByCategory = (category: string): Recommendation[] => {
-    return recommendations[category] || [];
-  };
-
-  const filterRecommendations = (options: FilterOptions = {}): Recommendation[] => {
-    const { category, tier, searchQuery } = options;
-    
-    // Start with all recommendations or filter by category
-    let filteredRecommendations = category 
-      ? getRecommendationsByCategory(category)
-      : getAllRecommendations();
-    
-    // Filter by tier if specified
-    if (tier) {
-      const tierLevels: PricingTier[] = ['free', 'standard', 'pro', 'enterprise'];
-      const tierIndex = tierLevels.indexOf(tier);
-      
-      filteredRecommendations = filteredRecommendations.filter(rec => {
-        const recTierIndex = tierLevels.indexOf(rec.requiredTier as PricingTier);
-        // Include recommendations that are available at the user's tier or below
-        return recTierIndex <= tierIndex;
-      });
-    }
-    
-    // Filter by search query if specified
-    if (searchQuery && searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase().trim();
-      filteredRecommendations = filteredRecommendations.filter(rec => 
-        rec.title.toLowerCase().includes(query) || 
-        rec.description.toLowerCase().includes(query) ||
-        rec.category.toLowerCase().includes(query)
-      );
-    }
-    
-    return filteredRecommendations;
-  };
+export const useFeatureRecommendations = (category?: string, limit: number = 3) => {
+  const { pricingTier = 'free' } = useDashboard();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  // Pre-filter some common recommendation sets
-  const getAvailableRecommendations = (tier: PricingTier): Recommendation[] => {
-    return filterRecommendations({ tier });
-  };
+  const [recommendedFeatures, setRecommendedFeatures] = useState<any[]>([]);
   
-  const getUpgradeRecommendations = (currentTier: PricingTier): Recommendation[] => {
-    const tierLevels: PricingTier[] = ['free', 'standard', 'pro', 'enterprise'];
-    const currentTierIndex = tierLevels.indexOf(currentTier);
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      setLoading(true);
+      try {
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Get recommendations for the requested category or all categories
+        let features;
+        if (category && recommendations[category]) {
+          features = recommendations[category];
+        } else {
+          // Get a mix of recommendations from all categories
+          features = Object.values(recommendations)
+            .flat()
+            .sort(() => 0.5 - Math.random()); // Shuffle them
+        }
+        
+        // Apply tier filtering - in a real app, this would be done server-side
+        const tierLevel = {
+          'free': 0,
+          'standard': 1,
+          'pro': 2
+        };
+        
+        const userTierLevel = tierLevel[pricingTier as keyof typeof tierLevel] || 0;
+        
+        const filtered = features.filter(feature => {
+          const featureTierLevel = tierLevel[feature.requiredTier as keyof typeof tierLevel] || 0;
+          // Return all features, but mark some as unavailable
+          return true;
+        }).slice(0, limit).map(feature => {
+          const featureTierLevel = tierLevel[feature.requiredTier as keyof typeof tierLevel] || 0;
+          return {
+            ...feature,
+            isAvailable: featureTierLevel <= userTierLevel
+          };
+        });
+        
+        setRecommendedFeatures(filtered);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching recommendations:', err);
+        setError('Failed to load recommendations');
+        setRecommendedFeatures([]);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // Don't show upgrade recommendations for enterprise tier
-    if (currentTier === 'enterprise') return [];
-    
-    return getAllRecommendations().filter(rec => {
-      const recTierIndex = tierLevels.indexOf(rec.requiredTier as PricingTier);
-      // Only include recommendations that require a higher tier
-      return recTierIndex > currentTierIndex;
-    });
-  };
-
-  return {
-    getAllRecommendations,
-    getRecommendationsByCategory,
-    filterRecommendations,
-    getAvailableRecommendations,
-    getUpgradeRecommendations
+    fetchRecommendations();
+  }, [category, pricingTier, limit]);
+  
+  return { 
+    recommendations: recommendedFeatures, 
+    loading, 
+    error 
   };
 };
