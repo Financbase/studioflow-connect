@@ -17,6 +17,7 @@ interface ColorPaletteContextType {
   applyColorPalette: (paletteId: string) => void;
   deleteColorPalette: (paletteId: string) => void;
   currentPaletteId: string | null;
+  getCurrentPaletteColors: () => Record<string, string>; // Add the missing method
 }
 
 interface ColorPaletteProviderProps {
@@ -123,13 +124,22 @@ export const ColorPaletteProvider: React.FC<ColorPaletteProviderProps> = ({
     });
   };
   
+  // Get the colors for the current palette
+  const getCurrentPaletteColors = (): Record<string, string> => {
+    if (!currentPaletteId) return {};
+    
+    const currentPalette = colorPalettes.find(p => p.id === currentPaletteId);
+    return currentPalette?.colors || {};
+  };
+  
   return (
     <ColorPaletteContext.Provider value={{
       colorPalettes,
       saveCurrentColorPalette,
       applyColorPalette,
       deleteColorPalette,
-      currentPaletteId
+      currentPaletteId,
+      getCurrentPaletteColors
     }}>
       {children}
     </ColorPaletteContext.Provider>
