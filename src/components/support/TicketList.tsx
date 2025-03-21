@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TicketProvider } from "./ticket/TicketContext";
@@ -7,18 +6,7 @@ import TicketItem from "./ticket/TicketItem";
 import EmptyTicketState from "./ticket/EmptyTicketState";
 import { useTicketFilters } from "./ticket/useTicketFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-interface Ticket {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  status: "open" | "in_progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "critical";
-  created_at: string;
-  updated_at: string;
-  response?: string;
-}
+import { Ticket } from "./ticket/types";
 
 interface TicketListProps {
   tickets: Ticket[];

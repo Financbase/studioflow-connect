@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,26 +5,17 @@ import { Clock, MessageSquare, Eye } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import TicketDetailsDialog from "./TicketDetailsDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Ticket } from "./types";
 
 interface TicketItemProps {
-  ticket: {
-    id: string;
-    user_id: string;
-    title: string;
-    description: string;
-    status: "open" | "in_progress" | "resolved" | "closed";
-    priority: "low" | "medium" | "high" | "critical";
-    created_at: string;
-    updated_at: string;
-    response?: string;
-  };
-  setSelectedTicket: (ticket: TicketItemProps["ticket"]) => void;
+  ticket: Ticket;
+  setSelectedTicket: (ticket: Ticket) => void;
 }
 
 const TicketItem: React.FC<TicketItemProps> = ({ ticket, setSelectedTicket }) => {
   const isMobile = useIsMobile();
   
-  const getStatusBadge = (status: TicketItemProps["ticket"]["status"]) => {
+  const getStatusBadge = (status: Ticket["status"]) => {
     switch (status) {
       case "open":
         return <Badge variant="destructive">Open</Badge>;
@@ -40,7 +30,7 @@ const TicketItem: React.FC<TicketItemProps> = ({ ticket, setSelectedTicket }) =>
     }
   };
   
-  const getPriorityBadge = (priority: TicketItemProps["ticket"]["priority"]) => {
+  const getPriorityBadge = (priority: Ticket["priority"]) => {
     switch (priority) {
       case "critical":
         return <Badge variant="destructive">Critical</Badge>;
