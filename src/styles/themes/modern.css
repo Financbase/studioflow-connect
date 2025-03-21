@@ -1,46 +1,46 @@
 
-/* StudioFlow Modern Theme - Default */
+/* Apple-Inspired Grayscale Theme - Modern */
 .theme-modern {
   --radius: 0.75rem;
-  /* StudioFlow Connect custom colors - Updated with harmonious palette */
-  --accent-primary: 130 110 250; /* #826AFA - More vibrant primary purple */
-  --accent-cta: 88 193 201; /* #58C1C9 - Teal accent color */
-  --highlight: 255 184 108; /* #FFB86C - Warm orange highlight */
-  --success: 80 200 120; /* #50C878 - Emerald green */
-  --warning: 255 184 108; /* #FFB86C - Warm orange */
-  --error: 255 85 85; /* #FF5555 - Soft red */
+  /* Apple-inspired custom colors */
+  --accent-primary: 0 0 0; /* Pure black */
+  --accent-cta: 50 50 50; /* Dark gray */
+  --highlight: 180 180 180; /* Light gray */
+  --success: 40 175 110; /* Apple green */
+  --warning: 255 204 0; /* Apple yellow */
+  --error: 255 59 48; /* Apple red */
 }
 
-/* Dark mode specific styles for StudioFlow Modern Theme */
+/* Dark mode specific styles for Apple-Inspired Grayscale Theme */
 .dark.theme-modern {
-  --background: 20 20 35; /* #141423 - Deeper, richer background */
-  --card: 25 25 40; /* #19192B - Deeper card background */
-  --foreground: 245 245 255; /* #F5F5FF - Crisp white text */
-  --muted-foreground: 190 190 210; /* #BEBED2 - Softer muted text */
-  --primary: 130 110 250; /* #826AFA - Vibrant purple */
-  --primary-foreground: 20 20 35; /* #141423 - Dark text on primary */
-  --secondary: 35 35 55; /* #232337 - Lighter accent background */
-  --border: 40 40 60; /* #28283C - More visible borders */
-  --ring: 130 110 250; /* #826AFA - Primary color ring */
-  --accent: 88 193 201; /* #58C1C9 - Teal accent */
+  --background: 20 20 20; /* #141414 - Deep black */
+  --card: 30 30 30; /* #1E1E1E - Dark gray background */
+  --foreground: 240 240 240; /* #F0F0F0 - Off-white text */
+  --muted-foreground: 180 180 180; /* #B4B4B4 - Medium gray text */
+  --primary: 0 0 0; /* #000000 - Pure black */
+  --primary-foreground: 255 255 255; /* #FFFFFF - Pure white on primary */
+  --secondary: 40 40 40; /* #282828 - Lighter gray background */
+  --border: 50 50 50; /* #323232 - Border color */
+  --ring: 0 0 0; /* #000000 - Black ring */
+  --accent: 80 80 80; /* #505050 - Gray accent */
   
-  --zen-background: 15 15 30; /* #0F0F1E - Deeper zen mode */
-  --zen-background-alt: 30 30 50; /* #1E1E32 - Zen mode accent */
-  --zen-focus: 40 40 60; /* #28283C - Zen mode focus area */
+  --zen-background: 15 15 15; /* #0F0F0F - Deeper zen mode */
+  --zen-background-alt: 25 25 25; /* #191919 - Zen mode accent */
+  --zen-focus: 35 35 35; /* #232323 - Zen mode focus area */
   
-  --sidebar-background: 15 15 30; /* #0F0F1E - Matching sidebar */
-  --sidebar-highlight: 35 35 55; /* #232337 - Subtle sidebar highlight */
+  --sidebar-background: 20 20 20; /* #141414 - Matching sidebar */
+  --sidebar-highlight: 40 40 40; /* #282828 - Subtle sidebar highlight */
 }
 
-/* Light mode specific styles for StudioFlow Modern Theme */
+/* Light mode specific styles for Apple-Inspired Grayscale Theme */
 :not(.dark).theme-modern {
-  --background: 248 248 255; /* #F8F8FF - Light but not harsh white */
-  --card: 255 255 255; /* #FFFFFF */
-  --foreground: 35 35 55; /* #232337 - Darker text for better contrast */
-  --muted-foreground: 90 90 120; /* #5A5A78 - More readable muted text */
-  --border: 220 220 240; /* #DCDCF0 - Subtle border */
-  --primary: 130 110 250; /* #826AFA - Matching primary */
-  --secondary: 240 240 255; /* #F0F0FF - Very light purple secondary */
-  --muted: 235 235 250; /* #EBEBFA */
-  --accent: 88 193 201; /* #58C1C9 - Matching accent */
+  --background: 248 248 248; /* #F8F8F8 - Off-white background */
+  --card: 255 255 255; /* #FFFFFF - Pure white */
+  --foreground: 30 30 30; /* #1E1E1E - Almost black text */
+  --muted-foreground: 120 120 120; /* #787878 - Medium gray text */
+  --border: 220 220 220; /* #DCDCDC - Light border */
+  --primary: 0 0 0; /* #000000 - Pure black */
+  --secondary: 240 240 240; /* #F0F0F0 - Very light gray */
+  --muted: 240 240 240; /* #F0F0F0 - Very light gray */
+  --accent: 180 180 180; /* #B4B4B4 - Medium gray */
 }

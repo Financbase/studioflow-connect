@@ -1,5 +1,5 @@
 
-/* Legacy Theme */
+/* Legacy Theme with Apple-inspired Grayscale */
 .theme-legacy {
   --radius: 0.25rem;
 }
@@ -20,22 +20,22 @@
 
 /* Light mode specific styles for Legacy theme */
 :not(.dark).theme-legacy {
-  --background: 220 20% 97%;
-  --card: 220 20% 99%;
-  --border: 220 13% 80%;
-  --primary: 230 100% 60%;
-  --secondary: 220 13% 90%;
-  --muted: 220 13% 90%;
-  --accent: 230 100% 50%;
+  --background: 245 245 245; /* #F5F5F5 */
+  --card: 255 255 255; /* #FFFFFF */
+  --border: 220 220 220; /* #DCDCDC */
+  --primary: 50 50 50; /* #323232 */
+  --secondary: 235 235 235; /* #EBEBEB */
+  --muted: 235 235 235; /* #EBEBEB */
+  --accent: 180 180 180; /* #B4B4B4 */
 }
 
 /* Dark mode specific styles for Legacy theme */
 .dark.theme-legacy {
-  --background: 220 13% 18%;
-  --card: 220 13% 23%;
-  --border: 220 13% 28%;
-  --primary: 230 100% 67%;
-  --secondary: 220 13% 28%;
-  --muted: 220 13% 28%;
-  --accent: 230 100% 67%;
+  --background: 30 30 30; /* #1E1E1E */
+  --card: 40 40 40; /* #282828 */
+  --border: 60 60 60; /* #3C3C3C */
+  --primary: 220 220 220; /* #DCDCDC */
+  --secondary: 50 50 50; /* #323232 */
+  --muted: 50 50 50; /* #323232 */
+  --accent: 80 80 80; /* #505050 */
 }

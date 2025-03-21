@@ -41,11 +41,11 @@ const MetricsCard: React.FC<MetricsCardProps> = ({
 
   const getBorderClass = () => {
     const colorMap: Record<string, string> = {
-      "green-500": "border-l-emerald-500",
-      "orange-500": "border-l-amber-500",
-      "destructive": "border-l-rose-500",
-      "success": "border-l-emerald-500",
-      "warning": "border-l-amber-500",
+      "green-500": "border-l-[#28AF6E]",
+      "orange-500": "border-l-[#FFCC00]",
+      "destructive": "border-l-[#FF3B30]",
+      "success": "border-l-[#28AF6E]",
+      "warning": "border-l-[#FFCC00]",
       "primary": "border-l-primary",
       "accent": "border-l-accent"
     };
@@ -55,11 +55,11 @@ const MetricsCard: React.FC<MetricsCardProps> = ({
 
   const getIconClass = () => {
     const colorMap: Record<string, string> = {
-      "green-500": "text-emerald-500",
-      "orange-500": "text-amber-500",
-      "destructive": "text-rose-500",
-      "success": "text-emerald-500",
-      "warning": "text-amber-500",
+      "green-500": "text-[#28AF6E]",
+      "orange-500": "text-[#FFCC00]",
+      "destructive": "text-[#FF3B30]",
+      "success": "text-[#28AF6E]",
+      "warning": "text-[#FFCC00]",
       "primary": "text-primary",
       "accent": "text-accent"
     };

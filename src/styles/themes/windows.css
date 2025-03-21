@@ -1,5 +1,5 @@
 
-/* Windows Theme */
+/* Windows Theme with Apple-inspired Grayscale */
 .theme-windows {
   --radius: 0;
 }
@@ -27,22 +27,22 @@
 
 /* Light mode specific styles for Windows theme */
 :not(.dark).theme-windows {
-  --background: 210 30% 98%;
-  --card: 0 0% 100%;
-  --border: 210 30% 80%;
-  --primary: 221 83% 53%;
-  --secondary: 210 30% 92%;
-  --muted: 210 30% 92%;
-  --accent: 221 83% 53%;
+  --background: 245 245 245; /* #F5F5F5 */
+  --card: 255 255 255; /* #FFFFFF */
+  --border: 210 210 210; /* #D2D2D2 */
+  --primary: 30 30 30; /* #1E1E1E */
+  --secondary: 235 235 235; /* #EBEBEB */
+  --muted: 235 235 235; /* #EBEBEB */
+  --accent: 120 120 120; /* #787878 */
 }
 
 /* Dark mode specific styles for Windows theme */
 .dark.theme-windows {
-  --background: 220 6% 10%;
-  --card: 230 5% 15%;
-  --border: 225 6% 19%;
-  --primary: 221 83% 53%;
-  --secondary: 225 6% 19%;
-  --muted: 225 6% 19%;
-  --accent: 221 83% 53%;
+  --background: 20 20 20; /* #141414 */
+  --card: 30 30 30; /* #1E1E1E */
+  --border: 45 45 45; /* #2D2D2D */
+  --primary: 230 230 230; /* #E6E6E6 */
+  --secondary: 40 40 40; /* #282828 */
+  --muted: 40 40 40; /* #282828 */
+  --accent: 80 80 80; /* #505050 */
 }
