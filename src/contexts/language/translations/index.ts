@@ -4,6 +4,8 @@ import dashboardTranslations from "./dashboard";
 import footerTranslations from "./footer";
 import widgetTranslations from "./widgets";
 import languageTranslations, { languageNames } from "./languages";
+import knowledgeBaseTranslations from "./knowledge";
+import supportTranslations from "./support";
 
 // Combine all translations
 const translations = {
@@ -12,6 +14,8 @@ const translations = {
   ...footerTranslations,
   ...widgetTranslations,
   ...languageTranslations,
+  ...knowledgeBaseTranslations,
+  ...supportTranslations,
 };
 
 export { languageNames };

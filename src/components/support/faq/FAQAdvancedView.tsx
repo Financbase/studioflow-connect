@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useLanguage } from "@/contexts/language";
 import { FAQAdvancedViewProps } from "./types";
 
 const FAQAdvancedView = ({ 
@@ -11,11 +12,13 @@ const FAQAdvancedView = ({
   setSearchQuery,
   faqType
 }: FAQAdvancedViewProps) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2 pb-2">
       <Card className="shadow-sm">
         <CardHeader className="py-2 px-3">
-          <CardTitle className="text-sm">Recently Searched</CardTitle>
+          <CardTitle className="text-sm">{t("support.recently_searched")}</CardTitle>
         </CardHeader>
         <CardContent className="py-2 px-3">
           {lastSearched.length > 0 ? (
@@ -32,14 +35,14 @@ const FAQAdvancedView = ({
               ))}
             </div>
           ) : (
-            <p className="text-xs text-muted-foreground">No recent searches</p>
+            <p className="text-xs text-muted-foreground">{t("kb.no_results")}</p>
           )}
         </CardContent>
       </Card>
       
       <Card className="shadow-sm">
         <CardHeader className="py-2 px-3">
-          <CardTitle className="text-sm">Recently Viewed</CardTitle>
+          <CardTitle className="text-sm">{t("support.recently_viewed")}</CardTitle>
         </CardHeader>
         <CardContent className="py-2 px-3">
           {viewHistory.length > 0 ? (
@@ -53,14 +56,14 @@ const FAQAdvancedView = ({
               </ul>
             </ScrollArea>
           ) : (
-            <p className="text-xs text-muted-foreground">No articles viewed yet</p>
+            <p className="text-xs text-muted-foreground">{t("kb.no_results")}</p>
           )}
         </CardContent>
       </Card>
       
       <Card className="shadow-sm">
         <CardHeader className="py-2 px-3">
-          <CardTitle className="text-sm">Related Topics</CardTitle>
+          <CardTitle className="text-sm">{t("support.related_topics")}</CardTitle>
         </CardHeader>
         <CardContent className="py-2 px-3">
           <div className="flex flex-wrap gap-1">
