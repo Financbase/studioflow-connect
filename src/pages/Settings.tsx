@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
@@ -16,14 +15,12 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { PricingTier } from "@/contexts/dashboard/types";
-import { useToast } from "@/hooks/use-toast";
-import { Language } from "@/hooks/use-language"; // Make sure to import Language type if needed
+import { toast } from "@/hooks/use-toast";
 
 const Settings = () => {
   const { themeVariant, setThemeVariant } = useTheme();
   const { currentLanguage, setLanguage } = useLanguage();
   const { pricingTier, setPricingTier } = useDashboard();
-  const { toast } = useToast();
   
   const [notificationSettings, setNotificationSettings] = useState({
     emailNotifications: true,
@@ -66,8 +63,7 @@ const Settings = () => {
     setThemeVariant(theme);
   };
   
-  // Update type to match what the language component expects
-  const handleLanguageChange = (language: Language) => {
+  const handleLanguageChange = (language: any) => {
     setLanguage(language);
   };
   
