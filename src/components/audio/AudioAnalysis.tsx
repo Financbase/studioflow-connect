@@ -19,7 +19,6 @@ interface AudioAnalysisProps {
 const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
-  const [isInitialized, setIsInitialized] = useState(false);
   
   const {
     isPlaying,
@@ -36,10 +35,10 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
     toggleMute,
     setVisualizationType,
     audioData,
-    audioContext,
     audioSource,
     initializeAudioContext,
-    cleanupAudioContext
+    cleanupAudioContext,
+    isInitialized
   } = useAudioAnalysis(audioFile, audioRef);
 
   // Get signed URL from Supabase
@@ -81,7 +80,6 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
   useEffect(() => {
     if (isPlaying && !isInitialized && audioRef.current) {
       initializeAudioContext();
-      setIsInitialized(true);
     }
   }, [isPlaying, isInitialized, initializeAudioContext]);
 
@@ -114,10 +112,10 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {visualizationType === "frequency" ? (
+            {visualizationType === "frequency" && audioSource ? (
               <FrequencyVisualizer className="col-span-full" audioSource={audioSource} />
             ) : (
-              <WaveformVisualizer audioData={audioData} className="col-span-full" />
+              audioData && <WaveformVisualizer audioData={audioData} className="col-span-full" />
             )}
           </div>
           
@@ -125,7 +123,12 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
           
           <AudioControls
             isPlaying={isPlaying}
-            onPlay={play}
+            onPlay={() => {
+              if (!isInitialized) {
+                initializeAudioContext();
+              }
+              play();
+            }}
             onPause={pause}
             onStop={stop}
             audioName={audioFile.name}
