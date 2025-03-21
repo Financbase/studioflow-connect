@@ -1,270 +1,161 @@
-
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { useDashboard } from "@/contexts/dashboard/useDashboard";
-import { useAuth } from "@/hooks/use-auth";
-import { 
-  LayoutDashboard, 
-  Music, 
-  AudioLines, 
-  Mic, 
-  Settings, 
-  FileAudio, 
-  HelpCircle, 
-  FolderMusic,
-  Sliders, 
-  User,
-  ListMusic,
-  Sparkles,
-  ExternalLink
-} from "lucide-react";
-import { 
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger
-} from "@/components/ui/sidebar";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { useTheme } from "@/contexts/ThemeContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Separator } from "@/components/ui/separator";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Home, 
+  Settings, 
+  User, 
+  FileMusic, 
+  Headphones, 
+  Library, 
+  Plug, 
+  LifeBuoy, 
+  FileCode
+} from "lucide-react";
 
-interface SidebarLayoutProps {
+interface SidebarProps {
   children: React.ReactNode;
 }
 
-export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
-  const { themeVariant } = useTheme();
-  
+interface SidebarItemProps {
+  label: string;
+  icon: React.ReactNode;
+  link: string;
+}
+
+interface SidebarGroupProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon, link }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = location.pathname === link;
+
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          {children}
-        </div>
-      </div>
-    </SidebarProvider>
+    <Button
+      variant="ghost"
+      className={`w-full justify-start font-normal ${
+        isActive ? "bg-secondary text-foreground hover:bg-secondary" : "hover:bg-secondary/50"
+      }`}
+      onClick={() => navigate(link)}
+    >
+      {icon}
+      <span>{label}</span>
+    </Button>
   );
 };
 
-const AppSidebar = () => {
-  const { pricingTier, hasFeatureAccess } = useDashboard();
-  const { user, profile } = useAuth();
+const SidebarGroup: React.FC<SidebarGroupProps> = ({ title, children }) => (
+  <div className="space-y-1">
+    <h4 className="mb-2 px-3 text-sm font-medium">{title}</h4>
+    {children}
+  </div>
+);
+
+const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { themeVariant } = useTheme();
+  const { hasFeatureAccess } = useDashboard();
+  const { isMobile } = useIsMobile();
+  const navigate = useNavigate();
   const location = useLocation();
-  
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
+
+  useEffect(() => {
+    // Collapse the sidebar on mobile devices
+    if (isMobile) {
+      setIsCollapsed(true);
+    }
+  }, [isMobile]);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
   };
-  
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-  
+
   return (
-    <Sidebar>
-      <SidebarHeader className="p-4 border-b">
-        <div className="flex items-center">
-          <Music className="h-6 w-6 text-primary mr-2" />
-          <span className="font-bold text-lg">StudioFlow</span>
-          <SidebarTrigger className="ml-auto" />
-        </div>
-      </SidebarHeader>
-      
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/")}>
-                  <Link to="/">
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/profile")}>
-                  <Link to="/profile">
-                    <User />
-                    <span>Profile</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/projects")}>
-                  <Link to="/projects">
-                    <FolderMusic />
-                    <span>Projects</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/library")}>
-                  <Link to="/library">
-                    <ListMusic />
-                    <span>Library</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Studio Tools</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/connect")}>
-                  <Link to="/connect">
-                    <ExternalLink />
-                    <span>StudioFlow Connect</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/audio")}
-                  tooltip={!hasFeatureAccess("audio") ? "Upgrade to access" : undefined}
-                >
-                  <Link to={hasFeatureAccess("audio") ? "/audio" : "#"} className={!hasFeatureAccess("audio") ? "opacity-50 pointer-events-none" : ""}>
-                    <AudioLines />
-                    <span>Audio Analysis</span>
-                    {!hasFeatureAccess("audio") && (
-                      <Badge variant="outline" className="ml-auto">Pro</Badge>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/daw")}
-                  tooltip={!hasFeatureAccess("daw") ? "Upgrade to access" : undefined}
-                >
-                  <Link to={hasFeatureAccess("daw") ? "/daw" : "#"} className={!hasFeatureAccess("daw") ? "opacity-50 pointer-events-none" : ""}>
-                    <Sliders />
-                    <span>DAW Integration</span>
-                    {!hasFeatureAccess("daw") && (
-                      <Badge variant="outline" className="ml-auto">Pro</Badge>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/ai")}
-                  tooltip={!hasFeatureAccess("ai") ? "Upgrade to access" : undefined}
-                >
-                  <Link to={hasFeatureAccess("ai") ? "/ai" : "#"} className={!hasFeatureAccess("ai") ? "opacity-50 pointer-events-none" : ""}>
-                    <Sparkles />
-                    <span>AI Tools</span>
-                    {!hasFeatureAccess("ai") && (
-                      <Badge variant="outline" className="ml-auto">Pro</Badge>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/marketplace")}
-                  tooltip={!hasFeatureAccess("marketplace") ? "Upgrade to access" : undefined}
-                >
-                  <Link to={hasFeatureAccess("marketplace") ? "/marketplace" : "#"} className={!hasFeatureAccess("marketplace") ? "opacity-50 pointer-events-none" : ""}>
-                    <FileAudio />
-                    <span>Marketplace</span>
-                    {!hasFeatureAccess("marketplace") && (
-                      <Badge variant="outline" className="ml-auto">Pro</Badge>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/settings")}>
-                  <Link to="/settings">
-                    <Settings />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/support")}>
-                  <Link to="/support">
-                    <HelpCircle />
-                    <span>Support</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/docs")}>
-                  <Link to="/docs">
-                    <HelpCircle />
-                    <span>Documentation</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      
-      <SidebarFooter className="p-4 border-t">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8">
-            {profile?.avatar_url ? (
-              <AvatarImage src={profile.avatar_url} alt={profile.username} />
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <aside
+        className={`flex flex-col space-y-2 bg-secondary border-r border-r-muted/50 transition-all duration-300 ${
+          isCollapsed ? "w-16" : "w-64"
+        } ${themeVariant === "windows" ? "border-r-2" : ""} z-50`}
+      >
+        <div className="flex items-center justify-between py-3 px-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+            <Home className="h-5 w-5" />
+            {!isCollapsed && <span className="ml-2">Home</span>}
+          </Button>
+          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
             ) : (
-              <AvatarFallback>
-                {profile?.username ? getInitials(profile.username) : "U"}
-              </AvatarFallback>
+              <ChevronLeft className="h-4 w-4" />
             )}
-          </Avatar>
-          <div className="flex flex-col truncate">
-            <span className="text-sm font-medium truncate">
-              {profile?.username || "User"}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {pricingTier.charAt(0).toUpperCase() + pricingTier.slice(1)} Plan
-            </span>
-          </div>
+          </Button>
         </div>
-      </SidebarFooter>
-    </Sidebar>
+        
+        <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+
+        <ScrollArea className="flex-1">
+          <div className="flex flex-col space-y-4 py-4">
+            <SidebarGroup title="Studio">
+              <SidebarItem
+                label="Projects"
+                icon={<FileMusic className="h-4 w-4 mr-2" />}
+                link="/projects"
+              />
+              <SidebarItem
+                label="Library"
+                icon={<Library className="h-4 w-4 mr-2" />}
+                link="/library"
+              />
+              <SidebarItem
+                label="Connect"
+                icon={<Plug className="h-4 w-4 mr-2" />}
+                link="/connect"
+              />
+              {hasFeatureAccess('ai') && (
+                <SidebarItem
+                  label="AI Tools"
+                  icon={<FileCode className="h-4 w-4 mr-2" />}
+                  link="/ai"
+                />
+              )}
+            </SidebarGroup>
+
+            <SidebarGroup title="User">
+              <SidebarItem
+                label="Profile"
+                icon={<User className="h-4 w-4 mr-2" />}
+                link="/profile"
+              />
+              <SidebarItem
+                label="Settings"
+                icon={<Settings className="h-4 w-4 mr-2" />}
+                link="/settings"
+              />
+              <SidebarItem
+                label="Support"
+                icon={<LifeBuoy className="h-4 w-4 mr-2" />}
+                link="/support"
+              />
+            </SidebarGroup>
+          </div>
+        </ScrollArea>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-x-hidden">{children}</div>
+    </div>
   );
 };
+
+export { SidebarLayout };

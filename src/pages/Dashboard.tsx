@@ -11,7 +11,7 @@ import StudioMarketplace from "@/components/StudioMarketplace";
 import StudioFlowConnect from "@/components/StudioFlowConnect";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useDashboard, WidgetId } from "@/contexts/dashboard/useDashboard";
+import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DashboardWidget from "@/components/DashboardWidget";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
