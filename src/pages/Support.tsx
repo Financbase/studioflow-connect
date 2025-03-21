@@ -2,14 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import { Separator } from "@/components/ui/separator";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/hooks/use-auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { TicketPlus, MessageSquare, MailOpen, CheckCircle, HelpCircle, SearchCode, AlertTriangle } from "lucide-react";
+import { TicketPlus, MessageSquare, MailOpen, CheckCircle, HelpCircle, AlertTriangle, Music } from "lucide-react";
 
 // Import our custom components
 import ContactCard from "@/components/support/ContactCard";
@@ -45,6 +44,7 @@ const Support = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
+  const [faqType, setFaqType] = useState<'general' | 'musicProduction'>('general');
   
   useEffect(() => {
     // Mock data - in a real app, you would fetch this from your API/database
@@ -156,7 +156,7 @@ const Support = () => {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Support Center</h1>
               <p className="text-muted-foreground">
-                Get help with your StudioFlow issues and track your support requests
+                Get help with your StudioFlow issues and access our knowledge resources
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
@@ -181,7 +181,7 @@ const Support = () => {
             
             <div className="md:col-span-3">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-                <TabsList className="grid grid-cols-1 sm:grid-cols-4 h-auto">
+                <TabsList className="grid grid-cols-1 sm:grid-cols-6 h-auto">
                   <TabsTrigger value="active" className="text-sm h-10">
                     <MailOpen className="mr-2 h-4 w-4" />
                     Active Tickets
@@ -202,7 +202,11 @@ const Support = () => {
                   </TabsTrigger>
                   <TabsTrigger value="faq" className="text-sm h-10">
                     <HelpCircle className="mr-2 h-4 w-4" />
-                    Knowledge Base
+                    General FAQ
+                  </TabsTrigger>
+                  <TabsTrigger value="music-faq" className="text-sm h-10 sm:col-span-2">
+                    <Music className="mr-2 h-4 w-4" />
+                    Music Production Knowledge
                   </TabsTrigger>
                 </TabsList>
                 
@@ -248,7 +252,15 @@ const Support = () => {
 
                 <TabsContent value="faq">
                   <FAQSection 
-                    faqs={faqs} 
+                    faqType="general"
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="music-faq">
+                  <FAQSection 
+                    faqType="musicProduction"
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                   />

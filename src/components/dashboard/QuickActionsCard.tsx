@@ -5,9 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Music, Headphones, Share2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboard } from "@/contexts/DashboardContext";
+import { toast } from "@/hooks/use-toast";
 
 const QuickActionsCard = () => {
   const { hasFeatureAccess } = useDashboard();
+
+  const handlePremiumFeature = (e: React.MouseEvent, featureId: string) => {
+    if (!hasFeatureAccess(featureId)) {
+      e.preventDefault();
+      toast({
+        title: "Premium Feature",
+        description: "Upgrade your plan to access this feature",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Card>
@@ -39,21 +51,16 @@ const QuickActionsCard = () => {
         
         <Button 
           variant="outline" 
-          className={`h-auto py-4 justify-start flex-col items-center ${!hasFeatureAccess('ai') ? 'opacity-50' : ''}`}
-          disabled={!hasFeatureAccess('ai')}
-          asChild={hasFeatureAccess('ai')}
+          className={`h-auto py-4 justify-start flex-col items-center ${!hasFeatureAccess('ai') ? 'opacity-70 hover:opacity-100' : ''}`}
+          asChild
         >
-          {hasFeatureAccess('ai') ? (
-            <Link to="/ai-tools">
-              <Sparkles className="h-5 w-5 mb-1" />
-              <span>AI Tools</span>
-            </Link>
-          ) : (
-            <div>
-              <Sparkles className="h-5 w-5 mb-1" />
-              <span>AI Tools</span>
-            </div>
-          )}
+          <Link 
+            to="/ai-tools" 
+            onClick={(e) => handlePremiumFeature(e, 'ai')}
+          >
+            <Sparkles className="h-5 w-5 mb-1" />
+            <span>AI Tools</span>
+          </Link>
         </Button>
       </CardContent>
     </Card>

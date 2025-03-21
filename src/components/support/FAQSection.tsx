@@ -1,6 +1,6 @@
 
-import React, { useState, useMemo } from "react";
-import { Search, Info, ChevronDown, Tag as TagIcon } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
+import { Search, Info, ChevronDown, Tag as TagIcon, Music, Mic, Sliders, Waveform } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { faqs } from "@/data/faqs";
+import { musicProductionFAQs } from "@/data/musicProductionFAQs";
 
 interface FAQ {
   question: string;
@@ -16,21 +19,29 @@ interface FAQ {
 }
 
 interface FAQSectionProps {
-  faqs: FAQ[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  faqType?: 'general' | 'musicProduction';
 }
 
-const FAQSection = ({ faqs, searchQuery, setSearchQuery }: FAQSectionProps) => {
+const FAQSection = ({ searchQuery, setSearchQuery, faqType = 'general' }: FAQSectionProps) => {
+  const { t, language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [faqData, setFaqData] = useState<FAQ[]>(faqType === 'musicProduction' ? musicProductionFAQs : faqs);
+  
+  // Update FAQ data when faqType changes
+  useEffect(() => {
+    setFaqData(faqType === 'musicProduction' ? musicProductionFAQs : faqs);
+    setActiveCategory("all");
+  }, [faqType]);
   
   const categories = useMemo(() => {
-    const uniqueCategories = Array.from(new Set(faqs.map(faq => faq.category)));
+    const uniqueCategories = Array.from(new Set(faqData.map(faq => faq.category)));
     return ["all", ...uniqueCategories];
-  }, [faqs]);
+  }, [faqData]);
   
   const filteredFaqs = useMemo(() => {
-    return faqs.filter(faq => {
+    return faqData.filter(faq => {
       const matchesSearch = 
         faq.question.toLowerCase().includes(searchQuery.toLowerCase()) || 
         faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
@@ -39,26 +50,46 @@ const FAQSection = ({ faqs, searchQuery, setSearchQuery }: FAQSectionProps) => {
       
       return matchesSearch && matchesCategory;
     });
-  }, [faqs, searchQuery, activeCategory]);
+  }, [faqData, searchQuery, activeCategory]);
 
   const categoryCount = useMemo(() => {
     return categories.map(category => {
       if (category === "all") {
-        return { category, count: faqs.length };
+        return { category, count: faqData.length };
       }
       return { 
         category, 
-        count: faqs.filter(faq => faq.category === category).length 
+        count: faqData.filter(faq => faq.category === category).length 
       };
     });
-  }, [faqs, categories]);
+  }, [faqData, categories]);
+  
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'mixing':
+        return <Sliders className="h-3 w-3" />;
+      case 'mastering':
+        return <Waveform className="h-3 w-3" />;
+      case 'recording':
+        return <Mic className="h-3 w-3" />;
+      case 'composition':
+      case 'technical':
+        return <Music className="h-3 w-3" />;
+      default:
+        return <TagIcon className="h-3 w-3" />;
+    }
+  };
 
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
-          <CardTitle>Knowledge Base</CardTitle>
-          <CardDescription>Frequently asked questions and helpful guides</CardDescription>
+          <CardTitle>{faqType === 'musicProduction' ? 'Music Production Knowledge Base' : 'Knowledge Base'}</CardTitle>
+          <CardDescription>
+            {faqType === 'musicProduction' 
+              ? 'Expert tips and solutions for music producers and engineers' 
+              : 'Frequently asked questions and helpful guides'}
+          </CardDescription>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -66,7 +97,7 @@ const FAQSection = ({ faqs, searchQuery, setSearchQuery }: FAQSectionProps) => {
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input 
             className="pl-9" 
-            placeholder="Search knowledge base..." 
+            placeholder={faqType === 'musicProduction' ? "Search music production topics..." : "Search knowledge base..."} 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -86,7 +117,7 @@ const FAQSection = ({ faqs, searchQuery, setSearchQuery }: FAQSectionProps) => {
                   value={category}
                   className="flex items-center gap-1 capitalize"
                 >
-                  <TagIcon className="h-3 w-3" />
+                  {getCategoryIcon(category)}
                   {category}
                   <Badge variant="outline" className="ml-1 h-5 text-xs">
                     {count}
