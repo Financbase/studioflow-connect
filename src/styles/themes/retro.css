@@ -1,0 +1,102 @@
+
+/* Retro Theme with nostalgic computer vibes */
+.theme-retro {
+  --radius: 0;
+  font-family: "Courier New", monospace;
+}
+
+.theme-retro .card,
+.theme-retro .panel {
+  border-width: 2px;
+  border-style: solid;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.theme-retro button,
+.theme-retro .btn {
+  border-radius: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-width: 2px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.theme-retro button:active,
+.theme-retro .btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.theme-retro h1, 
+.theme-retro h2, 
+.theme-retro h3 {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.theme-retro input,
+.theme-retro select,
+.theme-retro textarea {
+  border-radius: 0;
+  border-width: 2px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Light mode retro theme - amber CRT terminal style */
+:not(.dark).theme-retro {
+  --background: 39 100% 92%; /* #FFF4D9 */
+  --card: 39 80% 95%; /* #FFF9E8 */
+  --border: 36 73% 60%; /* #DBAF64 */
+  --primary: 29 87% 55%; /* #E68F2E */
+  --secondary: 29 40% 88%; /* #EBDAC8 */
+  --muted: 35 25% 90%; /* #EBE5D9 */
+  --accent: 27 90% 58%; /* #F0954F */
+  --foreground: 32 60% 20%; /* #604829 */
+  --muted-foreground: 32 30% 40%; /* #7A6E5B */
+  --sidebar-background: 39 100% 92%; /* #FFF4D9 */
+  --sidebar-highlight: 29 87% 65%; /* #EDC376 */
+}
+
+/* Dark mode retro theme - green phosphor CRT style */
+.dark.theme-retro {
+  --background: 116 20% 15%; /* #213225 */
+  --card: 116 20% 20%; /* #2B412F */
+  --border: 116 30% 30%; /* #365F3D */
+  --primary: 116 70% 50%; /* #42D364 */
+  --secondary: 116 20% 25%; /* #2E4733 */
+  --muted: 116 10% 25%; /* #313D33 */
+  --accent: 116 50% 45%; /* #42A35A */
+  --foreground: 116 80% 80%; /* #B3EFC3 */
+  --muted-foreground: 116 30% 60%; /* #79B987 */
+  --sidebar-background: 116 20% 15%; /* #213225 */
+  --sidebar-highlight: 116 40% 30%; /* #337843 */
+}
+
+/* Special terminal cursor animation */
+.theme-retro .cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Scanline effect (subtle) */
+.theme-retro::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  background-size: 100% 4px;
+  opacity: 0.1;
+}
