@@ -30,3 +30,26 @@
 [role="menuitem"] {
   @apply text-foreground hover:text-accent-foreground;
 }
+
+/* Card gradient utilities */
+.card-gradient-primary {
+  @apply bg-gradient-to-br from-card to-accent/10;
+}
+
+.card-gradient-secondary {
+  @apply bg-gradient-to-br from-card to-secondary/20;
+}
+
+/* Focus ring fixes */
+.focus-ring-fix {
+  @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring;
+}
+
+/* Animation utilities */
+.hover-scale {
+  @apply transition-transform hover:scale-105 duration-200;
+}
+
+.fade-in {
+  @apply animate-fade-in;
+}

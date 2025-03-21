@@ -52,4 +52,58 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+
+  /* Custom UI Animation Keyframes */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-10px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse 2s infinite;
+  }
+}
+
+/* Improved transition for all interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s ease;
+}
+
+/* Zen mode specific styles */
+.zen-mode-active .header,
+.zen-mode-active .sidebar {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.zen-mode-active .header:hover,
+.zen-mode-active .sidebar:hover {
+  opacity: 0.8;
+}
+
+/* Improved card styles */
+.card {
+  @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all duration-200;
+}
+
+.card:hover {
+  @apply shadow-md border-border/80;
 }

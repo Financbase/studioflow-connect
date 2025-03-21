@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Moon, MoonStar, Sparkles } from "lucide-react";
+import { MoonStar, Sparkles } from "lucide-react";
 
 interface ZenModeToggleProps {
   onClick: () => void;
@@ -19,14 +19,15 @@ const ZenModeToggle: React.FC<ZenModeToggleProps> = ({ onClick, isActive = false
             size="icon" 
             onClick={onClick} 
             className={isActive 
-              ? "bg-accent-primary text-background hover:bg-accent-primary/90" 
-              : "text-muted-foreground hover:text-foreground"
+              ? "bg-accent-primary hover:bg-accent-primary/90 text-background" 
+              : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
             }
+            aria-label={isActive ? "Exit Zen Mode" : "Enter Zen Mode"}
           >
             {isActive ? <Sparkles className="h-5 w-5" /> : <MoonStar className="h-5 w-5" />}
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side="bottom">
           <p>{isActive ? "Exit Zen Mode" : "Enter Zen Mode"}</p>
         </TooltipContent>
       </Tooltip>
