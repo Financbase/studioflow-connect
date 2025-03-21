@@ -9,7 +9,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { formatDistanceToNow } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { TrashIcon, HistoryIcon, SaveIcon, RestoreIcon, PlusIcon } from "lucide-react";
+import { TrashIcon, HistoryIcon, SaveIcon, RefreshCcw, PlusIcon } from "lucide-react";
 
 const ThemeVersionControl: React.FC = () => {
   const { themeVariant, theme, saveCurrentTheme, versionManager } = useTheme();
@@ -97,7 +97,7 @@ const ThemeVersionControl: React.FC = () => {
                           onClick={() => versionManager.switchToVersion(version.id)}
                           disabled={version.id === versionManager.currentVersionId}
                         >
-                          <RestoreIcon className="h-3.5 w-3.5" />
+                          <RefreshCcw className="h-3.5 w-3.5" />
                         </Button>
                         
                         <AlertDialog>
