@@ -30,7 +30,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
   resolvedToday, systemMetrics, userSessions, tickets 
 }) => {
   return (
-    <>
+    <div className="space-y-6 animate-fade-in">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricsCard 
           title="Active Users"
@@ -48,7 +48,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
           progressValue={openTickets > 0 ? 100 : 0}
           description={`${criticalTickets} critical issues pending`}
           color="orange-500"
-          progressColorClass="bg-orange-100"
+          progressColorClass="progress-gradient-warning"
         />
         
         <MetricsCard 
@@ -58,7 +58,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
           progressValue={criticalTickets > 0 ? 100 : 0}
           description={criticalTickets > 0 ? "Attention required" : "No critical issues"}
           color="destructive"
-          progressColorClass="bg-red-100"
+          progressColorClass="progress-gradient-error"
         />
         
         <MetricsCard 
@@ -68,29 +68,29 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
           progressValue={resolvedToday > 0 ? (resolvedToday / (resolvedToday + openTickets)) * 100 : 0}
           description={`${(resolvedToday / (resolvedToday + openTickets || 1) * 100).toFixed(0)}% resolution rate`}
           color="green-500"
-          progressColorClass="bg-green-100"
+          progressColorClass="progress-gradient-success"
         />
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="md:col-span-1">
+        <Card className="md:col-span-1 shadow-md hover:shadow-lg transition-all duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">System Status</CardTitle>
+            <CardTitle className="text-lg font-heading">System Status</CardTitle>
           </CardHeader>
           <CardContent>
             <SystemStatus systemMetrics={systemMetrics} />
           </CardContent>
           <CardFooter className="pt-0">
-            <Button variant="outline" size="sm" className="w-full">
-              <RefreshCw className="h-3.5 w-3.5 mr-2" />
+            <Button variant="outline" size="sm" className="w-full group">
+              <RefreshCw className="h-3.5 w-3.5 mr-2 group-hover:rotate-180 transition-transform duration-500" />
               Refresh Metrics
             </Button>
           </CardFooter>
         </Card>
         
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 shadow-md hover:shadow-lg transition-all duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Recent Activity</CardTitle>
+            <CardTitle className="text-lg font-heading">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <RecentActivity tickets={tickets} userSessions={userSessions} />
@@ -99,7 +99,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
       </div>
       
       <RecentOverviewCards tickets={tickets} userSessions={userSessions} />
-    </>
+    </div>
   );
 };
 
