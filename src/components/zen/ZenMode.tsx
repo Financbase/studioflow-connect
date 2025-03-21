@@ -1,8 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Clock, Timer } from "lucide-react";
+import { X, Clock, Timer, Volume2, VolumeX, Settings2 } from "lucide-react";
 import ZenModeSettings from "./ZenModeSettings";
+import ZenModeContent from "./ZenModeContent";
 import { ZenModeOptions } from "@/hooks/use-zen-mode";
 
 interface ZenModeProps {
@@ -26,7 +27,27 @@ const ZenMode: React.FC<ZenModeProps> = ({
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timerActive, setTimerActive] = useState(false);
   const [timerRemaining, setTimerRemaining] = useState(25 * 60); // in seconds
+  const [soundMuted, setSoundMuted] = useState(options.soundscape === 'silence');
   
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (timerActive && timerRemaining > 0) {
+      interval = setInterval(() => {
+        setTimerRemaining(prev => prev - 1);
+      }, 1000);
+    } else if (timerRemaining === 0) {
+      setTimerActive(false);
+      // Could trigger a notification here
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timerActive, timerRemaining]);
+  
+  // Return nothing if not active
   if (!isActive) return null;
   
   const formatTime = (seconds: number) => {
@@ -42,6 +63,17 @@ const ZenMode: React.FC<ZenModeProps> = ({
   
   const handleStopTimer = () => {
     setTimerActive(false);
+  };
+  
+  const toggleSoundMute = () => {
+    setSoundMuted(!soundMuted);
+    if (soundMuted) {
+      // If currently muted, unmute and set to default soundscape
+      onOptionsChange({ soundscape: 'lofi' });
+    } else {
+      // If currently unmuted, mute by setting to silence
+      onOptionsChange({ soundscape: 'silence' });
+    }
   };
   
   const getBackgroundClass = () => {
@@ -85,6 +117,19 @@ const ZenMode: React.FC<ZenModeProps> = ({
           </div>
         )}
         
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSoundMute}
+          className="text-white hover:bg-white/10 rounded-full"
+        >
+          {soundMuted ? (
+            <VolumeX className="h-5 w-5" />
+          ) : (
+            <Volume2 className="h-5 w-5" />
+          )}
+        </Button>
+        
         {onOptionsChange && (
           <ZenModeSettings options={options} onChange={onOptionsChange} />
         )}
@@ -93,7 +138,7 @@ const ZenMode: React.FC<ZenModeProps> = ({
           variant="ghost" 
           size="icon" 
           onClick={onToggle} 
-          className="text-white hover:bg-white/10"
+          className="text-white hover:bg-white/10 rounded-full"
         >
           <X className="h-6 w-6" />
         </Button>
@@ -107,25 +152,8 @@ const ZenMode: React.FC<ZenModeProps> = ({
           </div>
         )}
         
-        <div className="relative rounded-xl bg-background/10 backdrop-blur-sm border border-white/5 shadow-lg overflow-hidden">
-          {/* Your focused content would be rendered here */}
-          <div className="p-6">
-            {/* Content placeholder */}
-            <div className="flex flex-col items-center justify-center min-h-[400px]">
-              <div className="text-center space-y-4">
-                <div className="inline-block p-3 rounded-full bg-accent-primary/20 mb-4">
-                  <svg className="w-12 h-12 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-medium text-white">Your focused workspace</h3>
-                <p className="text-sm text-white/70 max-w-md">
-                  This is your distraction-free environment for deep work and creativity. 
-                  Essential tools remain accessible while the noise fades away.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="relative">
+          <ZenModeContent themeMode={options.theme} />
         </div>
       </div>
     </div>
