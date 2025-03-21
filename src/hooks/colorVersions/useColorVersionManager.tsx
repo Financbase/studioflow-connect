@@ -227,6 +227,8 @@ export function useColorVersionManager() {
     ));
   }, [setVersions]);
 
+  // Note: We already have addTag and removeTag functions that do what addTagToVersion and removeTagFromVersion should do
+  // We'll simply make addTagToVersion and removeTagFromVersion point to these existing functions
   const addTag = useCallback((id: string, tag: string) => {
     setVersions(prev => prev.map(version => 
       version.id === id && !version.tags.includes(tag)
@@ -243,21 +245,9 @@ export function useColorVersionManager() {
     ));
   }, [setVersions]);
 
-  const addTagToVersion = useCallback((id: string, tag: string) => {
-    setVersions(prev => prev.map(version => 
-      version.id === id && !version.tags.includes(tag)
-        ? { ...version, tags: [...version.tags, tag] }
-        : version
-    ));
-  }, [setVersions]);
-
-  const removeTagFromVersion = useCallback((id: string, tag: string) => {
-    setVersions(prev => prev.map(version => 
-      version.id === id
-        ? { ...version, tags: version.tags.filter(t => t !== tag) }
-        : version
-    ));
-  }, [setVersions]);
+  // Create aliases for these functions to match what's being called in ThemeVersionControl.tsx
+  const addTagToVersion = addTag;
+  const removeTagFromVersion = removeTag;
 
   const exportVersionAsString = useCallback((id: string): string | null => {
     const version = versions.find(v => v.id === id);
