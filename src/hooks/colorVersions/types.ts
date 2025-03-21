@@ -1,21 +1,25 @@
 
-export type ThemeMode = 'light' | 'dark';
-export type ThemeVariant = 'modern' | 'legacy' | 'classic' | 'windows' | 'default' | 'retro' | string;
-
-export type ColorVersion = {
+export interface ColorVersion {
   id: string;
-  timestamp: number;
   name: string;
-  themeData: Record<string, string>;
   description?: string;
-  previewColors?: string[]; // Array of hex colors for preview
-  tags?: string[]; // Optional tags for categorization
-  isFavorite?: boolean; // Mark as favorite for quick access
-};
+  themeData: Record<string, string>;
+  timestamp: number;
+  previewColors: string[];
+  tags: string[];
+  isFavorite: boolean;
+  lastUsed?: number; // Timestamp when the version was last used
+}
 
 export interface VersionFilter {
-  search?: string;
+  search: string;
+  tags: string[];
+  onlyFavorites: boolean;
+}
+
+export interface VersionUpdateData {
+  name?: string;
+  description?: string;
   tags?: string[];
-  sortBy?: 'name' | 'date' | 'favorites';
-  sortDirection?: 'asc' | 'desc';
+  isFavorite?: boolean;
 }

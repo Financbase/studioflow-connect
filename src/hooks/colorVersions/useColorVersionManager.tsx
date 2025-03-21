@@ -3,6 +3,7 @@ import { useVersionPersistence } from './useVersionPersistence';
 import { useVersionFiltering } from './useVersionFiltering';
 import { useVersionOperations } from './useVersionOperations';
 import { useVersionImportExport } from './useVersionImportExport';
+import { useVersionSorting, SortOption } from './useVersionSorting';
 
 export function useColorVersionManager() {
   const { 
@@ -15,8 +16,19 @@ export function useColorVersionManager() {
   const { 
     filters, 
     filteredVersions, 
-    updateFilters 
+    updateFilters,
+    addTagFilter,
+    removeTagFilter,
+    toggleFavoritesFilter,
+    resetFilters,
+    allTags 
   } = useVersionFiltering(versions);
+  
+  const {
+    sortOption,
+    setSortOption,
+    sortedVersions
+  } = useVersionSorting(filteredVersions, currentVersionId);
   
   const { 
     saveVersion, 
@@ -24,7 +36,9 @@ export function useColorVersionManager() {
     deleteVersion, 
     updateVersion, 
     toggleFavorite,
-    duplicateVersion
+    duplicateVersion,
+    addTagToVersion,
+    removeTagFromVersion
   } = useVersionOperations(versions, currentVersionId, persistVersions, persistCurrentVersionId);
   
   const { 
@@ -41,9 +55,11 @@ export function useColorVersionManager() {
   return {
     // State
     versions,
-    filteredVersions,
+    filteredVersions: sortedVersions,
     currentVersionId,
     filters,
+    sortOption,
+    allTags,
     
     // Version management
     saveVersion,
@@ -53,9 +69,18 @@ export function useColorVersionManager() {
     toggleFavorite,
     duplicateVersion,
     getCurrentVersion,
+    addTagToVersion,
+    removeTagFromVersion,
     
     // Filtering
     updateFilters,
+    addTagFilter,
+    removeTagFilter,
+    toggleFavoritesFilter,
+    resetFilters,
+    
+    // Sorting
+    setSortOption,
     
     // Import/Export
     exportVersion,

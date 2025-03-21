@@ -1,57 +1,41 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ColorVersion, VersionFilter } from './types';
 
 export function useVersionFiltering(versions: ColorVersion[]) {
   const [filters, setFilters] = useState<VersionFilter>({
-    sortBy: 'date',
-    sortDirection: 'desc'
+    search: '',
+    tags: [],
+    onlyFavorites: false
   });
-  const [filteredVersions, setFilteredVersions] = useState<ColorVersion[]>([]);
   
-  // Apply filters whenever versions or filters change
-  useEffect(() => {
-    let result = [...versions];
-    
-    // Apply search filter
-    if (filters.search) {
-      const search = filters.search.toLowerCase();
-      result = result.filter(v => 
-        v.name.toLowerCase().includes(search) || 
-        (v.description && v.description.toLowerCase().includes(search)) ||
-        (v.tags && v.tags.some(tag => tag.toLowerCase().includes(search)))
-      );
-    }
-    
-    // Apply tag filters
-    if (filters.tags && filters.tags.length > 0) {
-      result = result.filter(v => 
-        v.tags && filters.tags?.some(tag => v.tags?.includes(tag))
-      );
-    }
-    
-    // Apply sorting
-    if (filters.sortBy) {
-      result.sort((a, b) => {
-        let comparison = 0;
-        
-        switch (filters.sortBy) {
-          case 'name':
-            comparison = a.name.localeCompare(b.name);
-            break;
-          case 'date':
-            comparison = a.timestamp - b.timestamp;
-            break;
-          case 'favorites':
-            comparison = (a.isFavorite ? 1 : 0) - (b.isFavorite ? 1 : 0);
-            break;
-        }
-        
-        return filters.sortDirection === 'desc' ? -comparison : comparison;
-      });
-    }
-    
-    setFilteredVersions(result);
+  // Get all unique tags from all versions
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    versions.forEach(version => {
+      version.tags.forEach(tag => tagSet.add(tag));
+    });
+    return Array.from(tagSet).sort();
+  }, [versions]);
+  
+  // Apply filters to versions
+  const filteredVersions = useMemo(() => {
+    return versions.filter(version => {
+      // Filter by search term
+      const matchesSearch = !filters.search || 
+        version.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        (version.description?.toLowerCase() || '').includes(filters.search.toLowerCase()) ||
+        version.tags.some(tag => tag.toLowerCase().includes(filters.search.toLowerCase()));
+      
+      // Filter by selected tags
+      const matchesTags = filters.tags.length === 0 || 
+        filters.tags.every(tag => version.tags.includes(tag));
+      
+      // Filter by favorites
+      const matchesFavorites = !filters.onlyFavorites || version.isFavorite;
+      
+      return matchesSearch && matchesTags && matchesFavorites;
+    });
   }, [versions, filters]);
   
   // Update filters
@@ -59,9 +43,40 @@ export function useVersionFiltering(versions: ColorVersion[]) {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
   
+  // Add a tag to filters
+  const addTagFilter = (tag: string) => {
+    if (!filters.tags.includes(tag)) {
+      updateFilters({ tags: [...filters.tags, tag] });
+    }
+  };
+  
+  // Remove a tag from filters
+  const removeTagFilter = (tag: string) => {
+    updateFilters({ tags: filters.tags.filter(t => t !== tag) });
+  };
+  
+  // Toggle favorites only filter
+  const toggleFavoritesFilter = () => {
+    updateFilters({ onlyFavorites: !filters.onlyFavorites });
+  };
+  
+  // Reset all filters
+  const resetFilters = () => {
+    setFilters({
+      search: '',
+      tags: [],
+      onlyFavorites: false
+    });
+  };
+  
   return {
     filters,
     filteredVersions,
-    updateFilters
+    updateFilters,
+    addTagFilter,
+    removeTagFilter,
+    toggleFavoritesFilter,
+    resetFilters,
+    allTags
   };
 }
