@@ -1,6 +1,7 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { useColorVersionManager } from "@/hooks/colorVersions/useColorVersionManager";
+import { useColorVersionManager } from "@/hooks/useColorVersionManager";
 import { ThemeVariant, ThemeMode } from "@/hooks/colorVersions/types";
 import { ColorPaletteProvider } from "./ColorPaletteContext";
 
@@ -46,7 +47,7 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   }, []);
   
   useEffect(() => {
-    const currentVersion = versionManager.getCurrentVersion();
+    const currentVersion = versionManager.currentVersion;
     if (currentVersion) {
       const variant = currentVersion.themeData['themeVariant'] as ThemeVariant;
       if (variant) {
@@ -142,7 +143,7 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
       isDarkMode: isDarkMode.toString()
     };
     
-    versionManager.saveVersion(name, themeDataRecord, description, tags);
+    versionManager.createVersion(name, themeDataRecord, description, tags);
     
     toast({
       title: "Theme Version Saved",

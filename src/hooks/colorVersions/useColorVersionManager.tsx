@@ -1,8 +1,7 @@
-
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { useVersionFiltering } from './useVersionFiltering';
 import { useVersionSorting } from './useVersionSorting';
 import {
@@ -70,11 +69,10 @@ export function useColorVersionManager() {
   // Store versions in local storage
   const [versions, setVersions] = useLocalStorage<ColorVersion[]>('studioflow-color-versions', defaultVersions);
   const [currentVersionId, setCurrentVersionId] = useLocalStorage<string | null>('studioflow-current-version', 'default-dark');
-  const { toast } = useToast();
-
+  
   // Get the current version based on ID
   const currentVersion = versions.find(version => version.id === currentVersionId) || versions[0];
-
+  
   // Setup filtering and sorting hooks
   const { 
     filterText, 
@@ -92,6 +90,11 @@ export function useColorVersionManager() {
     setSortOption, 
     sortedVersions 
   } = useVersionSorting(filteredVersions, currentVersionId);
+
+  // Get current version (function interface for ThemeContext)
+  const getCurrentVersion = useCallback(() => {
+    return currentVersion;
+  }, [currentVersion]);
 
   // Operations for managing versions
   const createVersion = useCallback((
@@ -119,7 +122,7 @@ export function useColorVersionManager() {
     });
 
     return newVersion;
-  }, [setVersions, toast]);
+  }, [setVersions]);
 
   const updateVersion = useCallback((id: string, data: VersionUpdateData) => {
     setVersions(prev => prev.map(version => 
@@ -130,7 +133,7 @@ export function useColorVersionManager() {
       title: "Version Updated",
       description: `Theme version has been updated.`,
     });
-  }, [setVersions, toast]);
+  }, [setVersions]);
 
   const deleteVersion = useCallback((id: string) => {
     // Don't delete if it's the last version
@@ -157,7 +160,7 @@ export function useColorVersionManager() {
       title: "Version Deleted",
       description: "Theme version has been removed.",
     });
-  }, [versions, currentVersionId, setCurrentVersionId, setVersions, toast]);
+  }, [versions, currentVersionId, setCurrentVersionId, setVersions]);
 
   const duplicateVersion = useCallback((id: string) => {
     const versionToDuplicate = versions.find(version => version.id === id);
@@ -188,7 +191,7 @@ export function useColorVersionManager() {
     });
 
     return newVersion;
-  }, [versions, setVersions, toast]);
+  }, [versions, setVersions]);
 
   const setActiveVersion = useCallback((id: string) => {
     const version = versions.find(v => v.id === id);
@@ -213,7 +216,7 @@ export function useColorVersionManager() {
       title: "Theme Changed",
       description: `Switched to "${version.name}" theme.`,
     });
-  }, [versions, setCurrentVersionId, setVersions, toast]);
+  }, [versions, setCurrentVersionId, setVersions]);
 
   const toggleFavorite = useCallback((id: string) => {
     setVersions(prev => prev.map(version => 
@@ -239,115 +242,88 @@ export function useColorVersionManager() {
     ));
   }, [setVersions]);
 
-  // Share theme as a string that can be imported
-  const exportVersionAsString = useCallback((id: string): string => {
-    const version = versions.find(v => v.id === id);
-    if (!version) return '';
-    
-    const exportData = {
-      name: version.name,
-      description: version.description,
-      themeData: version.themeData,
-      tags: version.tags
-    };
-    
-    return `studioflow-theme:${btoa(JSON.stringify(exportData))}`;
+  // Filter-related methods for ThemeVersionControl
+  const [filters, setFilters] = useState<VersionFilter>({
+    search: '',
+    tags: [],
+    onlyFavorites: false
+  });
+
+  const updateFilters = useCallback((newFilters: Partial<VersionFilter>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+    if (newFilters.search !== undefined) {
+      setFilterText(newFilters.search);
+    }
+  }, [setFilterText]);
+
+  const addTagFilter = useCallback((tag: string) => {
+    setFilters(prev => ({
+      ...prev, 
+      tags: prev.tags.includes(tag) ? prev.tags : [...prev.tags, tag]
+    }));
+    setSelectedTags(prev => prev.includes(tag) ? prev : [...prev, tag]);
+  }, [setSelectedTags]);
+
+  const removeTagFilter = useCallback((tag: string) => {
+    setFilters(prev => ({
+      ...prev,
+      tags: prev.tags.filter(t => t !== tag)
+    }));
+    setSelectedTags(prev => prev.filter(t => t !== tag));
+  }, [setSelectedTags]);
+
+  const toggleFavoritesFilter = useCallback(() => {
+    setFilters(prev => ({
+      ...prev,
+      onlyFavorites: !prev.onlyFavorites
+    }));
+    setOnlyFavorites(prev => !prev);
+  }, [setOnlyFavorites]);
+
+  const resetFilters = useCallback(() => {
+    setFilters({
+      search: '',
+      tags: [],
+      onlyFavorites: false
+    });
+    setFilterText('');
+    setSelectedTags([]);
+    setOnlyFavorites(false);
+  }, [setFilterText, setSelectedTags, setOnlyFavorites]);
+
+  // Export version (wrapper for exportVersionAsString)
+  const exportVersion = useCallback((id: string): string | null => {
+    return exportVersionAsString(id) || null;
+  }, [exportVersionAsString]);
+
+  // Import version (wrapper for importVersionFromString)
+  const importVersion = useCallback((data: string): boolean => {
+    return importVersionFromString(data);
+  }, [importVersionFromString]);
+
+  // Save version (alias for createVersion in ThemeContext)
+  const saveVersion = useCallback((
+    name: string, 
+    themeData: Record<string, string>, 
+    description?: string, 
+    tags?: string[]
+  ) => {
+    return createVersion(name, themeData, description, tags);
+  }, [createVersion]);
+
+  // For ThemeVersionControl
+  const switchToVersion = useCallback((id: string) => {
+    setActiveVersion(id);
+  }, [setActiveVersion]);
+
+  // Get all available tags across all versions
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    versions.forEach(version => {
+      version.tags.forEach(tag => tagSet.add(tag));
+    });
+    return Array.from(tagSet).sort();
   }, [versions]);
-
-  // Import theme from a string
-  const importVersionFromString = useCallback((themeString: string): boolean => {
-    try {
-      if (!themeString.startsWith('studioflow-theme:')) {
-        throw new Error('Invalid theme format');
-      }
-      
-      const encodedData = themeString.replace('studioflow-theme:', '');
-      const decodedData = atob(encodedData);
-      const importData = JSON.parse(decodedData);
-      
-      // Validate required fields
-      if (!importData.name || !importData.themeData) {
-        throw new Error('Invalid theme data');
-      }
-      
-      // Create new version from imported data
-      createVersion(
-        importData.name,
-        importData.themeData,
-        importData.description,
-        importData.tags
-      );
-      
-      return true;
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Import Failed",
-        description: "Could not import theme. Invalid format.",
-      });
-      return false;
-    }
-  }, [createVersion, toast]);
-
-  // Generate specific theme variations
-  const generateThemeVariation = useCallback((
-    baseVersionId: string, 
-    mode: ThemeMode, 
-    variant: ThemeVariant
-  ): ColorVersion | null => {
-    const baseVersion = versions.find(v => v.id === baseVersionId);
-    if (!baseVersion) return null;
-    
-    // Generate variation based on mode and variant
-    // This is a simplified implementation - in a real app,
-    // you would have more complex transforms based on the variant
-    const themeData = { ...baseVersion.themeData };
-    
-    // Apply mode-specific transforms
-    if (mode === 'dark') {
-      themeData['--background'] = '#121212';
-      themeData['--foreground'] = '#e0e0e0';
-    } else {
-      themeData['--background'] = '#f7f7f7';
-      themeData['--foreground'] = '#111111';
-    }
-    
-    // Apply variant-specific transforms
-    switch (variant) {
-      case 'modern':
-        themeData['--primary'] = '#6366f1';
-        themeData['--accent'] = '#22d3ee';
-        break;
-      case 'legacy':
-        themeData['--primary'] = '#3b82f6';
-        themeData['--accent'] = '#10b981';
-        break;
-      case 'classic':
-        themeData['--primary'] = '#1e40af';
-        themeData['--accent'] = '#0284c7';
-        break;
-      case 'windows':
-        themeData['--primary'] = '#0078d7';
-        themeData['--accent'] = '#6264a7';
-        break;
-      case 'retro':
-        themeData['--primary'] = '#ff5722';
-        themeData['--accent'] = '#ffeb3b';
-        break;
-      default:
-        // Default variant
-        break;
-    }
-    
-    const newVersion = createVersion(
-      `${baseVersion.name} (${mode}-${variant})`,
-      themeData,
-      `${mode} ${variant} variation of ${baseVersion.name}`,
-      [...baseVersion.tags, mode, variant]
-    );
-    
-    return newVersion;
-  }, [versions, createVersion]);
 
   // Return all the necessary functions and state
   return {
@@ -362,12 +338,23 @@ export function useColorVersionManager() {
     deleteVersion,
     duplicateVersion,
     setActiveVersion,
+    switchToVersion, // Alias for ThemeVersionControl
     toggleFavorite,
     
     // Tag operations
     addTag,
     removeTag,
     availableTags,
+    allTags,
+    
+    // Version filters and operations for ThemeVersionControl
+    filters, 
+    updateFilters,
+    addTagFilter,
+    removeTagFilter,
+    toggleFavoritesFilter,
+    resetFilters,
+    filteredVersions,
     
     // Filtering
     filterText,
@@ -385,6 +372,12 @@ export function useColorVersionManager() {
     // Import/Export
     exportVersionAsString,
     importVersionFromString,
+    exportVersion, // Alias for ThemeVersionControl
+    importVersion, // Alias for ThemeVersionControl
+    
+    // For ThemeContext
+    getCurrentVersion,
+    saveVersion,
     
     // Theme generation
     generateThemeVariation
