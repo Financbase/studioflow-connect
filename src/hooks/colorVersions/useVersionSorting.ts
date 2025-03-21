@@ -30,9 +30,10 @@ export function useVersionSorting(versions: ColorVersion[], currentVersionId: st
         return b.timestamp - a.timestamp;
         
       case 'recent':
-        // This would use a separate "lastUsed" timestamp
-        // For now, fall back to newest if lastUsed isn't available
-        return b.timestamp - a.timestamp;
+        // Sort by lastUsed timestamp if available, otherwise use creation timestamp
+        const aLastUsed = a.lastUsed || a.timestamp;
+        const bLastUsed = b.lastUsed || b.timestamp;
+        return bLastUsed - aLastUsed;
         
       default:
         return 0;

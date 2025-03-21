@@ -1,8 +1,7 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { useColorVersionManager } from "@/hooks/useColorVersionManager";
-import { ThemeVariant, ThemeMode } from "./ThemeTypes";
+import { useColorVersionManager } from "@/hooks/colorVersions/useColorVersionManager";
+import { ThemeVariant, ThemeMode } from "@/hooks/colorVersions/types";
 import { ColorPaletteProvider } from "./ColorPaletteContext";
 
 interface ThemeContextType {
@@ -23,7 +22,6 @@ interface ThemeProviderProps {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-// The inner ThemeProvider that doesn't include ColorPaletteProvider
 const ThemeProviderInner: React.FC<ThemeProviderProps> = ({ 
   children, 
   pricingTier = "free" 
@@ -33,7 +31,6 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   const [theme, setTheme] = useState<ThemeMode>("dark");
   const versionManager = useColorVersionManager();
   
-  // Initialize theme from localStorage
   useEffect(() => {
     const storedTheme = localStorage.getItem("ui_theme_variant") as ThemeVariant;
     if (storedTheme && ["modern", "legacy", "classic", "windows", "default", "retro"].includes(storedTheme)) {
@@ -48,7 +45,6 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
   
-  // Check for current theme version and apply it if exists
   useEffect(() => {
     const currentVersion = versionManager.getCurrentVersion();
     if (currentVersion) {
@@ -64,24 +60,18 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
         document.documentElement.classList.toggle("dark", mode === 'dark');
       }
       
-      // Add theme transition animation
       document.documentElement.classList.add('animate-theme-transition');
       
-      // Remove animation class after it completes
       setTimeout(() => {
         document.documentElement.classList.remove('animate-theme-transition');
       }, 500);
     }
   }, [versionManager.currentVersionId]);
   
-  // Apply theme classes when the theme changes
   useEffect(() => {
-    // Clean up existing theme classes first
     document.documentElement.classList.remove("theme-modern", "theme-legacy", "theme-classic", "theme-windows", "theme-default", "theme-retro");
-    // Add the new theme class
     document.documentElement.classList.add(`theme-${themeVariant}`);
     
-    // Save to localStorage if applicable
     localStorage.setItem("ui_theme_variant", themeVariant);
     
     console.log("Theme changed to:", themeVariant);
@@ -89,15 +79,12 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   
   const handleSetThemeVariant = (theme: ThemeVariant) => {
     setThemeVariant(theme);
-    // Add theme transition animation
     document.documentElement.classList.add('animate-theme-transition');
     
-    // Remove animation class after it completes
     setTimeout(() => {
       document.documentElement.classList.remove('animate-theme-transition');
     }, 500);
     
-    // Add a toast notification for feedback
     toast({
       title: "Theme Updated",
       description: `UI theme changed to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
@@ -111,10 +98,8 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     document.documentElement.classList.toggle("dark", newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
     
-    // Add theme transition animation
     document.documentElement.classList.add('animate-theme-transition');
     
-    // Remove animation class after it completes
     setTimeout(() => {
       document.documentElement.classList.remove('animate-theme-transition');
     }, 500);
@@ -125,7 +110,6 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     });
   };
   
-  // A specific setter for theme mode
   const handleSetTheme = (mode: ThemeMode) => {
     const isDark = mode === "dark";
     setIsDarkMode(isDark);
@@ -133,10 +117,8 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     document.documentElement.classList.toggle("dark", isDark);
     localStorage.setItem("theme", mode);
     
-    // Add theme transition animation
     document.documentElement.classList.add('animate-theme-transition');
     
-    // Remove animation class after it completes
     setTimeout(() => {
       document.documentElement.classList.remove('animate-theme-transition');
     }, 500);
@@ -147,7 +129,6 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
     });
   };
   
-  // Save current theme as a version
   const saveCurrentTheme = (name: string, description?: string, tags?: string[]) => {
     const themeData = {
       themeVariant,
@@ -155,7 +136,13 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
       isDarkMode: isDarkMode.toString()
     };
     
-    versionManager.saveVersion(name, themeData, description, tags);
+    const themeDataRecord: Record<string, string> = {
+      themeVariant,
+      themeMode: theme,
+      isDarkMode: isDarkMode.toString()
+    };
+    
+    versionManager.saveVersion(name, themeDataRecord, description, tags);
     
     toast({
       title: "Theme Version Saved",
@@ -179,7 +166,6 @@ const ThemeProviderInner: React.FC<ThemeProviderProps> = ({
   );
 };
 
-// The outer ThemeProvider that includes ColorPaletteProvider
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, pricingTier }) => {
   return (
     <ColorPaletteProvider>

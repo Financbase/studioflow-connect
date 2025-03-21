@@ -2,10 +2,11 @@
 import { useColorVersionManager } from './colorVersions/useColorVersionManager';
 export { useColorVersionManager };
 
-// Re-export types for backward compatibility
+// Re-export types from our types file
 export type { 
-  ThemeMode,
-  ThemeVariant,
   ColorVersion,
-  VersionFilter
+  VersionFilter,
+  VersionUpdateData,
+  ThemeMode,
+  ThemeVariant
 } from './colorVersions/types';

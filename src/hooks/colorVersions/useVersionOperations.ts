@@ -1,215 +1,141 @@
 
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { ColorVersion, VersionUpdateData } from './types';
-import { extractPreviewColors } from './versionUtils';
-import { toast } from "@/components/ui/use-toast";
 
 export function useVersionOperations(
   versions: ColorVersion[],
   currentVersionId: string | null,
-  persistVersions: (updatedVersions: ColorVersion[]) => void,
+  persistVersions: (versions: ColorVersion[]) => void,
   persistCurrentVersionId: (id: string | null) => void
 ) {
   // Save a new version
-  const saveVersion = (name: string, description: string, themeData: Record<string, string>, tags: string[] = []) => {
-    const timestamp = Date.now();
-    const previewColors = extractPreviewColors(themeData);
+  const saveVersion = (
+    name: string,
+    themeData: Record<string, string>,
+    description?: string,
+    tags: string[] = []
+  ) => {
+    // Extract primary colors for preview
+    const previewColors = Object.entries(themeData)
+      .filter(([key]) => key.includes('primary') || key.includes('accent') || key.includes('background'))
+      .map(([, value]) => value)
+      .slice(0, 5);
     
     const newVersion: ColorVersion = {
-      id: timestamp.toString(),
+      id: uuidv4(),
       name,
       description,
       themeData,
-      timestamp,
+      timestamp: Date.now(),
       previewColors,
       tags,
       isFavorite: false,
-      lastUsed: timestamp
+      lastUsed: Date.now() // Set initial lastUsed timestamp
     };
     
-    const updatedVersions = [...versions, newVersion];
+    const updatedVersions = [newVersion, ...versions];
     persistVersions(updatedVersions);
     persistCurrentVersionId(newVersion.id);
-    
-    toast({
-      title: "Theme Saved",
-      description: `"${name}" has been saved as a new theme version`
-    });
     
     return newVersion;
   };
   
-  // Switch to a different version
+  // Switch to an existing version
   const switchToVersion = (versionId: string) => {
-    // Find the version to switch to
-    const versionToActivate = versions.find(v => v.id === versionId);
+    if (!versionId) return;
     
-    if (!versionToActivate) {
-      toast({
-        title: "Error",
-        description: "Could not find the selected theme version",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    // Update the lastUsed timestamp
-    const updatedVersions = versions.map(v => 
-      v.id === versionId ? { ...v, lastUsed: Date.now() } : v
+    // Update the lastUsed timestamp when switching to a version
+    const updatedVersions = versions.map(version => 
+      version.id === versionId 
+        ? { ...version, lastUsed: Date.now() } 
+        : version
     );
     
     persistVersions(updatedVersions);
     persistCurrentVersionId(versionId);
-    
-    toast({
-      title: "Theme Applied",
-      description: `"${versionToActivate.name}" is now active`
-    });
-    
-    return true;
   };
   
   // Delete a version
   const deleteVersion = (versionId: string) => {
-    // Prevent deleting the current version
-    if (versionId === currentVersionId) {
-      toast({
-        title: "Cannot Delete",
-        description: "You cannot delete the currently active theme version",
-        variant: "destructive"
-      });
-      return false;
-    }
+    // Can't delete the active version
+    if (versionId === currentVersionId) return;
     
     const updatedVersions = versions.filter(v => v.id !== versionId);
     persistVersions(updatedVersions);
-    
-    const versionName = versions.find(v => v.id === versionId)?.name;
-    toast({
-      title: "Theme Deleted",
-      description: `"${versionName || 'Version'}" has been deleted`
-    });
-    
-    return true;
   };
   
-  // Update an existing version
+  // Update a version's metadata
   const updateVersion = (versionId: string, updateData: VersionUpdateData) => {
-    const updatedVersions = versions.map(v => {
-      if (v.id === versionId) {
-        return {
-          ...v,
-          ...updateData,
-        };
-      }
-      return v;
-    });
+    const updatedVersions = versions.map(version => 
+      version.id === versionId 
+        ? { ...version, ...updateData } 
+        : version
+    );
     
     persistVersions(updatedVersions);
-    
-    toast({
-      title: "Theme Updated",
-      description: "The theme version has been updated"
-    });
-    
-    return true;
   };
   
-  // Toggle favorite status
+  // Toggle a version's favorite status
   const toggleFavorite = (versionId: string) => {
-    const version = versions.find(v => v.id === versionId);
-    if (!version) return false;
-    
-    const updatedVersions = versions.map(v => {
-      if (v.id === versionId) {
-        return {
-          ...v,
-          isFavorite: !v.isFavorite
-        };
-      }
-      return v;
-    });
+    const updatedVersions = versions.map(version => 
+      version.id === versionId 
+        ? { ...version, isFavorite: !version.isFavorite } 
+        : version
+    );
     
     persistVersions(updatedVersions);
-    
-    const status = !version.isFavorite ? 'added to' : 'removed from';
-    toast({
-      title: `Theme ${status} favorites`,
-      description: `"${version.name}" has been ${status} your favorites`
-    });
-    
-    return true;
   };
   
   // Duplicate a version
   const duplicateVersion = (versionId: string) => {
     const versionToDuplicate = versions.find(v => v.id === versionId);
+    if (!versionToDuplicate) return;
     
-    if (!versionToDuplicate) {
-      toast({
-        title: "Error",
-        description: "Could not find the version to duplicate",
-        variant: "destructive"
-      });
-      return null;
-    }
-    
-    const timestamp = Date.now();
-    const duplicatedVersion: ColorVersion = {
+    const newName = `${versionToDuplicate.name} (Copy)`;
+    const newVersion: ColorVersion = {
       ...versionToDuplicate,
-      id: timestamp.toString(),
-      name: `${versionToDuplicate.name} (Copy)`,
-      timestamp,
-      isFavorite: false,
-      lastUsed: timestamp
+      id: uuidv4(),
+      name: newName,
+      timestamp: Date.now(),
+      lastUsed: Date.now(), // Set lastUsed for the new copy
+      isFavorite: false // Duplicated versions start as non-favorites
     };
     
-    const updatedVersions = [...versions, duplicatedVersion];
+    const updatedVersions = [newVersion, ...versions];
     persistVersions(updatedVersions);
     
-    toast({
-      title: "Theme Duplicated",
-      description: `"${duplicatedVersion.name}" has been created`
-    });
-    
-    return duplicatedVersion;
+    return newVersion;
   };
   
-  // Add tag to a version
+  // Add a tag to a version
   const addTagToVersion = (versionId: string, tag: string) => {
-    const version = versions.find(v => v.id === versionId);
-    if (!version) return false;
-    
-    // Don't add duplicate tags
-    if (version.tags.includes(tag)) return true;
-    
-    const updatedVersions = versions.map(v => {
-      if (v.id === versionId) {
+    const updatedVersions = versions.map(version => {
+      if (version.id === versionId && !version.tags.includes(tag)) {
         return {
-          ...v,
-          tags: [...v.tags, tag]
+          ...version,
+          tags: [...version.tags, tag]
         };
       }
-      return v;
+      return version;
     });
     
     persistVersions(updatedVersions);
-    return true;
   };
   
-  // Remove tag from a version
+  // Remove a tag from a version
   const removeTagFromVersion = (versionId: string, tag: string) => {
-    const updatedVersions = versions.map(v => {
-      if (v.id === versionId) {
+    const updatedVersions = versions.map(version => {
+      if (version.id === versionId) {
         return {
-          ...v,
-          tags: v.tags.filter(t => t !== tag)
+          ...version,
+          tags: version.tags.filter(t => t !== tag)
         };
       }
-      return v;
+      return version;
     });
     
     persistVersions(updatedVersions);
-    return true;
   };
   
   return {

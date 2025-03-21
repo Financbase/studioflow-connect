@@ -23,3 +23,7 @@ export interface VersionUpdateData {
   tags?: string[];
   isFavorite?: boolean;
 }
+
+// Add the missing ThemeMode and ThemeVariant types to prevent import errors
+export type ThemeMode = "dark" | "light";
+export type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
