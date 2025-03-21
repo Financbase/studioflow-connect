@@ -1,0 +1,46 @@
+
+/* StudioFlow Modern Theme - Default */
+.theme-modern {
+  --radius: 0.75rem;
+  /* StudioFlow Connect custom colors - Updated with harmonious palette */
+  --accent-primary: 130 110 250; /* #826AFA - More vibrant primary purple */
+  --accent-cta: 88 193 201; /* #58C1C9 - Teal accent color */
+  --highlight: 255 184 108; /* #FFB86C - Warm orange highlight */
+  --success: 80 200 120; /* #50C878 - Emerald green */
+  --warning: 255 184 108; /* #FFB86C - Warm orange */
+  --error: 255 85 85; /* #FF5555 - Soft red */
+}
+
+/* Dark mode specific styles for StudioFlow Modern Theme */
+.dark.theme-modern {
+  --background: 20 20 35; /* #141423 - Deeper, richer background */
+  --card: 25 25 40; /* #19192B - Deeper card background */
+  --foreground: 245 245 255; /* #F5F5FF - Crisp white text */
+  --muted-foreground: 190 190 210; /* #BEBED2 - Softer muted text */
+  --primary: 130 110 250; /* #826AFA - Vibrant purple */
+  --primary-foreground: 20 20 35; /* #141423 - Dark text on primary */
+  --secondary: 35 35 55; /* #232337 - Lighter accent background */
+  --border: 40 40 60; /* #28283C - More visible borders */
+  --ring: 130 110 250; /* #826AFA - Primary color ring */
+  --accent: 88 193 201; /* #58C1C9 - Teal accent */
+  
+  --zen-background: 15 15 30; /* #0F0F1E - Deeper zen mode */
+  --zen-background-alt: 30 30 50; /* #1E1E32 - Zen mode accent */
+  --zen-focus: 40 40 60; /* #28283C - Zen mode focus area */
+  
+  --sidebar-background: 15 15 30; /* #0F0F1E - Matching sidebar */
+  --sidebar-highlight: 35 35 55; /* #232337 - Subtle sidebar highlight */
+}
+
+/* Light mode specific styles for StudioFlow Modern Theme */
+:not(.dark).theme-modern {
+  --background: 248 248 255; /* #F8F8FF - Light but not harsh white */
+  --card: 255 255 255; /* #FFFFFF */
+  --foreground: 35 35 55; /* #232337 - Darker text for better contrast */
+  --muted-foreground: 90 90 120; /* #5A5A78 - More readable muted text */
+  --border: 220 220 240; /* #DCDCF0 - Subtle border */
+  --primary: 130 110 250; /* #826AFA - Matching primary */
+  --secondary: 240 240 255; /* #F0F0FF - Very light purple secondary */
+  --muted: 235 235 250; /* #EBEBFA */
+  --accent: 88 193 201; /* #58C1C9 - Matching accent */
+}

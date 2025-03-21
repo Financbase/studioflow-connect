@@ -1,0 +1,41 @@
+
+/* Legacy Theme */
+.theme-legacy {
+  --radius: 0.25rem;
+}
+.theme-legacy .card,
+.theme-legacy .panel {
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.theme-legacy button {
+  border-radius: 0.25rem;
+}
+.theme-legacy h1, 
+.theme-legacy h2, 
+.theme-legacy h3 {
+  font-weight: 600;
+}
+
+/* Light mode specific styles for Legacy theme */
+:not(.dark).theme-legacy {
+  --background: 220 20% 97%;
+  --card: 220 20% 99%;
+  --border: 220 13% 80%;
+  --primary: 230 100% 60%;
+  --secondary: 220 13% 90%;
+  --muted: 220 13% 90%;
+  --accent: 230 100% 50%;
+}
+
+/* Dark mode specific styles for Legacy theme */
+.dark.theme-legacy {
+  --background: 220 13% 18%;
+  --card: 220 13% 23%;
+  --border: 220 13% 28%;
+  --primary: 230 100% 67%;
+  --secondary: 220 13% 28%;
+  --muted: 220 13% 28%;
+  --accent: 230 100% 67%;
+}

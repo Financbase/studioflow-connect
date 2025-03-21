@@ -1,0 +1,28 @@
+
+/* Zen Mode specific styles */
+.zen-mode-active {
+  * {
+    transition-duration: 0.15s !important;
+  }
+}
+
+.zen-mode-active .header,
+.zen-mode-active .sidebar {
+  opacity: 0.2 !important;
+  transition: opacity 0.3s ease;
+}
+
+.zen-mode-active .header:hover,
+.zen-mode-active .sidebar:hover {
+  opacity: 0.9 !important;
+}
+
+/* Card hover effects for zen mode */
+.zen-mode-active .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zen-mode-active .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}

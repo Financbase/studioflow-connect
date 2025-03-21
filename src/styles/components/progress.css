@@ -1,0 +1,26 @@
+
+/* Progress bar styles */
+.progress-gradient-success {
+  background: linear-gradient(90deg, rgb(80, 200, 120) 0%, rgb(100, 220, 140) 100%);
+}
+
+.progress-gradient-warning {
+  background: linear-gradient(90deg, rgb(255, 184, 108) 0%, rgb(255, 214, 138) 100%);
+}
+
+.progress-gradient-error {
+  background: linear-gradient(90deg, rgb(255, 85, 85) 0%, rgb(255, 115, 115) 100%);
+}
+
+/* Custom progress colors */
+.progress-gradient-blue {
+  background: linear-gradient(90deg, #58C1C9 0%, #4DB8C0 100%);
+}
+
+.progress-gradient-purple {
+  background: linear-gradient(90deg, #826AFA 0%, #9B87F5 100%);
+}
+
+.progress-gradient-amber {
+  background: linear-gradient(90deg, #FFB86C 0%, #FFCA8C 100%);
+}

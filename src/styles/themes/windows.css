@@ -1,0 +1,48 @@
+
+/* Windows Theme */
+.theme-windows {
+  --radius: 0;
+}
+.theme-windows .card,
+.theme-windows .panel {
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+.theme-windows button {
+  border-radius: 0;
+  border-width: 1px;
+  border-color: hsl(var(--border));
+}
+.theme-windows input,
+.theme-windows select {
+  border-radius: 0;
+}
+.theme-windows h1, 
+.theme-windows h2, 
+.theme-windows h3 {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+}
+
+/* Light mode specific styles for Windows theme */
+:not(.dark).theme-windows {
+  --background: 210 30% 98%;
+  --card: 0 0% 100%;
+  --border: 210 30% 80%;
+  --primary: 221 83% 53%;
+  --secondary: 210 30% 92%;
+  --muted: 210 30% 92%;
+  --accent: 221 83% 53%;
+}
+
+/* Dark mode specific styles for Windows theme */
+.dark.theme-windows {
+  --background: 220 6% 10%;
+  --card: 230 5% 15%;
+  --border: 225 6% 19%;
+  --primary: 221 83% 53%;
+  --secondary: 225 6% 19%;
+  --muted: 225 6% 19%;
+  --accent: 221 83% 53%;
+}
