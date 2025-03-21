@@ -1,6 +1,7 @@
 
 import React from "react";
 import ContactCard from "@/components/support/ContactCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SupportContentProps {
   headerComponent: React.ReactNode;
@@ -8,17 +9,26 @@ interface SupportContentProps {
 }
 
 const SupportContent = ({ headerComponent, tabsComponent }: SupportContentProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <>
       {headerComponent}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-1">
+      {isMobile ? (
+        <div className="space-y-8">
+          <div>{tabsComponent}</div>
           <ContactCard />
         </div>
-        <div className="md:col-span-3">
-          {tabsComponent}
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-1">
+            <ContactCard />
+          </div>
+          <div className="md:col-span-3">
+            {tabsComponent}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

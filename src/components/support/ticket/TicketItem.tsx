@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, MessageSquare, Eye } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import TicketDetailsDialog from "./TicketDetailsDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TicketItemProps {
   ticket: {
@@ -22,6 +23,8 @@ interface TicketItemProps {
 }
 
 const TicketItem: React.FC<TicketItemProps> = ({ ticket, setSelectedTicket }) => {
+  const isMobile = useIsMobile();
+  
   const getStatusBadge = (status: TicketItemProps["ticket"]["status"]) => {
     switch (status) {
       case "open":
@@ -56,44 +59,46 @@ const TicketItem: React.FC<TicketItemProps> = ({ ticket, setSelectedTicket }) =>
     <div key={ticket.id} className="space-y-3">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <h3 className="font-semibold">{ticket.title}</h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {getStatusBadge(ticket.status)}
           {getPriorityBadge(ticket.priority)}
         </div>
       </div>
       
-      <p className="text-sm text-muted-foreground">{ticket.description}</p>
+      <p className="text-sm text-muted-foreground line-clamp-2 md:line-clamp-none">
+        {ticket.description}
+      </p>
       
       {ticket.response && (
-        <div className="bg-muted p-3 rounded-md mt-2">
+        <div className="bg-muted p-2 md:p-3 rounded-md mt-2">
           <p className="text-xs font-semibold mb-1">Support Response:</p>
-          <p className="text-sm">{ticket.response}</p>
+          <p className="text-sm line-clamp-2 md:line-clamp-none">{ticket.response}</p>
         </div>
       )}
       
-      <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
-        <div className="flex items-center">
+      <div className={`flex ${isMobile ? 'flex-col' : 'items-center justify-between'} pt-2 text-xs text-muted-foreground`}>
+        <div className="flex items-center mb-2 md:mb-0">
           <Clock className="h-3 w-3 mr-1" />
           {new Date(ticket.created_at).toLocaleDateString()}
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full md:w-auto">
           <Dialog>
             <DialogTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-8 gap-1"
+                className={`h-8 gap-1 ${isMobile ? 'flex-1' : ''}`}
                 onClick={() => setSelectedTicket(ticket)}
               >
                 <Eye className="h-3 w-3" />
-                View Details
+                {isMobile ? "View" : "View Details"}
               </Button>
             </DialogTrigger>
             <TicketDetailsDialog />
           </Dialog>
           
-          <Button variant="ghost" size="sm" className="h-8 gap-1">
+          <Button variant="ghost" size="sm" className={`h-8 gap-1 ${isMobile ? 'flex-1' : ''}`}>
             <MessageSquare className="h-3 w-3" />
             Reply
           </Button>

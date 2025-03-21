@@ -6,6 +6,7 @@ import TicketListHeader from "./ticket/TicketListHeader";
 import TicketItem from "./ticket/TicketItem";
 import EmptyTicketState from "./ticket/EmptyTicketState";
 import { useTicketFilters } from "./ticket/useTicketFilters";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Ticket {
   id: string;
@@ -36,6 +37,7 @@ const TicketList = ({ tickets, emptyMessage, onNewTicket }: TicketListProps) => 
   } = useTicketFilters(tickets);
   
   const [selectedTicket, setSelectedTicket] = React.useState<Ticket | null>(null);
+  const isMobile = useIsMobile();
 
   if (tickets.length === 0) {
     return (
@@ -51,7 +53,7 @@ const TicketList = ({ tickets, emptyMessage, onNewTicket }: TicketListProps) => 
     <TicketProvider>
       <div className="space-y-4">
         <Card className="overflow-hidden">
-          <CardHeader className="p-4 pb-0">
+          <CardHeader className={`${isMobile ? 'p-3 pb-0' : 'p-4 pb-0'}`}>
             <TicketListHeader 
               onNewTicket={onNewTicket}
               onFilterStatus={(status) => setFilterStatus(status as any)}
@@ -71,7 +73,7 @@ const TicketList = ({ tickets, emptyMessage, onNewTicket }: TicketListProps) => 
               ticket.priority === 'medium' ? 'bg-blue-500' : 
               'bg-slate-300'
             }`} />
-            <CardContent className="p-4">
+            <CardContent className={isMobile ? "p-3" : "p-4"}>
               <TicketItem 
                 ticket={ticket} 
                 setSelectedTicket={setSelectedTicket} 

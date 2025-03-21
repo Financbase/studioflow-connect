@@ -8,10 +8,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageSquare } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useTicketContext } from "./TicketContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TicketDetailsDialog: React.FC = () => {
   const { selectedTicket } = useTicketContext();
   const [replyText, setReplyText] = useState("");
+  const isMobile = useIsMobile();
   
   if (!selectedTicket) return null;
   
@@ -28,27 +30,27 @@ const TicketDetailsDialog: React.FC = () => {
   };
 
   return (
-    <DialogContent className="max-w-xl">
+    <DialogContent className={`${isMobile ? 'w-[95vw] max-w-full p-4' : 'max-w-xl'}`}>
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
           Ticket #{selectedTicket.id.split('-').pop()}
         </DialogTitle>
-        <DialogDescription>
+        <DialogDescription className="text-xs md:text-sm">
           Created on {new Date(selectedTicket.created_at).toLocaleString()}
         </DialogDescription>
       </DialogHeader>
       
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium">{selectedTicket.title}</h3>
-          <p className="text-muted-foreground mt-1">{selectedTicket.description}</p>
+          <h3 className="text-base md:text-lg font-medium">{selectedTicket.title}</h3>
+          <p className="text-muted-foreground mt-1 text-sm">{selectedTicket.description}</p>
         </div>
         
         <Separator />
         
-        <ScrollArea className="h-[200px] rounded-md border p-4">
+        <ScrollArea className={`${isMobile ? 'h-[150px]' : 'h-[200px]'} rounded-md border p-3 md:p-4`}>
           <div className="space-y-4">
-            <div className="bg-muted p-3 rounded-md">
+            <div className="bg-muted p-2 md:p-3 rounded-md">
               <div className="flex justify-between">
                 <p className="text-xs font-semibold">You</p>
                 <p className="text-xs text-muted-foreground">
@@ -59,7 +61,7 @@ const TicketDetailsDialog: React.FC = () => {
             </div>
             
             {selectedTicket.response && (
-              <div className="bg-primary/10 p-3 rounded-md">
+              <div className="bg-primary/10 p-2 md:p-3 rounded-md">
                 <div className="flex justify-between">
                   <p className="text-xs font-semibold">Support Agent</p>
                   <p className="text-xs text-muted-foreground">

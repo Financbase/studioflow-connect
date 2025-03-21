@@ -2,7 +2,7 @@
 import React from "react";
 import { CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Filter, ArrowUpDown } from "lucide-react";
+import { Filter, ArrowUpDown, Plus } from "lucide-react";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TicketListHeaderProps {
   onNewTicket?: () => void;
@@ -29,6 +31,115 @@ const TicketListHeader: React.FC<TicketListHeaderProps> = ({
   sortField,
   sortDirection
 }) => {
+  const isMobile = useIsMobile();
+
+  const FilterContent = () => (
+    <>
+      <div className="mb-4">
+        <h3 className="text-sm font-medium mb-2">Filter by Status</h3>
+        <div className="grid grid-cols-2 gap-2">
+          <Button size="sm" variant="outline" onClick={() => onFilterStatus("all")}>All</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterStatus("open")}>Open</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterStatus("in_progress")}>In Progress</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterStatus("resolved")}>Resolved</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterStatus("closed")}>Closed</Button>
+        </div>
+      </div>
+      
+      <div>
+        <h3 className="text-sm font-medium mb-2">Filter by Priority</h3>
+        <div className="grid grid-cols-2 gap-2">
+          <Button size="sm" variant="outline" onClick={() => onFilterPriority("all")}>All</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterPriority("critical")}>Critical</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterPriority("high")}>High</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterPriority("medium")}>Medium</Button>
+          <Button size="sm" variant="outline" onClick={() => onFilterPriority("low")}>Low</Button>
+        </div>
+      </div>
+    </>
+  );
+  
+  const SortContent = () => (
+    <div className="space-y-2">
+      <Button 
+        size="sm" 
+        variant="outline" 
+        className="w-full justify-start"
+        onClick={() => onSort("created_at")}
+      >
+        Date {sortField === "created_at" && (sortDirection === "asc" ? "↑" : "↓")}
+      </Button>
+      <Button 
+        size="sm" 
+        variant="outline" 
+        className="w-full justify-start"
+        onClick={() => onSort("priority")}
+      >
+        Priority {sortField === "priority" && (sortDirection === "asc" ? "↑" : "↓")}
+      </Button>
+      <Button 
+        size="sm" 
+        variant="outline" 
+        className="w-full justify-start"
+        onClick={() => onSort("status")}
+      >
+        Status {sortField === "status" && (sortDirection === "asc" ? "↑" : "↓")}
+      </Button>
+    </div>
+  );
+
+  // Mobile version with sheets
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-2">
+        <CardTitle className="text-lg mb-2">Your Support Tickets</CardTitle>
+        <div className="flex gap-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-8 gap-1">
+                <Filter className="h-3 w-3" />
+                Filter
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[60vh]">
+              <SheetHeader>
+                <SheetTitle>Filter Tickets</SheetTitle>
+              </SheetHeader>
+              <div className="py-4">
+                <FilterContent />
+              </div>
+            </SheetContent>
+          </Sheet>
+          
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-8 gap-1">
+                <ArrowUpDown className="h-3 w-3" />
+                Sort
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[40vh]">
+              <SheetHeader>
+                <SheetTitle>Sort Tickets</SheetTitle>
+              </SheetHeader>
+              <div className="py-4">
+                <SortContent />
+              </div>
+            </SheetContent>
+          </Sheet>
+          
+          {onNewTicket && (
+            <Button size="sm" className="flex-1 h-8 gap-1" onClick={onNewTicket}>
+              <Plus className="h-3 w-3" />
+              New
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop version with dropdowns
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
       <CardTitle className="text-lg">Your Support Tickets</CardTitle>
