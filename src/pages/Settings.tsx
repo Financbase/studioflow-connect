@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
@@ -11,11 +12,11 @@ import { Separator } from "@/components/ui/separator";
 import PlanSwitcher from "@/components/PlanSwitcher";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme, ThemeVariant } from "@/contexts/ThemeContext";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { PricingTier } from "@/contexts/dashboard/types";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 const Settings = () => {
   const { themeVariant, setThemeVariant } = useTheme();
@@ -59,11 +60,11 @@ const Settings = () => {
     });
   };
   
-  const handleThemeChange = (theme: any) => {
+  const handleThemeChange = (theme: ThemeVariant) => {
     setThemeVariant(theme);
   };
   
-  const handleLanguageChange = (language: any) => {
+  const handleLanguageChange = (language: Language) => {
     setLanguage(language);
   };
   

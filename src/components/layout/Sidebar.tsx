@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { themeVariant } = useTheme();
   const { hasFeatureAccess } = useDashboard();
-  const { isMobile } = useIsMobile();
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
 

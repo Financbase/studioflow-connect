@@ -13,7 +13,7 @@ const DashboardContext = createContext<DashboardContextType | undefined>(undefin
 
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Authentication and device detection
-  const { isMobile } = useIsMobile();
+  const isMobile = useIsMobile();
   const { user, profile } = useAuth();
   
   // Use our custom hooks
