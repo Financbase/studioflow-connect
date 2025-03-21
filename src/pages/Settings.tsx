@@ -117,10 +117,8 @@ const Settings = () => {
                   
                   <Separator />
                   
-                  <LanguageSwitcher 
-                    currentLanguage={currentLanguage}
-                    onLanguageChange={handleLanguageChange}
-                  />
+                  {/* LanguageSwitcher doesn't need props since it accesses the context directly */}
+                  <LanguageSwitcher />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -134,10 +132,8 @@ const Settings = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ThemeSwitcher 
-                    currentTheme={themeVariant} 
-                    onThemeChange={handleThemeChange}
-                  />
+                  {/* ThemeSwitcher doesn't need props since it accesses the context directly */}
+                  <ThemeSwitcher />
                 </CardContent>
               </Card>
             </TabsContent>
