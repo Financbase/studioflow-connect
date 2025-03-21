@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Paintbrush, Monitor, Wind, Layers, Lock, Sun, Moon } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useDashboard } from "@/contexts/DashboardContext";
+import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { toast } from "@/components/ui/use-toast";
 
 const ThemeSwitcher = () => {
@@ -19,10 +19,10 @@ const ThemeSwitcher = () => {
   const { pricingTier } = useDashboard();
   
   const handleThemeChange = (theme: "modern" | "legacy" | "classic" | "windows") => {
-    if (theme !== "modern" && pricingTier !== "pro") {
+    if (theme !== "modern" && pricingTier !== "pro" && pricingTier !== "enterprise") {
       toast({
         title: "Pro Feature",
-        description: "UI themes are available with the Pro plan",
+        description: "Additional UI themes are available with Pro and Enterprise plans",
         variant: "destructive"
       });
       return;
@@ -64,31 +64,31 @@ const ThemeSwitcher = () => {
           <DropdownMenuItem 
             onClick={() => handleThemeChange("legacy")}
             className={themeVariant === "legacy" ? "bg-accent text-accent-foreground" : ""}
-            disabled={pricingTier !== "pro"}
+            disabled={pricingTier !== "pro" && pricingTier !== "enterprise"}
           >
             <Layers className="mr-2 h-4 w-4" />
             <span>Legacy</span>
-            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+            {pricingTier !== "pro" && pricingTier !== "enterprise" && <Lock className="ml-auto h-3 w-3" />}
           </DropdownMenuItem>
           
           <DropdownMenuItem 
             onClick={() => handleThemeChange("classic")}
             className={themeVariant === "classic" ? "bg-accent text-accent-foreground" : ""}
-            disabled={pricingTier !== "pro"}
+            disabled={pricingTier !== "pro" && pricingTier !== "enterprise"}
           >
             <Monitor className="mr-2 h-4 w-4" />
             <span>Classic</span>
-            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+            {pricingTier !== "pro" && pricingTier !== "enterprise" && <Lock className="ml-auto h-3 w-3" />}
           </DropdownMenuItem>
           
           <DropdownMenuItem 
             onClick={() => handleThemeChange("windows")}
             className={themeVariant === "windows" ? "bg-accent text-accent-foreground" : ""}
-            disabled={pricingTier !== "pro"}
+            disabled={pricingTier !== "pro" && pricingTier !== "enterprise"}
           >
             <Wind className="mr-2 h-4 w-4" />
             <span>Windows</span>
-            {pricingTier !== "pro" && <Lock className="ml-auto h-3 w-3" />}
+            {pricingTier !== "pro" && pricingTier !== "enterprise" && <Lock className="ml-auto h-3 w-3" />}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

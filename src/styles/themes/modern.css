@@ -14,14 +14,14 @@
 /* Dark mode specific styles for Apple-Inspired Grayscale Theme */
 .dark.theme-modern {
   --background: 20 20 20; /* #141414 - Deep black */
-  --card: 30 30 30; /* #1E1E1E - Dark gray background */
+  --card: 28 28 28; /* #1C1C1C - Dark gray background */
   --foreground: 240 240 240; /* #F0F0F0 - Off-white text */
   --muted-foreground: 180 180 180; /* #B4B4B4 - Medium gray text */
-  --primary: 0 0 0; /* #000000 - Pure black */
-  --primary-foreground: 255 255 255; /* #FFFFFF - Pure white on primary */
+  --primary: 240 240 240; /* #F0F0F0 - Almost white */
+  --primary-foreground: 20 20 20; /* #141414 - Deep black on primary */
   --secondary: 40 40 40; /* #282828 - Lighter gray background */
   --border: 50 50 50; /* #323232 - Border color */
-  --ring: 0 0 0; /* #000000 - Black ring */
+  --ring: 70 70 70; /* #464646 - Gray ring */
   --accent: 80 80 80; /* #505050 - Gray accent */
   
   --zen-background: 15 15 15; /* #0F0F0F - Deeper zen mode */
@@ -39,8 +39,10 @@
   --foreground: 30 30 30; /* #1E1E1E - Almost black text */
   --muted-foreground: 120 120 120; /* #787878 - Medium gray text */
   --border: 220 220 220; /* #DCDCDC - Light border */
-  --primary: 0 0 0; /* #000000 - Pure black */
+  --primary: 30 30 30; /* #1E1E1E - Almost black */
+  --primary-foreground: 255 255 255; /* #FFFFFF - Pure white on primary */
   --secondary: 240 240 240; /* #F0F0F0 - Very light gray */
   --muted: 240 240 240; /* #F0F0F0 - Very light gray */
   --accent: 180 180 180; /* #B4B4B4 - Medium gray */
+  --ring: 200 200 200; /* #C8C8C8 - Light gray ring */
 }
