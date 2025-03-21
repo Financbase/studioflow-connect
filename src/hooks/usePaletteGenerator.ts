@@ -1,6 +1,12 @@
 
 import { useState } from "react";
-import { hexToRgb, generateThemePalette, generateAnalogous, generateComplementary, generateTriadic } from "@/lib/colorUtils";
+import { hexToRgb } from "@/lib/colorUtils/colorConversion";
+import { 
+  generateAnalogous, 
+  generateComplementary, 
+  generateTriadic 
+} from "@/lib/colorUtils/colorPalette";
+import { generateThemePalette } from "@/lib/colorUtils/themeGenerator";
 
 export const usePaletteGenerator = (theme: string) => {
   const [generatedPalettes, setGeneratedPalettes] = useState<Record<string, string>[]>([]);

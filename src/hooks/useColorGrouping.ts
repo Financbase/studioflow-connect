@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { rgbToHex, hexToRgb } from "@/lib/colorUtils";
+import { rgbToHex, hexToRgb } from "@/lib/colorUtils/colorConversion";
 import { ColorSetting } from "@/components/settings/types/colorSettings";
 
 export const useColorGrouping = (theme: string, themeVariant: string) => {

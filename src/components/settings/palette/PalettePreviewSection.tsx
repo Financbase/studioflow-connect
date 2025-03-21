@@ -1,44 +1,187 @@
 
-import React from "react";
+import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useColorPalette } from "@/contexts/ColorPaletteContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import PalettePreview from "../PalettePreview";
+import ColorPaletteVisualizer from "./ColorPaletteVisualizer";
+import ColorSchemeGenerator from "./ColorSchemeGenerator";
 
-interface PalettePreviewSectionProps {
-  // No complex props needed for this component
-}
-
-const PalettePreviewSection: React.FC<PalettePreviewSectionProps> = () => {
+const PalettePreviewSection: React.FC = () => {
+  const { currentPaletteId, colorPalettes, getCurrentPaletteColors } = useColorPalette();
+  const { isDarkMode } = useTheme();
+  const [activeTab, setActiveTab] = useState("preview");
+  const [generatedScheme, setGeneratedScheme] = useState<string[]>([]);
+  
+  // Get colors for the current palette
+  const currentColors = getCurrentPaletteColors();
+  const currentPalette = colorPalettes.find(p => p.id === currentPaletteId);
+  
+  // Handle when a color scheme is generated
+  const handleSchemeGenerated = (colors: string[]) => {
+    setGeneratedScheme(colors);
+  };
+  
   return (
-    <div className="p-4 border rounded-lg bg-background text-foreground">
-      <div className="space-y-4">
-        <h4 className="font-medium">Color Palette Preview</h4>
-        <div className="flex flex-wrap gap-2">
-          <div className="px-3 py-1.5 bg-primary text-primary-foreground rounded">Primary</div>
-          <div className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded">Secondary</div>
-          <div className="px-3 py-1.5 bg-accent text-accent-foreground rounded">Accent</div>
-          <div className="px-3 py-1.5 bg-muted text-muted-foreground rounded">Muted</div>
-          <div className="px-3 py-1.5 bg-destructive text-destructive-foreground rounded">Destructive</div>
-        </div>
+    <div className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="visualizer">Visualizer</TabsTrigger>
+          <TabsTrigger value="generator">Scheme Generator</TabsTrigger>
+        </TabsList>
         
-        <div className="border rounded-lg overflow-hidden">
-          <div className="p-3 bg-card text-card-foreground border-b">
-            Card Header
+        <TabsContent value="preview" className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Background</h3>
+              <div 
+                className="h-24 rounded-md p-4 flex items-end"
+                style={{ backgroundColor: currentColors.background || '#FFFFFF' }}
+              >
+                <p style={{ color: currentColors.foreground || '#000000' }}>
+                  Text Color
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Primary Button</h3>
+              <div 
+                className="h-24 rounded-md flex items-center justify-center"
+                style={{ backgroundColor: currentColors.primary || '#000000' }}
+              >
+                <button 
+                  className="px-4 py-2 rounded-md text-sm"
+                  style={{ color: currentColors["primary-foreground"] || '#FFFFFF' }}
+                >
+                  Primary Button
+                </button>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Secondary Button</h3>
+              <div 
+                className="h-24 rounded-md flex items-center justify-center"
+                style={{ backgroundColor: currentColors.secondary || '#EEEEEE' }}
+              >
+                <button 
+                  className="px-4 py-2 rounded-md text-sm"
+                  style={{ color: currentColors["secondary-foreground"] || '#000000' }}
+                >
+                  Secondary Button
+                </button>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Card</h3>
+              <div 
+                className="h-24 rounded-md p-4"
+                style={{ backgroundColor: currentColors.card || '#FFFFFF' }}
+              >
+                <p style={{ color: currentColors["card-foreground"] || '#000000' }}>
+                  Card Content
+                </p>
+                <p 
+                  className="text-xs mt-2"
+                  style={{ color: currentColors["muted-foreground"] || '#666666' }}
+                >
+                  Muted text in card
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Accent</h3>
+              <div 
+                className="h-24 rounded-md flex items-center justify-center"
+                style={{ backgroundColor: currentColors.accent || '#F0F0FF' }}
+              >
+                <span 
+                  className="px-3 py-1 rounded-sm text-sm"
+                  style={{ color: currentColors["accent-foreground"] || '#0000DD' }}
+                >
+                  Accent Element
+                </span>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Destructive</h3>
+              <div 
+                className="h-24 rounded-md flex items-center justify-center"
+                style={{ backgroundColor: currentColors.destructive || '#FF0000' }}
+              >
+                <button 
+                  className="px-4 py-2 rounded-md text-sm"
+                  style={{ color: currentColors["destructive-foreground"] || '#FFFFFF' }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="p-3 bg-card text-muted-foreground">
-            Card content with <span className="text-card-foreground">normal</span> and muted text
-          </div>
-        </div>
+          
+          {currentPaletteId && (
+            <div className="pt-4 border-t">
+              <h3 className="text-sm font-medium mb-2">Current Palette</h3>
+              <div className="border rounded-md p-3">
+                <PalettePreview 
+                  colors={currentColors}
+                  size="lg"
+                  showLabels={true}
+                  name={currentPalette?.name}
+                  isActive={true}
+                />
+              </div>
+            </div>
+          )}
+        </TabsContent>
         
-        <div className="flex gap-2">
-          <button className="px-3 py-1.5 rounded bg-primary text-primary-foreground hover:opacity-90">
-            Button
-          </button>
-          <button className="px-3 py-1.5 rounded bg-secondary text-secondary-foreground hover:opacity-90">
-            Button
-          </button>
-          <button className="px-3 py-1.5 rounded border hover:bg-muted">
-            Button
-          </button>
-        </div>
-      </div>
+        <TabsContent value="visualizer">
+          <ColorPaletteVisualizer colors={currentColors} />
+        </TabsContent>
+        
+        <TabsContent value="generator">
+          <ColorSchemeGenerator 
+            initialColor={currentColors.primary || '#4f46e5'}
+            onSchemeGenerated={handleSchemeGenerated}
+          />
+          
+          {generatedScheme.length > 0 && (
+            <div className="mt-4 p-4 border rounded-md">
+              <h3 className="text-sm font-medium mb-2">Application Preview</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {generatedScheme.map((color, index) => (
+                  <div 
+                    key={index}
+                    className="p-3 rounded-md flex items-center justify-between"
+                    style={{ backgroundColor: color }}
+                  >
+                    <span 
+                      className="font-medium"
+                      style={{ color: isDarkMode ? '#FFFFFF' : '#000000' }}
+                    >
+                      Sample Text
+                    </span>
+                    <span 
+                      className="text-xs px-2 py-1 rounded-sm"
+                      style={{ 
+                        backgroundColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)',
+                        color: isDarkMode ? '#FFFFFF' : '#000000'
+                      }}
+                    >
+                      {color}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
