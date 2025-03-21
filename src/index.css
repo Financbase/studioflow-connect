@@ -15,42 +15,42 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
+    --primary: 260 60% 55%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 260 40% 96%;
+    --accent-foreground: 260 60% 30%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --ring: 260 60% 55%;
+    --radius: 0.75rem;
   }
  
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 240 6% 10%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 240 6% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 240 6% 12%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
+    --primary: 260 60% 55%;
+    --primary-foreground: 0 0% 98%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 260 40% 20%;
+    --accent-foreground: 260 60% 80%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 260 60% 55%;
   }
 
   /* Animations */
@@ -151,6 +151,11 @@ button, a, input, select, textarea {
   background: linear-gradient(90deg, rgb(245, 158, 11) 0%, rgb(217, 119, 6) 100%);
 }
 
+/* Glass Effects */
+.glass-card {
+  @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/5;
+}
+
 /* Custom Font Colors */
 .text-primary-content {
   color: hsl(var(--primary-foreground));
@@ -158,4 +163,18 @@ button, a, input, select, textarea {
 
 .text-accent-content {
   color: hsl(var(--accent-foreground));
+}
+
+/* Dashboard-specific styles */
+.dashboard-stat-card {
+  @apply relative overflow-hidden;
+}
+
+.dashboard-stat-card::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/10 dark:from-purple-600/10 dark:to-indigo-600/20 rounded-lg z-0;
+}
+
+.dashboard-stat-card > * {
+  @apply relative z-10;
 }

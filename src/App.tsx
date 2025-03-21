@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,7 +17,7 @@ import Library from "./pages/Library";
 import Connect from "./pages/Connect";
 import AIToolsPage from "./pages/AITools";
 import SubscriptionPage from "./pages/Subscription";
-import RecommendationsPage from "./pages/Recommendations";
+import RecommendationsPage from "./pages/RecommendationsPage";
 import Contribution from "./pages/Contribution";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
@@ -78,7 +77,7 @@ const App = () => {
                         path="/" 
                         element={
                           <ProtectedRoute>
-                            <Home />
+                            <Dashboard />
                           </ProtectedRoute>
                         } 
                       />

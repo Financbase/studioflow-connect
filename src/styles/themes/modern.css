@@ -1,46 +1,89 @@
 
-/* Apple-Inspired Grayscale Theme - Modern */
+/* Modern Theme - Main default theme with rounded corners and subtle shadows */
 .theme-modern {
   --radius: 0.75rem;
 }
 
-/* Dark mode specific styles for Modern Theme */
-.dark.theme-modern {
-  --background: 20 20 20; /* #141414 - Deep black */
-  --card: 28 28 28; /* #1C1C1C - Dark gray background */
-  --foreground: 240 240 240; /* #F0F0F0 - Off-white text */
-  --muted-foreground: 180 180 180; /* #B4B4B4 - Medium gray text */
-  --primary: 210 210 255; /* Soft blue-white primary color */
-  --primary-foreground: 20 20 20; /* #141414 - Deep black on primary */
-  --secondary: 40 40 50; /* #282832 - Darker blue-gray background */
-  --border: 50 50 60; /* #32323C - Blue-tinted border */
-  --ring: 70 70 90; /* #46465A - Blue-gray ring */
-  --accent: 80 80 100; /* #505064 - Blue-gray accent */
-  --accent-primary: 100 150 255; /* Accent primary color for highlights */
-  
-  --zen-background: 15 15 15; /* #0F0F0F - Deeper zen mode */
-  --zen-background-alt: 25 25 25; /* #191919 - Zen mode accent */
-  --zen-focus: 35 35 35; /* #232323 - Zen mode focus area */
-  
-  --sidebar-background: 20 20 20; /* #141414 - Matching sidebar */
-  --sidebar-highlight: 40 40 50; /* #282832 - Blue-tinted sidebar highlight */
+/* Light Mode */
+:not(.dark).theme-modern {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 260 60% 55%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 260 40% 96%;
+  --accent-foreground: 260 60% 30%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 260 60% 55%;
+
+  /* Sidebar specific colors */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 240 10% 3.9%;
+  --sidebar-muted: 240 3.8% 46.1%;
+  --sidebar-accent: 260 40% 96%;
+  --sidebar-highlight: 260 60% 55%;
 }
 
-/* Light mode specific styles for Modern Theme */
-:not(.dark).theme-modern {
-  --background: 248 248 250; /* #F8F8FA - Off-white background with slight blue tint */
-  --card: 255 255 255; /* #FFFFFF - Pure white */
-  --foreground: 30 30 40; /* #1E1E28 - Almost black text with blue tint */
-  --muted-foreground: 100 100 120; /* #646478 - Medium gray text with blue tint */
-  --border: 220 220 230; /* #DCDCE6 - Light blue-tinted border */
-  --primary: 0 122 255; /* #007AFF - Apple blue */
-  --primary-foreground: 255 255 255; /* #FFFFFF - Pure white on primary */
-  --secondary: 240 240 245; /* #F0F0F5 - Very light gray with blue tint */
-  --muted: 240 240 245; /* #F0F0F5 - Very light gray with blue tint */
-  --accent: 180 180 200; /* #B4B4C8 - Medium gray with blue tint */
-  --ring: 200 200 220; /* #C8C8DC - Light blue-gray ring */
-  --accent-primary: 60 100 255; /* Accent primary color for highlights */
-  
-  --sidebar-background: 248 248 250; /* #F8F8FA - Match main background */
-  --sidebar-highlight: 225 225 235; /* #E1E1EB - Subtle sidebar highlight with blue tint */
+/* Dark Mode */
+.dark.theme-modern {
+  --background: 240 6% 10%;
+  --foreground: 0 0% 98%;
+  --card: 240 6% 12%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 12%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 260 60% 55%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 260 40% 20%;
+  --accent-foreground: 260 60% 80%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 260 60% 55%;
+
+  /* Sidebar specific colors */
+  --sidebar-background: 240 6% 10%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-muted: 240 5% 64.9%;
+  --sidebar-accent: 260 40% 20%;
+  --sidebar-highlight: 260 60% 55%;
+}
+
+/* Enhanced Element Styling */
+.theme-modern .card {
+  border-radius: var(--radius);
+  border-width: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.theme-modern button {
+  border-radius: var(--radius);
+}
+
+.theme-modern input,
+.theme-modern select,
+.theme-modern textarea {
+  border-radius: var(--radius);
+}
+
+.theme-modern h1, 
+.theme-modern h2, 
+.theme-modern h3 {
+  letter-spacing: -0.025em;
 }
