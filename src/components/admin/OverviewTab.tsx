@@ -11,6 +11,7 @@ import {
 import MetricsCard from "./MetricsCard";
 import RecentActivity from "./RecentActivity";
 import SystemStatus from "./SystemStatus";
+import RecentOverviewCards from "./RecentOverviewCards";
 import { Ticket, UserSession, SystemMetrics } from "@/types/admin";
 
 interface OverviewTabProps {
