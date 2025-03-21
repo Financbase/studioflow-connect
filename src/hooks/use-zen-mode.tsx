@@ -1,5 +1,6 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { toast } from "@/hooks/use-toast";
 
 export interface ZenModeOptions {
   theme: 'minimal' | 'ambient' | 'focus';
@@ -10,6 +11,7 @@ export interface ZenModeOptions {
 
 interface UseZenModeProps {
   initialOptions?: Partial<ZenModeOptions>;
+  onStateChange?: (isActive: boolean) => void;
 }
 
 const DEFAULT_OPTIONS: ZenModeOptions = {
@@ -27,27 +29,61 @@ const SOUNDSCAPE_URLS: Record<Exclude<ZenModeOptions['soundscape'], 'silence'>, 
   analog: 'https://example.com/analog-static.mp3',
 };
 
+// Store user preferences for zen mode
+const STORAGE_KEY = 'zen-mode-preferences';
+
 export const useZenMode = (props?: UseZenModeProps) => {
+  // Load saved options from localStorage
+  const getSavedOptions = useCallback((): ZenModeOptions => {
+    try {
+      const savedOptions = localStorage.getItem(STORAGE_KEY);
+      return savedOptions 
+        ? { ...DEFAULT_OPTIONS, ...JSON.parse(savedOptions) } 
+        : { ...DEFAULT_OPTIONS, ...props?.initialOptions };
+    } catch (e) {
+      console.error('Error loading zen mode preferences:', e);
+      return { ...DEFAULT_OPTIONS, ...props?.initialOptions };
+    }
+  }, [props?.initialOptions]);
+
   const [isActive, setIsActive] = useState(false);
-  const [options, setOptions] = useState<ZenModeOptions>({
-    ...DEFAULT_OPTIONS,
-    ...props?.initialOptions,
-  });
+  const [options, setOptions] = useState<ZenModeOptions>(getSavedOptions());
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Save options when they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(options));
+    } catch (e) {
+      console.error('Error saving zen mode preferences:', e);
+    }
+  }, [options]);
   
   // Apply zen mode classes to document body
   useEffect(() => {
     if (isActive) {
       document.body.classList.add('zen-mode-active');
+      
+      // Notify user that zen mode is active
+      if (options.theme !== 'minimal') {
+        toast({
+          title: `${options.theme.charAt(0).toUpperCase() + options.theme.slice(1)} Zen Mode activated`,
+          description: "Enjoy your distraction-free environment.",
+          duration: 3000,
+        });
+      }
     } else {
       document.body.classList.remove('zen-mode-active');
     }
     
+    // Call onStateChange if provided
+    props?.onStateChange?.(isActive);
+    
     return () => {
       document.body.classList.remove('zen-mode-active');
     };
-  }, [isActive]);
+  }, [isActive, options.theme, props]);
   
   // Handle notification hiding
   useEffect(() => {
@@ -84,6 +120,7 @@ export const useZenMode = (props?: UseZenModeProps) => {
         const audio = new Audio(url);
         audio.loop = true;
         audio.volume = 0.4;
+        // In a real implementation, uncomment the line below:
         // audio.play().catch(err => console.error('Error playing audio:', err));
         audioRef.current = audio;
         
@@ -101,13 +138,28 @@ export const useZenMode = (props?: UseZenModeProps) => {
     };
   }, [isActive, options.soundscape]);
   
-  const updateOptions = (newOptions: Partial<ZenModeOptions>) => {
-    setOptions(prev => ({ ...prev, ...newOptions }));
-  };
+  // Keyboard shortcut for toggling zen mode (Ctrl/Cmd + Shift + Z)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Z') {
+        setIsActive(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   
-  const toggle = () => setIsActive(prev => !prev);
-  const activate = () => setIsActive(true);
-  const deactivate = () => setIsActive(false);
+  const updateOptions = useCallback((newOptions: Partial<ZenModeOptions>) => {
+    setOptions(prev => ({ ...prev, ...newOptions }));
+  }, []);
+  
+  const toggle = useCallback(() => setIsActive(prev => !prev), []);
+  const activate = useCallback(() => setIsActive(true), []);
+  const deactivate = useCallback(() => setIsActive(false), []);
   
   return {
     isActive,

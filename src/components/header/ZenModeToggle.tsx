@@ -19,18 +19,18 @@ const ZenModeToggle: React.FC<ZenModeToggleProps> = ({ onClick, isActive = false
             size="icon" 
             onClick={onClick} 
             className={isActive 
-              ? "bg-primary hover:bg-primary/90 text-primary-foreground relative overflow-hidden" 
+              ? "bg-primary hover:bg-primary/90 text-primary-foreground relative overflow-hidden transition-all duration-300" 
               : "text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all duration-300"
             }
             aria-label={isActive ? "Exit Zen Mode" : "Enter Zen Mode"}
           >
             {isActive ? (
               <>
-                <Sparkles className="h-5 w-5 relative z-10 animate-pulse text-primary-foreground" />
+                <Sparkles className="h-5 w-5 relative z-10 animate-pulse-soft text-primary-foreground" />
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-accent/50 to-primary/80 opacity-80 animate-pulse"></div>
               </>
             ) : (
-              <MoonStar className="h-5 w-5" />
+              <MoonStar className="h-5 w-5 transition-transform duration-300 hover:rotate-12" />
             )}
           </Button>
         </TooltipTrigger>
