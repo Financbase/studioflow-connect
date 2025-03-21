@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -115,17 +114,17 @@ const ThemeVersionControl = () => {
     setIsEditMode(null);
   };
   
-  // Add tag to version
+  // Handle add tag to version
   const handleAddTag = (versionId: string) => {
     if (newTag.trim()) {
-      versionManager.addTagToVersion(versionId, newTag.trim());
+      versionManager.addTag(versionId, newTag.trim());
       setNewTag("");
     }
   };
   
-  // Remove tag from version
+  // Handle remove tag from version
   const handleRemoveTag = (versionId: string, tag: string) => {
-    versionManager.removeTagFromVersion(versionId, tag);
+    versionManager.removeTag(versionId, tag);
   };
   
   // Handle filter by tag

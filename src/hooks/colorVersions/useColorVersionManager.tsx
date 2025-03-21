@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useLocalStorage } from '../../hooks/use-local-storage';
 import { toast } from '@/components/ui/use-toast';
 import { useVersionFiltering } from './useVersionFiltering';
 import { useVersionSorting } from './useVersionSorting';
@@ -243,7 +243,22 @@ export function useColorVersionManager() {
     ));
   }, [setVersions]);
 
-  // Export a version as a JSON string
+  const addTagToVersion = useCallback((id: string, tag: string) => {
+    setVersions(prev => prev.map(version => 
+      version.id === id && !version.tags.includes(tag)
+        ? { ...version, tags: [...version.tags, tag] }
+        : version
+    ));
+  }, [setVersions]);
+
+  const removeTagFromVersion = useCallback((id: string, tag: string) => {
+    setVersions(prev => prev.map(version => 
+      version.id === id
+        ? { ...version, tags: version.tags.filter(t => t !== tag) }
+        : version
+    ));
+  }, [setVersions]);
+
   const exportVersionAsString = useCallback((id: string): string | null => {
     const version = versions.find(v => v.id === id);
     
@@ -271,7 +286,6 @@ export function useColorVersionManager() {
     return JSON.stringify(exportData, null, 2);
   }, [versions]);
   
-  // Import a version from a JSON string
   const importVersionFromString = useCallback((jsonString: string): ColorVersion | null => {
     try {
       const importedData = JSON.parse(jsonString);
@@ -316,7 +330,6 @@ export function useColorVersionManager() {
     }
   }, [versions, setVersions]);
 
-  // Generate a theme variation
   const generateThemeVariation = useCallback((
     baseColor: string, 
     isDark: boolean = false
@@ -324,7 +337,6 @@ export function useColorVersionManager() {
     return generateThemePalette(baseColor, isDark);
   }, []);
 
-  // Filter-related methods for ThemeVersionControl
   const [filters, setFilters] = useState<VersionFilter>({
     search: '',
     tags: [],
@@ -373,17 +385,14 @@ export function useColorVersionManager() {
     setOnlyFavorites(false);
   }, [setFilterText, setSelectedTags, setOnlyFavorites]);
 
-  // Export version (wrapper for exportVersionAsString)
   const exportVersion = useCallback((id: string): string | null => {
     return exportVersionAsString(id);
   }, [exportVersionAsString]);
 
-  // Import version (wrapper for importVersionFromString)
   const importVersion = useCallback((data: string): ColorVersion | null => {
     return importVersionFromString(data);
   }, [importVersionFromString]);
 
-  // Save version (alias for createVersion in ThemeContext)
   const saveVersion = useCallback((
     name: string, 
     themeData: Record<string, string>, 
@@ -393,7 +402,6 @@ export function useColorVersionManager() {
     return createVersion(name, themeData, description, tags);
   }, [createVersion]);
 
-  // For ThemeVersionControl
   const switchToVersion = useCallback((id: string) => {
     // Find the version with this ID
     const version = versions.find(v => v.id === id);
@@ -420,7 +428,6 @@ export function useColorVersionManager() {
     });
   }, [versions, setCurrentVersionId, setVersions]);
 
-  // Get all available tags across all versions
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     versions.forEach(version => {
@@ -429,30 +436,27 @@ export function useColorVersionManager() {
     return Array.from(tagSet).sort();
   }, [versions]);
 
-  // Return all the necessary functions and state
   return {
-    // State
     versions,
     currentVersion,
     currentVersionId,
     
-    // Core operations
     createVersion,
     updateVersion,
     deleteVersion,
     duplicateVersion,
     setActiveVersion,
-    switchToVersion, // Alias for ThemeVersionControl
+    switchToVersion,
     toggleFavorite,
     
-    // Tag operations
     addTag,
     removeTag,
+    addTagToVersion,
+    removeTagFromVersion,
     availableTags,
     allTags,
     
-    // Version filters and operations for ThemeVersionControl
-    filters, 
+    filters,
     updateFilters,
     addTagFilter,
     removeTagFilter,
@@ -460,7 +464,6 @@ export function useColorVersionManager() {
     resetFilters,
     filteredVersions,
     
-    // Filtering
     filterText,
     setFilterText,
     selectedTags,
@@ -468,22 +471,18 @@ export function useColorVersionManager() {
     onlyFavorites,
     setOnlyFavorites,
     
-    // Sorting
     sortOption,
     setSortOption,
     sortedVersions,
     
-    // Import/Export
     exportVersionAsString,
     importVersionFromString,
-    exportVersion, // Alias for ThemeVersionControl
-    importVersion, // Alias for ThemeVersionControl
+    exportVersion,
+    importVersion,
     
-    // For ThemeContext
     getCurrentVersion,
     saveVersion,
     
-    // Theme generation
     generateThemeVariation
   };
 }
