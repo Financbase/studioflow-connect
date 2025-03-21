@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { useAuth } from "@/hooks/use-auth";
 import { MusicIcon } from "lucide-react";
-import PlanSwitcher from "@/components/PlanSwitcher";
+import ViewSelector from "@/components/ViewSelector";
 import CustomLayoutEditor from "@/components/CustomLayoutEditor";
 import { useResponsive } from "@/hooks/use-mobile";
 import NavLinks from "./header/NavLinks";
@@ -54,7 +54,7 @@ const Header = () => {
         <div className="flex flex-1 items-center justify-end gap-2">
           {isAuthenticated && !isMobile && (
             <>
-              <PlanSwitcher currentPlan={pricingTier} onPlanChange={setPricingTier} />
+              <ViewSelector />
               <CustomLayoutEditor />
             </>
           )}
