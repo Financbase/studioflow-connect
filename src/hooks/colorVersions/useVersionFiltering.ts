@@ -1,82 +1,49 @@
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { ColorVersion, VersionFilter } from './types';
 
+// Hook for filtering color versions by text, tags, and favorites
 export function useVersionFiltering(versions: ColorVersion[]) {
-  const [filters, setFilters] = useState<VersionFilter>({
-    search: '',
-    tags: [],
-    onlyFavorites: false
-  });
-  
-  // Get all unique tags from all versions
-  const allTags = useMemo(() => {
+  const [filterText, setFilterText] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+
+  // Get all available tags across all versions
+  const availableTags = useMemo(() => {
     const tagSet = new Set<string>();
     versions.forEach(version => {
       version.tags.forEach(tag => tagSet.add(tag));
     });
     return Array.from(tagSet).sort();
   }, [versions]);
-  
-  // Apply filters to versions
+
+  // Filter versions based on current filters
   const filteredVersions = useMemo(() => {
     return versions.filter(version => {
-      // Filter by search term
-      const matchesSearch = !filters.search || 
-        version.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-        (version.description?.toLowerCase() || '').includes(filters.search.toLowerCase()) ||
-        version.tags.some(tag => tag.toLowerCase().includes(filters.search.toLowerCase()));
+      // Filter by text (name or description)
+      const textMatch = filterText === '' || 
+        version.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        (version.description && version.description.toLowerCase().includes(filterText.toLowerCase()));
       
-      // Filter by selected tags
-      const matchesTags = filters.tags.length === 0 || 
-        filters.tags.every(tag => version.tags.includes(tag));
+      // Filter by tags
+      const tagsMatch = selectedTags.length === 0 || 
+        selectedTags.every(tag => version.tags.includes(tag));
       
       // Filter by favorites
-      const matchesFavorites = !filters.onlyFavorites || version.isFavorite;
+      const favoriteMatch = !onlyFavorites || version.isFavorite;
       
-      return matchesSearch && matchesTags && matchesFavorites;
+      return textMatch && tagsMatch && favoriteMatch;
     });
-  }, [versions, filters]);
-  
-  // Update filters
-  const updateFilters = (newFilters: Partial<VersionFilter>) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
-  };
-  
-  // Add a tag to filters
-  const addTagFilter = (tag: string) => {
-    if (!filters.tags.includes(tag)) {
-      updateFilters({ tags: [...filters.tags, tag] });
-    }
-  };
-  
-  // Remove a tag from filters
-  const removeTagFilter = (tag: string) => {
-    updateFilters({ tags: filters.tags.filter(t => t !== tag) });
-  };
-  
-  // Toggle favorites only filter
-  const toggleFavoritesFilter = () => {
-    updateFilters({ onlyFavorites: !filters.onlyFavorites });
-  };
-  
-  // Reset all filters
-  const resetFilters = () => {
-    setFilters({
-      search: '',
-      tags: [],
-      onlyFavorites: false
-    });
-  };
-  
+  }, [versions, filterText, selectedTags, onlyFavorites]);
+
   return {
-    filters,
+    filterText,
+    setFilterText,
+    selectedTags,
+    setSelectedTags,
+    onlyFavorites,
+    setOnlyFavorites,
     filteredVersions,
-    updateFilters,
-    addTagFilter,
-    removeTagFilter,
-    toggleFavoritesFilter,
-    resetFilters,
-    allTags
+    availableTags
   };
 }
