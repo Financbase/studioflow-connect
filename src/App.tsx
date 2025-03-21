@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
 import Auth from "./pages/Auth";
@@ -11,6 +12,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Support from "./pages/Support";
+import Projects from "./pages/Projects";
+import Library from "./pages/Library";
+import Connect from "./pages/Connect";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -63,14 +67,56 @@ const App = () => {
                     <ScrollToTop />
                     <Routes>
                       <Route path="/auth" element={<Auth />} />
+                      
+                      {/* Main Dashboard Routes */}
                       <Route 
                         path="/" 
+                        element={
+                          <ProtectedRoute>
+                            <Dashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      {/* Legacy dashboard route (redirects to new Dashboard) */}
+                      <Route 
+                        path="/old-dashboard" 
                         element={
                           <ProtectedRoute>
                             <Index />
                           </ProtectedRoute>
                         } 
                       />
+                      
+                      {/* Feature Routes */}
+                      <Route 
+                        path="/projects" 
+                        element={
+                          <ProtectedRoute>
+                            <Projects />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      <Route 
+                        path="/library" 
+                        element={
+                          <ProtectedRoute>
+                            <Library />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      <Route 
+                        path="/connect" 
+                        element={
+                          <ProtectedRoute>
+                            <Connect />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      {/* Admin Route */}
                       <Route 
                         path="/admin" 
                         element={
@@ -79,6 +125,8 @@ const App = () => {
                           </ProtectedRoute>
                         } 
                       />
+                      
+                      {/* User & System Routes */}
                       <Route 
                         path="/profile" 
                         element={
@@ -103,6 +151,8 @@ const App = () => {
                           </ProtectedRoute>
                         } 
                       />
+                      
+                      {/* Documentation Routes */}
                       <Route 
                         path="/docs" 
                         element={
@@ -135,6 +185,7 @@ const App = () => {
                           </ProtectedRoute>
                         } 
                       />
+                      
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>

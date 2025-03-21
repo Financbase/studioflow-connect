@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
 import { useAuth } from "@/hooks/use-auth";
 import { Badge } from "@/components/ui/badge";
@@ -23,10 +24,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <SidebarLayout>
       <Header />
-      <main className="container py-6 md:py-10">
-        <div className="flex flex-col gap-6 max-w-5xl mx-auto">
+      <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
+        <div className="max-w-5xl mx-auto space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold">My Profile</h1>
@@ -48,7 +49,7 @@ const Profile = () => {
           />
         </div>
       </main>
-    </div>
+    </SidebarLayout>
   );
 };
 
