@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
 import { useDashboard, PricingTier } from "@/contexts/DashboardContext";
 import RecommendationList from "./recommendation/RecommendationList";
-import { Recommendation } from "./recommendation/RecommendationCard";
+import { Recommendation } from "@/types/recommendation";
 
 interface FeatureRecommendationProps {
   recommendations: Recommendation[];
@@ -23,7 +23,7 @@ const FeatureRecommendation: React.FC<FeatureRecommendationProps> = ({
     const locked: Recommendation[] = [];
     
     recommendations.forEach(rec => {
-      const tierLevels: PricingTier[] = ['free', 'standard', 'pro'];
+      const tierLevels: PricingTier[] = ['free', 'standard', 'pro', 'enterprise'];
       const currentTierIndex = tierLevels.indexOf(pricingTier);
       const recommendationTierIndex = tierLevels.indexOf(rec.requiredTier);
       

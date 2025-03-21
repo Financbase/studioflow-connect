@@ -1,6 +1,7 @@
 
 import React from "react";
-import RecommendationCard, { Recommendation } from "./RecommendationCard";
+import RecommendationCard from "./RecommendationCard";
+import { Recommendation } from "@/types/recommendation";
 
 interface RecommendationListProps {
   recommendations: Recommendation[];
@@ -18,9 +19,9 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
   return (
     <div className="space-y-2">
       {title && <p className="text-xs text-muted-foreground">{title}</p>}
-      {recommendations.map((rec, idx) => (
+      {recommendations.map((rec) => (
         <RecommendationCard 
-          key={idx} 
+          key={rec.id} 
           recommendation={rec} 
           isLocked={isLocked} 
         />
