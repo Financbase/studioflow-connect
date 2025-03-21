@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, Info, ChevronDown, Tag as TagIcon, Music, Mic, Sliders, Activity, Database, Headphones, FileText, Waveform } from "lucide-react";
+import { Search, Info, ChevronDown, Tag as TagIcon, Music, Mic, Sliders, Activity, Database, Headphones, FileText, AudioWaveform } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -88,7 +88,7 @@ const FAQSection = ({
       case 'software':
         return <FileText className="h-3 w-3" />;
       case 'theory':
-        return <Waveform className="h-3 w-3" />;
+        return <AudioWaveform className="h-3 w-3" />; // Changed from Waveform to AudioWaveform
       default:
         return <TagIcon className="h-3 w-3" />;
     }
