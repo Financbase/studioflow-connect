@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Lock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Recommendation } from '@/types/recommendation';
+import { useRecommendations } from '@/hooks/useRecommendations';
 import { cn } from '@/lib/utils';
 
 interface FeatureRecommendationProps {
   title?: string;
   description?: string;
-  recommendations: Recommendation[];
+  category?: string;
   pricingTier?: string;
   limit?: number;
   compact?: boolean;
@@ -22,29 +22,22 @@ interface FeatureRecommendationProps {
 const FeatureRecommendation: React.FC<FeatureRecommendationProps> = ({
   title = "Recommended for you",
   description = "Features that might enhance your workflow",
-  recommendations,
+  category,
   pricingTier = "free",
   limit = 3,
   compact = false,
   className,
   showViewAll = true
 }) => {
-  // Get the pricing tier level for comparison
-  const getTierLevel = (tier: string) => {
-    switch (tier) {
-      case 'pro': return 2;
-      case 'standard': return 1;
-      default: return 0; // 'free'
-    }
-  };
-  
-  const userTierLevel = getTierLevel(pricingTier);
-  
-  // Limit the number of recommendations shown
-  const displayRecommendations = recommendations.slice(0, limit);
+  const { activeRecommendations } = useRecommendations({
+    initialCategory: category,
+    pricingTier,
+    limit,
+    filterByTier: true
+  });
   
   // Get a sample category if available for the "View all" link
-  const sampleCategory = recommendations[0]?.category || 'system';
+  const sampleCategory = category || (activeRecommendations[0]?.category || 'system');
   
   return (
     <Card className={cn("h-full", className)}>
@@ -54,9 +47,9 @@ const FeatureRecommendation: React.FC<FeatureRecommendationProps> = ({
       </CardHeader>
       
       <CardContent className="space-y-3">
-        {displayRecommendations.map((recommendation) => {
+        {activeRecommendations.map((recommendation) => {
           const Icon = recommendation.icon;
-          const isAvailable = getTierLevel(recommendation.requiredTier) <= userTierLevel;
+          const isAvailable = recommendation.isAvailable ?? true;
           
           return (
             <div 

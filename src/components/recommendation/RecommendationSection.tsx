@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRecommendations } from '@/hooks/useRecommendations';
 
 interface RecommendationSectionProps {
   title?: string;
@@ -13,7 +14,7 @@ interface RecommendationSectionProps {
   category: string;
   limit?: number;
   pricingTier?: string;
-  recommendations: Recommendation[];
+  showViewAll?: boolean;
 }
 
 export const RecommendationSection: React.FC<RecommendationSectionProps> = ({
@@ -22,18 +23,22 @@ export const RecommendationSection: React.FC<RecommendationSectionProps> = ({
   category,
   limit = 3,
   pricingTier = 'free',
-  recommendations
+  showViewAll = true
 }) => {
-  // Get recommendations from the specified category and limit them
-  const items = recommendations.slice(0, limit);
+  const { activeRecommendations } = useRecommendations({
+    initialCategory: category,
+    pricingTier,
+    limit,
+    filterByTier: true
+  });
   
-  // Determine which recommendations are available based on pricing tier
+  // Determine tier levels for showing badges
   const tierLevel = {
     'free': 0,
     'standard': 1,
     'pro': 2
   };
-
+  
   const userTierLevel = tierLevel[pricingTier as keyof typeof tierLevel] || 0;
   
   return (
@@ -44,10 +49,9 @@ export const RecommendationSection: React.FC<RecommendationSectionProps> = ({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-3">
-          {items.map((recommendation) => {
+          {activeRecommendations.map((recommendation) => {
             const Icon = recommendation.icon;
-            const recommendationTierLevel = tierLevel[recommendation.requiredTier as keyof typeof tierLevel] || 0;
-            const isAvailable = recommendationTierLevel <= userTierLevel;
+            const isAvailable = recommendation.isAvailable ?? true;
             
             return (
               <div
@@ -75,13 +79,15 @@ export const RecommendationSection: React.FC<RecommendationSectionProps> = ({
           })}
         </div>
         
-        <div className="flex justify-end">
-          <Button variant="ghost" asChild>
-            <Link to={`/recommendations?category=${category}`} className="flex items-center gap-1">
-              View all <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
+        {showViewAll && (
+          <div className="flex justify-end">
+            <Button variant="ghost" asChild>
+              <Link to={`/recommendations?category=${category}`} className="flex items-center gap-1">
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

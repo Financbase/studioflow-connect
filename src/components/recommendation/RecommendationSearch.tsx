@@ -4,22 +4,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import { recommendations } from '@/data/recommendations';
 import { useNavigate } from 'react-router-dom';
+import { useRecommendations } from '@/hooks/useRecommendations';
 
 interface RecommendationSearchProps {
   trigger?: React.ReactNode;
+  pricingTier?: string;
 }
 
 export const RecommendationSearch: React.FC<RecommendationSearchProps> = ({
-  trigger
+  trigger,
+  pricingTier = 'free'
 }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const { allRecommendations, categories } = useRecommendations({
+    pricingTier,
+    filterByTier: false // We'll show all recommendations in search but mark some as unavailable
+  });
 
   // Flatten recommendations for search
-  const allRecommendations = Object.entries(recommendations).flatMap(
-    ([category, items]) => items.map(item => ({ ...item, category }))
+  const allFlattenedRecommendations = Object.entries(allRecommendations).flatMap(
+    ([category, items]) => items.map(item => ({ ...item, categoryKey: category }))
   );
 
   const handleSelect = (id: string, category: string) => {
@@ -52,9 +59,12 @@ export const RecommendationSearch: React.FC<RecommendationSearchProps> = ({
             <CommandInput placeholder="Type to search..." />
             <CommandList>
               <CommandEmpty>No recommendations found.</CommandEmpty>
-              {Object.entries(recommendations).map(([category, items]) => (
-                <CommandGroup key={category} heading={category.charAt(0).toUpperCase() + category.slice(1)}>
-                  {items.map((item) => (
+              {categories.map((category) => (
+                <CommandGroup 
+                  key={category} 
+                  heading={category.charAt(0).toUpperCase() + category.slice(1)}
+                >
+                  {allRecommendations[category]?.map((item) => (
                     <CommandItem
                       key={item.id}
                       value={`${item.title} ${item.description}`}
