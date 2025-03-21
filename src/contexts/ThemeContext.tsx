@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useColorVersionManager, ColorVersion } from "@/hooks/useColorVersionManager";
 
 export type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
 export type ThemeMode = "dark" | "light";
@@ -12,6 +13,8 @@ interface ThemeContextType {
   toggleDarkMode: () => void;
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
+  saveCurrentTheme: (name: string, description?: string) => void;
+  versionManager: ReturnType<typeof useColorVersionManager>;
 }
 
 interface ThemeProviderProps {
@@ -28,6 +31,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const [themeVariant, setThemeVariant] = useState<ThemeVariant>("modern");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [theme, setTheme] = useState<ThemeMode>("dark");
+  const versionManager = useColorVersionManager();
   
   // Initialize theme from localStorage
   useEffect(() => {
@@ -43,6 +47,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     setTheme(isDark ? "dark" : "light");
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
+  
+  // Check for current theme version and apply it if exists
+  useEffect(() => {
+    const currentVersion = versionManager.getCurrentVersion();
+    if (currentVersion) {
+      const variant = currentVersion.themeData['themeVariant'] as ThemeVariant;
+      if (variant) {
+        setThemeVariant(variant);
+      }
+      
+      const mode = currentVersion.themeData['themeMode'] as ThemeMode;
+      if (mode) {
+        setTheme(mode);
+        setIsDarkMode(mode === 'dark');
+        document.documentElement.classList.toggle("dark", mode === 'dark');
+      }
+    }
+  }, [versionManager.currentVersionId]);
   
   // Apply theme classes when the theme changes
   useEffect(() => {
@@ -93,6 +115,17 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     });
   };
   
+  // Save current theme as a version
+  const saveCurrentTheme = (name: string, description?: string) => {
+    const themeData = {
+      themeVariant,
+      themeMode: theme,
+      isDarkMode: isDarkMode.toString()
+    };
+    
+    versionManager.saveVersion(name, themeData, description);
+  };
+  
   return (
     <ThemeContext.Provider value={{
       themeVariant,
@@ -100,7 +133,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       isDarkMode,
       toggleDarkMode,
       theme,
-      setTheme: handleSetTheme
+      setTheme: handleSetTheme,
+      saveCurrentTheme,
+      versionManager
     }}>
       {children}
     </ThemeContext.Provider>

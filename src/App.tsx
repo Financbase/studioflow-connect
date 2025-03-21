@@ -81,12 +81,11 @@ const App = () => {
                         } 
                       />
                       
-                      {/* Legacy dashboard route (redirects to new Dashboard) */}
                       <Route 
-                        path="/old-dashboard" 
+                        path="/dashboard" 
                         element={
                           <ProtectedRoute>
-                            <Index />
+                            <Dashboard />
                           </ProtectedRoute>
                         } 
                       />
@@ -120,7 +119,7 @@ const App = () => {
                       />
                       
                       <Route 
-                        path="/ai" 
+                        path="/ai-tools" 
                         element={
                           <ProtectedRoute>
                             <AIToolsPage />
@@ -146,9 +145,9 @@ const App = () => {
                         } 
                       />
                       
-                      {/* New Contribution Route */}
+                      {/* Contribution Routes */}
                       <Route 
-                        path="/contribute" 
+                        path="/contribution" 
                         element={
                           <ProtectedRoute>
                             <Contribution />
@@ -198,30 +197,6 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <Documentation />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/terms" 
-                        element={
-                          <ProtectedRoute>
-                            <Documentation page="terms" />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/privacy" 
-                        element={
-                          <ProtectedRoute>
-                            <Documentation page="privacy" />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/contact" 
-                        element={
-                          <ProtectedRoute>
-                            <Documentation page="contact" />
                           </ProtectedRoute>
                         } 
                       />

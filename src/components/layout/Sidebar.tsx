@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -115,7 +114,7 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
     },
     {
       title: "Documentation",
-      href: "/documentation",
+      href: "/docs",
       icon: <HelpCircle className="w-5 h-5" />,
     },
     {
