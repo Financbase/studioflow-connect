@@ -1,6 +1,6 @@
 
 import { Recommendation } from "@/types/recommendation";
-import { ServerStack, Cpu, BarChart } from "lucide-react";
+import { Server, Cpu, BarChart } from "lucide-react";
 
 export const systemRecommendations: Recommendation[] = [
   {
@@ -18,7 +18,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Implements memory compression for older 32-bit plugins to reduce their footprint while maintaining fast access.",
     category: "workflow",
     requiredTier: "standard",
-    icon: ServerStack,
+    icon: Server,
     actionLabel: "Enable Now"
   },
   {
@@ -27,7 +27,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Create and save optimized resource profiles for different project types (mixing vs. tracking sessions).",
     category: "workflow",
     requiredTier: "pro",
-    icon: ServerStack,
+    icon: Server,
     actionLabel: "Create Profile"
   },
   {
@@ -63,7 +63,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Intelligently pre-renders effect chains that don't require real-time interaction while keeping interactive elements responsive.",
     category: "workflow",
     requiredTier: "standard",
-    icon: ServerStack,
+    icon: Server,
     actionLabel: "Configure"
   },
   {
@@ -90,7 +90,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Tracks system-level variables like temperature, power draw, and disk fragmentation that might impact audio performance.",
     category: "workflow",
     requiredTier: "standard",
-    icon: ServerStack,
+    icon: Server,
     actionLabel: "Monitor Environment"
   }
 ];

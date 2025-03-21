@@ -10,7 +10,7 @@ export interface Recommendation {
   category: 'workflow' | 'plugins' | 'sounds' | 'features' | 'learning' | 'ai' | 'marketplace';
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   requiredTier: PricingTier;
-  icon: LucideIcon | ReactNode;
+  icon: LucideIcon;
   actionLabel: string;
   actionUrl?: string;
   onClick?: () => void;
