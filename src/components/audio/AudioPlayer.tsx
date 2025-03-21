@@ -5,6 +5,7 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAudioControls } from '@/hooks/use-audio-controls';
 import { formatTime } from '@/lib/audioUtils';
+import { toast } from '@/hooks/use-toast';
 
 interface AudioPlayerProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -32,7 +33,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   useEffect(() => {
     if (src && audioRef.current) {
       audioRef.current.src = src;
-      if (autoPlay) audioRef.current.play().catch(err => console.error("Error playing audio:", err));
+      
+      if (autoPlay) {
+        audioRef.current.play().catch(err => {
+          console.error("Error playing audio:", err);
+          toast.error({
+            title: "Playback Error",
+            description: "Could not auto-play the audio. Try playing it manually."
+          });
+        });
+      }
     }
   }, [src, audioRef, autoPlay]);
 
@@ -44,10 +54,20 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       onEnded();
     };
     
+    const handleAudioError = (e: Event) => {
+      console.error("Audio error:", e);
+      toast.error({
+        title: "Audio Error",
+        description: "There was a problem with the audio file."
+      });
+    };
+    
     audio.addEventListener('ended', handleAudioEnded);
+    audio.addEventListener('error', handleAudioError);
     
     return () => {
       audio.removeEventListener('ended', handleAudioEnded);
+      audio.removeEventListener('error', handleAudioError);
     };
   }, [audioRef, onEnded]);
 
@@ -61,12 +81,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   return (
     <div className="flex flex-col space-y-2 w-full">
-      <audio 
-        ref={audioRef} 
-        className="hidden" 
-        src={src}
-      />
-      
       {duration > 0 && (
         <div className="space-y-1 w-full">
           <Slider 

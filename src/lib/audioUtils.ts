@@ -39,3 +39,33 @@ export const debounce = <T extends (...args: any[]) => any>(
     timeout = setTimeout(() => func(...args), wait);
   };
 };
+
+/**
+ * Safely initializes an AudioContext with browser compatibility
+ */
+export const createAudioContext = (): AudioContext => {
+  // Check if AudioContext is available in this browser
+  if (!window.AudioContext && !(window as any).webkitAudioContext) {
+    throw new Error("AudioContext is not supported in this browser");
+  }
+  
+  // Create the appropriate context
+  return new (window.AudioContext || (window as any).webkitAudioContext)();
+};
+
+/**
+ * Safely connect an audio source to an analyzer and destination
+ */
+export const connectAudioNodes = (
+  context: AudioContext,
+  source: MediaElementAudioSourceNode,
+  analyzer: AnalyserNode
+): void => {
+  try {
+    source.connect(analyzer);
+    analyzer.connect(context.destination);
+  } catch (error) {
+    console.error("Error connecting audio nodes:", error);
+    throw error;
+  }
+};

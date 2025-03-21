@@ -8,8 +8,9 @@ import WaveformVisualizer from "./WaveformVisualizer";
 import AudioControls from "./AudioControls";
 import AudioPlayer from "./AudioPlayer";
 import { supabase } from "@/integrations/supabase/client";
-import { useAudioControls } from "@/hooks/use-audio-controls";
+import { useAudioAnalysis } from "@/hooks/use-audio-analysis";
 import { formatFileSize, formatFileType } from "@/lib/audioUtils";
+import { toast } from "@/hooks/use-toast";
 
 interface AudioAnalysisProps {
   audioFile: AudioAsset;
@@ -18,9 +19,7 @@ interface AudioAnalysisProps {
 const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
-  const [audioData, setAudioData] = useState<Uint8Array | null>(null);
-  const [audioSource, setAudioSource] = useState<MediaElementAudioSourceNode | null>(null);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   const {
     isPlaying,
@@ -35,8 +34,13 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
     seek,
     setVolume,
     toggleMute,
-    setVisualizationType
-  } = useAudioControls(audioRef);
+    setVisualizationType,
+    audioData,
+    audioContext,
+    audioSource,
+    initializeAudioContext,
+    cleanupAudioContext
+  } = useAudioAnalysis(audioFile, audioRef);
 
   // Get signed URL from Supabase
   useEffect(() => {
@@ -44,46 +48,50 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
       try {
         const { data, error } = await supabase.storage
           .from('audio_assets')
-          .createSignedUrl(audioFile.storage_path, 60); // 60 seconds expiry
+          .createSignedUrl(audioFile.storage_path, 3600); // 1 hour expiry for better user experience
           
         if (error) {
           console.error("Error getting signed URL:", error);
+          toast.error({
+            title: "Error loading audio file",
+            description: "Could not load the audio file. Please try again later."
+          });
           return;
         }
         
         setAudioUrl(data.signedUrl);
       } catch (error) {
         console.error("Error in getSignedUrl:", error);
+        toast.error({
+          title: "Error loading audio file",
+          description: "An unexpected error occurred while loading the audio file."
+        });
       }
     };
     
     getSignedUrl();
-  }, [audioFile]);
-
-  // Set up audio context and source node when audio element is available and playing state changes
-  useEffect(() => {
-    if (audioRef.current && isPlaying) {
-      // Create AudioContext if it doesn't exist
-      if (!audioContext) {
-        const newAudioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        setAudioContext(newAudioContext);
-      }
-      
-      // Create source node from audio element
-      if (audioContext && !audioSource && audioRef.current) {
-        const newSource = audioContext.createMediaElementSource(audioRef.current);
-        newSource.connect(audioContext.destination);
-        setAudioSource(newSource);
-      }
-    }
     
-    // Clean up when component unmounts
+    // Clean up audio context when component unmounts
     return () => {
-      if (audioContext) {
-        audioContext.close().catch(err => console.error("Error closing audio context:", err));
-      }
+      cleanupAudioContext();
     };
-  }, [audioRef.current, isPlaying, audioContext, audioSource]);
+  }, [audioFile, cleanupAudioContext]);
+
+  // Initialize audio context when audio starts playing
+  useEffect(() => {
+    if (isPlaying && !isInitialized && audioRef.current) {
+      initializeAudioContext();
+      setIsInitialized(true);
+    }
+  }, [isPlaying, isInitialized, initializeAudioContext]);
+
+  // Handle audio loading errors
+  const handleAudioError = () => {
+    toast.error({
+      title: "Audio Error",
+      description: "Failed to load audio file. Please check the file format and try again."
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -99,11 +107,15 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
           <AudioPlayer 
             audioRef={audioRef} 
             src={audioUrl}
+            onEnded={() => {
+              // Auto-stop on end
+              stop();
+            }}
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {visualizationType === "frequency" ? (
-              <FrequencyVisualizer className="col-span-full" audioSource={isPlaying ? audioSource : undefined} />
+              <FrequencyVisualizer className="col-span-full" audioSource={audioSource} />
             ) : (
               <WaveformVisualizer audioData={audioData} className="col-span-full" />
             )}
@@ -136,6 +148,14 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
           </div>
         </CardFooter>
       </Card>
+      
+      {/* Hidden audio element */}
+      <audio 
+        ref={audioRef} 
+        src={audioUrl} 
+        className="hidden" 
+        onError={handleAudioError}
+      />
     </div>
   );
 };
