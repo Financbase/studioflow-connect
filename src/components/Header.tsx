@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -25,6 +25,7 @@ const Header = () => {
   const { pricingTier, setPricingTier } = useDashboard();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isZenModeActive, toggleZenMode, options, updateOptions } = useZenMode();
   
@@ -43,6 +44,9 @@ const Header = () => {
     }
   };
   
+  // Determine if current page needs view selector
+  const showViewTools = ['/dashboard', '/library', '/connect'].includes(location.pathname);
+  
   return (
     <>
       <header className={`sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${themeVariant === "windows" ? "border-b-2" : ""}`}>
@@ -57,7 +61,7 @@ const Header = () => {
           )}
           
           <div className="flex flex-1 items-center justify-end gap-2">
-            {isAuthenticated && !isMobile && (
+            {isAuthenticated && !isMobile && showViewTools && (
               <>
                 <ZenModeToggle 
                   onClick={toggleZenMode} 
@@ -105,12 +109,14 @@ const Header = () => {
         </div>
       </header>
       
-      <ZenMode 
-        isActive={isZenModeActive} 
-        onToggle={toggleZenMode} 
-        options={options}
-        onOptionsChange={updateOptions}
-      />
+      {isZenModeActive && (
+        <ZenMode 
+          isActive={isZenModeActive} 
+          onToggle={toggleZenMode} 
+          options={options}
+          onOptionsChange={updateOptions}
+        />
+      )}
     </>
   );
 };

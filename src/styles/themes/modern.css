@@ -33,7 +33,7 @@
   --foreground: 30 30 40; /* #1E1E28 - Almost black text with blue tint */
   --muted-foreground: 100 100 120; /* #646478 - Medium gray text with blue tint */
   --border: 220 220 230; /* #DCDCE6 - Light blue-tinted border */
-  --primary: 30 30 40; /* #1E1E28 - Almost black with blue tint */
+  --primary: 0 122 255; /* #007AFF - Apple blue */
   --primary-foreground: 255 255 255; /* #FFFFFF - Pure white on primary */
   --secondary: 240 240 245; /* #F0F0F5 - Very light gray with blue tint */
   --muted: 240 240 245; /* #F0F0F5 - Very light gray with blue tint */

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -132,7 +133,7 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
   const sidebarLinks = links || defaultLinks;
   
   const sidebarClass = cn(
-    "bg-background border-r border-border flex flex-col transition-all duration-300 z-30 h-screen",
+    "bg-sidebar-background border-r border-border flex flex-col transition-all duration-300 z-30 h-screen",
     {
       "w-64": !isCollapsed,
       "w-16": isCollapsed,
@@ -188,8 +189,8 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                       isActive
-                        ? "bg-accent text-accent-foreground font-medium"
-                        : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground",
+                        ? "bg-sidebar-highlight text-foreground font-medium"
+                        : "text-muted-foreground hover:bg-sidebar-highlight/50 hover:text-foreground",
                       isLocked && "opacity-50"
                     )}
                     onClick={(e) => isLocked && e.preventDefault()}

@@ -2,7 +2,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Home, LayoutDashboard, HelpCircle } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -24,12 +24,27 @@ const NotFound = () => {
         </p>
         <div className="space-y-2">
           <Button asChild className="w-full">
-            <Link to="/">Return to Dashboard</Link>
+            <Link to="/">
+              <Home className="mr-2 h-4 w-4" />
+              Return Home
+            </Link>
           </Button>
           <Button asChild variant="outline" className="w-full">
-            <Link to="/support">Contact Support</Link>
+            <Link to="/dashboard">
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              Go to Dashboard
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link to="/support">
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Contact Support
+            </Link>
           </Button>
         </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Attempted path: <code className="bg-muted px-1 py-0.5 rounded">{location.pathname}</code>
+        </p>
       </div>
     </div>
   );
