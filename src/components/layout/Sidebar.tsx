@@ -39,12 +39,6 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
   const { themeVariant } = useTheme();
   const dashboard = useDashboard();
   
-  // Update localStorage when sidebar state changes
-  useEffect(() => {
-    localStorage.setItem("sidebar_collapsed", isCollapsed.toString());
-    localStorage.setItem("sidebar_locked", isLocked.toString());
-  }, [isCollapsed, isLocked]);
-  
   // Load sidebar state from localStorage on component mount
   useEffect(() => {
     const savedCollapsed = localStorage.getItem("sidebar_collapsed");
@@ -59,12 +53,22 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
     }
   }, []);
   
+  // Update localStorage when sidebar state changes
+  useEffect(() => {
+    localStorage.setItem("sidebar_collapsed", isCollapsed.toString());
+    localStorage.setItem("sidebar_locked", isLocked.toString());
+  }, [isCollapsed, isLocked]);
+  
   const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+    const newCollapsedState = !isCollapsed;
+    setIsCollapsed(newCollapsedState);
+    localStorage.setItem("sidebar_collapsed", newCollapsedState.toString());
   };
   
   const toggleLock = () => {
-    setIsLocked(!isLocked);
+    const newLockedState = !isLocked;
+    setIsLocked(newLockedState);
+    localStorage.setItem("sidebar_locked", newLockedState.toString());
   };
 
   const defaultLinks = [
@@ -129,12 +133,14 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
   const sidebarLinks = links || defaultLinks;
   
   const sidebarClass = cn(
-    "bg-card border-r border-border flex flex-col transition-all duration-300 z-30 h-screen",
+    "bg-background border-r border-border flex flex-col transition-all duration-300 z-30 h-screen",
     {
       "w-64": !isCollapsed,
       "w-16": isCollapsed,
-      "fixed md:sticky top-0 left-0": isLocked,
-      "fixed top-0 left-0": !isLocked
+      "fixed md:relative top-0 left-0": isLocked,
+      "fixed top-0 left-0 transform transition-transform": !isLocked,
+      "-translate-x-full": !isLocked && isCollapsed,
+      "translate-x-0": !isLocked && !isCollapsed
     },
     className
   );
@@ -193,7 +199,7 @@ export const Sidebar = ({ className, links, ...props }: SidebarProps) => {
                     {!isCollapsed && (
                       <span>{link.title}</span>
                     )}
-                    {!isCollapsed && isLocked && (
+                    {!isCollapsed && isLocked && link.pro && dashboard?.pricingTier !== 'pro' && dashboard?.pricingTier !== 'enterprise' && (
                       <svg
                         className="ml-auto h-4 w-4 opacity-70"
                         fill="none"

@@ -2,13 +2,6 @@
 /* Apple-Inspired Grayscale Theme - Modern */
 .theme-modern {
   --radius: 0.75rem;
-  /* Apple-inspired custom colors */
-  --accent-primary: 0 0 0; /* Pure black */
-  --accent-cta: 50 50 50; /* Dark gray */
-  --highlight: 180 180 180; /* Light gray */
-  --success: 40 175 110; /* Apple green */
-  --warning: 255 204 0; /* Apple yellow */
-  --error: 255 59 48; /* Apple red */
 }
 
 /* Dark mode specific styles for Apple-Inspired Grayscale Theme */
@@ -45,4 +38,7 @@
   --muted: 240 240 240; /* #F0F0F0 - Very light gray */
   --accent: 180 180 180; /* #B4B4B4 - Medium gray */
   --ring: 200 200 200; /* #C8C8C8 - Light gray ring */
+  
+  --sidebar-background: 248 248 248; /* #F8F8F8 - Match main background */
+  --sidebar-highlight: 225 225 225; /* #E1E1E1 - Subtle sidebar highlight */
 }

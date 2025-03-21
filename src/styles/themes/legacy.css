@@ -27,6 +27,8 @@
   --secondary: 235 235 235; /* #EBEBEB */
   --muted: 235 235 235; /* #EBEBEB */
   --accent: 180 180 180; /* #B4B4B4 */
+  --sidebar-background: 245 245 245; /* Match main background */
+  --sidebar-highlight: 230 230 230; /* Subtle highlight */
 }
 
 /* Dark mode specific styles for Legacy theme */
@@ -38,4 +40,6 @@
   --secondary: 50 50 50; /* #323232 */
   --muted: 50 50 50; /* #323232 */
   --accent: 80 80 80; /* #505050 */
+  --sidebar-background: 30 30 30; /* Match main background */
+  --sidebar-highlight: 50 50 50; /* Subtle highlight */
 }

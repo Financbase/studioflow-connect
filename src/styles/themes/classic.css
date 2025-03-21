@@ -31,6 +31,8 @@
   --secondary: 230 230 230; /* #E6E6E6 */
   --muted: 230 230 230; /* #E6E6E6 */
   --accent: 100 100 100; /* #646464 */
+  --sidebar-background: 240 240 240; /* Match main background */
+  --sidebar-highlight: 220 220 220; /* Subtle highlight */
 }
 
 /* Dark mode specific styles for Classic theme */
@@ -42,4 +44,6 @@
   --secondary: 40 40 40; /* #282828 */
   --muted: 40 40 40; /* #282828 */
   --accent: 70 70 70; /* #464646 */
+  --sidebar-background: 25 25 25; /* Match main background */
+  --sidebar-highlight: 45 45 45; /* Subtle highlight */
 }
