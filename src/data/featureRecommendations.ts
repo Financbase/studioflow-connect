@@ -1,5 +1,5 @@
 
-import { Recommendation } from "@/components/recommendation/RecommendationCard";
+import { Recommendation } from "@/types/recommendation";
 
 type FeatureRecommendations = {
   [key: string]: Recommendation[];
