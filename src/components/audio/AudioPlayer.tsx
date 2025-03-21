@@ -1,8 +1,10 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAudioControls } from '@/hooks/use-audio-controls';
+import { formatTime } from '@/lib/audioUtils';
 
 interface AudioPlayerProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -17,76 +19,50 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   src,
   autoPlay = false
 }) => {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(50);
-  const [isMuted, setIsMuted] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', onEnded);
-    
-    // Set initial volume
-    audio.volume = volume / 100;
-    
-    return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('ended', onEnded);
-    };
-  }, [audioRef, onEnded, volume]);
+  const {
+    currentTime,
+    duration,
+    volume,
+    isMuted,
+    seek,
+    setVolume,
+    toggleMute
+  } = useAudioControls(audioRef);
 
   useEffect(() => {
     if (src && audioRef.current) {
       audioRef.current.src = src;
-      if (autoPlay) audioRef.current.play();
+      if (autoPlay) audioRef.current.play().catch(err => console.error("Error playing audio:", err));
     }
   }, [src, audioRef, autoPlay]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const handleAudioEnded = () => {
+      onEnded();
+    };
+    
+    audio.addEventListener('ended', handleAudioEnded);
+    
+    return () => {
+      audio.removeEventListener('ended', handleAudioEnded);
+    };
+  }, [audioRef, onEnded]);
+
   const handleVolumeChange = (value: number[]) => {
-    const newVolume = value[0];
-    setVolume(newVolume);
-    
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume / 100;
-    }
-  };
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-    
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-    }
-  };
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    setVolume(value[0]);
   };
 
   const handleSeek = (value: number[]) => {
-    const newTime = value[0];
-    setCurrentTime(newTime);
-    
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-    }
+    seek(value[0]);
   };
 
   return (
     <div className="flex flex-col space-y-2 w-full">
       <audio 
         ref={audioRef} 
-        onEnded={onEnded}
         className="hidden" 
         src={src}
       />
@@ -97,7 +73,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             value={[currentTime]} 
             min={0} 
             max={duration} 
-            step={1} 
+            step={0.1} 
             onValueChange={handleSeek}
             className="w-full"
           />

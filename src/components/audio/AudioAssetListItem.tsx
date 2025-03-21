@@ -8,6 +8,7 @@ import { downloadAudioAsset } from './audioAssetUtils';
 import DeleteAudioDialog from './DeleteAudioDialog';
 import { formatDistanceToNow } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { formatFileSize, formatFileType } from '@/lib/audioUtils';
 
 interface AudioAssetListItemProps {
   asset: AudioAsset;
@@ -40,17 +41,6 @@ const AudioAssetListItem: React.FC<AudioAssetListItemProps> = ({
     downloadAudioAsset(asset);
   };
 
-  const formattedSize = (size: number) => {
-    if (size < 1024) return `${size} B`;
-    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
-  };
-
-  const formatFileType = (type: string) => {
-    const fileType = type.split('/')[1].toUpperCase();
-    return fileType.length > 4 ? fileType.substring(0, 4) : fileType;
-  };
-
   const dateCreated = asset.created_at
     ? formatDistanceToNow(new Date(asset.created_at), { addSuffix: true })
     : 'Unknown';
@@ -62,7 +52,7 @@ const AudioAssetListItem: React.FC<AudioAssetListItemProps> = ({
     >
       <TableCell className="font-medium">{asset.name}</TableCell>
       <TableCell>{formatFileType(asset.type)}</TableCell>
-      <TableCell>{formattedSize(asset.size)}</TableCell>
+      <TableCell>{formatFileSize(asset.size)}</TableCell>
       <TableCell>{dateCreated}</TableCell>
       <TableCell>
         <div className="flex items-center space-x-1">

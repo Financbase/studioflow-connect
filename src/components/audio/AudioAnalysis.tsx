@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AudioAsset } from "@/types/supabase";
@@ -7,37 +7,39 @@ import FrequencyVisualizer from "./FrequencyVisualizer";
 import WaveformVisualizer from "./WaveformVisualizer";
 import AudioControls from "./AudioControls";
 import AudioPlayer from "./AudioPlayer";
-import { useAudioAnalysis } from "@/hooks/use-audio-analysis";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect as useEffectReact } from "react";
+import { useAudioControls } from "@/hooks/use-audio-controls";
+import { formatFileSize, formatFileType } from "@/lib/audioUtils";
 
 interface AudioAnalysisProps {
   audioFile: AudioAsset;
 }
 
 const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [audioUrl, setAudioUrl] = useState<string>("");
+  const [audioData, setAudioData] = useState<Uint8Array | null>(null);
+  const [audioSource, setAudioSource] = useState<MediaElementAudioSourceNode | null>(null);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  
   const {
-    audioData,
     isPlaying,
     volume,
     isMuted,
-    handlePlay,
-    handlePause,
-    handleStop,
-    handleVolumeChange,
-    handleMuteToggle
-  } = useAudioAnalysis(audioFile);
-  
-  const [visualizationType, setVisualizationType] = useState<string>("waveform");
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [audioSource, setAudioSource] = useState<MediaElementAudioSourceNode | null>(null);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [audioUrl, setAudioUrl] = useState<string>("");
+    currentTime,
+    duration,
+    visualizationType,
+    play,
+    pause,
+    stop,
+    seek,
+    setVolume,
+    toggleMute,
+    setVisualizationType
+  } = useAudioControls(audioRef);
 
   // Get signed URL from Supabase
-  useEffectReact(() => {
+  useEffect(() => {
     const getSignedUrl = async () => {
       try {
         const { data, error } = await supabase.storage
@@ -58,21 +60,6 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
     getSignedUrl();
   }, [audioFile]);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      const updateTime = () => setCurrentTime(audioRef.current?.currentTime || 0);
-      const updateDuration = () => setDuration(audioRef.current?.duration || 0);
-      
-      audioRef.current.addEventListener('timeupdate', updateTime);
-      audioRef.current.addEventListener('loadedmetadata', updateDuration);
-      
-      return () => {
-        audioRef.current?.removeEventListener('timeupdate', updateTime);
-        audioRef.current?.removeEventListener('loadedmetadata', updateDuration);
-      };
-    }
-  }, [audioRef]);
-
   // Set up audio context and source node when audio element is available and playing state changes
   useEffect(() => {
     if (audioRef.current && isPlaying) {
@@ -83,7 +70,7 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
       }
       
       // Create source node from audio element
-      if (audioContext && !audioSource) {
+      if (audioContext && !audioSource && audioRef.current) {
         const newSource = audioContext.createMediaElementSource(audioRef.current);
         newSource.connect(audioContext.destination);
         setAudioSource(newSource);
@@ -93,17 +80,10 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
     // Clean up when component unmounts
     return () => {
       if (audioContext) {
-        // No need to disconnect in cleanup as the context will be closed
-        audioContext.close();
+        audioContext.close().catch(err => console.error("Error closing audio context:", err));
       }
     };
   }, [audioRef.current, isPlaying, audioContext, audioSource]);
-
-  const handleSeek = (time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -133,26 +113,26 @@ const AudioAnalysis: React.FC<AudioAnalysisProps> = ({ audioFile }) => {
           
           <AudioControls
             isPlaying={isPlaying}
-            onPlay={handlePlay}
-            onPause={handlePause}
-            onStop={handleStop}
+            onPlay={play}
+            onPause={pause}
+            onStop={stop}
             audioName={audioFile.name}
             volume={volume}
             isMuted={isMuted}
-            onVolumeChange={handleVolumeChange}
-            onMuteToggle={handleMuteToggle}
+            onVolumeChange={setVolume}
+            onMuteToggle={toggleMute}
             onVisualizationTypeChange={setVisualizationType}
             currentVisualizationType={visualizationType}
             duration={duration}
             currentTime={currentTime}
-            onSeek={handleSeek}
+            onSeek={seek}
           />
         </CardContent>
         
         <CardFooter>
           <div className="flex justify-between w-full text-sm text-muted-foreground">
-            <div>Format: {audioFile.type.split('/')[1].toUpperCase()}</div>
-            <div>Size: {(audioFile.size / 1024 / 1024).toFixed(2)} MB</div>
+            <div>Format: {formatFileType(audioFile.type)}</div>
+            <div>Size: {formatFileSize(audioFile.size)}</div>
           </div>
         </CardFooter>
       </Card>

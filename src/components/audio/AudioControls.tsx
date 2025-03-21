@@ -6,47 +6,42 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, SkipBack, Volume2, VolumeX } from "lucide-react";
+import { formatTime } from "@/lib/audioUtils";
 
 interface AudioControlsProps {
-  onPlay: () => void;
-  onPause: () => void;
-  onStop: () => void;
   isPlaying: boolean;
   audioName?: string;
   volume: number;
   isMuted: boolean;
-  onVolumeChange: (volume: number) => void;
-  onMuteToggle: () => void;
-  onVisualizationTypeChange?: (type: string) => void;
-  currentVisualizationType?: string;
   duration?: number;
   currentTime?: number;
+  currentVisualizationType?: string;
+  onPlay: () => void;
+  onPause: () => void;
+  onStop: () => void;
+  onVolumeChange: (volume: number) => void;
+  onMuteToggle: () => void;
   onSeek?: (time: number) => void;
+  onVisualizationTypeChange?: (type: string) => void;
 }
 
 const AudioControls: React.FC<AudioControlsProps> = ({
-  onPlay,
-  onPause,
-  onStop,
   isPlaying,
   audioName,
   volume,
   isMuted,
-  onVolumeChange,
-  onMuteToggle,
-  onVisualizationTypeChange,
-  currentVisualizationType = "waveform",
   duration = 0,
   currentTime = 0,
+  currentVisualizationType = "waveform",
+  onPlay,
+  onPause,
+  onStop,
+  onVolumeChange,
+  onMuteToggle,
   onSeek,
+  onVisualizationTypeChange,
 }) => {
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
-
   const handleSeek = (value: number[]) => {
     if (onSeek) {
       onSeek(value[0]);
