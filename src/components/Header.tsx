@@ -1,123 +1,66 @@
 
-import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
-import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useDashboard } from "@/contexts/dashboard/useDashboard";
-import { useAuth } from "@/hooks/use-auth";
-import { MusicIcon } from "lucide-react";
-import ViewSelector from "@/components/ViewSelector";
-import CustomLayoutEditor from "@/components/CustomLayoutEditor";
-import { useIsMobile } from "@/hooks/use-mobile";
-import NavLinks from "./header/NavLinks";
-import UserMenu from "./header/UserMenu";
-import MobileMenu from "./header/MobileMenu";
-import ZenModeToggle from "./header/ZenModeToggle";
-import ZenMode from "./zen/ZenMode";
+import React from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { useZenMode } from "@/hooks/use-zen-mode";
+import ZenModeToggle from "./header/ZenModeToggle";
+import UserMenu from "./header/UserMenu";
+import NavLinks from "./header/NavLinks";
+import MobileMenu from "./header/MobileMenu";
+import { useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Header = () => {
-  const { themeVariant } = useTheme();
-  const { t, setLanguage, currentLanguage } = useLanguage();
-  const { user, profile, signOut, isAuthenticated } = useAuth();
-  const { pricingTier, setPricingTier } = useDashboard();
-  const isMobile = useIsMobile();
-  const navigate = useNavigate();
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isActive, toggle, options, updateOptions } = useZenMode();
-  
-  const isAdmin = user?.email?.includes("admin") || 
-                 profile?.username === "admin" || 
-                 profile?.plan === "pro";
-  
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/auth");
-  };
+  const isMobile = useIsMobile();
+  // Use the correct property names from useZenMode hook
+  const { isActive, toggle } = useZenMode();
 
-  const handleLanguageChange = (lang: string) => {
-    if (lang === "en" || lang === "es" || lang === "fr" || lang === "de" || lang === "sv") {
-      setLanguage(lang);
-    }
-  };
+  const isMounted = React.useRef(false);
   
-  // Determine if current page needs view selector
-  const showViewTools = ['/dashboard', '/library', '/connect'].includes(location.pathname);
+  React.useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  // Only show the header if:
+  // 1. We're not on the auth page
+  // 2. We're not on the index page
+  // 3. Zen mode is not active
   
+  const isAuthPage = location.pathname === "/auth";
+  const isIndexPage = location.pathname === "/";
+  
+  if (isAuthPage || isIndexPage || isActive) {
+    return null;
+  }
+
   return (
-    <>
-      <header className={`sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${themeVariant === "windows" ? "border-b-2" : ""}`}>
-        <div className="container flex h-14 items-center">
-          <Link to="/" className="flex items-center gap-2 font-semibold">
-            <MusicIcon className="h-5 w-5 text-primary" />
-            <span className="hidden md:inline-block">StudioFlow</span>
-          </Link>
-          
-          {isAuthenticated && !isMobile && (
-            <NavLinks isAdmin={isAdmin} t={t} />
-          )}
-          
-          <div className="flex flex-1 items-center justify-end gap-2">
-            {isAuthenticated && !isMobile && showViewTools && (
-              <>
-                <ZenModeToggle 
-                  onClick={toggle} 
-                  isActive={isActive} 
-                />
-                <ViewSelector />
-                <CustomLayoutEditor />
-              </>
-            )}
-            
-            <ModeToggle />
-            
-            {isAuthenticated ? (
-              <>
-                {isMobile ? (
-                  <MobileMenu 
-                    isOpen={mobileMenuOpen}
-                    onOpenChange={setMobileMenuOpen}
-                    user={user}
-                    profile={profile}
-                    isAdmin={isAdmin}
-                    onSignOut={handleSignOut}
-                    pricingTier={pricingTier}
-                    setPricingTier={setPricingTier}
-                    t={t}
-                  />
-                ) : (
-                  <UserMenu 
-                    user={user}
-                    profile={profile}
-                    isAdmin={isAdmin}
-                    onSignOut={handleSignOut}
-                    t={t}
-                    currentLanguage={currentLanguage}
-                    onLanguageChange={handleLanguageChange}
-                  />
-                )}
-              </>
-            ) : (
-              <Button size="sm" onClick={() => navigate("/auth")}>
-                {t("auth.signin")}
-              </Button>
-            )}
-          </div>
+    <header className="border-b z-10 bg-background">
+      <div className="flex h-16 items-center px-4">
+        <div className="flex gap-2 items-center">
+          <span className="text-xl font-bold">StudioFlow</span>
         </div>
-      </header>
-      
-      {isActive && (
-        <ZenMode 
-          isActive={isActive} 
-          onToggle={toggle} 
-          options={options}
-          onOptionsChange={updateOptions}
-        />
-      )}
-    </>
+        
+        {/* Navigation Links */}
+        {!isMobile && <NavLinks />}
+        
+        <div className="ml-auto flex items-center space-x-2">
+          {/* Use the correct property names for zen mode */}
+          <ZenModeToggle onClick={toggle} isActive={isActive} />
+          <ThemeSwitcher />
+          <LanguageSwitcher />
+          
+          {/* User Menu Section */}
+          <UserMenu />
+          
+          {/* Mobile Menu Button (visible on small screens) */}
+          {isMobile && <MobileMenu />}
+        </div>
+      </div>
+    </header>
   );
 };
 

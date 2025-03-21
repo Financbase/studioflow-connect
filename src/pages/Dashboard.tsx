@@ -16,7 +16,7 @@ const Dashboard = () => {
   const { themeVariant } = useTheme();
   const [zenModeActive, setZenModeActive] = useState(false);
   const [zenModeOptions, setZenModeOptions] = useState<ZenModeOptions>({
-    theme: 'minimal',
+    theme: 'minimal', // Using literal string type, not generic string
     soundscape: 'silence',
     enableTimers: false,
     hideNotifications: true
