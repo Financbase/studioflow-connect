@@ -78,7 +78,7 @@ const FAQSection = ({ faqs, searchQuery, setSearchQuery }: FAQSectionProps) => {
           onValueChange={setActiveCategory}
           className="w-full"
         >
-          <ScrollArea className="w-full pb-2" orientation="horizontal">
+          <ScrollArea className="w-full pb-2">
             <TabsList className="inline-flex w-full justify-start h-auto p-1">
               {categoryCount.map(({category, count}) => (
                 <TabsTrigger 

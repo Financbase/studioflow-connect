@@ -9,7 +9,7 @@ import { Paperclip, AlertCircle, Upload, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface Attachment {
   name: string;
@@ -36,7 +36,6 @@ const NewTicketForm = ({
   setNewTicketPriority,
   onSubmit
 }: NewTicketFormProps) => {
-  const { toast } = useToast();
   const [category, setCategory] = useState("technical");
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
