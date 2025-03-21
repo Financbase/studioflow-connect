@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useZenMode } from "@/hooks/use-zen-mode";
@@ -9,12 +9,18 @@ import NavLinks from "./header/NavLinks";
 import MobileMenu from "./header/MobileMenu";
 import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/use-auth";
+import { useContext } from "react";
+import { LanguageContext } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   // Use the correct property names from useZenMode hook
   const { isActive, toggle } = useZenMode();
+  const { user, profile, signOut } = useAuth();
+  const { translate, currentLanguage, setLanguage } = useContext(LanguageContext);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isMounted = React.useRef(false);
   
@@ -37,6 +43,9 @@ const Header = () => {
     return null;
   }
 
+  // Determine if the user is an admin
+  const isAdmin = profile?.plan === 'pro'; // Using plan as a proxy for admin status
+
   return (
     <header className="border-b z-10 bg-background">
       <div className="flex h-16 items-center px-4">
@@ -45,7 +54,12 @@ const Header = () => {
         </div>
         
         {/* Navigation Links */}
-        {!isMobile && <NavLinks />}
+        {!isMobile && (
+          <NavLinks 
+            isAdmin={isAdmin} 
+            t={(key) => translate(key)}
+          />
+        )}
         
         <div className="ml-auto flex items-center space-x-2">
           {/* Use the correct property names for zen mode */}
@@ -54,10 +68,30 @@ const Header = () => {
           <LanguageSwitcher />
           
           {/* User Menu Section */}
-          <UserMenu />
+          <UserMenu 
+            user={user}
+            profile={profile}
+            isAdmin={isAdmin}
+            onSignOut={signOut}
+            t={(key) => translate(key)}
+            currentLanguage={currentLanguage}
+            onLanguageChange={setLanguage}
+          />
           
           {/* Mobile Menu Button (visible on small screens) */}
-          {isMobile && <MobileMenu />}
+          {isMobile && (
+            <MobileMenu 
+              isOpen={isMobileMenuOpen}
+              onOpenChange={setIsMobileMenuOpen}
+              user={user}
+              profile={profile}
+              isAdmin={isAdmin}
+              onSignOut={signOut}
+              pricingTier={profile?.plan || 'free'}
+              setPricingTier={() => {}} // This is a placeholder, ideally should be implemented fully
+              t={(key) => translate(key)}
+            />
+          )}
         </div>
       </div>
     </header>
