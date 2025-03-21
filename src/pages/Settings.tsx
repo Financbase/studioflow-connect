@@ -17,6 +17,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { PricingTier } from "@/contexts/dashboard/types";
 import { useToast } from "@/hooks/use-toast";
+import { Language } from "@/hooks/use-language"; // Make sure to import Language type if needed
 
 const Settings = () => {
   const { themeVariant, setThemeVariant } = useTheme();
@@ -65,7 +66,8 @@ const Settings = () => {
     setThemeVariant(theme);
   };
   
-  const handleLanguageChange = (language: string) => {
+  // Update type to match what the language component expects
+  const handleLanguageChange = (language: Language) => {
     setLanguage(language);
   };
   

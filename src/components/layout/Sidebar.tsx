@@ -82,7 +82,6 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <aside
         className={`flex flex-col space-y-2 bg-secondary border-r border-r-muted/50 transition-all duration-300 ${
           isCollapsed ? "w-16" : "w-64"
@@ -152,7 +151,6 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
         </ScrollArea>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 overflow-x-hidden">{children}</div>
     </div>
   );
