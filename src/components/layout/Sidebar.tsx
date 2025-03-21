@@ -18,7 +18,11 @@ import {
   Library, 
   Plug, 
   LifeBuoy, 
-  FileCode
+  FileCode,
+  CreditCard,
+  HelpCircle,
+  BookOpen,
+  MessageSquare
 } from "lucide-react";
 
 interface SidebarProps {
@@ -50,7 +54,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon, link }) => {
       onClick={() => navigate(link)}
     >
       {icon}
-      <span>{label}</span>
+      <span className="ml-2">{label}</span>
     </Button>
   );
 };
@@ -65,7 +69,7 @@ const SidebarGroup: React.FC<SidebarGroupProps> = ({ title, children }) => (
 const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { themeVariant } = useTheme();
-  const { hasFeatureAccess } = useDashboard();
+  const { hasFeatureAccess, pricingTier } = useDashboard();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,6 +81,13 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
     }
   }, [isMobile]);
 
+  useEffect(() => {
+    // Handle mobile sidebar on route change
+    if (isMobile) {
+      setIsCollapsed(true);
+    }
+  }, [location.pathname, isMobile]);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -84,7 +95,7 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
   return (
     <div className="flex h-screen">
       <aside
-        className={`flex flex-col space-y-2 bg-secondary border-r border-r-muted/50 transition-all duration-300 ${
+        className={`flex flex-col space-y-2 bg-background border-r border-r-muted transition-all duration-300 ${
           isCollapsed ? "w-16" : "w-64"
         } ${themeVariant === "windows" ? "border-r-2" : ""} z-50`}
       >
@@ -106,46 +117,64 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
 
         <ScrollArea className="flex-1">
           <div className="flex flex-col space-y-4 py-4">
-            <SidebarGroup title="Studio">
+            <SidebarGroup title={isCollapsed ? "" : "Studio"}>
               <SidebarItem
                 label="Projects"
-                icon={<FileMusic className="h-4 w-4 mr-2" />}
+                icon={<FileMusic className="h-4 w-4" />}
                 link="/projects"
               />
               <SidebarItem
                 label="Library"
-                icon={<Library className="h-4 w-4 mr-2" />}
+                icon={<Library className="h-4 w-4" />}
                 link="/library"
               />
               <SidebarItem
                 label="Connect"
-                icon={<Plug className="h-4 w-4 mr-2" />}
+                icon={<Plug className="h-4 w-4" />}
                 link="/connect"
               />
               {hasFeatureAccess('ai') && (
                 <SidebarItem
                   label="AI Tools"
-                  icon={<FileCode className="h-4 w-4 mr-2" />}
+                  icon={<FileCode className="h-4 w-4" />}
                   link="/ai"
                 />
               )}
             </SidebarGroup>
 
-            <SidebarGroup title="User">
+            <SidebarGroup title={isCollapsed ? "" : "Account"}>
               <SidebarItem
                 label="Profile"
-                icon={<User className="h-4 w-4 mr-2" />}
+                icon={<User className="h-4 w-4" />}
                 link="/profile"
               />
               <SidebarItem
                 label="Settings"
-                icon={<Settings className="h-4 w-4 mr-2" />}
+                icon={<Settings className="h-4 w-4" />}
                 link="/settings"
               />
               <SidebarItem
+                label="Subscription"
+                icon={<CreditCard className="h-4 w-4" />}
+                link="/subscription"
+              />
+            </SidebarGroup>
+
+            <SidebarGroup title={isCollapsed ? "" : "Support"}>
+              <SidebarItem
+                label="Help Center"
+                icon={<HelpCircle className="h-4 w-4" />}
+                link="/docs"
+              />
+              <SidebarItem
                 label="Support"
-                icon={<LifeBuoy className="h-4 w-4 mr-2" />}
+                icon={<LifeBuoy className="h-4 w-4" />}
                 link="/support"
+              />
+              <SidebarItem
+                label="Recommendations"
+                icon={<BookOpen className="h-4 w-4" />}
+                link="/recommendations"
               />
             </SidebarGroup>
           </div>

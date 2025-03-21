@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useDashboard } from "@/contexts/DashboardContext";
+import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { useAuth } from "@/hooks/use-auth";
 import { MusicIcon } from "lucide-react";
 import ViewSelector from "@/components/ViewSelector";
 import CustomLayoutEditor from "@/components/CustomLayoutEditor";
-import { useResponsive } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import NavLinks from "./header/NavLinks";
 import UserMenu from "./header/UserMenu";
 import MobileMenu from "./header/MobileMenu";
@@ -20,12 +20,14 @@ const Header = () => {
   const { t, setLanguage, currentLanguage } = useLanguage();
   const { user, profile, signOut, isAuthenticated } = useAuth();
   const { pricingTier, setPricingTier } = useDashboard();
-  const { isMobile } = useResponsive();
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Check if user has admin privileges
-  const isAdmin = profile?.username === "admin" || user?.email?.includes("admin");
+  // Check if user has admin privileges - look for "admin" in username or email
+  const isAdmin = profile?.role === "admin" || 
+                 profile?.username === "admin" || 
+                 (user?.email && user.email.includes("admin"));
   
   const handleSignOut = async () => {
     await signOut();

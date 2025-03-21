@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -15,6 +14,9 @@ import Support from "./pages/Support";
 import Projects from "./pages/Projects";
 import Library from "./pages/Library";
 import Connect from "./pages/Connect";
+import AIToolsPage from "./pages/AITools";
+import SubscriptionPage from "./pages/Subscription";
+import RecommendationsPage from "./pages/Recommendations";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -112,6 +114,33 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <Connect />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      <Route 
+                        path="/ai" 
+                        element={
+                          <ProtectedRoute>
+                            <AIToolsPage />
+                          </ProtectedRoute>
+                        } 
+                      />
+
+                      <Route 
+                        path="/subscription" 
+                        element={
+                          <ProtectedRoute>
+                            <SubscriptionPage />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      <Route 
+                        path="/recommendations" 
+                        element={
+                          <ProtectedRoute>
+                            <RecommendationsPage />
                           </ProtectedRoute>
                         } 
                       />
