@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
 import { useContext } from "react";
-import { LanguageContext } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const location = useLocation();
@@ -19,7 +19,7 @@ const Header = () => {
   // Use the correct property names from useZenMode hook
   const { isActive, toggle } = useZenMode();
   const { user, profile, signOut } = useAuth();
-  const { translate, currentLanguage, setLanguage } = useContext(LanguageContext);
+  const { t: translate, currentLanguage, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isMounted = React.useRef(false);

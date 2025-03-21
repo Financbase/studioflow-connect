@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -140,7 +141,7 @@ const Support = () => {
   const resolvedTickets = tickets.filter(t => ["resolved", "closed"].includes(t.status));
   
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+    <SidebarLayout>
       <Header />
       
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
@@ -345,7 +346,7 @@ const Support = () => {
           </Tabs>
         </div>
       </main>
-    </div>
+    </SidebarLayout>
   );
 };
 
