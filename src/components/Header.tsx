@@ -27,7 +27,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isZenModeActive, toggleZenMode, options, updateOptions } = useZenMode();
+  const { isActive, toggle, options, updateOptions } = useZenMode();
   
   const isAdmin = user?.email?.includes("admin") || 
                  profile?.username === "admin" || 
@@ -64,8 +64,8 @@ const Header = () => {
             {isAuthenticated && !isMobile && showViewTools && (
               <>
                 <ZenModeToggle 
-                  onClick={toggleZenMode} 
-                  isActive={isZenModeActive} 
+                  onClick={toggle} 
+                  isActive={isActive} 
                 />
                 <ViewSelector />
                 <CustomLayoutEditor />
@@ -109,10 +109,10 @@ const Header = () => {
         </div>
       </header>
       
-      {isZenModeActive && (
+      {isActive && (
         <ZenMode 
-          isActive={isZenModeActive} 
-          onToggle={toggleZenMode} 
+          isActive={isActive} 
+          onToggle={toggle} 
           options={options}
           onOptionsChange={updateOptions}
         />

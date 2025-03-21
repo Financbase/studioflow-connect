@@ -13,13 +13,14 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Link } from "react-router-dom";
 import ZenMode from "@/components/zen/ZenMode";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ZenModeOptions } from "@/hooks/use-zen-mode";
 
 const Dashboard = () => {
   const { pricingTier, hasFeatureAccess } = useDashboard();
   const { themeVariant } = useTheme();
   const isMobile = useIsMobile();
   const [zenModeActive, setZenModeActive] = useState(false);
-  const [zenModeOptions, setZenModeOptions] = useState({
+  const [zenModeOptions, setZenModeOptions] = useState<ZenModeOptions>({
     theme: 'minimal',
     soundscape: 'silence',
     enableTimers: false,
