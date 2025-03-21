@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Languages, Check } from "lucide-react";
-import { useLanguage, Language, flagEmojis, languageNames } from "@/contexts/LanguageContext";
+import { useLanguage, Language, flagEmojis, languageNames } from "@/contexts/language";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
