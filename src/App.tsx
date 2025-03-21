@@ -17,6 +17,7 @@ import Connect from "./pages/Connect";
 import AIToolsPage from "./pages/AITools";
 import SubscriptionPage from "./pages/Subscription";
 import RecommendationsPage from "./pages/Recommendations";
+import Contribution from "./pages/Contribution";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -141,6 +142,16 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <RecommendationsPage />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      {/* New Contribution Route */}
+                      <Route 
+                        path="/contribute" 
+                        element={
+                          <ProtectedRoute>
+                            <Contribution />
                           </ProtectedRoute>
                         } 
                       />

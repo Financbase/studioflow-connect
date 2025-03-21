@@ -1,12 +1,29 @@
-
 /* Theme-specific styles */
 :root {
   --radius: 0.5rem;
 }
 
-/* Modern Theme - Default */
+/* StudioFlow Modern Theme - Default */
 .theme-modern {
   --radius: 0.75rem;
+  /* StudioFlow Connect custom colors */
+  --accent-primary: 164 140 255; /* #A48CFF */
+  --accent-cta: 88 193 201; /* #58C1C9 */
+  --highlight: 246 190 68; /* #F6BE44 */
+}
+
+/* Dark mode specific styles for StudioFlow Modern Theme */
+.dark.theme-modern {
+  --background: 28 28 46; /* #1C1C2E */
+  --card: 28 28 46; /* #1C1C2E */
+  --foreground: 236 236 236; /* #ECECEC */
+  --muted-foreground: 177 177 179; /* #B1B1B3 */
+  --primary: 164 140 255; /* #A48CFF */
+  --primary-foreground: 28 28 46; /* #1C1C2E */
+  --secondary: 36 36 54; /* #242436 - slightly lighter than background */
+  --border: 40 40 58; /* #28283A - subtle borders */
+  --ring: 164 140 255; /* #A48CFF */
+  --accent: 88 193 201; /* #58C1C9 */
 }
 
 /* Legacy Theme */
@@ -145,13 +162,13 @@
 
 /* Modern Theme Light Mode */
 :not(.dark).theme-modern {
-  --background: 0 0% 98%;
-  --card: 0 0% 100%;
-  --border: 210 20% 90%;
-  --primary: 240 5.9% 10%;
-  --secondary: 210 20% 96%;
-  --muted: 210 20% 96%;
-  --accent: 210 100% 50%;
+  --background: 250 250 255; /* #FAFAFF - light but not harsh white */
+  --card: 255 255 255; /* #FFFFFF */
+  --border: 230 230 240; /* #E6E6F0 */
+  --primary: 164 140 255; /* #A48CFF */
+  --secondary: 240 240 250; /* #F0F0FA */
+  --muted: 240 240 250; /* #F0F0FA */
+  --accent: 88 193 201; /* #58C1C9 */
 }
 
 /* Modern Theme Dark Mode */

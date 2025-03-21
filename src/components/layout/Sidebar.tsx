@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,8 @@ import {
   CreditCard,
   HelpCircle,
   BookOpen,
-  MessageSquare
+  MessageSquare,
+  Heart
 } from "lucide-react";
 
 interface SidebarProps {
@@ -75,14 +75,12 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Collapse the sidebar on mobile devices
     if (isMobile) {
       setIsCollapsed(true);
     }
   }, [isMobile]);
 
   useEffect(() => {
-    // Handle mobile sidebar on route change
     if (isMobile) {
       setIsCollapsed(true);
     }
@@ -142,6 +140,19 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
               )}
             </SidebarGroup>
 
+            <SidebarGroup title={isCollapsed ? "" : "Community"}>
+              <SidebarItem
+                label="Contribute"
+                icon={<Heart className="h-4 w-4" />}
+                link="/contribute"
+              />
+              <SidebarItem
+                label="Learn"
+                icon={<BookOpen className="h-4 w-4" />}
+                link="/recommendations"
+              />
+            </SidebarGroup>
+
             <SidebarGroup title={isCollapsed ? "" : "Account"}>
               <SidebarItem
                 label="Profile"
@@ -170,11 +181,6 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
                 label="Support"
                 icon={<LifeBuoy className="h-4 w-4" />}
                 link="/support"
-              />
-              <SidebarItem
-                label="Recommendations"
-                icon={<BookOpen className="h-4 w-4" />}
-                link="/recommendations"
               />
             </SidebarGroup>
           </div>
