@@ -2,22 +2,24 @@
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { FileAudio, Music, FolderOpen, Upload, Search, Filter } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/components/ui/use-toast";
+import StoragePanel from "@/components/library/StoragePanel";
+import SearchAndFilter from "@/components/library/SearchAndFilter";
+import LibraryTabs from "@/components/library/LibraryTabs";
+import { useAudioAssets } from "@/hooks/use-audio-assets";
 
 const Library = () => {
   const { themeVariant } = useTheme();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // In a real application, we would use the imported hook
+  // const { assets, loading } = useAudioAssets(user);
   
   // Mock library data
   const audioSamples = [
@@ -45,13 +47,6 @@ const Library = () => {
     });
   };
 
-  const handleSampleClick = (sample: { name: string; size: string; duration: string; type: string }) => {
-    toast({
-      title: "Sample selected",
-      description: `Selected ${sample.name}`,
-    });
-  };
-
   return (
     <SidebarLayout>
       <Header />
@@ -68,178 +63,15 @@ const Library = () => {
             </Button>
           </div>
 
-          <div className="relative flex gap-2">
-            <div className="relative flex-grow">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search your audio library..." 
-                className="pl-9"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-            </div>
-            <Button variant="outline" size="icon" className="h-10 w-10">
-              <Filter className="h-4 w-4" />
-            </Button>
-          </div>
+          <SearchAndFilter searchQuery={searchQuery} onSearchChange={handleSearch} />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="md:col-span-1">
-              <CardHeader>
-                <CardTitle>Storage</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>4.2 GB used</span>
-                    <span>10 GB total</span>
-                  </div>
-                  <Progress value={42} />
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium">Categories</h4>
-                  <div className="space-y-1">
-                    {["All Files", "Samples", "Loops", "Presets", "Projects"].map((category) => (
-                      <Button 
-                        key={category} 
-                        variant={category === "All Files" ? "secondary" : "ghost"} 
-                        className="w-full justify-start"
-                        size="sm"
-                      >
-                        <FolderOpen className="h-4 w-4 mr-2" />
-                        {category}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium">Labels</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {["Drums", "Bass", "Synth", "Guitar", "Vocals", "FX"].map((label) => (
-                      <Badge key={label} variant="outline">
-                        {label}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="md:col-span-3 space-y-6">
-              <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
-                  <TabsTrigger value="all">All Files</TabsTrigger>
-                  <TabsTrigger value="samples">Samples</TabsTrigger>
-                  <TabsTrigger value="loops">Loops</TabsTrigger>
-                  <TabsTrigger value="presets">Presets</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="all" className="space-y-4 mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Audio Assets</CardTitle>
-                      <CardDescription>Browse all your audio files and samples</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {filteredSamples.length > 0 ? (
-                          filteredSamples.map((sample, index) => (
-                            <div 
-                              key={index} 
-                              className="flex items-center justify-between p-3 rounded-md border hover:bg-accent/50 transition-colors cursor-pointer"
-                              onClick={() => handleSampleClick(sample)}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className="p-2 rounded-full bg-muted">
-                                  <FileAudio className="h-4 w-4 text-primary" />
-                                </div>
-                                <div>
-                                  <p className="font-medium">{sample.name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {sample.size} • {sample.duration}
-                                  </p>
-                                </div>
-                              </div>
-                              <Badge variant="outline">{sample.type}</Badge>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center py-8">
-                            <Music className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-                            <p>No audio files found matching your search</p>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                      <Button variant="outline">Import</Button>
-                      <Button variant="outline">Organize</Button>
-                    </CardFooter>
-                  </Card>
-                </TabsContent>
-                
-                <TabsContent value="samples" className="mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Samples</CardTitle>
-                      <CardDescription>One-shot samples and instrument sounds</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-center h-32 text-muted-foreground">
-                        <p>Samples content will be displayed here</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                
-                <TabsContent value="loops" className="mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Loops</CardTitle>
-                      <CardDescription>Drum and melody loops</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-center h-32 text-muted-foreground">
-                        <p>Loops content will be displayed here</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                
-                <TabsContent value="presets" className="mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Presets</CardTitle>
-                      <CardDescription>Synth and effect presets</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-center h-32 text-muted-foreground">
-                        <p>Presets content will be displayed here</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recently Added</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer">
-                        <Music className="h-8 w-8 text-muted-foreground mb-2" />
-                        <h4 className="font-medium">New Sample Pack {i}</h4>
-                        <p className="text-sm text-muted-foreground">Added yesterday</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <StoragePanel />
+            <LibraryTabs 
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              filteredSamples={filteredSamples}
+            />
           </div>
         </div>
       </main>
