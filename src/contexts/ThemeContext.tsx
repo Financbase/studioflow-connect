@@ -2,9 +2,18 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useColorVersionManager, ColorVersion } from "@/hooks/useColorVersionManager";
+import { hexToRgb } from "@/lib/colorUtils";
 
 export type ThemeVariant = "modern" | "legacy" | "classic" | "windows" | "default" | "retro";
 export type ThemeMode = "dark" | "light";
+
+export interface ColorPalette {
+  id: string;
+  name: string;
+  colors: Record<string, string>;
+  description?: string;
+  timestamp: number;
+}
 
 interface ThemeContextType {
   themeVariant: ThemeVariant;
@@ -15,6 +24,12 @@ interface ThemeContextType {
   setTheme: (theme: ThemeMode) => void;
   saveCurrentTheme: (name: string, description?: string) => void;
   versionManager: ReturnType<typeof useColorVersionManager>;
+  // Color palette functions
+  colorPalettes: ColorPalette[];
+  saveCurrentColorPalette: (name: string, colors: Record<string, string>, description?: string) => void;
+  applyColorPalette: (paletteId: string) => void;
+  deleteColorPalette: (paletteId: string) => void;
+  currentPaletteId: string | null;
 }
 
 interface ThemeProviderProps {
@@ -31,6 +46,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const [themeVariant, setThemeVariant] = useState<ThemeVariant>("modern");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [theme, setTheme] = useState<ThemeMode>("dark");
+  const [colorPalettes, setColorPalettes] = useState<ColorPalette[]>([]);
+  const [currentPaletteId, setCurrentPaletteId] = useState<string | null>(null);
   const versionManager = useColorVersionManager();
   
   // Initialize theme from localStorage
@@ -46,6 +63,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     setIsDarkMode(isDark);
     setTheme(isDark ? "dark" : "light");
     document.documentElement.classList.toggle("dark", isDark);
+    
+    // Load saved color palettes
+    const savedPalettes = localStorage.getItem("color_palettes");
+    if (savedPalettes) {
+      try {
+        setColorPalettes(JSON.parse(savedPalettes));
+      } catch (e) {
+        console.error("Failed to parse saved color palettes", e);
+      }
+    }
+    
+    // Load active palette if exists
+    const activePaletteId = localStorage.getItem("active_color_palette_id");
+    if (activePaletteId) {
+      setCurrentPaletteId(activePaletteId);
+      const palette = JSON.parse(savedPalettes || "[]").find(
+        (p: ColorPalette) => p.id === activePaletteId
+      );
+      if (palette) {
+        applyPaletteToDOM(palette.colors);
+      }
+    }
   }, []);
   
   // Check for current theme version and apply it if exists
@@ -126,6 +165,73 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     versionManager.saveVersion(name, themeData, description);
   };
   
+  // Apply color palette to DOM
+  const applyPaletteToDOM = (colors: Record<string, string>) => {
+    Object.entries(colors).forEach(([key, hexValue]) => {
+      const { r, g, b } = hexToRgb(hexValue);
+      document.documentElement.style.setProperty(`--${key}`, `${r} ${g} ${b}`);
+    });
+  };
+  
+  // Save current color palette
+  const saveCurrentColorPalette = (name: string, colors: Record<string, string>, description?: string) => {
+    const newPalette: ColorPalette = {
+      id: Date.now().toString(),
+      name,
+      colors,
+      description,
+      timestamp: Date.now()
+    };
+    
+    const updatedPalettes = [...colorPalettes, newPalette];
+    setColorPalettes(updatedPalettes);
+    setCurrentPaletteId(newPalette.id);
+    
+    localStorage.setItem("color_palettes", JSON.stringify(updatedPalettes));
+    localStorage.setItem("active_color_palette_id", newPalette.id);
+    
+    toast({
+      title: "Color Palette Saved",
+      description: `"${name}" has been saved as a new palette`
+    });
+  };
+  
+  // Apply a saved color palette
+  const applyColorPalette = (paletteId: string) => {
+    const palette = colorPalettes.find(p => p.id === paletteId);
+    if (!palette) return;
+    
+    applyPaletteToDOM(palette.colors);
+    setCurrentPaletteId(paletteId);
+    localStorage.setItem("active_color_palette_id", paletteId);
+    
+    toast({
+      title: "Color Palette Applied",
+      description: `"${palette.name}" palette has been applied`
+    });
+  };
+  
+  // Delete a color palette
+  const deleteColorPalette = (paletteId: string) => {
+    if (paletteId === currentPaletteId) {
+      toast({
+        title: "Cannot Delete Active Palette",
+        description: "Please switch to another palette before deleting this one",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const updatedPalettes = colorPalettes.filter(p => p.id !== paletteId);
+    setColorPalettes(updatedPalettes);
+    localStorage.setItem("color_palettes", JSON.stringify(updatedPalettes));
+    
+    toast({
+      title: "Color Palette Deleted",
+      description: "The selected color palette has been removed"
+    });
+  };
+  
   return (
     <ThemeContext.Provider value={{
       themeVariant,
@@ -135,7 +241,13 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       theme,
       setTheme: handleSetTheme,
       saveCurrentTheme,
-      versionManager
+      versionManager,
+      // Color palette functions
+      colorPalettes,
+      saveCurrentColorPalette,
+      applyColorPalette,
+      deleteColorPalette,
+      currentPaletteId
     }}>
       {children}
     </ThemeContext.Provider>
