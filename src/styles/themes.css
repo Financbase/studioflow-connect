@@ -20,8 +20,8 @@
   --muted-foreground: 177 177 179; /* #B1B1B3 */
   --primary: 164 140 255; /* #A48CFF */
   --primary-foreground: 28 28 46; /* #1C1C2E */
-  --secondary: 36 36 54; /* #242436 - slightly lighter than background */
-  --border: 40 40 58; /* #28283A - subtle borders */
+  --secondary: 36 36 54; /* #242436 */
+  --border: 40 40 58; /* #28283A */
   --ring: 164 140 255; /* #A48CFF */
   --accent: 88 193 201; /* #58C1C9 */
 }
@@ -171,13 +171,27 @@
   --accent: 88 193 201; /* #58C1C9 */
 }
 
-/* Modern Theme Dark Mode */
+/* Modern Theme Dark Mode - Custom Enhancements */
 .dark.theme-modern {
-  --background: 240 10% 3.9%;
-  --card: 240 10% 3.9%;
-  --border: 240 3.7% 15.9%;
-  --primary: 0 0% 98%;
-  --secondary: 240 3.7% 15.9%;
-  --muted: 240 3.7% 15.9%;
-  --accent: 240 4.9% 83.9%;
+  --background: 28 28 46; /* #1C1C2E */
+  --foreground: 236 236 236; /* #ECECEC */
+  --muted-foreground: 177 177 179; /* #B1B1B3 */
+  
+  --accent-primary: 164 140 255; /* #A48CFF */
+  --accent-cta: 88 193 201; /* #58C1C9 */
+  --highlight: 246 190 68; /* #F6BE44 */
+  
+  --zen-background: 28 28 46; /* #1C1C2E */
+  --zen-background-alt: 42 42 78; /* #2A2A4E */
+  --zen-focus: 45 45 58; /* #2D2D3A */
+  
+  --sidebar-background: 24 24 40; /* #18182A */
+  --sidebar-highlight: 36 36 54; /* #242436 */
+}
+
+/* Zen Mode specific styles */
+.zen-mode-active {
+  * {
+    transition-duration: 0.15s !important;
+  }
 }

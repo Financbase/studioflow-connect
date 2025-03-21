@@ -1,175 +1,132 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MoonStar, Sun, Volume2, Timer, Sparkles } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { Toggle } from "@/components/ui/toggle";
+import { X, Clock, Timer } from "lucide-react";
+import ZenModeSettings from "./ZenModeSettings";
+import { ZenModeOptions } from "@/hooks/use-zen-mode";
 
 interface ZenModeProps {
   isActive: boolean;
   onToggle: () => void;
+  options?: ZenModeOptions;
+  onOptionsChange?: (options: Partial<ZenModeOptions>) => void;
 }
 
-const ZenMode: React.FC<ZenModeProps> = ({ isActive, onToggle }) => {
+const ZenMode: React.FC<ZenModeProps> = ({ 
+  isActive, 
+  onToggle, 
+  options = {
+    theme: 'minimal',
+    soundscape: 'silence',
+    enableTimers: false,
+    hideNotifications: true
+  },
+  onOptionsChange = () => {}
+}) => {
   const [timerMinutes, setTimerMinutes] = useState(25);
-  const [ambientVolume, setAmbientVolume] = useState(50);
-  const [activeTimer, setActiveTimer] = useState<number | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
-  
-  // Ambient sound options
-  const ambientOptions = [
-    { id: "nature", name: "Nature", icon: <Sparkles className="h-4 w-4" /> },
-    { id: "studio", name: "Studio", icon: <Volume2 className="h-4 w-4" /> },
-    { id: "minimal", name: "Minimal", icon: <MoonStar className="h-4 w-4" /> },
-  ];
-  
-  // Reset timer when deactivating Zen Mode
-  useEffect(() => {
-    if (!isActive && activeTimer) {
-      clearInterval(activeTimer);
-      setActiveTimer(null);
-      setTimeRemaining(null);
-    }
-  }, [isActive, activeTimer]);
-  
-  const startTimer = () => {
-    if (activeTimer) {
-      clearInterval(activeTimer);
-    }
-    
-    const totalSeconds = timerMinutes * 60;
-    setTimeRemaining(totalSeconds);
-    
-    const timer = window.setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev === null || prev <= 1) {
-          clearInterval(timer);
-          setActiveTimer(null);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    
-    setActiveTimer(timer);
-  };
-  
-  const formatTime = (seconds: number | null): string => {
-    if (seconds === null) return "00:00";
-    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${mins}:${secs}`;
-  };
+  const [timerActive, setTimerActive] = useState(false);
+  const [timerRemaining, setTimerRemaining] = useState(25 * 60); // in seconds
   
   if (!isActive) return null;
   
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+  
+  const handleStartTimer = () => {
+    setTimerRemaining(timerMinutes * 60);
+    setTimerActive(true);
+  };
+  
+  const handleStopTimer = () => {
+    setTimerActive(false);
+  };
+  
+  const getBackgroundClass = () => {
+    switch(options.theme) {
+      case 'ambient':
+        return 'bg-gradient-to-br from-[#1C1C2E]/90 to-[#2A2A4E]/90';
+      case 'focus':
+        return 'bg-gradient-to-br from-[#1C1C2E]/95 to-[#2D2D3A]/95';
+      case 'minimal':
+      default:
+        return 'bg-[#1C1C2E]/95';
+    }
+  };
+  
   return (
-    <div className="fixed inset-0 bg-background/95 backdrop-blur-md z-50 flex flex-col items-center justify-center p-4 animate-fade-in">
-      <div className="absolute top-4 right-4">
-        <Button variant="ghost" size="icon" onClick={onToggle}>
-          <Sun className="h-5 w-5" />
+    <div className={`fixed inset-0 z-50 backdrop-blur-xl ${getBackgroundClass()} flex flex-col items-center justify-center transition-opacity duration-500`}>
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        {options.enableTimers && (
+          <div className="flex items-center mr-4 bg-background/20 rounded-full px-4 py-2">
+            <Clock className="h-4 w-4 mr-2" />
+            <span className="text-lg font-mono">{formatTime(timerRemaining)}</span>
+            {timerActive ? (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="ml-2 h-6 w-6 rounded-full" 
+                onClick={handleStopTimer}
+              >
+                <span className="h-2 w-2 bg-white rounded-sm"></span>
+              </Button>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="ml-2 h-6 w-6 rounded-full" 
+                onClick={handleStartTimer}
+              >
+                <Timer className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        )}
+        
+        {onOptionsChange && (
+          <ZenModeSettings options={options} onChange={onOptionsChange} />
+        )}
+        
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onToggle} 
+          className="text-white hover:bg-white/10"
+        >
+          <X className="h-6 w-6" />
         </Button>
       </div>
       
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Zen Mode</h1>
-          <p className="text-muted-foreground">Focus on what matters most</p>
-        </div>
+      <div className="w-full max-w-4xl p-6">
+        {options.theme === 'minimal' && (
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-light mb-6">Zen Studio Mode</h2>
+            <p className="text-muted-foreground">Focus on your creativity. All distractions eliminated.</p>
+          </div>
+        )}
         
-        <Card className="border-0 bg-transparent">
-          <CardContent className="p-0">
-            <div className="text-center mb-8">
-              <div className="text-6xl font-mono font-bold">{formatTime(timeRemaining)}</div>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Focus Duration</label>
-                <div className="flex items-center gap-2">
-                  <Slider
-                    value={[timerMinutes]}
-                    min={5}
-                    max={60}
-                    step={5}
-                    onValueChange={(value) => setTimerMinutes(value[0])}
-                    disabled={!!activeTimer}
-                  />
-                  <span className="text-sm font-medium w-12">{timerMinutes}m</span>
+        <div className="relative rounded-xl bg-background/10 backdrop-blur-sm border border-white/5 shadow-lg overflow-hidden">
+          {/* Your focused content would be rendered here */}
+          <div className="p-6">
+            {/* Content placeholder */}
+            <div className="flex flex-col items-center justify-center min-h-[400px]">
+              <div className="text-center space-y-4">
+                <div className="inline-block p-3 rounded-full bg-accent-primary/20 mb-4">
+                  <svg className="w-12 h-12 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                  </svg>
                 </div>
-              </div>
-              
-              <Tabs defaultValue="nature">
-                <TabsList className="grid grid-cols-3 w-full">
-                  {ambientOptions.map(option => (
-                    <TabsTrigger key={option.id} value={option.id} className="flex items-center gap-1">
-                      {option.icon}
-                      <span className="hidden sm:inline">{option.name}</span>
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                
-                <TabsContent value="nature" className="mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Ambient Volume</label>
-                    <div className="flex items-center gap-2">
-                      <Slider
-                        value={[ambientVolume]}
-                        min={0}
-                        max={100}
-                        onValueChange={(value) => setAmbientVolume(value[0])}
-                      />
-                      <span className="text-sm font-medium w-12">{ambientVolume}%</span>
-                    </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="studio" className="mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Studio Ambience</label>
-                    <div className="flex items-center gap-2">
-                      <Slider
-                        value={[ambientVolume]}
-                        min={0}
-                        max={100}
-                        onValueChange={(value) => setAmbientVolume(value[0])}
-                      />
-                      <span className="text-sm font-medium w-12">{ambientVolume}%</span>
-                    </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="minimal" className="mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Minimal Tone</label>
-                    <div className="flex items-center gap-2">
-                      <Slider
-                        value={[ambientVolume]}
-                        min={0}
-                        max={100}
-                        onValueChange={(value) => setAmbientVolume(value[0])}
-                      />
-                      <span className="text-sm font-medium w-12">{ambientVolume}%</span>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-              
-              <div className="flex justify-center gap-2">
-                <Button 
-                  className="w-full" 
-                  onClick={startTimer}
-                  disabled={!!activeTimer}
-                >
-                  <Timer className="h-4 w-4 mr-2" />
-                  Start Focus Session
-                </Button>
+                <h3 className="text-xl font-medium text-white">Your focused workspace</h3>
+                <p className="text-sm text-white/70 max-w-md">
+                  This is your distraction-free environment for deep work and creativity. 
+                  Essential tools remain accessible while the noise fades away.
+                </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

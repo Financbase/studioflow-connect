@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ import UserMenu from "./header/UserMenu";
 import MobileMenu from "./header/MobileMenu";
 import ZenModeToggle from "./header/ZenModeToggle";
 import ZenMode from "./zen/ZenMode";
-import { useZenMode } from "@/hooks/use-zen-mode";
+import { useZenMode, ZenModeOptions } from "@/hooks/use-zen-mode";
 
 const Header = () => {
   const { themeVariant } = useTheme();
@@ -26,9 +25,8 @@ const Header = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isZenModeActive, toggleZenMode } = useZenMode();
+  const { isZenModeActive, toggleZenMode, options, updateOptions } = useZenMode();
   
-  // Check if user has admin privileges - look for "admin" in username or email
   const isAdmin = user?.email?.includes("admin") || 
                  profile?.username === "admin" || 
                  profile?.plan === "pro";
@@ -38,7 +36,6 @@ const Header = () => {
     navigate("/auth");
   };
 
-  // Type-safe language selection handler
   const handleLanguageChange = (lang: string) => {
     if (lang === "en" || lang === "es" || lang === "fr" || lang === "de" || lang === "sv") {
       setLanguage(lang);
@@ -61,7 +58,7 @@ const Header = () => {
           <div className="flex flex-1 items-center justify-end gap-2">
             {isAuthenticated && !isMobile && (
               <>
-                <ZenModeToggle onClick={toggleZenMode} />
+                <ZenModeToggle onClick={toggleZenMode} isActive={isZenModeActive} />
                 <ViewSelector />
                 <CustomLayoutEditor />
               </>
@@ -104,7 +101,12 @@ const Header = () => {
         </div>
       </header>
       
-      <ZenMode isActive={isZenModeActive} onToggle={toggleZenMode} />
+      <ZenMode 
+        isActive={isZenModeActive} 
+        onToggle={toggleZenMode} 
+        options={options}
+        onOptionsChange={updateOptions}
+      />
     </>
   );
 };
