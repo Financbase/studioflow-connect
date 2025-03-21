@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { TicketPlus, MessageSquare, MailOpen, CheckCircle, HelpCircle } from "lucide-react";
+import { TicketPlus, MessageSquare, MailOpen, CheckCircle, HelpCircle, SearchCode, AlertTriangle } from "lucide-react";
 
 // Import our custom components
 import ContactCard from "@/components/support/ContactCard";
@@ -80,6 +80,16 @@ const Support = () => {
         created_at: new Date(Date.now() - 604800000).toISOString(),
         updated_at: new Date(Date.now() - 345600000).toISOString(),
         response: "We've verified the double charge and have processed a refund. It should appear in your account within 3-5 business days. We apologize for the inconvenience."
+      },
+      {
+        id: "ticket-004",
+        user_id: user?.id || "",
+        title: "Plugin compatibility issue",
+        description: "I'm trying to use a third-party VST plugin but it crashes when I load it in StudioFlow. The plugin works fine in other DAWs.",
+        status: "open",
+        priority: "critical",
+        created_at: new Date(Date.now() - 86400000).toISOString(),
+        updated_at: new Date(Date.now() - 86400000).toISOString()
       }
     ];
     
@@ -116,6 +126,9 @@ const Support = () => {
       title: "Ticket Created",
       description: "Your support ticket has been submitted successfully."
     });
+    
+    // Switch to active tickets tab to show the new ticket
+    setActiveTab("active");
   };
 
   const handleSendChatMessage = () => {
@@ -128,14 +141,6 @@ const Support = () => {
     });
     
     setChatMessage("");
-    
-    // Auto-response after a delay (for demo)
-    setTimeout(() => {
-      toast({
-        title: "Support Response",
-        description: "Hello! Thanks for reaching out. How can we help you today?"
-      });
-    }, 2000);
   };
   
   const activeTickets = tickets.filter(t => ["open", "in_progress"].includes(t.status));
@@ -206,8 +211,11 @@ const Support = () => {
                     tickets={activeTickets} 
                     emptyMessage={
                       <>
-                        <MailOpen className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                        <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
                         <p className="text-muted-foreground">You don't have any active support tickets</p>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Need help with something? Create a new support ticket.
+                        </p>
                       </>
                     }
                     onNewTicket={() => setActiveTab("new")}

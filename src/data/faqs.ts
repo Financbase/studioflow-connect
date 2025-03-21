@@ -30,5 +30,30 @@ export const faqs: FAQ[] = [
     question: "What is the difference between Pro and Enterprise plans?",
     answer: "The Pro plan includes advanced audio editing tools and 100GB of storage. The Enterprise plan adds dedicated support, unlimited storage, and team collaboration features.",
     category: "billing"
+  },
+  {
+    question: "How do I connect external MIDI controllers?",
+    answer: "To connect a MIDI controller, first ensure it's connected to your computer via USB or MIDI interface. Then go to Settings > MIDI Setup and click 'Scan for Devices'. Select your controller from the list and click 'Enable'.",
+    category: "technical"
+  },
+  {
+    question: "Can I share my projects with other users?",
+    answer: "Yes, you can share projects with other StudioFlow users. Go to your project, click the 'Share' button, and enter the email addresses of the users you want to collaborate with.",
+    category: "usage"
+  },
+  {
+    question: "How can I export my project to work in another DAW?",
+    answer: "StudioFlow supports exporting to various formats compatible with other DAWs. Go to File > Export > DAW Project and select your target DAW format (Pro Tools, Logic, Ableton, etc.).",
+    category: "technical"
+  },
+  {
+    question: "Is there a limit to how many projects I can create?",
+    answer: "Free users can create up to 5 projects. Pro users can create unlimited projects, and Enterprise users have unlimited projects with enhanced collaboration features.",
+    category: "billing"
+  },
+  {
+    question: "How do I cancel my subscription?",
+    answer: "To cancel your subscription, go to Settings > Subscription > Manage Subscription and click 'Cancel Subscription'. Your access will continue until the end of your current billing period.",
+    category: "billing"
   }
 ];
