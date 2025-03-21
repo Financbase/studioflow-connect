@@ -1,44 +1,18 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Plus, Save, EyeIcon, Trash2, Sparkles, RefreshCw, Check } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { toast } from "@/components/ui/use-toast";
 import { rgbToHex, hexToRgb, generateThemePalette, generateAnalogous, generateComplementary, generateTriadic } from "@/lib/colorUtils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import PalettePreview from "./PalettePreview";
+import { ColorSetting } from "./types/colorSettings";
 
-type ColorKey = 
-  | "background" 
-  | "foreground" 
-  | "card" 
-  | "card-foreground" 
-  | "primary" 
-  | "primary-foreground" 
-  | "secondary" 
-  | "secondary-foreground" 
-  | "muted" 
-  | "muted-foreground" 
-  | "accent" 
-  | "accent-foreground" 
-  | "border" 
-  | "input" 
-  | "ring" 
-  | "destructive" 
-  | "destructive-foreground";
-
-interface ColorSetting {
-  name: string;
-  key: ColorKey;
-  value: string;
-  description: string;
-}
+// Import our new components
+import ColorGroupEditor from "./palette/ColorGroupEditor";
+import PaletteGenerator from "./palette/PaletteGenerator";
+import PalettePreviewSection from "./palette/PalettePreviewSection";
+import SavePaletteForm from "./palette/SavePaletteForm";
+import SavedPalettesList from "./palette/SavedPalettesList";
 
 const ColorPaletteEditor: React.FC = () => {
   const { theme, themeVariant, saveCurrentColorPalette, colorPalettes, applyColorPalette, deleteColorPalette, currentPaletteId } = useTheme();
@@ -305,250 +279,50 @@ const ColorPaletteEditor: React.FC = () => {
           </TabsList>
           
           <TabsContent value="manual" className="space-y-6 pt-4">
-            {Object.entries(colorGroups).map(([groupName, colors]) => (
-              <div key={groupName} className="space-y-4">
-                <h3 className="text-md font-medium">{groupName}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {colors.map((color, index) => {
-                    const fullIndex = currentColors.findIndex(c => c.key === color.key);
-                    return (
-                      <div key={color.key} className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div 
-                            className="w-6 h-6 rounded border" 
-                            style={{ 
-                              backgroundColor: color.value,
-                              borderColor: getContrastColor(color.value)
-                            }} 
-                          />
-                          <Label htmlFor={`color-${color.key}`}>{color.name}</Label>
-                        </div>
-                        <div className="flex gap-2">
-                          <Input
-                            id={`color-${color.key}`}
-                            type="color"
-                            value={color.value}
-                            onChange={(e) => handleColorChange(fullIndex, e.target.value)}
-                            className="h-10 w-14"
-                          />
-                          <Input
-                            type="text"
-                            value={color.value}
-                            onChange={(e) => handleColorChange(fullIndex, e.target.value)}
-                            className="font-mono text-sm"
-                            placeholder="#RRGGBB"
-                          />
-                        </div>
-                        <p className="text-xs text-muted-foreground">{color.description}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+            <ColorGroupEditor 
+              colorGroups={colorGroups}
+              onColorChange={handleColorChange}
+              getContrastColor={getContrastColor}
+              currentColors={currentColors}
+            />
           </TabsContent>
           
           <TabsContent value="auto" className="space-y-6 pt-4">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="primary-color">Primary Brand Color</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="primary-color"
-                    type="color"
-                    value={primaryColor}
-                    onChange={(e) => setPrimaryColor(e.target.value)}
-                    className="h-10 w-14"
-                  />
-                  <Input
-                    type="text"
-                    value={primaryColor}
-                    onChange={(e) => setPrimaryColor(e.target.value)}
-                    className="font-mono text-sm"
-                    placeholder="#RRGGBB"
-                  />
-                  <Button 
-                    variant="outline"
-                    onClick={generatePalettes}
-                    className="flex-shrink-0"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Generate
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Select a primary brand color and the AI will generate a complete color palette that works well together
-                </p>
-              </div>
-              
-              {generatedPalettes.length > 0 && (
-                <div className="space-y-4 pt-4">
-                  <h3 className="text-md font-medium">Generated Palettes</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {generatedPalettes.map((palette, index) => (
-                      <div key={index} className="relative">
-                        <PalettePreview 
-                          colors={palette}
-                          onClick={() => {
-                            setSelectedPalette(palette);
-                            applyTempPalette(palette);
-                          }}
-                          isActive={selectedPalette === palette}
-                          size="sm"
-                          showLabels={false}
-                        />
-                        {selectedPalette === palette && (
-                          <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full p-0.5">
-                            <Check className="h-3 w-3" />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button 
-                    variant="outline"
-                    onClick={generatePalettes}
-                    className="w-full"
-                  >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Regenerate Palettes
-                  </Button>
-                </div>
-              )}
-            </div>
+            <PaletteGenerator 
+              primaryColor={primaryColor}
+              setPrimaryColor={setPrimaryColor}
+              generatePalettes={generatePalettes}
+              generatedPalettes={generatedPalettes}
+              selectedPalette={selectedPalette}
+              setSelectedPalette={setSelectedPalette}
+              applyTempPalette={applyTempPalette}
+            />
           </TabsContent>
         </Tabs>
         
         <div className="border-t pt-6 space-y-4">
           <h3 className="text-lg font-medium">Preview</h3>
-          <div className="p-4 border rounded-lg bg-background text-foreground">
-            <div className="space-y-4">
-              <h4 className="font-medium">Color Palette Preview</h4>
-              <div className="flex flex-wrap gap-2">
-                <div className="px-3 py-1.5 bg-primary text-primary-foreground rounded">Primary</div>
-                <div className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded">Secondary</div>
-                <div className="px-3 py-1.5 bg-accent text-accent-foreground rounded">Accent</div>
-                <div className="px-3 py-1.5 bg-muted text-muted-foreground rounded">Muted</div>
-                <div className="px-3 py-1.5 bg-destructive text-destructive-foreground rounded">Destructive</div>
-              </div>
-              
-              <div className="border rounded-lg overflow-hidden">
-                <div className="p-3 bg-card text-card-foreground border-b">
-                  Card Header
-                </div>
-                <div className="p-3 bg-card text-muted-foreground">
-                  Card content with <span className="text-card-foreground">normal</span> and muted text
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                <button className="px-3 py-1.5 rounded bg-primary text-primary-foreground hover:opacity-90">
-                  Button
-                </button>
-                <button className="px-3 py-1.5 rounded bg-secondary text-secondary-foreground hover:opacity-90">
-                  Button
-                </button>
-                <button className="px-3 py-1.5 rounded border hover:bg-muted">
-                  Button
-                </button>
-              </div>
-            </div>
-          </div>
+          <PalettePreviewSection />
         </div>
         
         <div className="border-t pt-6 space-y-4">
-          <h3 className="text-lg font-medium">Save Current Palette</h3>
-          
-          <div className="space-y-2">
-            <Label htmlFor="palette-name">Palette Name</Label>
-            <Input
-              id="palette-name"
-              placeholder="e.g., Dark Blue Theme"
-              value={paletteName}
-              onChange={(e) => setPaletteName(e.target.value)}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="palette-description">Description (optional)</Label>
-            <Input
-              id="palette-description"
-              placeholder="Describe your color palette"
-              value={paletteDescription}
-              onChange={(e) => setPaletteDescription(e.target.value)}
-            />
-          </div>
-          
-          <Button 
-            onClick={handleSavePalette}
-            disabled={!paletteName.trim()}
-            className="w-full"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Save Current Palette
-          </Button>
+          <SavePaletteForm 
+            paletteName={paletteName}
+            setPaletteName={setPaletteName}
+            paletteDescription={paletteDescription}
+            setPaletteDescription={setPaletteDescription}
+            handleSavePalette={handleSavePalette}
+          />
         </div>
         
         {colorPalettes.length > 0 && (
           <div className="border-t pt-6">
-            <h3 className="text-lg font-medium mb-4">Saved Palettes</h3>
-            <div className="space-y-3">
-              {colorPalettes.map((palette) => (
-                <div 
-                  key={palette.id}
-                  className="flex items-center justify-between p-3 border rounded-md hover:bg-muted/40 transition-colors"
-                >
-                  <div>
-                    <h4 className="font-medium">{palette.name}</h4>
-                    {palette.description && (
-                      <p className="text-xs text-muted-foreground">{palette.description}</p>
-                    )}
-                  </div>
-                  
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => applyColorPalette(palette.id)}
-                      title="Apply this palette"
-                      className={currentPaletteId === palette.id ? "bg-primary text-primary-foreground" : ""}
-                    >
-                      <EyeIcon className="h-4 w-4" />
-                    </Button>
-                    
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          title="Delete this palette"
-                          disabled={currentPaletteId === palette.id}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Color Palette</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete "{palette.name}"? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => deleteColorPalette(palette.id)}
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <SavedPalettesList 
+              colorPalettes={colorPalettes}
+              currentPaletteId={currentPaletteId}
+              applyColorPalette={applyColorPalette}
+              deleteColorPalette={deleteColorPalette}
+            />
           </div>
         )}
       </CardContent>
