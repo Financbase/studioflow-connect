@@ -1,3 +1,4 @@
+
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
@@ -11,6 +12,7 @@ interface UseAuthReturn {
   isLoading: boolean;
   isAuthenticated: boolean;
   signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<Profile>) => Promise<void>;
 }
 
 export const useAuth = (): UseAuthReturn => {
@@ -93,11 +95,34 @@ export const useAuth = (): UseAuthReturn => {
     }
   };
 
+  // Add updateProfile method
+  const updateProfile = async (updates: Partial<Profile>) => {
+    if (!user) throw new Error('No user logged in');
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      // Update local profile state with the changes
+      setProfile(prev => prev ? { ...prev, ...updates } : null);
+      
+      return;
+    } catch (error: any) {
+      console.error('Error updating profile:', error.message);
+      throw error;
+    }
+  };
+
   return {
     user,
     profile,
     isLoading,
     isAuthenticated,
     signOut,
+    updateProfile,
   };
 };

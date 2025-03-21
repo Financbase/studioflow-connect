@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Dialog,
@@ -21,6 +22,9 @@ import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useResponsive } from "@/hooks/use-mobile";
+
+// Import the missing icons from lucide-react
+import { Cpu, AudioLines, FileAudio } from "lucide-react";
 
 type SavedLayout = {
   id: string;

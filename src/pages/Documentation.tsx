@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,6 +24,7 @@ import DocumentationAPI from "@/components/documentation/DocumentationAPI";
 import DocumentationExamples from "@/components/documentation/DocumentationExamples";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface DocumentationProps {
   page?: string;

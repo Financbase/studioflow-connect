@@ -1,3 +1,4 @@
+
 export type Json =
   | string
   | number
@@ -12,6 +13,7 @@ export interface UserProfile {
   full_name: string | null;
   avatar_url: string | null;
   plan: 'free' | 'standard' | 'pro';
+  bio?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -22,6 +24,7 @@ export interface Profile {
   full_name: string | null;
   avatar_url: string | null;
   plan: 'free' | 'standard' | 'pro';
+  bio?: string | null;
   created_at: string;
   updated_at: string;
 }
