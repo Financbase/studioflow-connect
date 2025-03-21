@@ -71,13 +71,47 @@ export function useColorVersionManager() {
     
     // Apply the theme from this version
     document.documentElement.classList.remove(
-      "theme-modern", "theme-legacy", "theme-classic", "theme-windows"
+      "theme-modern", "theme-legacy", "theme-classic", "theme-windows", "theme-default", "theme-retro"
     );
     
     // Apply the theme variant
     const themeVariant = version.themeData['themeVariant'] || 'modern';
     document.documentElement.classList.add(`theme-${themeVariant}`);
     localStorage.setItem('ui_theme_variant', themeVariant);
+    
+    // Apply dark/light mode if stored
+    if (version.themeData['themeMode']) {
+      const isDark = version.themeData['themeMode'] === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+    
+    // Apply any color variables if they exist in the version
+    Object.entries(version.themeData).forEach(([key, value]) => {
+      // Only apply if it's a color value (starts with # or has rgb format)
+      if ((value.startsWith('#') || value.includes('rgb')) && !['themeVariant', 'themeMode', 'isDarkMode'].includes(key)) {
+        try {
+          // Try to extract RGB values for CSS variables
+          const hexToRgb = (hex: string) => {
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            const formattedHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(formattedHex);
+            return result ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16)
+            } : { r: 0, g: 0, b: 0 };
+          };
+          
+          if (value.startsWith('#')) {
+            const { r, g, b } = hexToRgb(value);
+            document.documentElement.style.setProperty(`--${key}`, `${r} ${g} ${b}`);
+          }
+        } catch (error) {
+          console.error(`Failed to apply color variable ${key}:`, error);
+        }
+      }
+    });
     
     toast({
       title: "Theme version restored",
