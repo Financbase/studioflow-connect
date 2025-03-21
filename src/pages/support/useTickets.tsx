@@ -1,79 +1,81 @@
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useState } from "react";
+import { Ticket } from "@/components/support/ticket/types";
 
-interface Ticket {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  status: "open" | "in_progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "critical";
-  created_at: string;
-  updated_at: string;
-  response?: string;
-}
-
+// Create a custom hook to manage tickets
 export const useTickets = () => {
-  const { user } = useAuth();
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  // Sample ticket data
+  const initialTickets: Ticket[] = [
+    {
+      id: "ticket-123-456",
+      user_id: "user-789",
+      title: "DAW Integration Issue",
+      description: "I'm having trouble connecting my DAW with the audio interface. The connection drops intermittently during recording sessions.",
+      status: "open",
+      priority: "high",
+      created_at: "2025-03-01T10:30:00Z",
+      updated_at: "2025-03-02T14:20:00Z"
+    },
+    {
+      id: "ticket-456-789",
+      user_id: "user-789",
+      title: "Billing Question",
+      description: "I was charged twice for my monthly subscription. Could you please help me resolve this issue?",
+      status: "in_progress",
+      priority: "medium",
+      created_at: "2025-02-28T15:45:00Z",
+      updated_at: "2025-03-01T09:10:00Z",
+      response: "We're looking into this issue and will get back to you shortly."
+    },
+    {
+      id: "ticket-789-012",
+      user_id: "user-789",
+      title: "Feature Request",
+      description: "I would love to see integration with virtual instruments. This would streamline my workflow significantly.",
+      status: "open",
+      priority: "low",
+      created_at: "2025-02-25T11:20:00Z",
+      updated_at: "2025-02-25T11:20:00Z"
+    },
+    {
+      id: "ticket-012-345",
+      user_id: "user-789",
+      title: "Audio Latency Issue",
+      description: "I'm experiencing high latency during recording. This makes it difficult to perform in real-time.",
+      status: "resolved",
+      priority: "high",
+      created_at: "2025-02-20T09:15:00Z",
+      updated_at: "2025-02-22T16:30:00Z",
+      response: "Glad we could help resolve your latency issues. Let us know if you need any further assistance!"
+    },
+    {
+      id: "ticket-345-678",
+      user_id: "user-789",
+      title: "Account Deletion Request",
+      description: "I'd like to delete my account and remove all my data from your servers.",
+      status: "closed",
+      priority: "medium",
+      created_at: "2025-02-15T14:20:00Z",
+      updated_at: "2025-02-17T11:05:00Z",
+      response: "Your account has been successfully deleted and all data has been removed from our servers as requested."
+    }
+  ];
+
+  const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [newTicketTitle, setNewTicketTitle] = useState("");
   const [newTicketDescription, setNewTicketDescription] = useState("");
-  const [newTicketPriority, setNewTicketPriority] = useState<"low" | "medium" | "high">("medium");
-  
-  useEffect(() => {
-    // Mock data - in a real app, you would fetch this from your API/database
-    const mockTickets: Ticket[] = [
-      {
-        id: "ticket-001",
-        user_id: user?.id || "",
-        title: "Cannot access audio analysis feature",
-        description: "When I try to analyze my uploaded audio files, the frequency visualizer remains blank.",
-        status: "in_progress",
-        priority: "medium",
-        created_at: new Date(Date.now() - 172800000).toISOString(),
-        updated_at: new Date(Date.now() - 86400000).toISOString(),
-        response: "We're looking into this issue. Our team has identified that it might be related to the audio format. We'll update you soon."
-      },
-      {
-        id: "ticket-002",
-        user_id: user?.id || "",
-        title: "Feature request: MIDI integration",
-        description: "Would it be possible to add MIDI file support for the DAW workflow integration?",
-        status: "open",
-        priority: "low",
-        created_at: new Date(Date.now() - 259200000).toISOString(),
-        updated_at: new Date(Date.now() - 259200000).toISOString()
-      },
-      {
-        id: "ticket-003",
-        user_id: user?.id || "",
-        title: "Billing question",
-        description: "I was charged twice for my Pro subscription. Could you please check this and refund the extra payment?",
-        status: "resolved",
-        priority: "high",
-        created_at: new Date(Date.now() - 604800000).toISOString(),
-        updated_at: new Date(Date.now() - 345600000).toISOString(),
-        response: "We've verified the double charge and have processed a refund. It should appear in your account within 3-5 business days. We apologize for the inconvenience."
-      },
-      {
-        id: "ticket-004",
-        user_id: user?.id || "",
-        title: "Plugin compatibility issue",
-        description: "I'm trying to use a third-party VST plugin but it crashes when I load it in StudioFlow. The plugin works fine in other DAWs.",
-        status: "open",
-        priority: "critical",
-        created_at: new Date(Date.now() - 86400000).toISOString(),
-        updated_at: new Date(Date.now() - 86400000).toISOString()
-      }
-    ];
-    
-    setTickets(mockTickets);
-  }, [user?.id]);
+  const [newTicketPriority, setNewTicketPriority] = useState<"low" | "medium" | "high" | "critical">("medium");
 
-  const activeTickets = tickets.filter(t => ["open", "in_progress"].includes(t.status));
-  const resolvedTickets = tickets.filter(t => ["resolved", "closed"].includes(t.status));
-  
+  // Get active tickets (open or in progress)
+  const activeTickets = tickets.filter(
+    ticket => ticket.status === "open" || ticket.status === "in_progress"
+  );
+
+  // Get resolved tickets
+  const resolvedTickets = tickets.filter(
+    ticket => ticket.status === "resolved" || ticket.status === "closed"
+  );
+
   return {
     tickets,
     setTickets,

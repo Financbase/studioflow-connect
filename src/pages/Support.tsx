@@ -31,8 +31,8 @@ const Support = () => {
   const handleCreateTicket = () => {
     if (!newTicketTitle.trim() || !newTicketDescription.trim()) {
       toast({
-        title: "Validation Error",
-        description: "Please provide both a title and description for your support ticket.",
+        title: t("support.validation_error"),
+        description: t("support.provide_title_description"),
         variant: "destructive"
       });
       return;
@@ -55,8 +55,8 @@ const Support = () => {
     setNewTicketPriority("medium");
     
     toast({
-      title: "Ticket Created",
-      description: "Your support ticket has been submitted successfully."
+      title: t("support.ticket_created"),
+      description: t("support.ticket_submitted")
     });
   };
 
@@ -65,8 +65,8 @@ const Support = () => {
     
     // This would normally send the message to your support system
     toast({
-      title: "Message Sent",
-      description: "A support agent will respond shortly."
+      title: t("support.message_sent"),
+      description: t("support.agent_respond")
     });
     
     setChatMessage("");

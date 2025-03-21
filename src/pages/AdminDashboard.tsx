@@ -6,9 +6,13 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/hooks/use-auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, BarChart2, TicketPlus, Activity, Share2, LineChart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { 
+  RefreshCw, BarChart2, TicketPlus, Activity, 
+  Share2, LineChart, ChevronLeft, HelpCircle 
+} from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import components
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -24,8 +28,10 @@ const AdminDashboard = () => {
   const { user, profile, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { systemMetrics, tickets, userSessions, refreshMetrics } = useSystemMetrics();
+  const { t } = useLanguage();
   
   const [activeTab, setActiveTab] = useState("overview");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   useEffect(() => {
     if (!isAuthenticated) {
@@ -57,12 +63,53 @@ const AdminDashboard = () => {
     new Date(t.updated_at).toDateString() === new Date().toDateString()
   ).length;
   
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    refreshMetrics();
+    
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast({
+        title: "Refreshed",
+        description: "Dashboard data has been updated",
+      });
+    }, 1000);
+  };
+  
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
       <Header />
       
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="max-w-[1200px] mx-auto space-y-8">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                asChild 
+                className="gap-1 text-muted-foreground hover:text-foreground"
+              >
+                <Link to="/">
+                  <ChevronLeft className="h-4 w-4" />
+                  <span>Back to Dashboard</span>
+                </Link>
+              </Button>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-1"
+              asChild
+            >
+              <Link to="/support">
+                <HelpCircle className="h-3.5 w-3.5" />
+                <span>Help</span>
+              </Link>
+            </Button>
+          </div>
+          
           <AdminHeader activeUsers={activeUsers} />
           
           <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
@@ -74,23 +121,23 @@ const AdminDashboard = () => {
                   <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
                     <TabsTrigger value="overview" className="text-sm h-10">
                       <BarChart2 className="mr-2 h-4 w-4" />
-                      <span className="hidden xs:inline">Overview</span>
+                      <span className="hidden xs:inline">{t("admin.overview")}</span>
                     </TabsTrigger>
                     <TabsTrigger value="tickets" className="text-sm h-10">
                       <TicketPlus className="mr-2 h-4 w-4" />
-                      <span className="hidden xs:inline">Support Tickets</span>
+                      <span className="hidden xs:inline">{t("admin.support_tickets")}</span>
                     </TabsTrigger>
                     <TabsTrigger value="sessions" className="text-sm h-10">
                       <Activity className="mr-2 h-4 w-4" />
-                      <span className="hidden xs:inline">User Sessions</span>
+                      <span className="hidden xs:inline">{t("admin.user_sessions")}</span>
                     </TabsTrigger>
                     <TabsTrigger value="remote" className="text-sm h-10">
                       <Share2 className="mr-2 h-4 w-4" />
-                      <span className="hidden xs:inline">Remote Assistance</span>
+                      <span className="hidden xs:inline">{t("admin.remote_assistance")}</span>
                     </TabsTrigger>
                     <TabsTrigger value="analytics" className="text-sm h-10">
                       <LineChart className="mr-2 h-4 w-4" />
-                      <span className="hidden xs:inline">System Analytics</span>
+                      <span className="hidden xs:inline">{t("admin.system_analytics")}</span>
                     </TabsTrigger>
                   </TabsList>
                   
@@ -98,10 +145,11 @@ const AdminDashboard = () => {
                     variant="outline" 
                     size="sm" 
                     className="ml-2 flex gap-1 items-center" 
-                    onClick={refreshMetrics}
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
                   >
-                    <RefreshCw className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">Refresh</span>
+                    <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    <span className="hidden sm:inline">{isRefreshing ? "Refreshing..." : "Refresh"}</span>
                   </Button>
                 </div>
                 

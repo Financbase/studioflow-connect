@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TicketList from "@/components/support/TicketList";
@@ -6,6 +7,8 @@ import { Ticket } from "@/components/support/ticket/types";
 import ContactCard from "@/components/support/ContactCard";
 import NotificationsTab from "@/components/support/NotificationsTab";
 import { Badge } from "@/components/ui/badge";
+import { Bell, MessageSquare, HelpCircle, PhoneCall } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const mockTickets: Ticket[] = [
   {
@@ -68,6 +71,7 @@ interface SupportTabsProps {
 }
 
 const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
+  const { t } = useLanguage();
   const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -77,23 +81,33 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
   return (
     <Tabs defaultValue="tickets" className={className}>
       <TabsList className="mb-4">
-        <TabsTrigger value="tickets">My Tickets</TabsTrigger>
-        <TabsTrigger value="notifications" className="relative">
-          Notifications
+        <TabsTrigger value="tickets" className="flex items-center gap-1">
+          <MessageSquare className="h-4 w-4" />
+          <span>{t("support.tickets")}</span>
+        </TabsTrigger>
+        <TabsTrigger value="notifications" className="relative flex items-center gap-1">
+          <Bell className="h-4 w-4" />
+          <span>{t("support.notifications")}</span>
           {notificationCount > 0 && (
-            <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center">
+            <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center">
               {notificationCount}
             </Badge>
           )}
         </TabsTrigger>
-        <TabsTrigger value="faq">FAQs</TabsTrigger>
-        <TabsTrigger value="contact">Contact</TabsTrigger>
+        <TabsTrigger value="faq" className="flex items-center gap-1">
+          <HelpCircle className="h-4 w-4" />
+          <span>{t("support.faq")}</span>
+        </TabsTrigger>
+        <TabsTrigger value="contact" className="flex items-center gap-1">
+          <PhoneCall className="h-4 w-4" />
+          <span>{t("support.contact")}</span>
+        </TabsTrigger>
       </TabsList>
       
       <TabsContent value="tickets">
         <TicketList 
           tickets={tickets} 
-          emptyMessage="You don't have any support tickets yet."
+          emptyMessage={t("support.no_tickets")}
           onNewTicket={() => {}} // Empty function since we're not handling new tickets here
         />
       </TabsContent>

@@ -7,32 +7,33 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Languages } from "lucide-react";
-import { useLanguage, Language } from "@/contexts/LanguageContext";
+import { Languages, Check } from "lucide-react";
+import { useLanguage, Language, flagEmojis, languageNames } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const LanguageSwitcher = () => {
   const { language, setLanguage, t } = useLanguage();
   const { themeVariant } = useTheme();
-  
-  const getFlagEmoji = (languageCode: Language) => {
-    const flags: Record<Language, string> = {
-      en: "🇬🇧",
-      es: "🇪🇸",
-      fr: "🇫🇷",
-      de: "🇩🇪",
-      sv: "🇸🇪"
-    };
-    return flags[languageCode];
-  };
   
   // Dispatch custom event when language changes
   useEffect(() => {
     const event = new CustomEvent("languageChange", { detail: { language } });
     window.dispatchEvent(event);
   }, [language]);
+  
+  // Group languages by region for a more organized dropdown
+  const languageGroups = {
+    west: ['en', 'es', 'fr', 'de', 'pt'] as Language[],
+    east: ['ja', 'zh', 'ru', 'sv', 'ar'] as Language[]
+  };
   
   return (
     <DropdownMenu>
@@ -45,49 +46,33 @@ const LanguageSwitcher = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className={`w-[150px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
-        <DropdownMenuLabel className="text-foreground">{t("label.language")}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className={`w-[180px] bg-popover text-popover-foreground ${themeVariant === "windows" ? "rounded-none" : ""}`}>
+        <DropdownMenuLabel className="text-foreground flex items-center gap-2">
+          <Languages className="h-4 w-4" />
+          <span>{t("label.language")}</span>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem 
-          onClick={() => setLanguage("en")}
-          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "en" ? "bg-accent text-accent-foreground" : ""}`}
-        >
-          <span className="mr-2">{getFlagEmoji("en")}</span>
-          <span>{t("language.en")}</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => setLanguage("es")}
-          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "es" ? "bg-accent text-accent-foreground" : ""}`}
-        >
-          <span className="mr-2">{getFlagEmoji("es")}</span>
-          <span>{t("language.es")}</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => setLanguage("fr")}
-          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "fr" ? "bg-accent text-accent-foreground" : ""}`}
-        >
-          <span className="mr-2">{getFlagEmoji("fr")}</span>
-          <span>{t("language.fr")}</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => setLanguage("de")}
-          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "de" ? "bg-accent text-accent-foreground" : ""}`}
-        >
-          <span className="mr-2">{getFlagEmoji("de")}</span>
-          <span>{t("language.de")}</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem 
-          onClick={() => setLanguage("sv")}
-          className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === "sv" ? "bg-accent text-accent-foreground" : ""}`}
-        >
-          <span className="mr-2">{getFlagEmoji("sv")}</span>
-          <span>{t("language.sv")}</span>
-        </DropdownMenuItem>
+        <ScrollArea className="h-[280px]">
+          <DropdownMenuGroup>
+            {Object.keys(flagEmojis).map((langCode) => {
+              const lang = langCode as Language;
+              return (
+                <DropdownMenuItem 
+                  key={lang}
+                  onClick={() => setLanguage(lang)}
+                  className={`hover:bg-accent hover:text-accent-foreground text-foreground ${language === lang ? "bg-accent text-accent-foreground" : ""} flex justify-between`}
+                >
+                  <div className="flex items-center">
+                    <span className="mr-2">{flagEmojis[lang]}</span>
+                    <span>{languageNames[lang][language]}</span>
+                  </div>
+                  {language === lang && <Check className="h-4 w-4" />}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuGroup>
+        </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
   );
