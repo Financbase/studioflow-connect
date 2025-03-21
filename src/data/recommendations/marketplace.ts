@@ -9,7 +9,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Test marketplace items within a functional project context before purchasing.",
     category: "marketplace",
     requiredTier: "free",
-    icon: <ShoppingCart className="h-5 w-5 text-primary" />,
+    icon: ShoppingCart,
     actionLabel: "Try Workspace"
   },
   {
@@ -18,7 +18,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Enables multiple contributors to share revenue when selling collaborative templates or presets.",
     category: "marketplace",
     requiredTier: "pro",
-    icon: <Users className="h-5 w-5 text-primary" />,
+    icon: Users,
     actionLabel: "Setup Licensing"
   },
   {
@@ -27,7 +27,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Suggests marketplace items based on your current project needs, DAW choice, and production style.",
     category: "marketplace",
     requiredTier: "standard",
-    icon: <ShoppingCart className="h-5 w-5 text-primary" />,
+    icon: ShoppingCart,
     actionLabel: "View Recommendations"
   },
   {
@@ -36,7 +36,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Guides creators through developing marketplace items from concept to release with templates.",
     category: "marketplace",
     requiredTier: "pro",
-    icon: <Gauge className="h-5 w-5 text-primary" />,
+    icon: Gauge,
     actionLabel: "Start Development"
   },
   {
@@ -45,7 +45,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Connects creators with willing beta testers who match their target user profile.",
     category: "marketplace",
     requiredTier: "standard",
-    icon: <Users className="h-5 w-5 text-primary" />,
+    icon: Users,
     actionLabel: "Find Testers"
   },
   {
@@ -54,7 +54,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Allows content creators to build their own subscription offerings with customizable access tiers and preview capabilities.",
     category: "marketplace",
     requiredTier: "pro",
-    icon: <ShoppingCart className="h-5 w-5 text-primary" />,
+    icon: ShoppingCart,
     actionLabel: "Create Bundle"
   },
   {
@@ -63,7 +63,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Provides sellers with detailed analytics on how customers use their products and which features are most valuable.",
     category: "marketplace",
     requiredTier: "standard",
-    icon: <Gauge className="h-5 w-5 text-primary" />,
+    icon: Gauge,
     actionLabel: "View Analytics"
   },
   {
@@ -72,7 +72,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Tests creator submissions across different system configurations to ensure compatibility and stability before marketplace listing.",
     category: "marketplace",
     requiredTier: "pro",
-    icon: <Gauge className="h-5 w-5 text-primary" />,
+    icon: Gauge,
     actionLabel: "Run QA Tests"
   },
   {
@@ -81,7 +81,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Offers creators flexible pricing options including pay-what-you-want, subscription access, free-with-attribution, or traditional one-time purchase.",
     category: "marketplace",
     requiredTier: "standard",
-    icon: <ShoppingCart className="h-5 w-5 text-primary" />,
+    icon: ShoppingCart,
     actionLabel: "Set Pricing Model"
   },
   {
@@ -90,7 +90,7 @@ export const marketplaceRecommendations: Recommendation[] = [
     description: "Provides tools for creating interactive tutorials that integrate directly with the DAW environment for hands-on learning.",
     category: "marketplace",
     requiredTier: "pro",
-    icon: <Users className="h-5 w-5 text-primary" />,
+    icon: Users,
     actionLabel: "Create Tutorials"
   }
 ];

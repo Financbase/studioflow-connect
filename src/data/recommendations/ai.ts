@@ -9,7 +9,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Creates musical elements that match the stylistic nuances of your project rather than generic patterns.",
     category: "ai",
     requiredTier: "standard",
-    icon: <BrainCircuit className="h-5 w-5 text-primary" />,
+    icon: BrainCircuit,
     actionLabel: "Generate Composition"
   },
   {
@@ -18,7 +18,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Generates complementary parts for multiple instruments that work together harmonically and rhythmically.",
     category: "ai",
     requiredTier: "pro",
-    icon: <Sparkles className="h-5 w-5 text-primary" />,
+    icon: Sparkles,
     actionLabel: "Generate Arrangement"
   },
   {
@@ -27,7 +27,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Analyzes spaces between musical elements to suggest fills, transitions, and ornamentations.",
     category: "ai",
     requiredTier: "standard",
-    icon: <BrainCircuit className="h-5 w-5 text-primary" />,
+    icon: BrainCircuit,
     actionLabel: "Generate Fills"
   },
   {
@@ -36,7 +36,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Tracks when users accomplish their most effective work to suggest optimal times for creative tasks.",
     category: "ai",
     requiredTier: "pro",
-    icon: <BrainCircuit className="h-5 w-5 text-primary" />,
+    icon: BrainCircuit,
     actionLabel: "Analyze Patterns"
   },
   {
@@ -45,7 +45,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Gradually introduces advanced techniques as users master basics, creating a personalized learning curve.",
     category: "ai",
     requiredTier: "standard",
-    icon: <Sparkles className="h-5 w-5 text-primary" />,
+    icon: Sparkles,
     actionLabel: "Start Learning"
   },
   {
@@ -54,7 +54,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Generates evolving sound design elements that develop over time based on arrangement landmarks detected in the project.",
     category: "ai",
     requiredTier: "pro",
-    icon: <Sparkles className="h-5 w-5 text-primary" />,
+    icon: Sparkles,
     actionLabel: "Generate Sounds"
   },
   {
@@ -63,7 +63,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Creates lyric suggestions based on defined character personas, storytelling arc, and emotional progression.",
     category: "ai",
     requiredTier: "standard",
-    icon: <Mic2 className="h-5 w-5 text-primary" />,
+    icon: Mic2,
     actionLabel: "Generate Lyrics"
   },
   {
@@ -72,7 +72,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Recommends session structures based on available time, project deadlines, and historical time spent on similar tasks.",
     category: "ai",
     requiredTier: "pro",
-    icon: <BrainCircuit className="h-5 w-5 text-primary" />,
+    icon: BrainCircuit,
     actionLabel: "Plan Session"
   },
   {
@@ -81,7 +81,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Provides a voice control system that understands DAW-specific terminology and can execute complex command chains.",
     category: "ai",
     requiredTier: "standard",
-    icon: <Mic2 className="h-5 w-5 text-primary" />,
+    icon: Mic2,
     actionLabel: "Enable Voice Control"
   },
   {
@@ -90,7 +90,7 @@ export const aiRecommendations: Recommendation[] = [
     description: "Identifies when users are experiencing decision fatigue and suggests either breaks or simplifies choices.",
     category: "ai",
     requiredTier: "pro",
-    icon: <BrainCircuit className="h-5 w-5 text-primary" />,
+    icon: BrainCircuit,
     actionLabel: "Analyze Workflow"
   }
 ];

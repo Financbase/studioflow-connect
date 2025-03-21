@@ -9,7 +9,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Maintains lightweight snapshots of VM states that can be instantly restored, perfect for A/B testing plugins.",
     category: "plugins",
     requiredTier: "pro",
-    icon: <Layers className="h-5 w-5 text-primary" />,
+    icon: Layers,
     actionLabel: "Enable Snapshots"
   },
   {
@@ -18,7 +18,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Cross-platform database of plugins that tracks compatibility, version history, and known issues.",
     category: "plugins",
     requiredTier: "pro",
-    icon: <Database className="h-5 w-5 text-primary" />,
+    icon: Database,
     actionLabel: "Access Database"
   },
   {
@@ -27,7 +27,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Pre-configured VM environments optimized for specific DAWs with recommended settings.",
     category: "plugins",
     requiredTier: "standard",
-    icon: <Monitor className="h-5 w-5 text-primary" />,
+    icon: Monitor,
     actionLabel: "Browse Templates"
   },
   {
@@ -36,7 +36,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Automatically test newly installed plugins in a sandboxed environment before integration.",
     category: "plugins",
     requiredTier: "pro",
-    icon: <Layers className="h-5 w-5 text-primary" />,
+    icon: Layers,
     actionLabel: "Validate Plugin"
   },
   {
@@ -45,7 +45,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Visually compare settings between environments to diagnose performance differences.",
     category: "plugins",
     requiredTier: "standard",
-    icon: <Monitor className="h-5 w-5 text-primary" />,
+    icon: Monitor,
     actionLabel: "Compare Environments"
   },
   {
@@ -54,7 +54,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Links multiple VMs for parallel processing, allowing projects to distribute CPU-intensive plugins across several virtualized systems.",
     category: "plugins",
     requiredTier: "pro",
-    icon: <Layers className="h-5 w-5 text-primary" />,
+    icon: Layers,
     actionLabel: "Setup Network"
   },
   {
@@ -63,7 +63,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Provides consistent access to audio interfaces and controllers across different VM environments through a universal driver translation layer.",
     category: "plugins",
     requiredTier: "standard",
-    icon: <Layers className="h-5 w-5 text-primary" />,
+    icon: Layers,
     actionLabel: "Configure HAL"
   },
   {
@@ -72,7 +72,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Allocates system resources to different VMs based on active task priorities, scaling up resources for rendering VMs.",
     category: "plugins",
     requiredTier: "pro",
-    icon: <Database className="h-5 w-5 text-primary" />,
+    icon: Database,
     actionLabel: "Schedule Resources"
   },
   {
@@ -81,7 +81,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Provides guided setup of OS-level parameters critical for audio work with one-click application.",
     category: "plugins",
     requiredTier: "standard",
-    icon: <Monitor className="h-5 w-5 text-primary" />,
+    icon: Monitor,
     actionLabel: "Run Wizard"
   },
   {
@@ -90,7 +90,7 @@ export const vmRecommendations: Recommendation[] = [
     description: "Runs scheduled analysis of VM environments to detect fragmentation, driver conflicts, or other performance degrading factors.",
     category: "plugins",
     requiredTier: "standard",
-    icon: <Database className="h-5 w-5 text-primary" />,
+    icon: Database,
     actionLabel: "Run Scan"
   }
 ];

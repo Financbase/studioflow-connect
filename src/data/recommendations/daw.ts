@@ -9,7 +9,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Preserves creative intent when moving between DAWs, maintaining relationships between tracks.",
     category: "features",
     requiredTier: "standard",
-    icon: <Code className="h-5 w-5 text-primary" />,
+    icon: Code,
     actionLabel: "Translate Project"
   },
   {
@@ -18,7 +18,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "When a native plugin isn't available in the target DAW, finds the closest match with similar settings.",
     category: "features",
     requiredTier: "pro",
-    icon: <Code className="h-5 w-5 text-primary" />,
+    icon: Code,
     actionLabel: "Match Plugins"
   },
   {
@@ -27,7 +27,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Suggests optimized keyboard shortcuts based on frequency of operations and ergonomic factors.",
     category: "features",
     requiredTier: "standard",
-    icon: <Workflow className="h-5 w-5 text-primary" />,
+    icon: Workflow,
     actionLabel: "Analyze Workflow"
   },
   {
@@ -36,7 +36,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Analyzes repeated sequences of actions to suggest macros that could reduce repetitive tasks.",
     category: "features",
     requiredTier: "pro",
-    icon: <Workflow className="h-5 w-5 text-primary" />,
+    icon: Workflow,
     actionLabel: "Mine Processes"
   },
   {
@@ -45,7 +45,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Customized workspace layouts that show only relevant tools for specific tasks to reduce cognitive load.",
     category: "features",
     requiredTier: "standard",
-    icon: <LayoutGrid className="h-5 w-5 text-primary" />,
+    icon: LayoutGrid,
     actionLabel: "Configure Focus Mode"
   },
   {
@@ -54,7 +54,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Maintains precise automation data even when moving between DAWs with different automation curve implementations or resolution.",
     category: "features",
     requiredTier: "standard",
-    icon: <Code className="h-5 w-5 text-primary" />,
+    icon: Code,
     actionLabel: "Preserve Automation"
   },
   {
@@ -63,7 +63,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Preserves relationships between tracks (sends, groups, VCAs) even when the routing architecture differs between DAWs.",
     category: "features",
     requiredTier: "pro",
-    icon: <Code className="h-5 w-5 text-primary" />,
+    icon: Code,
     actionLabel: "Map Relationships"
   },
   {
@@ -72,7 +72,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Ensures consistent output levels and frequency response when moving projects between different DAW summing engines.",
     category: "features",
     requiredTier: "standard",
-    icon: <Workflow className="h-5 w-5 text-primary" />,
+    icon: Workflow,
     actionLabel: "Calibrate Mix"
   },
   {
@@ -81,7 +81,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Creates comprehensive templates that include not just track structure but also window layouts, controller mappings, and plugin chains.",
     category: "features",
     requiredTier: "pro",
-    icon: <LayoutGrid className="h-5 w-5 text-primary" />,
+    icon: LayoutGrid,
     actionLabel: "Create Blueprint"
   },
   {
@@ -90,7 +90,7 @@ export const dawRecommendations: Recommendation[] = [
     description: "Learns from user behavior to suggest appropriate starting points for new projects based on past successful workflows.",
     category: "features",
     requiredTier: "standard",
-    icon: <Workflow className="h-5 w-5 text-primary" />,
+    icon: Workflow,
     actionLabel: "View Suggestions"
   }
 ];

@@ -9,7 +9,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Automatically shifts CPU resources to the most active plugin chains during playback and recording.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <Cpu className="h-5 w-5 text-primary" />,
+    icon: Cpu,
     actionLabel: "Learn More"
   },
   {
@@ -18,7 +18,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Implements memory compression for older 32-bit plugins to reduce their footprint while maintaining fast access.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <ServerStack className="h-5 w-5 text-primary" />,
+    icon: ServerStack,
     actionLabel: "Enable Now"
   },
   {
@@ -27,7 +27,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Create and save optimized resource profiles for different project types (mixing vs. tracking sessions).",
     category: "workflow",
     requiredTier: "pro",
-    icon: <ServerStack className="h-5 w-5 text-primary" />,
+    icon: ServerStack,
     actionLabel: "Create Profile"
   },
   {
@@ -36,7 +36,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Granular monitoring of individual plugin instances with visual alerts for problematic plugins.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <BarChart className="h-5 w-5 text-primary" />,
+    icon: BarChart,
     actionLabel: "View Metrics"
   },
   {
@@ -45,7 +45,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Track resource usage across sessions to identify problematic setups or performance trends.",
     category: "workflow",
     requiredTier: "pro",
-    icon: <BarChart className="h-5 w-5 text-primary" />,
+    icon: BarChart,
     actionLabel: "View History"
   },
   {
@@ -54,7 +54,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Automatically offloads compatible DSP processes to GPU for tasks like convolution reverb or spectral processing.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <Cpu className="h-5 w-5 text-primary" />,
+    icon: Cpu,
     actionLabel: "Enable GPU"
   },
   {
@@ -63,7 +63,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Intelligently pre-renders effect chains that don't require real-time interaction while keeping interactive elements responsive.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <ServerStack className="h-5 w-5 text-primary" />,
+    icon: ServerStack,
     actionLabel: "Configure"
   },
   {
@@ -72,7 +72,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Monitors disk read/write speeds for sample streaming, buffer underruns, and suggests optimal sample rate/bit depth settings.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <BarChart className="h-5 w-5 text-primary" />,
+    icon: BarChart,
     actionLabel: "Track Performance"
   },
   {
@@ -81,7 +81,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "For collaborative sessions, monitors latency, packet loss, and bandwidth utilization with automatic quality adjustment recommendations.",
     category: "workflow",
     requiredTier: "pro",
-    icon: <BarChart className="h-5 w-5 text-primary" />,
+    icon: BarChart,
     actionLabel: "Analyze Network"
   },
   {
@@ -90,7 +90,7 @@ export const systemRecommendations: Recommendation[] = [
     description: "Tracks system-level variables like temperature, power draw, and disk fragmentation that might impact audio performance.",
     category: "workflow",
     requiredTier: "standard",
-    icon: <ServerStack className="h-5 w-5 text-primary" />,
+    icon: ServerStack,
     actionLabel: "Monitor Environment"
   }
 ];
