@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import ContributorDashboard from "@/components/contribution/ContributorDashboard";
 import FundingProgress from "@/components/contribution/FundingProgress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CommunityTab } from "@/components/studioflow/CommunityTab";
+import CommunityTab from "@/components/studioflow/CommunityTab";
 
 const Contribution = () => {
   return (
