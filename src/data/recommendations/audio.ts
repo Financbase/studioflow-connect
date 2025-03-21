@@ -1,6 +1,6 @@
 
 import { Recommendation } from "@/types/recommendation";
-import { WaveformIcon, Music, Ear } from "lucide-react";
+import { AudioWaveform, Music, Ear } from "lucide-react";
 
 export const audioRecommendations: Recommendation[] = [
   {
@@ -9,7 +9,7 @@ export const audioRecommendations: Recommendation[] = [
     description: "Compare mixes against multiple reference tracks with statistical aggregation to identify trends.",
     category: "sounds",
     requiredTier: "free",
-    icon: WaveformIcon,
+    icon: AudioWaveform,
     actionLabel: "Compare References"
   },
   {
@@ -45,7 +45,7 @@ export const audioRecommendations: Recommendation[] = [
     description: "Suggests precise EQ adjustments based on instrument recognition and its role in the current mix.",
     category: "sounds",
     requiredTier: "pro",
-    icon: WaveformIcon,
+    icon: AudioWaveform,
     actionLabel: "Get EQ Suggestions"
   },
   {
@@ -81,7 +81,7 @@ export const audioRecommendations: Recommendation[] = [
     description: "Provides feedback on mix balance using machine learning models trained on successful mixes within similar genres.",
     category: "sounds",
     requiredTier: "pro",
-    icon: WaveformIcon,
+    icon: AudioWaveform,
     actionLabel: "Check Balance"
   },
   {
@@ -90,7 +90,7 @@ export const audioRecommendations: Recommendation[] = [
     description: "Maps the emotional energy curve of a song based on dynamic range, instrumentation density, and frequency content over time.",
     category: "sounds",
     requiredTier: "standard",
-    icon: WaveformIcon,
+    icon: AudioWaveform,
     actionLabel: "Visualize Dynamics"
   }
 ];

@@ -19,7 +19,7 @@ export const useRecommendationData = () => {
       description: "Speed up your workflow by using our pre-made project templates",
       category: "workflow",
       requiredTier: "free",
-      icon: <Music className="h-5 w-5 text-primary" />,
+      icon: Music,
       actionLabel: "Explore Templates",
       actionUrl: "/templates"
     },
@@ -29,7 +29,7 @@ export const useRecommendationData = () => {
       description: "Customize your keyboard shortcuts for faster editing",
       category: "workflow",
       requiredTier: "free",
-      icon: <Settings className="h-5 w-5 text-primary" />,
+      icon: Settings,
       actionLabel: "Setup Shortcuts",
       actionUrl: "/settings/shortcuts"
     },
@@ -39,7 +39,7 @@ export const useRecommendationData = () => {
       description: "Let our AI handle the final touches on your track",
       category: "workflow",
       requiredTier: "pro",
-      icon: <Zap className="h-5 w-5 text-primary" />,
+      icon: Zap,
       actionLabel: "Try AI Mastering",
       actionUrl: "/ai/mastering"
     }
@@ -52,7 +52,7 @@ export const useRecommendationData = () => {
       description: "Learn the fundamentals of audio mixing in our free course",
       category: "learning",
       requiredTier: "free",
-      icon: <BookOpen className="h-5 w-5 text-primary" />,
+      icon: BookOpen,
       actionLabel: "Start Learning",
       actionUrl: "/learn/mixing-basics"
     },
@@ -62,7 +62,7 @@ export const useRecommendationData = () => {
       description: "Take your productions to the next level with advanced techniques",
       category: "learning",
       requiredTier: "standard",
-      icon: <Headphones className="h-5 w-5 text-primary" />,
+      icon: Headphones,
       actionLabel: "Start Course",
       actionUrl: "/learn/advanced-production"
     }
@@ -75,7 +75,7 @@ export const useRecommendationData = () => {
       description: "Extract vocals, drums, bass and more from any track",
       category: "ai",
       requiredTier: "pro",
-      icon: <FileCode className="h-5 w-5 text-primary" />,
+      icon: FileCode,
       actionLabel: "Try Stem Separation",
       actionUrl: "/ai/stem-separation"
     },
@@ -85,7 +85,7 @@ export const useRecommendationData = () => {
       description: "Clean up and enhance your vocal recordings",
       category: "ai",
       requiredTier: "pro",
-      icon: <Zap className="h-5 w-5 text-primary" />,
+      icon: Zap,
       actionLabel: "Enhance Vocals",
       actionUrl: "/ai/vocal-enhancement"
     }
