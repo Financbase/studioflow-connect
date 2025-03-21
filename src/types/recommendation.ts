@@ -15,4 +15,5 @@ export interface Recommendation {
   actionUrl?: string;
   onClick?: () => void;
   imageUrl?: string;
+  isAvailable?: boolean;
 }

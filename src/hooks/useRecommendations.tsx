@@ -69,7 +69,7 @@ export function useRecommendations({
           };
         });
         return acc;
-      }, {} as Record<string, (Recommendation & { isAvailable?: boolean })[]>);
+      }, {} as Record<string, Recommendation[]>);
     }
 
     const query = searchQuery.toLowerCase();
@@ -95,12 +95,12 @@ export function useRecommendations({
         acc[key] = filtered;
       }
       return acc;
-    }, {} as Record<string, (Recommendation & { isAvailable?: boolean })[]>);
+    }, {} as Record<string, Recommendation[]>);
   }, [searchQuery, filterByTier, tierLevel, userTierLevel]);
 
   // Get specific recommendation by ID
   const getRecommendationById = useMemo(() => {
-    return (id?: string): (Recommendation & { isAvailable?: boolean }) | null => {
+    return (id?: string): Recommendation | null => {
       if (!id) return null;
       
       const allRecs = Object.values(recommendations).flat();
