@@ -6,33 +6,25 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Settings2, Save } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { Settings2 } from "lucide-react";
 import { useDashboard } from "@/contexts/dashboard";
 import { WidgetId } from "@/contexts/dashboard/types";
 import { toast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Import our newly created components
-import WidgetList from "./WidgetList";
-import SavedLayouts from "./SavedLayouts";
-import LayoutNameInput from "./LayoutNameInput";
-import ProFeatures from "./ProFeatures";
+import CustomLayoutTabs from "./CustomLayoutTabs";
+import DialogActions from "./DialogActions";
 import { SavedLayout } from "./types";
 
 const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess, pricingTier } = useDashboard();
-  const { t } = useLanguage();
   const { themeVariant } = useTheme();
-  const isMobile = useIsMobile(); // Correctly use the useIsMobile hook as a boolean
+  const isMobile = useIsMobile();
+  
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("widgets");
@@ -147,71 +139,28 @@ const CustomLayoutEditor = () => {
           </DialogDescription>
         </DialogHeader>
         
-        <Tabs defaultValue="widgets" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="widgets">Widget Selection</TabsTrigger>
-            <TabsTrigger 
-              value="layouts" 
-              disabled={!canSaveMultipleLayouts}
-              className="relative"
-            >
-              Saved Layouts
-              {!canSaveMultipleLayouts && (
-                <Badge variant="outline" className="absolute -top-1 -right-1 text-[10px] px-1 py-0">
-                  Pro
-                </Badge>
-              )}
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="widgets" className="space-y-4 py-4">
-            <LayoutNameInput 
-              layoutName={layoutName}
-              onLayoutNameChange={setLayoutName}
-              canSaveMultipleLayouts={canSaveMultipleLayouts}
-              pricingTier={pricingTier}
-            />
-            
-            <Separator />
-            
-            <WidgetList 
-              widgets={Object.keys(featureAccess) as WidgetId[]}
-              selectedWidgets={selectedWidgets}
-              featureAccess={featureAccess}
-              pricingTier={pricingTier}
-              onToggleWidget={handleToggleWidget}
-            />
-          </TabsContent>
-          
-          <TabsContent value="layouts" className="space-y-4 py-4">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-sm font-medium">Your Saved Layouts</h3>
-                <Badge variant="secondary">Pro Feature</Badge>
-              </div>
-              
-              <SavedLayouts 
-                savedLayouts={savedLayouts}
-                onSelectSavedLayout={handleSelectSavedLayout}
-                onDeleteLayout={handleDeleteLayout}
-              />
-              
-              <Separator />
-              
-              <ProFeatures />
-            </div>
-          </TabsContent>
-        </Tabs>
+        <CustomLayoutTabs
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          layoutName={layoutName}
+          onLayoutNameChange={setLayoutName}
+          canSaveMultipleLayouts={canSaveMultipleLayouts}
+          pricingTier={pricingTier}
+          widgets={Object.keys(featureAccess) as WidgetId[]}
+          selectedWidgets={selectedWidgets}
+          featureAccess={featureAccess}
+          onToggleWidget={handleToggleWidget}
+          savedLayouts={savedLayouts}
+          onSelectSavedLayout={handleSelectSavedLayout}
+          onDeleteLayout={handleDeleteLayout}
+        />
         
-        <DialogFooter className={isMobile ? "flex-col space-y-2" : ""}>
-          <Button variant="outline" onClick={() => setIsOpen(false)} className={isMobile ? "w-full" : ""}>
-            Cancel
-          </Button>
-          <Button onClick={handleSaveLayout} className={`${isMobile ? "w-full" : ""} gap-2`}>
-            <Save className="h-4 w-4" />
-            {activeTab === "layouts" && canSaveMultipleLayouts ? "Save New Layout" : "Save Changes"}
-          </Button>
-        </DialogFooter>
+        <DialogActions
+          onCancel={() => setIsOpen(false)}
+          onSave={handleSaveLayout}
+          activeTab={activeTab}
+          canSaveMultipleLayouts={canSaveMultipleLayouts}
+        />
       </DialogContent>
     </Dialog>
   );
