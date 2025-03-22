@@ -46,8 +46,9 @@ export const useErrorHandling = () => {
         description: errorMessage,
         variant: toastVariant,
         action: retry ? {
-          label: "Retry",
-          onClick: () => retryOperation(retry)
+          altText: "Retry operation",
+          onClick: () => retryOperation(retry),
+          className: "retry-action"
         } : undefined
       });
     }

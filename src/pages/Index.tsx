@@ -39,8 +39,8 @@ const Index = () => {
         setIsLoading(false);
       } catch (error) {
         handleError(error, {
-          title: "Dashboard Error",
-          description: "Failed to load dashboard components"
+          title: "Dashboard Error"
+          // Removed the description property as it's not part of ErrorOptions
         });
         setIsLoading(false);
       }
