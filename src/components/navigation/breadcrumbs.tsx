@@ -1,119 +1,119 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface BreadcrumbItem {
+export interface BreadcrumbItem {
   label: string;
   href?: string;
   icon?: React.ReactNode;
 }
 
 interface BreadcrumbsProps {
-  items?: BreadcrumbItem[];
+  items: BreadcrumbItem[];
   homeHref?: string;
   className?: string;
   separator?: React.ReactNode;
-  showHome?: boolean;
+  showHomeIcon?: boolean;
   maxItems?: number;
 }
 
 /**
- * Breadcrumbs component that shows the current navigation path
- * and allows users to navigate back to previous levels.
+ * Responsive breadcrumbs navigation component that intelligently
+ * handles overflow and provides consistent navigation context.
  */
 export const Breadcrumbs = ({
-  items = [],
+  items,
   homeHref = '/',
   className,
-  separator = <ChevronRight className="h-4 w-4 text-muted-foreground mx-1" />,
-  showHome = true,
-  maxItems = 0, // 0 means no limit
+  separator = <ChevronRight className="h-4 w-4 text-muted-foreground" />,
+  showHomeIcon = true,
+  maxItems = 4
 }: BreadcrumbsProps) => {
-  const location = useLocation();
+  const allItems: BreadcrumbItem[] = [
+    { label: 'Home', href: homeHref, icon: showHomeIcon ? <Home className="h-4 w-4" /> : undefined },
+    ...items
+  ];
   
-  // Generate breadcrumbs from the current path if no items are provided
-  const generatedItems = React.useMemo(() => {
-    if (items.length > 0) return items;
-    
-    const pathSegments = location.pathname.split('/')
-      .filter(segment => segment !== '');
-    
-    const breadcrumbItems: BreadcrumbItem[] = [];
-    let path = '';
-    
-    for (const segment of pathSegments) {
-      path += `/${segment}`;
-      
-      // Capitalize first letter and replace hyphens with spaces
-      const label = segment
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, char => char.toUpperCase());
-      
-      breadcrumbItems.push({
-        label,
-        href: path,
-      });
+  // Handle overflow by truncating middle items when needed
+  const visibleItems = React.useMemo(() => {
+    if (allItems.length <= maxItems) {
+      return allItems;
     }
     
-    return breadcrumbItems;
-  }, [items, location.pathname]);
-  
-  // Apply max items limit if specified
-  const visibleItems = maxItems > 0 && generatedItems.length > maxItems
-    ? [
-        ...generatedItems.slice(0, maxItems - 2),
-        { label: '...', href: undefined },
-        generatedItems[generatedItems.length - 1],
-      ]
-    : generatedItems;
+    // Always show first and last items
+    const firstItem = allItems[0];
+    const lastItem = allItems[allItems.length - 1];
+    
+    // Calculate how many middle items we can show
+    const remainingSlots = maxItems - 2; // -2 for first and last items
+    
+    if (remainingSlots <= 0) {
+      return [firstItem, { label: '...', href: undefined }, lastItem];
+    }
+    
+    // Show some middle items
+    const middleItems = allItems.slice(1, -1);
+    const truncated = middleItems.length > remainingSlots;
+    
+    if (!truncated) {
+      return allItems;
+    }
+    
+    // Calculate how many items to show from start/end of middle section
+    const startCount = Math.ceil(remainingSlots / 2);
+    const endCount = Math.floor(remainingSlots / 2);
+    
+    const startItems = middleItems.slice(0, startCount);
+    const endItems = endCount > 0 
+      ? middleItems.slice(middleItems.length - endCount) 
+      : [];
+    
+    return [
+      firstItem,
+      ...startItems,
+      { label: '...', href: undefined },
+      ...endItems,
+      lastItem
+    ];
+  }, [allItems, maxItems]);
   
   return (
-    <nav
-      className={cn(
-        "flex items-center text-sm text-muted-foreground",
-        className
-      )}
-      aria-label="Breadcrumb"
-    >
-      <ol className="flex items-center space-x-1">
-        {showHome && (
-          <li className="flex items-center">
-            <Link
-              to={homeHref}
-              className="flex items-center hover:text-foreground transition-colors"
-              aria-label="Home"
-            >
-              <Home className="h-4 w-4" />
-            </Link>
-            {visibleItems.length > 0 && separator}
-          </li>
-        )}
-        
+    <nav aria-label="Breadcrumb" className={cn("flex items-center text-sm", className)}>
+      <ol className="flex items-center flex-wrap">
         {visibleItems.map((item, index) => {
           const isLast = index === visibleItems.length - 1;
           
           return (
-            <li key={`${item.label}-${index}`} className="flex items-center">
-              {item.href ? (
-                <Link
-                  to={item.href}
-                  className={cn(
-                    "flex items-center hover:text-foreground transition-colors",
-                    isLast && "text-foreground font-medium pointer-events-none"
-                  )}
-                >
-                  {item.icon && <span className="mr-1">{item.icon}</span>}
-                  {item.label}
-                </Link>
-              ) : (
-                <span className="flex items-center">
-                  {item.icon && <span className="mr-1">{item.icon}</span>}
-                  {item.label}
+            <li key={index} className="flex items-center">
+              {index > 0 && (
+                <span className="mx-2 text-muted-foreground" aria-hidden="true">
+                  {separator}
                 </span>
               )}
-              {!isLast && separator}
+              
+              {item.href && !isLast ? (
+                <Link
+                  to={item.href}
+                  className="flex items-center hover:text-primary transition-colors gap-1"
+                >
+                  {item.icon}
+                  <span className={item.icon ? "hidden sm:inline" : undefined}>
+                    {item.label}
+                  </span>
+                </Link>
+              ) : (
+                <span className={cn(
+                  "flex items-center gap-1",
+                  isLast ? "font-medium text-foreground" : "text-muted-foreground"
+                )}>
+                  {item.icon}
+                  <span className={item.icon && !isLast ? "hidden sm:inline" : undefined}>
+                    {item.label}
+                  </span>
+                </span>
+              )}
             </li>
           );
         })}
@@ -121,3 +121,5 @@ export const Breadcrumbs = ({
     </nav>
   );
 };
+
+export default Breadcrumbs;

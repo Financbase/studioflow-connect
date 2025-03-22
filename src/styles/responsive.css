@@ -1,228 +1,174 @@
 
-/* Responsive utilities for consistent layouts across the application */
-
-/* Base container size utilities */
-.container-xs {
-  @apply w-full max-w-xs mx-auto px-4;
+/* Base responsive utilities */
+.responsive-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.container-sm {
-  @apply w-full max-w-sm mx-auto px-4 sm:px-6;
+/* Responsive container sizes based on breakpoints */
+@media (min-width: 640px) {
+  .responsive-container.max-w-sm,
+  .responsive-container.size-sm {
+    max-width: 36rem;
+  }
 }
 
-.container-md {
-  @apply w-full max-w-md mx-auto px-4 sm:px-6;
+@media (min-width: 768px) {
+  .responsive-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .responsive-container.max-w-md,
+  .responsive-container.size-md {
+    max-width: 42rem;
+  }
 }
 
-.container-lg {
-  @apply w-full max-w-lg mx-auto px-4 sm:px-6 lg:px-8;
+@media (min-width: 1024px) {
+  .responsive-container.max-w-lg,
+  .responsive-container.size-lg {
+    max-width: 64rem;
+  }
 }
 
-.container-xl {
-  @apply w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8;
+@media (min-width: 1280px) {
+  .responsive-container.max-w-xl,
+  .responsive-container.size-xl {
+    max-width: 72rem;
+  }
 }
 
-.container-2xl {
-  @apply w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8;
+@media (min-width: 1536px) {
+  .responsive-container.max-w-2xl,
+  .responsive-container.size-2xl {
+    max-width: 84rem;
+  }
 }
 
-.container-3xl {
-  @apply w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+/* Tablet-specific adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-stack {
+    flex-direction: column !important;
+  }
+  
+  .tablet-full-width {
+    width: 100% !important;
+  }
+  
+  .tablet-half-width {
+    width: 50% !important;
+  }
+  
+  .tablet-hide {
+    display: none !important;
+  }
+  
+  .tablet-show {
+    display: block !important;
+  }
+  
+  .tablet-compact-padding {
+    padding: 0.75rem !important;
+  }
 }
 
-.container-4xl {
-  @apply w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  .mobile-show {
+    display: block !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  
+  .mobile-compact-padding {
+    padding: 0.5rem !important;
+  }
+  
+  .mobile-no-border {
+    border: none !important;
+  }
+  
+  .mobile-rounded-none {
+    border-radius: 0 !important;
+  }
 }
 
-.container-5xl {
-  @apply w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+/* Improved grid layout utilities */
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
 }
 
-.container-6xl {
-  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+@media (min-width: 640px) {
+  .responsive-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.container-7xl {
-  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+@media (min-width: 768px) {
+  .responsive-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* Breakpoint-specific display classes */
-@layer utilities {
-  /* Show elements only at specific breakpoints */
-  .xs\:show {
-    @apply block;
+@media (min-width: 1024px) {
+  .responsive-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Content visibility optimizations for performance */
+@media (max-width: 767px) {
+  .defer-mobile {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+}
+
+/* Print-specific styles */
+@media print {
+  .print-hide {
+    display: none !important;
   }
   
-  .sm\:show {
-    @apply hidden sm:block;
+  .print-break-after {
+    break-after: page;
   }
   
-  .md\:show {
-    @apply hidden md:block;
+  .print-break-before {
+    break-before: page;
   }
-  
-  .lg\:show {
-    @apply hidden lg:block;
+}
+
+/* High-contrast and reduced motion adaptations for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .adaptive-motion {
+    transition: none !important;
+    animation: none !important;
   }
-  
-  .xl\:show {
-    @apply hidden xl:block;
-  }
-  
-  /* Hide elements at specific breakpoints */
-  .xs\:hide {
-    @apply hidden;
-  }
-  
-  .sm\:hide {
-    @apply sm:hidden;
-  }
-  
-  .md\:hide {
-    @apply md:hidden;
-  }
-  
-  .lg\:hide {
-    @apply lg:hidden;
-  }
-  
-  .xl\:hide {
-    @apply xl:hidden;
-  }
-  
-  /* Responsive grid layouts */
-  .grid-responsive {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
-  }
-  
-  .grid-responsive-tight {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2;
-  }
-  
-  .grid-responsive-wide {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
-  }
-  
-  /* Two-column layout that becomes single column on mobile */
-  .grid-2-col {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
-  }
-  
-  /* Three-column layout that adapts to screen size */
-  .grid-3-col {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
-  }
-  
-  /* Four-column layout that adapts to screen size */
-  .grid-4-col {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
-  }
-  
-  /* Responsive aspect ratio containers */
-  .aspect-4x3 {
-    @apply relative pt-[75%];
-  }
-  
-  .aspect-16x9 {
-    @apply relative pt-[56.25%];
-  }
-  
-  .aspect-square {
-    @apply relative pt-[100%];
-  }
-  
-  /* Content within aspect ratio containers */
-  .aspect-content {
-    @apply absolute inset-0 w-full h-full object-cover;
-  }
-  
-  /* Responsive margins and paddings */
-  .margin-responsive {
-    @apply m-2 sm:m-3 md:m-4 lg:m-6;
-  }
-  
-  .padding-responsive {
-    @apply p-2 sm:p-3 md:p-4 lg:p-6;
-  }
-  
-  /* Responsive spacing utilities */
-  .space-responsive {
-    @apply space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10;
-  }
-  
-  .gap-responsive {
-    @apply gap-2 sm:gap-3 md:gap-4 lg:gap-6;
-  }
-  
-  /* Responsive text sizes */
-  .text-responsive-title {
-    @apply text-xl sm:text-2xl md:text-3xl font-bold;
-  }
-  
-  .text-responsive-subtitle {
-    @apply text-lg sm:text-xl md:text-2xl font-semibold;
-  }
-  
-  .text-responsive-body {
-    @apply text-sm sm:text-base;
-  }
-  
-  /* Responsive container widths */
-  .container-responsive {
-    @apply w-full max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-  
-  /* Responsive flex layouts */
-  .flex-responsive-row {
-    @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
-  }
-  
-  .flex-responsive-col {
-    @apply flex flex-col gap-2 sm:gap-4;
-  }
-  
-  /* Responsive sticky elements */
-  .sticky-top-responsive {
-    @apply sticky top-0 z-10;
-  }
-  
-  /* Responsive aspect ratios */
-  .aspect-responsive-video {
-    @apply aspect-video md:aspect-[16/9] lg:aspect-[21/9];
-  }
-  
-  /* Fixed aspect ratio card layouts */
-  .card-grid-fixed {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
-  }
-  
-  .card-grid-fixed > * {
-    @apply aspect-[4/3] overflow-hidden;
-  }
-  
-  /* Dynamic grid sizing with auto-fit/auto-fill */
-  .auto-grid-sm {
-    @apply grid gap-4;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  }
-  
-  .auto-grid-md {
-    @apply grid gap-4;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-  
-  .auto-grid-lg {
-    @apply grid gap-4;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-  
-  /* Centered content wrapper */
-  .content-centered {
-    @apply flex items-center justify-center min-h-[50vh];
-  }
-  
-  /* Full height container */
-  .full-height {
-    @apply min-h-[calc(100vh-64px)];
+}
+
+@media (prefers-contrast: high) {
+  .adaptive-contrast {
+    border: 1px solid currentColor !important;
   }
 }

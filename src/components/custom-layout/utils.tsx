@@ -30,7 +30,7 @@ export const getWidgetIcon = (widgetId: WidgetId) => {
     case 'connect':
       return <Merge className="h-4 w-4" />;
     default:
-      // Fix: Cast widgetId to string to safely use string methods
+      // Properly cast widgetId to string to prevent TypeScript errors
       const widgetIdString = String(widgetId);
       return <Activity className="h-4 w-4" />;
   }
@@ -54,7 +54,7 @@ export const getWidgetLabel = (widgetId: WidgetId) => {
     case 'connect':
       return 'StudioFlow Connect';
     default:
-      // Fix: Cast widgetId to string to safely use string methods
+      // Properly cast widgetId to string to prevent TypeScript errors
       const widgetIdString = String(widgetId);
       return widgetIdString.charAt(0).toUpperCase() + widgetIdString.slice(1);
   }

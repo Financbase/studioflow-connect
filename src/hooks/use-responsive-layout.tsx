@@ -1,16 +1,32 @@
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useIsMobile } from './use-mobile';
 
-/**
- * Available breakpoints in the application
- */
-export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+type LayoutMode = 'compact' | 'default' | 'expanded';
+type ScreenOrientation = 'portrait' | 'landscape';
 
-/**
- * Screen size configuration matching Tailwind default breakpoints
- */
-const breakpoints = {
+interface LayoutConfig {
+  sidebarVisible: boolean;
+  contentColumns: 1 | 2 | 3 | 4;
+  widgetsPerRow: 1 | 2 | 3 | 4;
+  compactHeader: boolean;
+  compactWidgets: boolean;
+  stackedNavigation: boolean;
+}
+
+interface ResponsiveLayout {
+  breakpoint: Breakpoint;
+  mode: LayoutMode;
+  orientation: ScreenOrientation;
+  config: LayoutConfig;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+}
+
+// Breakpoint values in px - matching Tailwind defaults
+const breakpointValues = {
   xs: 0,
   sm: 640,
   md: 768,
@@ -19,154 +35,92 @@ const breakpoints = {
   '2xl': 1536
 };
 
-interface ResponsiveLayoutOptions {
-  /**
-   * Debounce time for resize events in milliseconds
-   */
-  debounceTime?: number;
-}
-
-export interface ResponsiveLayoutState {
-  /**
-   * Current screen width
-   */
-  screenWidth: number;
-  
-  /**
-   * Current screen height
-   */
-  screenHeight: number;
-  
-  /**
-   * Current breakpoint (xs, sm, md, lg, xl, 2xl)
-   */
-  breakpoint: Breakpoint;
-  
-  /**
-   * Whether the current screen size is mobile
-   */
-  isMobile: boolean;
-  
-  /**
-   * Whether the current screen size is portrait
-   */
-  isPortrait: boolean;
-  
-  /**
-   * Check if the current screen size is at or above a specific breakpoint
-   */
-  isMinWidth: (breakpoint: Breakpoint) => boolean;
-  
-  /**
-   * Check if the current screen size is below a specific breakpoint
-   */
-  isMaxWidth: (breakpoint: Breakpoint) => boolean;
-  
-  /**
-   * Get the number of columns to use for the current breakpoint
-   */
-  getColumnsForBreakpoint: (options?: {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-    '2xl'?: number;
-  }) => number;
-}
-
 /**
- * A comprehensive hook for responsive layout management
- * that provides various utilities for responsive design.
+ * Hook for handling responsive layout configurations across different device sizes
+ * with automatic detection of screen changes and orientation shifts.
  */
-export const useResponsiveLayout = (
-  options: ResponsiveLayoutOptions = {}
-): ResponsiveLayoutState => {
-  const { debounceTime = 100 } = options;
+export function useResponsiveLayout(): ResponsiveLayout {
   const isMobileDevice = useIsMobile();
+  const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const [height, setHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 768);
   
-  // Track window dimensions with debounce
-  const [dimensions, setDimensions] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0
-  });
+  // Determine current breakpoint based on screen width
+  const getBreakpoint = useCallback((width: number): Breakpoint => {
+    if (width < breakpointValues.sm) return 'xs';
+    if (width < breakpointValues.md) return 'sm';
+    if (width < breakpointValues.lg) return 'md';
+    if (width < breakpointValues.xl) return 'lg';
+    if (width < breakpointValues['2xl']) return 'xl';
+    return '2xl';
+  }, []);
+  
+  // Get screen orientation
+  const getOrientation = useCallback((width: number, height: number): ScreenOrientation => {
+    return width > height ? 'landscape' : 'portrait';
+  }, []);
+  
+  // Derive layout mode from breakpoint
+  const getLayoutMode = useCallback((breakpoint: Breakpoint): LayoutMode => {
+    if (['xs', 'sm'].includes(breakpoint)) return 'compact';
+    if (['md', 'lg'].includes(breakpoint)) return 'default';
+    return 'expanded';
+  }, []);
+  
+  // Generate layout configuration based on breakpoint and mode
+  const getLayoutConfig = useCallback((breakpoint: Breakpoint, mode: LayoutMode): LayoutConfig => {
+    switch (mode) {
+      case 'compact':
+        return {
+          sidebarVisible: false,
+          contentColumns: 1,
+          widgetsPerRow: 1,
+          compactHeader: true,
+          compactWidgets: true,
+          stackedNavigation: true
+        };
+      case 'default':
+        return {
+          sidebarVisible: true,
+          contentColumns: breakpoint === 'md' ? 2 : 3,
+          widgetsPerRow: breakpoint === 'md' ? 1 : 2,
+          compactHeader: false,
+          compactWidgets: false,
+          stackedNavigation: false
+        };
+      case 'expanded':
+        return {
+          sidebarVisible: true,
+          contentColumns: 4,
+          widgetsPerRow: 3,
+          compactHeader: false,
+          compactWidgets: false,
+          stackedNavigation: false
+        };
+    }
+  }, []);
   
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    let debounceTimeout: NodeJS.Timeout;
-    
     const handleResize = () => {
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(() => {
-        setDimensions({
-          width: window.innerWidth,
-          height: window.innerHeight
-        });
-      }, debounceTime);
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
     };
     
     window.addEventListener('resize', handleResize);
-    
-    // Initial dimensions
-    setDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(debounceTimeout);
-    };
-  }, [debounceTime]);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
-  // Calculate current breakpoint based on screen width
-  const breakpoint = useMemo<Breakpoint>(() => {
-    const { width } = dimensions;
-    
-    if (width >= breakpoints['2xl']) return '2xl';
-    if (width >= breakpoints.xl) return 'xl';
-    if (width >= breakpoints.lg) return 'lg';
-    if (width >= breakpoints.md) return 'md';
-    if (width >= breakpoints.sm) return 'sm';
-    return 'xs';
-  }, [dimensions]);
-  
-  // Utility functions for breakpoint comparisons
-  const isMinWidth = (bp: Breakpoint): boolean => {
-    return dimensions.width >= breakpoints[bp];
-  };
-  
-  const isMaxWidth = (bp: Breakpoint): boolean => {
-    return dimensions.width < breakpoints[bp];
-  };
-  
-  // Determine if the screen is in portrait orientation
-  const isPortrait = dimensions.height > dimensions.width;
-  
-  // Function to get number of columns based on current breakpoint
-  const getColumnsForBreakpoint = (options: {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-    '2xl'?: number;
-  } = {}): number => {
-    const defaults = { xs: 1, sm: 2, md: 2, lg: 3, xl: 4, '2xl': 4 };
-    const merged = { ...defaults, ...options };
-    
-    return merged[breakpoint];
-  };
+  const breakpoint = getBreakpoint(width);
+  const orientation = getOrientation(width, height);
+  const mode = getLayoutMode(breakpoint);
+  const config = getLayoutConfig(breakpoint, mode);
   
   return {
-    screenWidth: dimensions.width,
-    screenHeight: dimensions.height,
     breakpoint,
-    isMobile: isMobileDevice,
-    isPortrait,
-    isMinWidth,
-    isMaxWidth,
-    getColumnsForBreakpoint
+    mode,
+    orientation,
+    config,
+    isMobile: ['xs', 'sm'].includes(breakpoint),
+    isTablet: ['md', 'lg'].includes(breakpoint),
+    isDesktop: ['xl', '2xl'].includes(breakpoint)
   };
-};
+}

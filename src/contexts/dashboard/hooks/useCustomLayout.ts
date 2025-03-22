@@ -34,7 +34,7 @@ export const useCustomLayout = () => {
       return true;
     }
     
-    return JSON.stringify(lastSavedLayout) !== JSON.stringify(newLayout);
+    return JSON.stringify(lastSavedLayout.sort()) !== JSON.stringify(newLayout.sort());
   }, [lastSavedLayout]);
   
   // Function used in CustomLayoutEditor.tsx to update the custom layout
