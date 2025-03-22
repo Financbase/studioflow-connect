@@ -1,97 +1,115 @@
 
-import { WidgetId, PricingTier, featureAccessMap } from '../types';
+import { WidgetId } from '../types';
+import { 
+  Activity, 
+  Cpu, 
+  Database, 
+  Headphones, 
+  LayoutGrid, 
+  Merge, 
+  ShoppingBag, 
+  Sparkles
+} from 'lucide-react';
 
-interface WidgetMetadata {
-  id: WidgetId;
-  label: string;
-  description: string;
-  minPlanRequired: PricingTier;
-  iconName: string;
-}
-
-// Widget metadata with labels, descriptions, and min plan requirements
-export const widgetMetadata: Record<WidgetId, WidgetMetadata> = {
-  'system': {
-    id: 'system',
-    label: 'System Monitor',
-    description: 'Monitor CPU, RAM and disk metrics',
-    minPlanRequired: 'standard',
-    iconName: 'Cpu'
-  },
-  'audio': {
-    id: 'audio',
-    label: 'Audio Analyzer',
-    description: 'Analyze audio files and recordings',
-    minPlanRequired: 'free',
-    iconName: 'AudioLines'
-  },
-  'ai': {
-    id: 'ai',
-    label: 'AI Tools',
-    description: 'AI-assisted music production',
-    minPlanRequired: 'standard',
-    iconName: 'FileAudio'
-  },
-  'vm': {
-    id: 'vm',
-    label: 'VM Controller',
-    description: 'Create and manage virtual machines',
-    minPlanRequired: 'pro',
-    iconName: 'Layout'
-  },
-  'daw': {
-    id: 'daw',
-    label: 'DAW Workflow',
-    description: 'Connect with digital audio workstations',
-    minPlanRequired: 'standard',
-    iconName: 'Layers'
-  },
-  'marketplace': {
-    id: 'marketplace',
-    label: 'Marketplace',
-    description: 'Browse and purchase plugins and samples',
-    minPlanRequired: 'standard',
-    iconName: 'FileOutput'
-  },
-  'connect': {
-    id: 'connect',
-    label: 'StudioFlow Connect',
-    description: 'Cross-platform storage access',
-    minPlanRequired: 'free',
-    iconName: 'BookmarkPlus'
+/**
+ * Get the icon component for a widget
+ */
+export const getWidgetIcon = (widgetId: WidgetId) => {
+  switch (widgetId) {
+    case 'system':
+      return <Cpu className="h-4 w-4" />;
+    case 'audio':
+      return <Headphones className="h-4 w-4" />;
+    case 'ai':
+      return <Sparkles className="h-4 w-4" />;
+    case 'vm':
+      return <Database className="h-4 w-4" />;
+    case 'daw':
+      return <LayoutGrid className="h-4 w-4" />;
+    case 'marketplace':
+      return <ShoppingBag className="h-4 w-4" />;
+    case 'connect':
+      return <Merge className="h-4 w-4" />;
+    default:
+      return <Activity className="h-4 w-4" />;
   }
 };
 
 /**
- * Get widget information by ID
+ * Get a human-readable label for a widget
  */
-export const getWidgetInfo = (widgetId: WidgetId): WidgetMetadata => {
-  return widgetMetadata[widgetId];
+export const getWidgetLabel = (widgetId: WidgetId) => {
+  switch (widgetId) {
+    case 'system':
+      return 'System Monitor';
+    case 'audio':
+      return 'Audio Analysis';
+    case 'ai':
+      return 'AI Tools';
+    case 'vm':
+      return 'Virtual Machine';
+    case 'daw':
+      return 'DAW Integration';
+    case 'marketplace':
+      return 'Marketplace';
+    case 'connect':
+      return 'StudioFlow Connect';
+    default:
+      return widgetId.charAt(0).toUpperCase() + widgetId.slice(1);
+  }
 };
 
 /**
- * Check if a user has access to a specific widget based on their plan
+ * Get a description for a widget
  */
-export const hasWidgetAccess = (widgetId: WidgetId, userPlan: PricingTier): boolean => {
-  return featureAccessMap[userPlan][widgetId];
+export const getWidgetDescription = (widgetId: WidgetId) => {
+  switch (widgetId) {
+    case 'system':
+      return 'Monitor CPU, memory, and disk usage';
+    case 'audio':
+      return 'Analyze audio files and frequencies';
+    case 'ai':
+      return 'AI-powered creative tools and assistance';
+    case 'vm':
+      return 'Manage virtual machines and environments';
+    case 'daw':
+      return 'Integrate with your DAW software';
+    case 'marketplace':
+      return 'Discover plugins, samples, and presets';
+    case 'connect':
+      return 'Connect across operating systems and formats';
+    default:
+      return 'Widget functionality';
+  }
 };
 
 /**
- * Get all widgets accessible to a user based on their plan
+ * Get the order priority for a widget (for sorting)
  */
-export const getAccessibleWidgets = (userPlan: PricingTier): WidgetId[] => {
-  return Object.entries(featureAccessMap[userPlan])
-    .filter(([_, hasAccess]) => hasAccess)
-    .map(([widgetId]) => widgetId as WidgetId);
+export const getWidgetPriority = (widgetId: WidgetId): number => {
+  switch (widgetId) {
+    case 'connect':
+      return 1; // Highest priority
+    case 'system':
+      return 2;
+    case 'audio':
+      return 3;
+    case 'ai':
+      return 4;
+    case 'daw':
+      return 5;
+    case 'vm':
+      return 6;
+    case 'marketplace':
+      return 7;
+    default:
+      return 99; // Lowest priority
+  }
 };
 
 /**
- * Get recommended widgets for a user based on their plan and current widgets
+ * Sort widgets by priority
  */
-export const getRecommendedWidgets = (
-  currentWidgets: WidgetId[], 
-  userPlan: PricingTier
-): WidgetId[] => {
-  const accessibleWidgets = getAccessibleWidgets(userPlan);
-  return accessibleWidgets.filter(widget => !currentWidgets.includes(widget));
+export const sortWidgetsByPriority = (widgets: WidgetId[]): WidgetId[] => {
+  return [...widgets].sort((a, b) => getWidgetPriority(a) - getWidgetPriority(b));
 };

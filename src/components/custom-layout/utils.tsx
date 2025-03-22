@@ -1,53 +1,79 @@
 
 import React from "react";
-import { Settings2, Layout, Layers, BookmarkPlus, FileOutput, Cpu, AudioLines, FileAudio } from "lucide-react";
 import { WidgetId } from "@/contexts/dashboard/types";
+import { 
+  Activity, 
+  Cpu, 
+  Database, 
+  Headphones, 
+  LayoutGrid, 
+  Merge, 
+  ShoppingBag, 
+  Sparkles
+} from 'lucide-react';
 
-export const getWidgetLabel = (widgetId: WidgetId): string => {
-  const widgetLabelMap: Record<WidgetId, string> = {
-    'system': 'System Monitor',
-    'vm': 'VM Controller',
-    'daw': 'DAW Workflow',
-    'audio': 'Audio Analyzer',
-    'ai': 'AI Tools',
-    'marketplace': 'Marketplace',
-    'connect': 'StudioFlow Connect'
-  };
-  
-  return widgetLabelMap[widgetId];
-};
-
-export const getWidgetDescription = (widgetId: WidgetId): string => {
-  const widgetDescMap: Record<WidgetId, string> = {
-    'system': 'Monitor CPU, RAM and disk metrics',
-    'vm': 'Create and manage virtual machines',
-    'daw': 'Connect with digital audio workstations',
-    'audio': 'Analyze audio files and recordings',
-    'ai': 'AI-assisted music production',
-    'marketplace': 'Browse and purchase plugins and samples',
-    'connect': 'Cross-platform storage access'
-  };
-  
-  return widgetDescMap[widgetId];
-};
-
-export const getWidgetIcon = (widgetId: WidgetId): React.ReactNode => {
+// Get the appropriate icon for each widget
+export const getWidgetIcon = (widgetId: WidgetId) => {
   switch (widgetId) {
     case 'system':
-      return <Cpu className="h-4 w-4 mr-2" />;
+      return <Cpu className="h-4 w-4" />;
     case 'audio':
-      return <AudioLines className="h-4 w-4 mr-2" />;
+      return <Headphones className="h-4 w-4" />;
     case 'ai':
-      return <FileAudio className="h-4 w-4 mr-2" />;
+      return <Sparkles className="h-4 w-4" />;
     case 'vm':
-      return <Layout className="h-4 w-4 mr-2" />;
+      return <Database className="h-4 w-4" />;
     case 'daw':
-      return <Layers className="h-4 w-4 mr-2" />;
+      return <LayoutGrid className="h-4 w-4" />;
     case 'marketplace':
-      return <FileOutput className="h-4 w-4 mr-2" />;
+      return <ShoppingBag className="h-4 w-4" />;
     case 'connect':
-      return <BookmarkPlus className="h-4 w-4 mr-2" />;
+      return <Merge className="h-4 w-4" />;
     default:
-      return <Settings2 className="h-4 w-4 mr-2" />;
+      return <Activity className="h-4 w-4" />;
+  }
+};
+
+// Get a user-friendly label for each widget
+export const getWidgetLabel = (widgetId: WidgetId) => {
+  switch (widgetId) {
+    case 'system':
+      return 'System Monitor';
+    case 'audio':
+      return 'Audio Analysis';
+    case 'ai':
+      return 'AI Tools';
+    case 'vm':
+      return 'Virtual Machine';
+    case 'daw':
+      return 'DAW Integration';
+    case 'marketplace':
+      return 'Marketplace';
+    case 'connect':
+      return 'StudioFlow Connect';
+    default:
+      return widgetId.charAt(0).toUpperCase() + widgetId.slice(1);
+  }
+};
+
+// Get a description for each widget
+export const getWidgetDescription = (widgetId: WidgetId) => {
+  switch (widgetId) {
+    case 'system':
+      return 'Monitor CPU, memory, and disk usage';
+    case 'audio':
+      return 'Analyze audio files and frequencies';
+    case 'ai':
+      return 'AI-powered creative tools and assistance';
+    case 'vm':
+      return 'Manage virtual machines and environments';
+    case 'daw':
+      return 'Integrate with your DAW software';
+    case 'marketplace':
+      return 'Discover plugins, samples, and presets';
+    case 'connect':
+      return 'Connect across operating systems and formats';
+    default:
+      return 'Widget functionality';
   }
 };
