@@ -1,8 +1,10 @@
 
 import React from "react";
+import { TabsContent } from "@/components/ui/tabs";
 import PaletteGenerator from "./PaletteGenerator";
 
 interface AutoGeneratorTabProps {
+  isActive: boolean;
   primaryColor: string;
   setPrimaryColor: (color: string) => void;
   generatePalettes: () => void;
@@ -12,7 +14,8 @@ interface AutoGeneratorTabProps {
   applyTempPalette: (palette: Record<string, string>) => void;
 }
 
-const AutoGeneratorTab: React.FC<AutoGeneratorTabProps> = ({
+export const AutoGeneratorTab: React.FC<AutoGeneratorTabProps> = ({
+  isActive,
   primaryColor,
   setPrimaryColor,
   generatePalettes,
@@ -22,17 +25,19 @@ const AutoGeneratorTab: React.FC<AutoGeneratorTabProps> = ({
   applyTempPalette
 }) => {
   return (
-    <div className="space-y-6 pt-4">
-      <PaletteGenerator 
-        primaryColor={primaryColor}
-        setPrimaryColor={setPrimaryColor}
-        generatePalettes={generatePalettes}
-        generatedPalettes={generatedPalettes}
-        selectedPalette={selectedPalette}
-        setSelectedPalette={setSelectedPalette}
-        applyTempPalette={applyTempPalette}
-      />
-    </div>
+    <TabsContent value="auto" className={isActive ? "block" : "hidden"}>
+      <div className="space-y-6 pt-4">
+        <PaletteGenerator 
+          primaryColor={primaryColor}
+          setPrimaryColor={setPrimaryColor}
+          generatePalettes={generatePalettes}
+          generatedPalettes={generatedPalettes}
+          selectedPalette={selectedPalette}
+          setSelectedPalette={setSelectedPalette}
+          applyTempPalette={applyTempPalette}
+        />
+      </div>
+    </TabsContent>
   );
 };
 

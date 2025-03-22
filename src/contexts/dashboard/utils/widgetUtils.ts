@@ -1,115 +1,66 @@
 
-import { WidgetId } from '../types';
-import { 
-  Activity, 
-  Cpu, 
-  Database, 
-  Headphones, 
-  LayoutGrid, 
-  Merge, 
-  ShoppingBag, 
-  Sparkles
-} from 'lucide-react';
+import React from "react";
+import { AudioAssetIcon, HeartPulse, MonitorX, Settings, Terminal, Video, Zap } from "lucide-react";
+import { WidgetId } from "../types";
 
-/**
- * Get the icon component for a widget
- */
+// Get icon for a widget by its ID
 export const getWidgetIcon = (widgetId: WidgetId) => {
+  const iconProps = { className: "h-4 w-4" };
+
   switch (widgetId) {
-    case 'system':
-      return <Cpu className="h-4 w-4" />;
-    case 'audio':
-      return <Headphones className="h-4 w-4" />;
-    case 'ai':
-      return <Sparkles className="h-4 w-4" />;
-    case 'vm':
-      return <Database className="h-4 w-4" />;
-    case 'daw':
-      return <LayoutGrid className="h-4 w-4" />;
-    case 'marketplace':
-      return <ShoppingBag className="h-4 w-4" />;
-    case 'connect':
-      return <Merge className="h-4 w-4" />;
+    case "audio":
+      return <AudioAssetIcon {...iconProps} />;
+    case "system":
+      return <MonitorX {...iconProps} />;
+    case "connect":
+      return <Zap {...iconProps} />;
+    case "tools":
+      return <Terminal {...iconProps} />;
+    case "monitor":
+      return <HeartPulse {...iconProps} />;
+    case "virtual":
+      return <Video {...iconProps} />;
     default:
-      return <Activity className="h-4 w-4" />;
+      return <Settings {...iconProps} />;
   }
 };
 
-/**
- * Get a human-readable label for a widget
- */
-export const getWidgetLabel = (widgetId: WidgetId) => {
+// Get display label for a widget ID
+export const getWidgetLabel = (widgetId: WidgetId): string => {
   switch (widgetId) {
-    case 'system':
-      return 'System Monitor';
-    case 'audio':
-      return 'Audio Analysis';
-    case 'ai':
-      return 'AI Tools';
-    case 'vm':
-      return 'Virtual Machine';
-    case 'daw':
-      return 'DAW Integration';
-    case 'marketplace':
-      return 'Marketplace';
-    case 'connect':
-      return 'StudioFlow Connect';
+    case "audio":
+      return "Audio Controls";
+    case "system":
+      return "System Monitor";
+    case "connect":
+      return "Studio Flow";
+    case "tools":
+      return "AI Tools";
+    case "monitor":
+      return "Performance";
+    case "virtual":
+      return "VM Controller";
     default:
-      return widgetId.charAt(0).toUpperCase() + widgetId.slice(1);
+      return widgetId;
   }
 };
 
-/**
- * Get a description for a widget
- */
-export const getWidgetDescription = (widgetId: WidgetId) => {
+// Get description for a widget ID
+export const getWidgetDescription = (widgetId: WidgetId): string => {
   switch (widgetId) {
-    case 'system':
-      return 'Monitor CPU, memory, and disk usage';
-    case 'audio':
-      return 'Analyze audio files and frequencies';
-    case 'ai':
-      return 'AI-powered creative tools and assistance';
-    case 'vm':
-      return 'Manage virtual machines and environments';
-    case 'daw':
-      return 'Integrate with your DAW software';
-    case 'marketplace':
-      return 'Discover plugins, samples, and presets';
-    case 'connect':
-      return 'Connect across operating systems and formats';
+    case "audio":
+      return "Audio player and waveform visualizer";
+    case "system":
+      return "System resource monitoring with CPU/RAM stats";
+    case "connect":
+      return "Connect with studio hardware and peripherals";
+    case "tools":
+      return "AI-powered audio enhancement tools";
+    case "monitor":
+      return "Real-time performance monitoring";
+    case "virtual":
+      return "Virtual machine resource management";
     default:
-      return 'Widget functionality';
+      return "Widget settings and configuration";
   }
-};
-
-/**
- * Get the order priority for a widget (for sorting)
- */
-export const getWidgetPriority = (widgetId: WidgetId): number => {
-  switch (widgetId) {
-    case 'connect':
-      return 1; // Highest priority
-    case 'system':
-      return 2;
-    case 'audio':
-      return 3;
-    case 'ai':
-      return 4;
-    case 'daw':
-      return 5;
-    case 'vm':
-      return 6;
-    case 'marketplace':
-      return 7;
-    default:
-      return 99; // Lowest priority
-  }
-};
-
-/**
- * Sort widgets by priority
- */
-export const sortWidgetsByPriority = (widgets: WidgetId[]): WidgetId[] => {
-  return [...widgets].sort((a, b) => getWidgetPriority(a) - getWidgetPriority(b));
 };

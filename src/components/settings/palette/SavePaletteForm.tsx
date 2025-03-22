@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Save } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 interface SavePaletteFormProps {
   paletteName: string;
@@ -11,15 +12,35 @@ interface SavePaletteFormProps {
   paletteDescription: string;
   setPaletteDescription: (description: string) => void;
   handleSavePalette: () => void;
+  isValid: boolean;
 }
 
-const SavePaletteForm: React.FC<SavePaletteFormProps> = ({
+export const SavePaletteForm: React.FC<SavePaletteFormProps> = ({
   paletteName,
   setPaletteName,
   paletteDescription,
   setPaletteDescription,
-  handleSavePalette
+  handleSavePalette,
+  isValid
 }) => {
+  const onSave = () => {
+    if (!isValid) {
+      toast({
+        title: "Name Required",
+        description: "Please provide a name for your color palette",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    handleSavePalette();
+    
+    toast({
+      title: "Color Palette Saved",
+      description: `"${paletteName}" has been saved to your palettes`
+    });
+  };
+  
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Save Current Palette</h3>
@@ -45,8 +66,8 @@ const SavePaletteForm: React.FC<SavePaletteFormProps> = ({
       </div>
       
       <Button 
-        onClick={handleSavePalette}
-        disabled={!paletteName.trim()}
+        onClick={onSave}
+        disabled={!isValid}
         className="w-full"
       >
         <Save className="h-4 w-4 mr-2" />

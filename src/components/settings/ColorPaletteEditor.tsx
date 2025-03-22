@@ -1,29 +1,27 @@
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useColorPalette } from "@/contexts/ColorPaletteContext";
-import { toast } from "@/components/ui/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Import our tab components
+import { ManualEditorTab } from "./palette/ManualEditorTab";
+import { AutoGeneratorTab } from "./palette/AutoGeneratorTab";
+import { PalettePreviewSection } from "./palette/PalettePreviewSection";
+import { SavePaletteForm } from "./palette/SavePaletteForm";
+import { SavedPalettesList } from "./palette/SavedPalettesList";
 
 // Import our custom hooks
 import { useColorGrouping } from "@/hooks/useColorGrouping";
 import { usePaletteGenerator } from "@/hooks/usePaletteGenerator";
-import { getContrastColor } from "@/lib/colorContrastUtils";
-
-// Import our components
-import ManualEditorTab from "./palette/ManualEditorTab";
-import AutoGeneratorTab from "./palette/AutoGeneratorTab";
-import PalettePreviewSection from "./palette/PalettePreviewSection";
-import SavePaletteForm from "./palette/SavePaletteForm";
-import SavedPalettesList from "./palette/SavedPalettesList";
 
 const ColorPaletteEditor: React.FC = () => {
   const { theme, themeVariant } = useTheme();
   const { saveCurrentColorPalette, colorPalettes, applyColorPalette, deleteColorPalette, currentPaletteId } = useColorPalette();
-  const [paletteName, setPaletteName] = useState("");
-  const [paletteDescription, setPaletteDescription] = useState("");
-  const [activeTab, setActiveTab] = useState("manual");
+  const [paletteName, setPaletteName] = React.useState("");
+  const [paletteDescription, setPaletteDescription] = React.useState("");
+  const [activeTab, setActiveTab] = React.useState("manual");
   
   // Use our custom hooks
   const { 
@@ -44,7 +42,7 @@ const ColorPaletteEditor: React.FC = () => {
   } = usePaletteGenerator(theme);
   
   // Update currentColors when a palette is selected from the generator
-  useEffect(() => {
+  React.useEffect(() => {
     if (selectedPalette) {
       setCurrentColors(prev => 
         prev.map(colorSetting => ({
@@ -60,15 +58,6 @@ const ColorPaletteEditor: React.FC = () => {
   };
   
   const handleSavePalette = () => {
-    if (!paletteName.trim()) {
-      toast({
-        title: "Name Required",
-        description: "Please provide a name for your color palette",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     const colorData: Record<string, string> = {};
     currentColors.forEach(color => {
       colorData[color.key] = color.value;
@@ -83,11 +72,6 @@ const ColorPaletteEditor: React.FC = () => {
     // Reset form
     setPaletteName("");
     setPaletteDescription("");
-    
-    toast({
-      title: "Color Palette Saved",
-      description: `"${paletteName}" has been saved to your palettes`
-    });
   };
   
   return (
@@ -106,26 +90,23 @@ const ColorPaletteEditor: React.FC = () => {
             <TabsTrigger value="auto">AI Generator</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="manual">
-            <ManualEditorTab 
-              colorGroups={colorGroups}
-              handleColorChange={handleColorChange}
-              getContrastColor={getContrastColor}
-              currentColors={currentColors}
-            />
-          </TabsContent>
+          <ManualEditorTab 
+            isActive={activeTab === "manual"}
+            colorGroups={colorGroups}
+            handleColorChange={handleColorChange}
+            currentColors={currentColors}
+          />
           
-          <TabsContent value="auto">
-            <AutoGeneratorTab 
-              primaryColor={primaryColor}
-              setPrimaryColor={setPrimaryColor}
-              generatePalettes={handleGeneratePalettes}
-              generatedPalettes={generatedPalettes}
-              selectedPalette={selectedPalette}
-              setSelectedPalette={setSelectedPalette}
-              applyTempPalette={applyTempPalette}
-            />
-          </TabsContent>
+          <AutoGeneratorTab 
+            isActive={activeTab === "auto"}
+            primaryColor={primaryColor}
+            setPrimaryColor={setPrimaryColor}
+            generatePalettes={handleGeneratePalettes}
+            generatedPalettes={generatedPalettes}
+            selectedPalette={selectedPalette}
+            setSelectedPalette={setSelectedPalette}
+            applyTempPalette={applyTempPalette}
+          />
         </Tabs>
         
         <div className="border-t pt-6 space-y-4">
@@ -140,6 +121,7 @@ const ColorPaletteEditor: React.FC = () => {
             paletteDescription={paletteDescription}
             setPaletteDescription={setPaletteDescription}
             handleSavePalette={handleSavePalette}
+            isValid={!!paletteName.trim()}
           />
         </div>
         
