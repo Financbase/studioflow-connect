@@ -15,7 +15,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const zenMode = useZenMode();
+  const { isActive, toggle } = useZenMode();
   const { user, profile, signOut } = useAuth();
   const { t: translate, currentLanguage, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,7 +37,7 @@ const Header = () => {
   const isAuthPage = location.pathname === "/auth";
   const isIndexPage = location.pathname === "/";
   
-  if (isAuthPage || isIndexPage || zenMode.isActive) {
+  if (isAuthPage || isIndexPage || isActive) {
     return null;
   }
 
@@ -61,7 +61,7 @@ const Header = () => {
         
         <div className="ml-auto flex items-center space-x-2">
           {/* Use the correct property from zen mode hook */}
-          <ZenModeToggle onClick={zenMode.toggle} isActive={zenMode.isActive} />
+          <ZenModeToggle onClick={toggle} isActive={isActive} />
           <ThemeSwitcher />
           <LanguageSwitcher />
           

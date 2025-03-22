@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import SystemMonitor from "@/components/SystemMonitor";
@@ -13,20 +14,21 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import DashboardWidget from "@/components/DashboardWidget";
-import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
+import { useDashboard, WidgetId } from "@/contexts/dashboard";
 import { useIsMobile } from "@/hooks/use-mobile";
 import PageContainer from "@/components/ui/page-container";
 import useResponsiveLayout from "@/hooks/use-responsive-layout";
 import Breadcrumbs from "@/components/navigation/breadcrumbs";
 import { toast } from "@/hooks/use-toast";
 import useErrorHandling from "@/hooks/use-error-handling";
+import ViewSelector from "@/components/ViewSelector";
 
 const Index = () => {
   const { themeVariant } = useTheme();
   const { t } = useLanguage();
   const { isWidgetVisible, hasFeatureAccess } = useDashboard();
   const isMobile = useIsMobile();
-  const { screenSize, getContainerClass } = useResponsiveLayout();
+  const { getContainerClass } = useResponsiveLayout();
   const { handleError } = useErrorHandling();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -69,6 +71,10 @@ const Index = () => {
                 {t("dashboard.subtitle")}
               </p>
             </section>
+            
+            <div className="flex justify-end mb-4">
+              <ViewSelector />
+            </div>
             
             <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
             
