@@ -8,7 +8,7 @@ import { useColorPalette } from "@/contexts/ColorPaletteContext";
 // Import our tab components
 import { ManualEditorTab } from "./palette/ManualEditorTab";
 import { AutoGeneratorTab } from "./palette/AutoGeneratorTab";
-import { PalettePreviewSection } from "./palette/PalettePreviewSection";
+import PalettePreviewSection from "./palette/PalettePreviewSection";
 import { SavePaletteForm } from "./palette/SavePaletteForm";
 import { SavedPalettesList } from "./palette/SavedPalettesList";
 

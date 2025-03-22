@@ -1,66 +1,72 @@
 
-import React from "react";
-import { AudioAssetIcon, HeartPulse, MonitorX, Settings, Terminal, Video, Zap } from "lucide-react";
-import { WidgetId } from "../types";
+import { WidgetId } from '../types';
 
-// Get icon for a widget by its ID
-export const getWidgetIcon = (widgetId: WidgetId) => {
-  const iconProps = { className: "h-4 w-4" };
+/**
+ * Utility functions for widget management
+ */
 
-  switch (widgetId) {
-    case "audio":
-      return <AudioAssetIcon {...iconProps} />;
-    case "system":
-      return <MonitorX {...iconProps} />;
-    case "connect":
-      return <Zap {...iconProps} />;
-    case "tools":
-      return <Terminal {...iconProps} />;
-    case "monitor":
-      return <HeartPulse {...iconProps} />;
-    case "virtual":
-      return <Video {...iconProps} />;
+// Maps widget IDs to human-readable names
+export const widgetNames: Record<WidgetId, string> = {
+  'analytics': 'Analytics Dashboard',
+  'performance': 'Performance Metrics',
+  'audio': 'Audio Control Panel',
+  'library': 'Audio Library',
+  'recommendations': 'Recommendations',
+  'connect': 'StudioFlow Connect',
+  'marketplace': 'Marketplace',
+  'monitor': 'System Monitor'
+};
+
+// Default widget ordering for new users
+export const defaultWidgetOrder: WidgetId[] = [
+  'analytics',
+  'performance',
+  'audio',
+  'library',
+  'recommendations',
+  'connect',
+  'marketplace',
+  'monitor'
+];
+
+// Get widgets available for the user's pricing tier
+export const getAvailableWidgets = (pricingTier: string): WidgetId[] => {
+  const basicWidgets: WidgetId[] = ['analytics', 'audio', 'library'];
+  const proWidgets: WidgetId[] = ['recommendations', 'connect'];
+  const premiumWidgets: WidgetId[] = ['marketplace', 'monitor', 'performance'];
+  
+  switch (pricingTier) {
+    case 'free':
+      return basicWidgets;
+    case 'pro':
+      return [...basicWidgets, ...proWidgets];
+    case 'premium':
+      return [...basicWidgets, ...proWidgets, ...premiumWidgets];
     default:
-      return <Settings {...iconProps} />;
+      return basicWidgets;
   }
 };
 
-// Get display label for a widget ID
-export const getWidgetLabel = (widgetId: WidgetId): string => {
-  switch (widgetId) {
-    case "audio":
-      return "Audio Controls";
-    case "system":
-      return "System Monitor";
-    case "connect":
-      return "Studio Flow";
-    case "tools":
-      return "AI Tools";
-    case "monitor":
-      return "Performance";
-    case "virtual":
-      return "VM Controller";
-    default:
-      return widgetId;
-  }
+// Check if a widget is available for a specific pricing tier
+export const isWidgetAvailable = (widgetId: WidgetId, pricingTier: string): boolean => {
+  return getAvailableWidgets(pricingTier).includes(widgetId);
 };
 
-// Get description for a widget ID
-export const getWidgetDescription = (widgetId: WidgetId): string => {
-  switch (widgetId) {
-    case "audio":
-      return "Audio player and waveform visualizer";
-    case "system":
-      return "System resource monitoring with CPU/RAM stats";
-    case "connect":
-      return "Connect with studio hardware and peripherals";
-    case "tools":
-      return "AI-powered audio enhancement tools";
-    case "monitor":
-      return "Real-time performance monitoring";
-    case "virtual":
-      return "Virtual machine resource management";
-    default:
-      return "Widget settings and configuration";
-  }
+// Get widget details including name and tier requirements
+export const getWidgetDetails = (widgetId: WidgetId): { name: string; minTier: string } => {
+  const widgetTiers: Record<WidgetId, string> = {
+    'analytics': 'free',
+    'audio': 'free',
+    'library': 'free',
+    'recommendations': 'pro',
+    'connect': 'pro',
+    'marketplace': 'premium',
+    'monitor': 'premium',
+    'performance': 'premium'
+  };
+  
+  return {
+    name: widgetNames[widgetId],
+    minTier: widgetTiers[widgetId]
+  };
 };
