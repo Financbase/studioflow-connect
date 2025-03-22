@@ -2,6 +2,7 @@
 @import "./styles/themes.css";
 @import "./styles/animations.css";
 @import "./styles/utilities.css";
+@import "./styles/responsive.css";
 
 @tailwind base;
 @tailwind components;
@@ -53,80 +54,68 @@
     --ring: 260 60% 55%;
   }
 
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* Focus styles for better accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
 
-  @keyframes slideIn {
-    from { transform: translateX(-10px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-
-  @keyframes glow {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.2); }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-out forwards;
-  }
-
-  .animate-slide-in {
-    animation: slideIn 0.3s ease-out forwards;
-  }
-
-  .animate-pulse-soft {
-    animation: pulse 2s infinite;
-  }
-  
-  .animate-glow {
-    animation: glow 2s infinite;
-  }
-  
-  /* Typography Improvements */
-  html {
+  /* Base font settings for improved readability */
+  body {
+    @apply text-foreground bg-background antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     text-rendering: optimizeLegibility;
   }
-  
+
+  /* Typography hierarchy */
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-    color: hsl(var(--foreground));
+    @apply font-bold tracking-tight text-foreground;
   }
-  
-  p, span, div, a {
-    color: hsl(var(--foreground));
+
+  h1 {
+    @apply text-4xl md:text-5xl;
   }
-  
-  .text-muted-foreground {
-    color: hsl(var(--muted-foreground));
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h5 {
+    @apply text-lg md:text-xl;
+  }
+
+  h6 {
+    @apply text-base md:text-lg;
+  }
+
+  /* Improved transition for all interactive elements */
+  button, a, input, select, textarea {
+    @apply transition-all duration-200;
   }
 }
 
-/* Improved transition for all interactive elements */
-button, a, input, select, textarea {
-  transition: all 0.2s ease;
+/* Common animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
-/* Zen mode specific styles */
-.zen-mode-active .header,
-.zen-mode-active .sidebar {
-  opacity: 0.3;
-  transition: opacity 0.3s ease;
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
 }
 
-.zen-mode-active .header:hover,
-.zen-mode-active .sidebar:hover {
-  opacity: 0.8;
+.animate-pulse-soft {
+  animation: pulse 2s infinite;
+}
+
+.animate-glow {
+  animation: glow 2s infinite;
 }
 
 /* Improved card styles */
@@ -156,15 +145,6 @@ button, a, input, select, textarea {
   @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/5;
 }
 
-/* Custom Font Colors */
-.text-primary-content {
-  color: hsl(var(--primary-foreground));
-}
-
-.text-accent-content {
-  color: hsl(var(--accent-foreground));
-}
-
 /* Dashboard-specific styles */
 .dashboard-stat-card {
   @apply relative overflow-hidden;
@@ -177,4 +157,20 @@ button, a, input, select, textarea {
 
 .dashboard-stat-card > * {
   @apply relative z-10;
+}
+
+/* Accessibility classes */
+.visually-hidden {
+  @apply sr-only;
+}
+
+/* Print-friendly styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    @apply text-black bg-white;
+  }
 }
