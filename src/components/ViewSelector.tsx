@@ -16,8 +16,11 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip";
-import { useDashboard, ViewMode } from "@/contexts/DashboardContext";
-import { toast } from "@/components/ui/use-toast";
+import { 
+  useDashboard,
+  ViewMode 
+} from "@/contexts/dashboard";
+import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const ViewSelector = () => {

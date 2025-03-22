@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import SystemMonitor from "@/components/SystemMonitor";
@@ -40,7 +39,6 @@ const Index = () => {
       } catch (error) {
         handleError(error, {
           title: "Dashboard Error"
-          // Removed the description property as it's not part of ErrorOptions
         });
         setIsLoading(false);
       }
