@@ -1,7 +1,8 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TicketList from "@/components/support/TicketList";
-import FAQSection from "@/components/support/FAQSection";
+import FAQSection from "@/components/support/faq/FAQSection";
 import { Ticket } from "@/components/support/ticket/types";
 import ContactCard from "@/components/support/ContactCard";
 import NotificationsTab from "@/components/support/NotificationsTab";

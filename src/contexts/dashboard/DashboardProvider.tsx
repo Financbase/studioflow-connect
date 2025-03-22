@@ -1,57 +1,77 @@
 
-import React, { createContext } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import React, { createContext, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { DashboardContextType } from './types';
 import { useWidgets } from './hooks/useWidgets';
 import { useViewMode } from './hooks/useViewMode';
-import { usePricingTier } from './hooks/usePricingTier';
 import { useDashboardPersistence } from './hooks/useDashboardPersistence';
+import { usePricingTier } from './hooks/usePricingTier';
+import { WidgetId, ViewMode } from './types';
 
-// Create context with undefined initial value
-const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
+interface DashboardContextType {
+  widgets: WidgetId[];
+  addWidget: (widget: WidgetId) => void;
+  removeWidget: (widget: WidgetId) => void;
+  moveWidget: (fromIndex: number, toIndex: number) => void;
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
+  customLayout: WidgetId[];
+  setCustomLayout: (layout: WidgetId[]) => void;
+  saveDashboard: () => Promise<void>;
+  resetDashboard: () => void;
+  pricingTier: ReturnType<typeof usePricingTier>["pricingTier"];
+  setPricingTier: ReturnType<typeof usePricingTier>["setPricingTier"];
+  isUpdating: boolean;
+  hasFeatureAccess: (widget: WidgetId) => boolean;
+  featureAccess: ReturnType<typeof usePricingTier>["featureAccess"];
+}
+
+export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Authentication and device detection
-  const isMobile = useIsMobile();
   const { user, profile } = useAuth();
+  const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating } = usePricingTier(user, profile);
+  const { viewMode, setViewMode } = useViewMode();
+  const { widgets, addWidget, removeWidget, moveWidget, customLayout, setCustomLayout, resetWidgets } = useWidgets(viewMode, hasFeatureAccess);
+  const { saveDashboard, resetDashboard } = useDashboardPersistence(user, viewMode, widgets, customLayout);
   
-  // Use our custom hooks
-  const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess } = usePricingTier(user, profile);
-  const { viewMode, setViewMode, isWidgetVisible: baseIsWidgetVisible } = useViewMode(isMobile, pricingTier);
-  const { collapsedWidgets, customLayout, toggleWidget, isWidgetCollapsed, updateCustomLayout } = useWidgets(user, isMobile);
+  // Console log to debug auth status
+  useEffect(() => {
+    if (user) {
+      console.log('DashboardProvider: User is logged in', user.id);
+    } else {
+      console.log('DashboardProvider: No user is logged in');
+    }
+  }, [user]);
   
-  // Save settings when they change
-  useDashboardPersistence(user, viewMode, customLayout, collapsedWidgets);
-  
-  // Wrapper for isWidgetVisible to include customLayout
-  const isWidgetVisible = (widgetId: any) => baseIsWidgetVisible(widgetId, customLayout);
-  
-  // Alias for toggleWidget for clearer API
-  const toggleWidgetCollapse = toggleWidget;
-  
+  // Listen for pricingTier changes
+  useEffect(() => {
+    console.log('PricingTier changed:', pricingTier);
+  }, [pricingTier]);
+
   return (
-    <DashboardContext.Provider 
-      value={{ 
-        collapsedWidgets, 
-        toggleWidget, 
-        isWidgetCollapsed,
-        isWidgetVisible,
-        hasFeatureAccess,
-        toggleWidgetCollapse,
-        viewMode,
+    <DashboardContext.Provider
+      value={{
+        widgets,
+        addWidget,
+        removeWidget,
+        moveWidget,
+        viewMode, 
         setViewMode,
+        customLayout,
+        setCustomLayout,
+        saveDashboard,
+        resetDashboard: () => {
+          resetWidgets();
+          resetDashboard();
+        },
         pricingTier,
         setPricingTier,
-        customLayout,
-        updateCustomLayout,
-        featureAccess,
-        isMobileView: isMobile
+        isUpdating,
+        hasFeatureAccess,
+        featureAccess
       }}
     >
       {children}
     </DashboardContext.Provider>
   );
 };
-
-export { DashboardContext };

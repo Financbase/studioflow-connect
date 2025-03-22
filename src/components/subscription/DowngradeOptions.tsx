@@ -7,11 +7,13 @@ import { CreditCard, Award, Zap } from "lucide-react";
 interface DowngradeOptionsProps {
   currentPlan: PricingTier;
   handlePlanSwitch: (plan: PricingTier) => void;
+  isDisabled?: boolean;
 }
 
 const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({ 
   currentPlan,
-  handlePlanSwitch
+  handlePlanSwitch,
+  isDisabled = false
 }) => {
   if (currentPlan === "free") {
     return null; // Already on lowest plan
@@ -27,6 +29,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handlePlanSwitch("pro")}
+              disabled={isDisabled}
             >
               <Zap className="mr-2 h-4 w-4" />
               Switch to Pro
@@ -36,6 +39,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handlePlanSwitch("standard")}
+              disabled={isDisabled}
             >
               <Award className="mr-2 h-4 w-4" />
               Switch to Standard
@@ -45,6 +49,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handlePlanSwitch("free")}
+              disabled={isDisabled}
             >
               <CreditCard className="mr-2 h-4 w-4" />
               Switch to Free
@@ -58,6 +63,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handlePlanSwitch("standard")}
+              disabled={isDisabled}
             >
               <Award className="mr-2 h-4 w-4" />
               Switch to Standard
@@ -67,6 +73,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handlePlanSwitch("free")}
+              disabled={isDisabled}
             >
               <CreditCard className="mr-2 h-4 w-4" />
               Switch to Free
@@ -79,6 +86,7 @@ const DowngradeOptions: React.FC<DowngradeOptionsProps> = ({
             variant="outline"
             size="sm"
             onClick={() => handlePlanSwitch("free")}
+            disabled={isDisabled}
           >
             <CreditCard className="mr-2 h-4 w-4" />
             Switch to Free

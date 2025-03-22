@@ -12,14 +12,21 @@ import { isValidPlanChange } from "@/contexts/dashboard/utils";
 interface PlanSwitcherProps {
   currentPlan: PricingTier;
   onPlanChange: (plan: PricingTier) => void;
+  isUpdating?: boolean;
 }
 
-const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }) => {
+const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ 
+  currentPlan, 
+  onPlanChange,
+  isUpdating = false 
+}) => {
   const [showDowngradeDialog, setShowDowngradeDialog] = useState(false);
   const [targetPlan, setTargetPlan] = useState<PricingTier>("free");
   
   // Function to simulate a subscription upgrade
   const handleUpgradeSubscription = async (newPlan: PricingTier) => {
+    if (isUpdating) return;
+    
     toast({
       title: "Upgrade Required",
       description: "Please subscribe to upgrade your plan. This would typically redirect to a payment page.",
@@ -28,6 +35,8 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
   
   // Handle plan switch with downgrades requiring confirmation
   const handlePlanSwitch = (newPlan: PricingTier) => {
+    if (isUpdating) return;
+    
     // Check if this is a downgrade
     if (isValidPlanChange(currentPlan, newPlan)) {
       // Direct change if not a downgrade
@@ -49,11 +58,13 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
         <UpgradeOptions 
           currentPlan={currentPlan} 
           handleUpgradeSubscription={handleUpgradeSubscription} 
+          isDisabled={isUpdating}
         />
         
         <DowngradeOptions 
           currentPlan={currentPlan}
           handlePlanSwitch={handlePlanSwitch}
+          isDisabled={isUpdating}
         />
       </div>
       
@@ -63,6 +74,7 @@ const PlanSwitcher: React.FC<PlanSwitcherProps> = ({ currentPlan, onPlanChange }
         currentPlan={currentPlan}
         targetPlan={targetPlan}
         onConfirm={onPlanChange}
+        isDisabled={isUpdating}
       />
     </div>
   );

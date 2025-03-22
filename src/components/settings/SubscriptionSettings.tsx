@@ -11,19 +11,14 @@ import AIAssistant from "@/components/AIAssistant";
 import { Button } from "@/components/ui/button";
 
 const SubscriptionSettings = () => {
-  const { pricingTier, setPricingTier } = useDashboard();
+  const { pricingTier, setPricingTier, isUpdating } = useDashboard();
   const [error, setError] = useState<string | null>(null);
   
-  const handlePlanChange = (plan: PricingTier) => {
+  const handlePlanChange = async (plan: PricingTier) => {
     try {
-      // Only show toast if the plan actually changes
-      if (plan !== pricingTier) {
-        setPricingTier(plan);
-        
-        toast({
-          title: "Subscription updated",
-          description: `Your plan has been updated to ${plan.charAt(0).toUpperCase() + plan.slice(1)}`,
-        });
+      // Only update if the plan actually changes and not currently updating
+      if (plan !== pricingTier && !isUpdating) {
+        await setPricingTier(plan);
       }
       
       // Clear any existing errors
@@ -77,6 +72,7 @@ const SubscriptionSettings = () => {
           <PlanSwitcher 
             currentPlan={pricingTier} 
             onPlanChange={handlePlanChange}
+            isUpdating={isUpdating}
           />
         </CardContent>
       </Card>
