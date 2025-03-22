@@ -14,18 +14,29 @@ export const usePricingTier = (user: User | null, profile: any) => {
   // Load pricing tier from profile
   useEffect(() => {
     if (profile && profile.plan) {
-      // Ensure plan is one of the allowed values
-      const planValue = profile.plan as PricingTier;
-      if (planValue === 'free' || planValue === 'standard' || planValue === 'pro' || planValue === 'enterprise') {
-        setPricingTier(planValue);
-        console.log("Setting pricing tier from profile:", planValue);
+      try {
+        // Ensure plan is one of the allowed values
+        const planValue = profile.plan as PricingTier;
+        if (['free', 'standard', 'pro', 'enterprise'].includes(planValue)) {
+          setPricingTier(planValue);
+          console.log("Setting pricing tier from profile:", planValue);
+        } else {
+          console.warn(`Invalid plan value in profile: ${planValue}, defaulting to free`);
+          setPricingTier('free');
+        }
+      } catch (err) {
+        console.error("Error loading pricing tier from profile:", err);
+        setPricingTier('free');
       }
     }
   }, [profile]);
   
   // Update user profile when pricing tier changes
   const updatePricingTierInDB = useCallback(async (newTier: PricingTier) => {
-    if (!user || !profile) return;
+    if (!user || !profile) {
+      console.warn("Cannot update pricing tier: Missing user or profile");
+      return false;
+    }
     
     // Check if the plan change is valid
     if (!isValidPlanChange(profile.plan as PricingTier, newTier)) {
@@ -55,20 +66,23 @@ export const usePricingTier = (user: User | null, profile: any) => {
           title: 'Error',
           description: 'Could not update subscription plan'
         });
-        setIsUpdating(false);
         return false;
-      } else {
-        toast.default({
-          title: 'Plan Updated',
-          description: `Your plan has been updated to ${newTier}`
-        });
-        setIsUpdating(false);
-        return true;
-      }
+      } 
+      
+      toast.default({
+        title: 'Plan Updated',
+        description: `Your plan has been updated to ${newTier}`
+      });
+      return true;
     } catch (err) {
       console.error('Error in updating pricing tier:', err);
-      setIsUpdating(false);
+      toast.destructive({
+        title: 'Error',
+        description: 'An unexpected error occurred while updating your subscription'
+      });
       return false;
+    } finally {
+      setIsUpdating(false);
     }
   }, [user, profile]);
   
@@ -85,9 +99,9 @@ export const usePricingTier = (user: User | null, profile: any) => {
   }, [pricingTier, updatePricingTierInDB]);
 
   // Check if user has access to the feature based on pricing tier
-  const hasFeatureAccess = (widgetId: WidgetId): boolean => {
+  const hasFeatureAccess = useCallback((widgetId: WidgetId): boolean => {
     return featureAccessMap[pricingTier][widgetId];
-  };
+  }, [pricingTier]);
 
   return {
     pricingTier,

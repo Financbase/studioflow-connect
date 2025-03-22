@@ -15,10 +15,6 @@ const UpgradeOptions: React.FC<UpgradeOptionsProps> = ({
   handleUpgradeSubscription,
   isDisabled = false
 }) => {
-  // The TypeScript error occurs because of type inference in the conditional check
-  // TypeScript thinks `currentPlan` can't be "enterprise" at this point
-  // We need to fix the comparison to satisfy TypeScript's type checking
-  
   // First, we'll handle the case where we don't want to show any upgrade options
   if (currentPlan === "enterprise") {
     return null;
