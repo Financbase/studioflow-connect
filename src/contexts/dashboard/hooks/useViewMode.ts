@@ -1,8 +1,11 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ViewMode, WidgetId, defaultVisibleWidgets } from '../types';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-export const useViewMode = (isMobile: boolean, pricingTier: string) => {
+export const useViewMode = () => {
+  const isMobile = useIsMobile();
+  
   // View mode state - default to mobile if on mobile device
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     return isMobile ? 'mobile' : 'advanced'; // Default to advanced when not on mobile
@@ -12,13 +15,11 @@ export const useViewMode = (isMobile: boolean, pricingTier: string) => {
   useEffect(() => {
     if (isMobile && viewMode !== 'mobile') {
       setViewMode('mobile');
-    } else if (!isMobile && viewMode === 'mobile') {
-      setViewMode('advanced');
     }
   }, [isMobile, viewMode]);
 
   // Determines if a widget should be visible based on current view mode
-  const isWidgetVisible = (widgetId: WidgetId, customLayout: WidgetId[]): boolean => {
+  const isWidgetVisible = useCallback((widgetId: WidgetId, pricingTier: string, customLayout: WidgetId[]): boolean => {
     // Always show all widgets for Pro users regardless of view mode
     if (pricingTier === 'pro') {
       return true;
@@ -28,7 +29,7 @@ export const useViewMode = (isMobile: boolean, pricingTier: string) => {
       return customLayout.includes(widgetId);
     }
     return defaultVisibleWidgets[viewMode].includes(widgetId);
-  };
+  }, [viewMode]);
 
   return {
     viewMode,

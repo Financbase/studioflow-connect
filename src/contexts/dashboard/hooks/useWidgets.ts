@@ -1,10 +1,14 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { User } from '@supabase/supabase-js';
-import { WidgetId } from '../types';
+import { WidgetId, ViewMode } from '../types';
 
-export const useWidgets = (user: User | null, isMobile: boolean) => {
+export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: WidgetId) => boolean) => {
+  // Widget state
+  const [widgets, setWidgets] = useState<WidgetId[]>([
+    'connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace'
+  ]);
+  
   // Collapsed widgets state
   const [collapsedWidgets, setCollapsedWidgets] = useState<WidgetId[]>([]);
   
@@ -13,44 +17,40 @@ export const useWidgets = (user: User | null, isMobile: boolean) => {
     'connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace'
   ]);
 
-  // Load widget settings from Supabase
-  useEffect(() => {
-    const loadWidgetSettings = async () => {
-      if (user) {
-        try {
-          const { data, error } = await supabase
-            .from('dashboard_settings')
-            .select('*')
-            .eq('user_id', user.id)
-            .single();
-            
-          if (error && error.code !== 'PGRST116') {
-            console.error('Error loading dashboard settings:', error);
-            return;
-          }
-          
-          if (data) {
-            // Set custom layout from database
-            if (data.custom_layout && Array.isArray(data.custom_layout)) {
-              setCustomLayout(data.custom_layout as WidgetId[]);
-            }
-            
-            // Set collapsed widgets from database
-            if (data.collapsed_widgets && Array.isArray(data.collapsed_widgets)) {
-              setCollapsedWidgets(data.collapsed_widgets as WidgetId[]);
-            }
-          }
-        } catch (err) {
-          console.error('Error in loading widget settings:', err);
-        }
+  // Add a widget to the dashboard
+  const addWidget = useCallback((widget: WidgetId) => {
+    setWidgets(prev => {
+      if (prev.includes(widget)) {
+        return prev;
       }
-    };
-    
-    loadWidgetSettings();
-  }, [user]);
+      return [...prev, widget];
+    });
+  }, []);
+
+  // Remove a widget from the dashboard
+  const removeWidget = useCallback((widget: WidgetId) => {
+    setWidgets(prev => prev.filter(w => w !== widget));
+  }, []);
+
+  // Move a widget in the dashboard
+  const moveWidget = useCallback((fromIndex: number, toIndex: number) => {
+    setWidgets(prev => {
+      const result = [...prev];
+      const [removed] = result.splice(fromIndex, 1);
+      result.splice(toIndex, 0, removed);
+      return result;
+    });
+  }, []);
+
+  // Reset widgets to default
+  const resetWidgets = useCallback(() => {
+    setWidgets(['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace']);
+    setCollapsedWidgets([]);
+    setCustomLayout(['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace']);
+  }, []);
 
   // Toggle widget collapse state
-  const toggleWidget = (widgetId: WidgetId) => {
+  const toggleWidget = useCallback((widgetId: WidgetId) => {
     setCollapsedWidgets(prev => {
       if (prev.includes(widgetId)) {
         return prev.filter(id => id !== widgetId);
@@ -58,23 +58,23 @@ export const useWidgets = (user: User | null, isMobile: boolean) => {
         return [...prev, widgetId];
       }
     });
-  };
+  }, []);
   
   // Check if widget is collapsed
-  const isWidgetCollapsed = (widgetId: WidgetId) => {
+  const isWidgetCollapsed = useCallback((widgetId: WidgetId) => {
     return collapsedWidgets.includes(widgetId);
-  };
-  
-  // Update custom layout
-  const updateCustomLayout = (widgets: WidgetId[]) => {
-    setCustomLayout(widgets);
-  };
+  }, [collapsedWidgets]);
 
   return {
-    collapsedWidgets,
+    widgets,
+    addWidget,
+    removeWidget,
+    moveWidget,
     customLayout,
+    setCustomLayout,
+    resetWidgets,
+    collapsedWidgets,
     toggleWidget,
-    isWidgetCollapsed,
-    updateCustomLayout
+    isWidgetCollapsed
   };
 };

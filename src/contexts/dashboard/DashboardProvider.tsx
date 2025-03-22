@@ -1,11 +1,12 @@
 
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useWidgets } from './hooks/useWidgets';
 import { useViewMode } from './hooks/useViewMode';
 import { useDashboardPersistence } from './hooks/useDashboardPersistence';
 import { usePricingTier } from './hooks/usePricingTier';
 import { WidgetId, ViewMode } from './types';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DashboardContextType {
   widgets: WidgetId[];
@@ -23,6 +24,10 @@ interface DashboardContextType {
   isUpdating: boolean;
   hasFeatureAccess: (widget: WidgetId) => boolean;
   featureAccess: ReturnType<typeof usePricingTier>["featureAccess"];
+  isWidgetVisible: (widgetId: WidgetId) => boolean;
+  isWidgetCollapsed: (widgetId: WidgetId) => boolean;
+  toggleWidgetCollapse: (widgetId: WidgetId) => void;
+  updateCustomLayout: (newLayout: WidgetId[]) => void;
 }
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -31,7 +36,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const { user, profile } = useAuth();
   const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating } = usePricingTier(user, profile);
   const { viewMode, setViewMode } = useViewMode();
-  const { widgets, addWidget, removeWidget, moveWidget, customLayout, setCustomLayout, resetWidgets } = useWidgets(viewMode, hasFeatureAccess);
+  const { widgets, addWidget, removeWidget, moveWidget, customLayout, setCustomLayout, resetWidgets, collapsedWidgets, toggleWidget, isWidgetCollapsed } = useWidgets(viewMode, hasFeatureAccess);
   const { saveDashboard, resetDashboard } = useDashboardPersistence(user?.id || '', viewMode, widgets, customLayout);
   
   // Console log to debug auth status
@@ -47,6 +52,21 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   useEffect(() => {
     console.log('PricingTier changed:', pricingTier);
   }, [pricingTier]);
+
+  // Check if a widget is visible based on the current view mode
+  const isWidgetVisible = useCallback((widgetId: WidgetId): boolean => {
+    return widgets.includes(widgetId);
+  }, [widgets]);
+
+  // Update custom layout
+  const updateCustomLayout = useCallback((newLayout: WidgetId[]): void => {
+    setCustomLayout(newLayout);
+  }, [setCustomLayout]);
+
+  // Handler for toggling widget collapse
+  const toggleWidgetCollapse = useCallback((widgetId: WidgetId): void => {
+    toggleWidget(widgetId);
+  }, [toggleWidget]);
 
   return (
     <DashboardContext.Provider
@@ -68,7 +88,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setPricingTier,
         isUpdating,
         hasFeatureAccess,
-        featureAccess
+        featureAccess,
+        isWidgetVisible,
+        isWidgetCollapsed,
+        toggleWidgetCollapse,
+        updateCustomLayout
       }}
     >
       {children}

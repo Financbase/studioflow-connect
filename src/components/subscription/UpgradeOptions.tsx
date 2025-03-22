@@ -15,7 +15,7 @@ const UpgradeOptions: React.FC<UpgradeOptionsProps> = ({
   handleUpgradeSubscription,
   isDisabled = false
 }) => {
-  // Fix comparison by using strict equality operator
+  // No upgrade options for Enterprise plan
   if (currentPlan === "enterprise") {
     return null;
   }
