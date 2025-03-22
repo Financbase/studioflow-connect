@@ -10,14 +10,12 @@ import MobileMenu from "./header/MobileMenu";
 import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
-import { useContext } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
-  // Use the correct property names from useZenMode hook
-  const { isActive, toggle } = useZenMode();
+  const zenMode = useZenMode();
   const { user, profile, signOut } = useAuth();
   const { t: translate, currentLanguage, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -39,7 +37,7 @@ const Header = () => {
   const isAuthPage = location.pathname === "/auth";
   const isIndexPage = location.pathname === "/";
   
-  if (isAuthPage || isIndexPage || isActive) {
+  if (isAuthPage || isIndexPage || zenMode.isActive) {
     return null;
   }
 
@@ -62,8 +60,8 @@ const Header = () => {
         )}
         
         <div className="ml-auto flex items-center space-x-2">
-          {/* Use the correct property names for zen mode */}
-          <ZenModeToggle onClick={toggle} isActive={isActive} />
+          {/* Use the correct property from zen mode hook */}
+          <ZenModeToggle onClick={zenMode.toggle} isActive={zenMode.isActive} />
           <ThemeSwitcher />
           <LanguageSwitcher />
           
