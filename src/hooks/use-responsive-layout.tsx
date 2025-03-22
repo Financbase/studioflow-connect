@@ -1,126 +1,81 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useIsMobile } from './use-mobile';
 
-type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-type LayoutMode = 'compact' | 'default' | 'expanded';
-type ScreenOrientation = 'portrait' | 'landscape';
-
-interface LayoutConfig {
-  sidebarVisible: boolean;
-  contentColumns: 1 | 2 | 3 | 4;
-  widgetsPerRow: 1 | 2 | 3 | 4;
-  compactHeader: boolean;
-  compactWidgets: boolean;
-  stackedNavigation: boolean;
-}
-
-interface ResponsiveLayout {
-  breakpoint: Breakpoint;
-  mode: LayoutMode;
-  orientation: ScreenOrientation;
-  config: LayoutConfig;
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-}
-
-// Breakpoint values in px - matching Tailwind defaults
-const breakpointValues = {
-  xs: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536
-};
-
 /**
- * Hook for handling responsive layout configurations across different device sizes
- * with automatic detection of screen changes and orientation shifts.
+ * Hook to manage responsive layout adjustments across the application
+ * with optimized rendering and performance considerations.
+ * 
+ * @returns Various responsive layout utilities and state
  */
-export function useResponsiveLayout(): ResponsiveLayout {
-  const isMobileDevice = useIsMobile();
-  const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1024);
-  const [height, setHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 768);
+export const useResponsiveLayout = () => {
+  const isMobile = useIsMobile();
+  const [isTablet, setIsTablet] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isLargeDesktop, setIsLargeDesktop] = useState(false);
   
-  // Determine current breakpoint based on screen width
-  const getBreakpoint = useCallback((width: number): Breakpoint => {
-    if (width < breakpointValues.sm) return 'xs';
-    if (width < breakpointValues.md) return 'sm';
-    if (width < breakpointValues.lg) return 'md';
-    if (width < breakpointValues.xl) return 'lg';
-    if (width < breakpointValues['2xl']) return 'xl';
-    return '2xl';
-  }, []);
-  
-  // Get screen orientation
-  const getOrientation = useCallback((width: number, height: number): ScreenOrientation => {
-    return width > height ? 'landscape' : 'portrait';
-  }, []);
-  
-  // Derive layout mode from breakpoint
-  const getLayoutMode = useCallback((breakpoint: Breakpoint): LayoutMode => {
-    if (['xs', 'sm'].includes(breakpoint)) return 'compact';
-    if (['md', 'lg'].includes(breakpoint)) return 'default';
-    return 'expanded';
-  }, []);
-  
-  // Generate layout configuration based on breakpoint and mode
-  const getLayoutConfig = useCallback((breakpoint: Breakpoint, mode: LayoutMode): LayoutConfig => {
-    switch (mode) {
-      case 'compact':
-        return {
-          sidebarVisible: false,
-          contentColumns: 1,
-          widgetsPerRow: 1,
-          compactHeader: true,
-          compactWidgets: true,
-          stackedNavigation: true
-        };
-      case 'default':
-        return {
-          sidebarVisible: true,
-          contentColumns: breakpoint === 'md' ? 2 : 3,
-          widgetsPerRow: breakpoint === 'md' ? 1 : 2,
-          compactHeader: false,
-          compactWidgets: false,
-          stackedNavigation: false
-        };
-      case 'expanded':
-        return {
-          sidebarVisible: true,
-          contentColumns: 4,
-          widgetsPerRow: 3,
-          compactHeader: false,
-          compactWidgets: false,
-          stackedNavigation: false
-        };
-    }
-  }, []);
-  
+  // Debounced resize handler to improve performance
   useEffect(() => {
     const handleResize = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
+      const width = window.innerWidth;
+      setIsTablet(width >= 768 && width < 1024);
+      setIsDesktop(width >= 1024 && width < 1440);
+      setIsLargeDesktop(width >= 1440);
     };
     
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Add debouncing for better performance
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const debouncedResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleResize, 100);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', debouncedResize);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
   
-  const breakpoint = getBreakpoint(width);
-  const orientation = getOrientation(width, height);
-  const mode = getLayoutMode(breakpoint);
-  const config = getLayoutConfig(breakpoint, mode);
+  // Determine optimal column count based on screen size
+  const getOptimalColumnCount = (minColumns = 1, maxColumns = 4) => {
+    if (isMobile) return minColumns;
+    if (isTablet) return Math.min(maxColumns, Math.max(minColumns, 2));
+    if (isDesktop) return Math.min(maxColumns, Math.max(minColumns, 3));
+    if (isLargeDesktop) return maxColumns;
+    return minColumns;
+  };
+  
+  // Get appropriate container class based on screen size
+  const getContainerClass = () => {
+    if (isMobile) return 'responsive-container size-sm mobile-container';
+    if (isTablet) return 'responsive-container size-md tablet-container';
+    if (isDesktop) return 'responsive-container size-lg desktop-container';
+    return 'responsive-container size-xl large-desktop-container';
+  };
+  
+  // Get appropriate grid class for responsive layouts
+  const getResponsiveGridClass = (columns = 4) => {
+    const optimalColumns = getOptimalColumnCount(1, columns);
+    return `responsive-grid responsive-grid-${optimalColumns}`;
+  };
   
   return {
-    breakpoint,
-    mode,
-    orientation,
-    config,
-    isMobile: ['xs', 'sm'].includes(breakpoint),
-    isTablet: ['md', 'lg'].includes(breakpoint),
-    isDesktop: ['xl', '2xl'].includes(breakpoint)
+    isMobile,
+    isTablet,
+    isDesktop,
+    isLargeDesktop,
+    getOptimalColumnCount,
+    getContainerClass,
+    getResponsiveGridClass,
+    screenSize: isMobile ? 'mobile' : isTablet ? 'tablet' : isDesktop ? 'desktop' : 'large-desktop',
   };
-}
+};
+
+export default useResponsiveLayout;
