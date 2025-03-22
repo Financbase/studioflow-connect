@@ -32,7 +32,7 @@ const CustomLayoutEditor = () => {
   const { customLayout, updateCustomLayout, featureAccess, pricingTier } = useDashboard();
   const { t } = useLanguage();
   const { themeVariant } = useTheme();
-  const { isMobile } = useIsMobile();
+  const isMobile = useIsMobile(); // Correctly use the useIsMobile hook as a boolean
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("widgets");
