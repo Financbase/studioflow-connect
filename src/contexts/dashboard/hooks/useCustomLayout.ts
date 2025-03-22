@@ -9,21 +9,23 @@ import { useDashboard } from '../useDashboard';
 export const useCustomLayout = () => {
   const { 
     customLayout, 
-    setCustomLayout,
+    updateCustomLayout: updateLayout,
     viewMode,
     saveDashboard
   } = useDashboard();
   
   // Function used in CustomLayoutEditor.tsx to update the custom layout
   const updateCustomLayout = useCallback((newLayout: WidgetId[]): void => {
-    setCustomLayout(newLayout);
+    if (updateLayout) {
+      updateLayout(newLayout);
     
-    // If we're in custom view mode, update the visible widgets too
-    if (viewMode === 'custom') {
-      // Save the dashboard with new settings
-      saveDashboard(newLayout, viewMode, newLayout);
+      // If we're in custom view mode, update the visible widgets too
+      if (viewMode === 'custom') {
+        // Save the dashboard with new settings
+        saveDashboard(newLayout, viewMode, newLayout);
+      }
     }
-  }, [setCustomLayout, viewMode, saveDashboard]);
+  }, [updateLayout, viewMode, saveDashboard]);
   
   return {
     customLayout,

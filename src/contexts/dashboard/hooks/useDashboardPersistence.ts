@@ -1,10 +1,10 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { WidgetId, ViewMode } from '../types';
 import { toast } from '@/hooks/use-toast';
 
-export const useDashboardPersistence = () => {
+export const useDashboardPersistence = (userId?: string, viewMode?: ViewMode, widgets?: WidgetId[], customLayout?: WidgetId[]) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const saveDashboardSettings = async (
@@ -20,13 +20,12 @@ export const useDashboardPersistence = () => {
         throw new Error('No user logged in');
       }
       
-      // Instead of using 'widgets_list', let's use column names that actually exist
-      // Based on the error, we'll use 'settings' instead as a JSON field
+      // Using 'dashboard_config' as JSON field instead of 'settings' which doesn't exist
       const { error } = await supabase
         .from('dashboard_settings')
         .upsert({
           user_id: (await user).data.user?.id,
-          settings: {
+          dashboard_config: { // Use the correct column name here
             widgets,
             viewMode,
             customLayout
@@ -38,7 +37,7 @@ export const useDashboardPersistence = () => {
         throw error;
       }
       
-      console.info('Minimal dashboard settings saved successfully');
+      console.info('Dashboard settings saved successfully');
       return true;
     } catch (error: any) {
       console.error('Error saving dashboard settings:', error);
@@ -68,7 +67,7 @@ export const useDashboardPersistence = () => {
       
       const { data, error } = await supabase
         .from('dashboard_settings')
-        .select('settings')
+        .select('dashboard_config') // Use the correct column name here
         .eq('user_id', (await user).data.user?.id)
         .single();
         
@@ -76,14 +75,14 @@ export const useDashboardPersistence = () => {
         throw error;
       }
       
-      if (!data || !data.settings) {
+      if (!data || !data.dashboard_config) {
         return null;
       }
       
       return {
-        widgets: data.settings.widgets as WidgetId[],
-        viewMode: data.settings.viewMode as ViewMode,
-        customLayout: data.settings.customLayout as WidgetId[]
+        widgets: data.dashboard_config.widgets as WidgetId[],
+        viewMode: data.dashboard_config.viewMode as ViewMode,
+        customLayout: data.dashboard_config.customLayout as WidgetId[]
       };
     } catch (error: any) {
       console.warn('Error loading dashboard settings:', error);
@@ -91,9 +90,21 @@ export const useDashboardPersistence = () => {
     }
   };
   
+  // Add helper methods to simplify usage from DashboardProvider
+  const saveDashboard = useCallback((widgets: WidgetId[], viewMode: ViewMode, customLayout: WidgetId[]) => {
+    return saveDashboardSettings(widgets, viewMode, customLayout);
+  }, []);
+  
+  const resetDashboard = useCallback(() => {
+    // This is a stub - the actual reset is handled in the DashboardProvider
+    console.log('Dashboard reset requested');
+  }, []);
+  
   return {
     saveDashboardSettings,
     loadDashboardSettings,
+    saveDashboard,
+    resetDashboard,
     isUpdating
   };
 };

@@ -59,7 +59,13 @@ export interface DashboardContextType {
   toggleWidget: (widgetId: WidgetId) => void;
   isWidgetCollapsed: (widgetId: WidgetId) => boolean;
   
-  // Properties for widget management
+  // Widget management
+  widgets: WidgetId[];
+  addWidget: (widgetId: WidgetId) => void;
+  removeWidget: (widgetId: WidgetId) => void;
+  moveWidget: (fromIndex: number, toIndex: number) => void;
+  
+  // Properties for widget visibility
   isWidgetVisible: (widgetId: WidgetId) => boolean;
   hasFeatureAccess: (widgetId: WidgetId) => boolean;
   toggleWidgetCollapse: (widgetId: WidgetId) => void;
@@ -74,11 +80,19 @@ export interface DashboardContextType {
   
   // Custom layout management
   customLayout: WidgetId[];
+  setCustomLayout: (widgets: WidgetId[]) => void;
   updateCustomLayout: (widgets: WidgetId[]) => void;
   
   // Feature access
   featureAccess: Record<WidgetId, boolean>;
   
+  // Persistence
+  saveDashboard: (widgets: WidgetId[], viewMode: ViewMode, customLayout: WidgetId[]) => Promise<boolean>;
+  resetDashboard: () => void;
+  
+  // State management
+  isUpdating: boolean;
+  
   // Mobile specific
-  isMobileView: boolean;
+  isMobileView?: boolean;
 }

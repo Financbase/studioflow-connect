@@ -10,7 +10,7 @@ import { ManualEditorTab } from "./palette/ManualEditorTab";
 import { AutoGeneratorTab } from "./palette/AutoGeneratorTab";
 import PalettePreviewSection from "./palette/PalettePreviewSection";
 import { SavePaletteForm } from "./palette/SavePaletteForm";
-import { SavedPalettesList } from "./palette/SavedPalettesList";
+import SavedPalettesList from "./palette/SavedPalettesList";
 
 // Import our custom hooks
 import { useColorGrouping } from "@/hooks/useColorGrouping";

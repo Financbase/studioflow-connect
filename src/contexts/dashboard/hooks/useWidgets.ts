@@ -1,8 +1,7 @@
 
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { WidgetId, ViewMode } from '../types';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { WidgetId, ViewMode } from '../types';
 
 // Default widget configurations
 const DEFAULT_WIDGETS: WidgetId[] = ['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace'];
@@ -26,15 +25,24 @@ export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: Widget
       const savedCustomLayout = localStorage.getItem('studioflow_custom_layout');
       
       if (savedWidgets) {
-        setWidgets(JSON.parse(savedWidgets));
+        const parsed = JSON.parse(savedWidgets);
+        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
+          setWidgets(parsed as WidgetId[]);
+        }
       }
       
       if (savedCollapsed) {
-        setCollapsedWidgets(JSON.parse(savedCollapsed));
+        const parsed = JSON.parse(savedCollapsed);
+        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
+          setCollapsedWidgets(parsed as WidgetId[]);
+        }
       }
       
       if (savedCustomLayout) {
-        setCustomLayout(JSON.parse(savedCustomLayout));
+        const parsed = JSON.parse(savedCustomLayout);
+        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
+          setCustomLayout(parsed as WidgetId[]);
+        }
       }
     } catch (err) {
       console.warn('Error loading widget settings from localStorage:', err);
@@ -140,8 +148,13 @@ export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: Widget
     return collapsedWidgets.includes(widgetId);
   }, [collapsedWidgets]);
 
+  // Memoized filtered widgets based on feature access
+  const accessibleWidgets = useMemo(() => {
+    return widgets.filter(widget => hasFeatureAccess(widget));
+  }, [widgets, hasFeatureAccess]);
+
   return {
-    widgets,
+    widgets: accessibleWidgets,
     addWidget,
     removeWidget,
     moveWidget,

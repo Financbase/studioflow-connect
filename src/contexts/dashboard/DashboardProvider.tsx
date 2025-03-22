@@ -1,5 +1,5 @@
 
-import React, { createContext, useEffect, useCallback } from 'react';
+import React, { createContext, useEffect, useCallback, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useWidgets } from './hooks/useWidgets';
 import { useViewMode } from './hooks/useViewMode';
@@ -17,11 +17,33 @@ export const DashboardContext = createContext<DashboardContextType | undefined>(
  */
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
-  const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating } = usePricingTier(user, profile);
+  const isMobile = useIsMobile();
+  const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating: pricingUpdating } = usePricingTier(user, profile);
   const { viewMode, setViewMode } = useViewMode();
-  const { widgets, addWidget, removeWidget, moveWidget, customLayout, setCustomLayout, resetWidgets, collapsedWidgets, toggleWidget, isWidgetCollapsed } = useWidgets(viewMode, hasFeatureAccess);
-  const { saveDashboard, resetDashboard } = useDashboardPersistence(user?.id || '', viewMode, widgets, customLayout);
   
+  // Initialize widget management hooks
+  const { 
+    widgets, 
+    addWidget, 
+    removeWidget, 
+    moveWidget, 
+    customLayout, 
+    setCustomLayout, 
+    resetWidgets, 
+    collapsedWidgets, 
+    toggleWidget, 
+    isWidgetCollapsed 
+  } = useWidgets(viewMode, hasFeatureAccess);
+  
+  // Initialize persistence hooks
+  const { 
+    saveDashboardSettings, 
+    isUpdating: persistenceUpdating
+  } = useDashboardPersistence(user?.id, viewMode, widgets, customLayout);
+  
+  // Combined loading state
+  const isUpdating = pricingUpdating || persistenceUpdating;
+
   // Console log to debug auth status
   useEffect(() => {
     if (user) {
@@ -51,6 +73,18 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     toggleWidget(widgetId);
   }, [toggleWidget]);
 
+  // Save dashboard settings
+  const saveDashboard = useCallback((widgets: WidgetId[], viewMode: ViewMode, customLayout: WidgetId[]): Promise<boolean> => {
+    return saveDashboardSettings(widgets, viewMode, customLayout);
+  }, [saveDashboardSettings]);
+
+  // Reset dashboard to defaults
+  const resetDashboard = useCallback(() => {
+    resetWidgets();
+    // No need to call saveDashboardSettings here since resetWidgets already updates the state
+    // which triggers the useEffect to save to localStorage
+  }, [resetWidgets]);
+
   return (
     <DashboardContext.Provider
       value={{
@@ -63,10 +97,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         customLayout,
         setCustomLayout,
         saveDashboard,
-        resetDashboard: () => {
-          resetWidgets();
-          resetDashboard();
-        },
+        resetDashboard,
         pricingTier,
         setPricingTier,
         isUpdating,
@@ -77,7 +108,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         toggleWidgetCollapse,
         updateCustomLayout,
         collapsedWidgets,
-        toggleWidget
+        toggleWidget,
+        isMobileView: isMobile
       }}
     >
       {children}
