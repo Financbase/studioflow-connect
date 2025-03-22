@@ -1,6 +1,51 @@
 
 /* Responsive utilities for consistent layouts across the application */
 
+/* Base container size utilities */
+.container-xs {
+  @apply w-full max-w-xs mx-auto px-4;
+}
+
+.container-sm {
+  @apply w-full max-w-sm mx-auto px-4 sm:px-6;
+}
+
+.container-md {
+  @apply w-full max-w-md mx-auto px-4 sm:px-6;
+}
+
+.container-lg {
+  @apply w-full max-w-lg mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-xl {
+  @apply w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-2xl {
+  @apply w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-3xl {
+  @apply w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-4xl {
+  @apply w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-5xl {
+  @apply w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-6xl {
+  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-7xl {
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
 /* Breakpoint-specific display classes */
 @layer utilities {
   /* Show elements only at specific breakpoints */
@@ -63,6 +108,34 @@
     @apply grid grid-cols-1 md:grid-cols-2 gap-4;
   }
   
+  /* Three-column layout that adapts to screen size */
+  .grid-3-col {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+  }
+  
+  /* Four-column layout that adapts to screen size */
+  .grid-4-col {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+  
+  /* Responsive aspect ratio containers */
+  .aspect-4x3 {
+    @apply relative pt-[75%];
+  }
+  
+  .aspect-16x9 {
+    @apply relative pt-[56.25%];
+  }
+  
+  .aspect-square {
+    @apply relative pt-[100%];
+  }
+  
+  /* Content within aspect ratio containers */
+  .aspect-content {
+    @apply absolute inset-0 w-full h-full object-cover;
+  }
+  
   /* Responsive margins and paddings */
   .margin-responsive {
     @apply m-2 sm:m-3 md:m-4 lg:m-6;
@@ -70,6 +143,15 @@
   
   .padding-responsive {
     @apply p-2 sm:p-3 md:p-4 lg:p-6;
+  }
+  
+  /* Responsive spacing utilities */
+  .space-responsive {
+    @apply space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10;
+  }
+  
+  .gap-responsive {
+    @apply gap-2 sm:gap-3 md:gap-4 lg:gap-6;
   }
   
   /* Responsive text sizes */
@@ -107,5 +189,40 @@
   /* Responsive aspect ratios */
   .aspect-responsive-video {
     @apply aspect-video md:aspect-[16/9] lg:aspect-[21/9];
+  }
+  
+  /* Fixed aspect ratio card layouts */
+  .card-grid-fixed {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+  
+  .card-grid-fixed > * {
+    @apply aspect-[4/3] overflow-hidden;
+  }
+  
+  /* Dynamic grid sizing with auto-fit/auto-fill */
+  .auto-grid-sm {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  
+  .auto-grid-md {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .auto-grid-lg {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+  
+  /* Centered content wrapper */
+  .content-centered {
+    @apply flex items-center justify-center min-h-[50vh];
+  }
+  
+  /* Full height container */
+  .full-height {
+    @apply min-h-[calc(100vh-64px)];
   }
 }

@@ -1,10 +1,10 @@
-
 import { useCallback, useMemo } from 'react';
 import { WidgetId } from '../types';
 import { useDashboard } from '../useDashboard';
 
 /**
  * Hook for managing widget visibility and collapse state with performance optimizations
+ * and additional useful metrics for dashboard analysis
  */
 export const useWidgetVisibility = () => {
   const { 
@@ -23,6 +23,11 @@ export const useWidgetVisibility = () => {
     }
     return widgets;
   }, [viewMode, customLayout, widgets]);
+  
+  // Get all currently visible and accessible widgets
+  const getAllVisibleWidgets = useMemo(() => {
+    return visibleWidgets.filter(widgetId => hasFeatureAccess(widgetId));
+  }, [visibleWidgets, hasFeatureAccess]);
   
   // Determine if a widget is visible based on dashboard settings
   const isWidgetVisible = useCallback((widgetId: WidgetId): boolean => {
@@ -50,16 +55,23 @@ export const useWidgetVisibility = () => {
     toggleWidgetBase(widgetId);
   }, [toggleWidgetBase]);
   
-  // Get all currently visible and accessible widgets
-  const getAllVisibleWidgets = useMemo(() => {
-    return visibleWidgets.filter(widgetId => hasFeatureAccess(widgetId));
-  }, [visibleWidgets, hasFeatureAccess]);
+  // Calculate dashboard analytics
+  const dashboardMetrics = useMemo(() => ({
+    totalWidgets: widgets.length,
+    visibleCount: getAllVisibleWidgets.length,
+    collapsedCount: collapsedWidgets.length,
+    collapsedPercentage: widgets.length > 0 
+      ? Math.round((collapsedWidgets.length / widgets.length) * 100) 
+      : 0,
+    customizationActive: viewMode === 'custom'
+  }), [widgets, getAllVisibleWidgets, collapsedWidgets, viewMode]);
   
   return {
     isWidgetVisible,
     isWidgetCollapsed,
     toggleWidgetCollapse,
     visibleWidgets: getAllVisibleWidgets,
-    collapsedCount: collapsedWidgets.length
+    collapsedCount: collapsedWidgets.length,
+    metrics: dashboardMetrics
   };
 };

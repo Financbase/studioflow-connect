@@ -5,7 +5,8 @@ import { useDashboard } from '../useDashboard';
 import { toast } from '@/hooks/use-toast';
 
 /**
- * Hook for managing custom layout functionality with enhanced error handling and user feedback
+ * Hook for managing custom layout functionality with enhanced error handling,
+ * user feedback, and performance optimizations.
  */
 export const useCustomLayout = () => {
   const { 
@@ -17,13 +18,24 @@ export const useCustomLayout = () => {
   } = useDashboard();
   
   const [lastSavedLayout, setLastSavedLayout] = useState<WidgetId[]>([]);
+  const [isLayoutChanged, setIsLayoutChanged] = useState(false);
   
   // Track last saved layout for comparison
   useEffect(() => {
     if (customLayout && !isUpdating) {
       setLastSavedLayout([...customLayout]);
+      setIsLayoutChanged(false);
     }
   }, [customLayout, isUpdating]);
+  
+  // Function to check if the layout has been modified
+  const hasLayoutChanged = useCallback((newLayout: WidgetId[]): boolean => {
+    if (!lastSavedLayout || lastSavedLayout.length !== newLayout.length) {
+      return true;
+    }
+    
+    return JSON.stringify(lastSavedLayout) !== JSON.stringify(newLayout);
+  }, [lastSavedLayout]);
   
   // Function used in CustomLayoutEditor.tsx to update the custom layout
   const updateCustomLayout = useCallback((newLayout: WidgetId[]): void => {
@@ -36,6 +48,10 @@ export const useCustomLayout = () => {
       return;
     }
     
+    // Update the layout changed status
+    const layoutChanged = hasLayoutChanged(newLayout);
+    setIsLayoutChanged(layoutChanged);
+    
     if (updateLayout) {
       updateLayout(newLayout);
     
@@ -46,21 +62,31 @@ export const useCustomLayout = () => {
           .then(success => {
             if (success) {
               // Only show toast on successful save and if the layout actually changed
-              if (JSON.stringify(lastSavedLayout) !== JSON.stringify(newLayout)) {
+              if (layoutChanged) {
                 toast({
                   title: "Layout Updated",
                   description: "Your custom dashboard layout has been saved",
                 });
               }
             }
+          })
+          .catch(error => {
+            toast({
+              title: "Save Failed",
+              description: "There was an error saving your layout. Please try again.",
+              variant: "destructive"
+            });
+            console.error("Error saving dashboard:", error);
           });
       }
     }
-  }, [updateLayout, viewMode, saveDashboard, lastSavedLayout]);
+  }, [updateLayout, viewMode, saveDashboard, lastSavedLayout, hasLayoutChanged]);
   
   return {
     customLayout,
     updateCustomLayout,
-    isUpdating
+    isUpdating,
+    isLayoutChanged,
+    hasLayoutChanged
   };
 };

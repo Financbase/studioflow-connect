@@ -2,29 +2,48 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ViewMode, WidgetId, defaultVisibleWidgets, PricingTier } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from '@/hooks/use-toast';
 
-export const useViewMode = () => {
+interface ViewModeOptions {
+  persistToStorage?: boolean;
+  showToastOnChange?: boolean;
+}
+
+/**
+ * Hook for managing view modes with enhanced browser/device detection
+ * and improved persistence
+ */
+export const useViewMode = (options: ViewModeOptions = {}) => {
+  const { 
+    persistToStorage = true,
+    showToastOnChange = true 
+  } = options;
+  
   const isMobile = useIsMobile();
+  const storageKey = 'studioflow_view_mode';
   
   // View mode state - default to mobile if on mobile device
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    try {
-      // Try to load from localStorage first
-      const savedViewMode = localStorage.getItem('studioflow_view_mode');
-      if (savedViewMode) {
-        const parsedMode = JSON.parse(savedViewMode) as ViewMode;
-        // Validate the saved mode is a valid ViewMode
-        if (['simple', 'advanced', 'custom', 'mobile'].includes(parsedMode)) {
-          // If we're on mobile, force mobile view regardless of saved preference
-          return isMobile ? 'mobile' : parsedMode;
+    if (isMobile) return 'mobile';
+    
+    if (persistToStorage) {
+      try {
+        // Try to load from localStorage first
+        const savedViewMode = localStorage.getItem(storageKey);
+        if (savedViewMode) {
+          const parsedMode = JSON.parse(savedViewMode) as ViewMode;
+          // Validate the saved mode is a valid ViewMode
+          if (['simple', 'advanced', 'custom', 'mobile'].includes(parsedMode)) {
+            return parsedMode;
+          }
         }
+      } catch (err) {
+        console.error('Error loading view mode from storage:', err);
       }
-    } catch (err) {
-      console.error('Error loading view mode from storage:', err);
     }
     
     // Default fallback
-    return isMobile ? 'mobile' : 'advanced';
+    return 'advanced';
   });
   
   // Update view mode when mobile status changes
@@ -36,12 +55,28 @@ export const useViewMode = () => {
 
   // Save view mode to localStorage when it changes
   useEffect(() => {
-    try {
-      localStorage.setItem('studioflow_view_mode', JSON.stringify(viewMode));
-    } catch (err) {
-      console.warn('Could not save view mode to localStorage:', err);
+    if (persistToStorage) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(viewMode));
+      } catch (err) {
+        console.warn('Could not save view mode to localStorage:', err);
+      }
     }
-  }, [viewMode]);
+  }, [viewMode, persistToStorage]);
+
+  // Update view mode with notification
+  const updateViewMode = useCallback((newMode: ViewMode) => {
+    if (newMode === viewMode) return;
+    
+    setViewMode(newMode);
+    
+    if (showToastOnChange) {
+      toast({
+        title: "View Changed",
+        description: `Dashboard view set to ${newMode}`,
+      });
+    }
+  }, [viewMode, showToastOnChange]);
 
   // Determines if a widget should be visible based on current view mode
   const isWidgetVisible = useCallback((
@@ -65,7 +100,8 @@ export const useViewMode = () => {
 
   return {
     viewMode,
-    setViewMode,
-    isWidgetVisible
+    setViewMode: updateViewMode,
+    isWidgetVisible,
+    isMobileView: viewMode === 'mobile'
   };
 };
