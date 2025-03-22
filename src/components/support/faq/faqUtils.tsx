@@ -1,36 +1,61 @@
 
-import React from "react";
-import { 
-  Sliders, 
-  Activity, 
-  Mic, 
-  Music, 
-  Database, 
-  Headphones, 
-  FileText, 
-  AudioWaveform, 
-  TagIcon 
-} from "lucide-react";
+import { FAQItem, FAQType } from "./types";
+import { getFAQsByType, getCategoryCounts, getAllCategories } from "@/data/faqsIndex";
 
-export const getCategoryIcon = (category: string) => {
-  switch (category.toLowerCase()) {
-    case 'mixing':
-      return <Sliders className="h-3 w-3" />;
-    case 'mastering':
-      return <Activity className="h-3 w-3" />;
-    case 'recording':
-      return <Mic className="h-3 w-3" />;
-    case 'composition':
-      return <Music className="h-3 w-3" />;
-    case 'technical':
-      return <Database className="h-3 w-3" />;
-    case 'hardware':
-      return <Headphones className="h-3 w-3" />;
-    case 'software':
-      return <FileText className="h-3 w-3" />;
-    case 'theory':
-      return <AudioWaveform className="h-3 w-3" />;
-    default:
-      return <TagIcon className="h-3 w-3" />;
-  }
+/**
+ * Search FAQs based on a query string
+ */
+export const searchFAQs = (faqs: FAQItem[], query: string): FAQItem[] => {
+  if (!query.trim()) return faqs;
+  
+  const lowercaseQuery = query.toLowerCase();
+  
+  return faqs.filter((faq) => {
+    const matchesQuestion = faq.question.toLowerCase().includes(lowercaseQuery);
+    const matchesAnswer = faq.answer.toLowerCase().includes(lowercaseQuery);
+    const matchesCategory = faq.category.toLowerCase().includes(lowercaseQuery);
+    const matchesTags = faq.tags?.some(tag => tag.toLowerCase().includes(lowercaseQuery));
+    
+    return matchesQuestion || matchesAnswer || matchesCategory || matchesTags;
+  });
+};
+
+/**
+ * Filter FAQs by category
+ */
+export const filterFAQsByCategory = (faqs: FAQItem[], category: string): FAQItem[] => {
+  if (category === "all") return faqs;
+  return faqs.filter((faq) => faq.category === category);
+};
+
+/**
+ * Get all available categories from FAQs
+ */
+export const getCategories = (faqType: FAQType): string[] => {
+  // Use the utility from faqsIndex to get categories
+  return getAllCategories();
+};
+
+/**
+ * Count FAQs per category
+ */
+export const countFAQsPerCategory = (faqType: FAQType): Record<string, number> => {
+  // Use the utility from faqsIndex to get category counts
+  return getCategoryCounts(faqType);
+};
+
+/**
+ * Get FAQs by type
+ */
+export const getFAQs = (faqType: FAQType): FAQItem[] => {
+  // Use the utility from faqsIndex
+  return getFAQsByType(faqType);
+};
+
+export default {
+  searchFAQs,
+  filterFAQsByCategory,
+  getCategories,
+  countFAQsPerCategory,
+  getFAQs
 };
