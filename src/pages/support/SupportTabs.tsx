@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TicketList from "@/components/support/TicketList";
@@ -75,7 +74,6 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
   const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Calculate unread notification count (for the badge)
   const notificationCount = 3; // This would come from your notification system
 
   return (
@@ -118,9 +116,9 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
       
       <TabsContent value="faq">
         <FAQSection 
-          searchQuery={searchQuery} 
+          faqType="general"
+          searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          faqType="general" 
         />
       </TabsContent>
       

@@ -5,15 +5,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/language";
-import generalFAQs from "@/data/faqs";
-import musicProductionFAQs from "@/data/musicProductionFAQs";
-import technicalFAQs from "@/data/technicalFAQs";
 import { FAQItem, FAQSectionProps } from "./types";
 import FAQSearch from "./FAQSearch";
 import FAQCategories from "./FAQCategories";
 import FAQContent from "./FAQContent";
 import FAQAdvancedView from "./FAQAdvancedView";
 import { getCategoryIcon } from "./faqUtils";
+import generalFAQs from "@/data/faqs";
+import musicProductionFAQs from "@/data/musicProductionFAQs";
+import technicalFAQs from "@/data/technicalFAQs";
 
 const FAQSection = ({ 
   title,
