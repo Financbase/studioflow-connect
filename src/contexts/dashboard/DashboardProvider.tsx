@@ -5,33 +5,16 @@ import { useWidgets } from './hooks/useWidgets';
 import { useViewMode } from './hooks/useViewMode';
 import { useDashboardPersistence } from './hooks/useDashboardPersistence';
 import { usePricingTier } from './hooks/usePricingTier';
-import { WidgetId, ViewMode } from './types';
+import { WidgetId, ViewMode, DashboardContextType } from './types';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-interface DashboardContextType {
-  widgets: WidgetId[];
-  addWidget: (widget: WidgetId) => void;
-  removeWidget: (widget: WidgetId) => void;
-  moveWidget: (fromIndex: number, toIndex: number) => void;
-  viewMode: ViewMode;
-  setViewMode: (mode: ViewMode) => void;
-  customLayout: WidgetId[];
-  setCustomLayout: (layout: WidgetId[]) => void;
-  saveDashboard: () => Promise<void>;
-  resetDashboard: () => void;
-  pricingTier: ReturnType<typeof usePricingTier>["pricingTier"];
-  setPricingTier: ReturnType<typeof usePricingTier>["setPricingTier"];
-  isUpdating: boolean;
-  hasFeatureAccess: (widget: WidgetId) => boolean;
-  featureAccess: ReturnType<typeof usePricingTier>["featureAccess"];
-  isWidgetVisible: (widgetId: WidgetId) => boolean;
-  isWidgetCollapsed: (widgetId: WidgetId) => boolean;
-  toggleWidgetCollapse: (widgetId: WidgetId) => void;
-  updateCustomLayout: (newLayout: WidgetId[]) => void;
-}
-
+// Creating the Dashboard Context
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
+/**
+ * Provider component for the Dashboard context
+ * Manages the state and functionality of the dashboard
+ */
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
   const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating } = usePricingTier(user, profile);
@@ -92,7 +75,9 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         isWidgetVisible,
         isWidgetCollapsed,
         toggleWidgetCollapse,
-        updateCustomLayout
+        updateCustomLayout,
+        collapsedWidgets,
+        toggleWidget
       }}
     >
       {children}
