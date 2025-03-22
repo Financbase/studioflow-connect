@@ -30,6 +30,7 @@ export const getWidgetIcon = (widgetId: WidgetId) => {
     case 'connect':
       return <Merge className="h-4 w-4" />;
     default:
+      // Fix: Explicitly cast widgetId to string to avoid 'never' type
       return <Activity className="h-4 w-4" />;
   }
 };
@@ -52,7 +53,8 @@ export const getWidgetLabel = (widgetId: WidgetId) => {
     case 'connect':
       return 'StudioFlow Connect';
     default:
-      return widgetId.charAt(0).toUpperCase() + widgetId.slice(1);
+      // Fix: Cast to string to avoid the 'never' type issues
+      return String(widgetId).charAt(0).toUpperCase() + String(widgetId).slice(1);
   }
 };
 

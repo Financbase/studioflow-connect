@@ -20,16 +20,14 @@ export const useDashboardPersistence = (userId?: string, viewMode?: ViewMode, wi
         throw new Error('No user logged in');
       }
       
-      // Using 'dashboard_config' as JSON field instead of 'settings' which doesn't exist
+      // Using the actual column names that exist in the database
       const { error } = await supabase
         .from('dashboard_settings')
         .upsert({
           user_id: (await user).data.user?.id,
-          dashboard_config: { // Use the correct column name here
-            widgets,
-            viewMode,
-            customLayout
-          },
+          view_mode: viewMode,
+          custom_layout: customLayout,
+          collapsed_widgets: [], // Default value for collapsed widgets
           updated_at: new Date().toISOString()
         }, { onConflict: 'user_id' });
         
@@ -67,7 +65,7 @@ export const useDashboardPersistence = (userId?: string, viewMode?: ViewMode, wi
       
       const { data, error } = await supabase
         .from('dashboard_settings')
-        .select('dashboard_config') // Use the correct column name here
+        .select('view_mode, custom_layout, collapsed_widgets') // Use correct column names
         .eq('user_id', (await user).data.user?.id)
         .single();
         
@@ -75,14 +73,15 @@ export const useDashboardPersistence = (userId?: string, viewMode?: ViewMode, wi
         throw error;
       }
       
-      if (!data || !data.dashboard_config) {
+      if (!data) {
         return null;
       }
       
       return {
-        widgets: data.dashboard_config.widgets as WidgetId[],
-        viewMode: data.dashboard_config.viewMode as ViewMode,
-        customLayout: data.dashboard_config.customLayout as WidgetId[]
+        widgets: data.custom_layout as WidgetId[], // Use the custom_layout as widgets
+        viewMode: data.view_mode as ViewMode,
+        customLayout: data.custom_layout as WidgetId[],
+        collapsedWidgets: data.collapsed_widgets as WidgetId[]
       };
     } catch (error: any) {
       console.warn('Error loading dashboard settings:', error);

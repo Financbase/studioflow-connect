@@ -7,33 +7,31 @@ import { WidgetId } from '../types';
 
 // Maps widget IDs to human-readable names
 export const widgetNames: Record<WidgetId, string> = {
-  'analytics': 'Analytics Dashboard',
-  'performance': 'Performance Metrics',
+  'system': 'System Monitor',
   'audio': 'Audio Control Panel',
-  'library': 'Audio Library',
-  'recommendations': 'Recommendations',
+  'ai': 'AI Tools',
+  'vm': 'Virtual Machine',
+  'daw': 'DAW Integration',
   'connect': 'StudioFlow Connect',
-  'marketplace': 'Marketplace',
-  'monitor': 'System Monitor'
+  'marketplace': 'Marketplace'
 };
 
 // Default widget ordering for new users
 export const defaultWidgetOrder: WidgetId[] = [
-  'analytics',
-  'performance',
+  'system',
   'audio',
-  'library',
-  'recommendations',
+  'ai',
+  'vm',
+  'daw',
   'connect',
-  'marketplace',
-  'monitor'
+  'marketplace'
 ];
 
 // Get widgets available for the user's pricing tier
 export const getAvailableWidgets = (pricingTier: string): WidgetId[] => {
-  const basicWidgets: WidgetId[] = ['analytics', 'audio', 'library'];
-  const proWidgets: WidgetId[] = ['recommendations', 'connect'];
-  const premiumWidgets: WidgetId[] = ['marketplace', 'monitor', 'performance'];
+  const basicWidgets: WidgetId[] = ['audio', 'connect'];
+  const proWidgets: WidgetId[] = ['ai', 'daw'];
+  const premiumWidgets: WidgetId[] = ['marketplace', 'system', 'vm'];
   
   switch (pricingTier) {
     case 'free':
@@ -55,14 +53,13 @@ export const isWidgetAvailable = (widgetId: WidgetId, pricingTier: string): bool
 // Get widget details including name and tier requirements
 export const getWidgetDetails = (widgetId: WidgetId): { name: string; minTier: string } => {
   const widgetTiers: Record<WidgetId, string> = {
-    'analytics': 'free',
+    'system': 'premium',
     'audio': 'free',
-    'library': 'free',
-    'recommendations': 'pro',
-    'connect': 'pro',
-    'marketplace': 'premium',
-    'monitor': 'premium',
-    'performance': 'premium'
+    'ai': 'pro',
+    'vm': 'premium',
+    'daw': 'pro',
+    'connect': 'free',
+    'marketplace': 'premium'
   };
   
   return {
