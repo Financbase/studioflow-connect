@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -7,9 +6,9 @@ import { Menu, Shield, LogOut, TicketPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import PlanSwitcher from "@/components/PlanSwitcher";
-import CustomLayoutEditor from "@/components/CustomLayoutEditor";
+import { CustomLayoutEditor } from "@/components/custom-layout";
 import { UserProfile } from "@/types/supabase";
-import { PricingTier } from "@/contexts/DashboardContext";
+import { PricingTier } from "@/contexts/dashboard/types";
 
 interface MobileMenuProps {
   isOpen: boolean;
