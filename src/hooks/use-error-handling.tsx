@@ -1,6 +1,7 @@
 
 import { useState, useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 interface ErrorOptions {
   title?: string;
@@ -45,11 +46,16 @@ export const useErrorHandling = () => {
         title,
         description: errorMessage,
         variant: toastVariant,
-        action: retry ? {
-          altText: "Retry operation",
-          onClick: () => retryOperation(retry),
-          className: "retry-action"
-        } : undefined
+        action: retry ? (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => retryOperation(retry)}
+            className="retry-action"
+          >
+            Retry
+          </Button>
+        ) : undefined
       });
     }
     
