@@ -19,12 +19,11 @@ export interface FAQAdvancedViewProps {
 }
 
 export interface FAQContentProps {
-  faqs: FAQItem[];
   filteredFAQs: FAQItem[];
-  activeFAQ: string | null;
-  setActiveFAQ: (id: string | null) => void;
-  isSearching: boolean;
   searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  handleFaqClick: (question: string) => void;
+  t: (key: string) => string;
 }
 
 export interface FAQSearchProps {
@@ -32,6 +31,7 @@ export interface FAQSearchProps {
   setSearchQuery: (query: string) => void;
   resultsCount: number;
   isSearching: boolean;
+  onSearch: (e: React.FormEvent) => void;
 }
 
 export interface FAQCategoriesProps {
@@ -39,12 +39,16 @@ export interface FAQCategoriesProps {
   activeCategory: string;
   setActiveCategory: (category: string) => void;
   categoryCounts: Record<string, number>;
+  categoryCount?: { category: string; count: number }[];
+  getCategoryIcon?: (category: string) => ReactNode;
 }
 
 export interface FAQSectionProps {
   title?: string;
   subtitle?: string;
-  faqs: FAQItem[];
+  faqs?: FAQItem[];
   showAdvancedView?: boolean;
   faqType?: FAQType;
+  searchQuery?: string;
+  setSearchQuery?: (query: string) => void;
 }

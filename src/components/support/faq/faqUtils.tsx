@@ -1,6 +1,34 @@
 
+import { Book, HelpCircle, Settings, Music, Activity, Users, Lock, CreditCard, FileQuestion, MessagesSquare } from "lucide-react";
 import { FAQItem, FAQType } from "./types";
 import { getFAQsByType, getCategoryCounts, getAllCategories } from "@/data/faqsIndex";
+import React from "react";
+
+/**
+ * Get icon for FAQ category
+ */
+export const getCategoryIcon = (category: string) => {
+  const icons: Record<string, React.ReactNode> = {
+    account: <Users className="h-4 w-4" />,
+    billing: <CreditCard className="h-4 w-4" />,
+    security: <Lock className="h-4 w-4" />,
+    help: <HelpCircle className="h-4 w-4" />,
+    technical: <Settings className="h-4 w-4" />,
+    installation: <Settings className="h-4 w-4" />,
+    compatibility: <Activity className="h-4 w-4" />,
+    performance: <Activity className="h-4 w-4" />,
+    troubleshooting: <FileQuestion className="h-4 w-4" />,
+    updates: <Activity className="h-4 w-4" />,
+    mixing: <Music className="h-4 w-4" />,
+    mastering: <Music className="h-4 w-4" />,
+    production: <Music className="h-4 w-4" />,
+    all: <MessagesSquare className="h-4 w-4" />,
+  };
+
+  const lowerCaseCategory = category.toLowerCase();
+  
+  return icons[lowerCaseCategory] || <Book className="h-4 w-4" />;
+};
 
 /**
  * Search FAQs based on a query string
@@ -57,5 +85,6 @@ export default {
   filterFAQsByCategory,
   getCategories,
   countFAQsPerCategory,
-  getFAQs
+  getFAQs,
+  getCategoryIcon
 };

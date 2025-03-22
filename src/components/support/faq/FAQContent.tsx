@@ -8,7 +8,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { FAQContentProps } from "./types";
 
 const FAQContent = ({ 
-  filteredFaqs, 
+  filteredFAQs, 
   searchQuery, 
   setSearchQuery, 
   handleFaqClick,
@@ -16,7 +16,7 @@ const FAQContent = ({
 }: FAQContentProps) => {
   return (
     <TabsContent value="all" className="pt-2">
-      {filteredFaqs.length === 0 ? (
+      {filteredFAQs.length === 0 ? (
         <div className="text-center py-8">
           <Info className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
           <p className="text-muted-foreground">{t("kb.no_results")} "{searchQuery}"</p>
@@ -26,7 +26,7 @@ const FAQContent = ({
         </div>
       ) : (
         <Accordion type="single" collapsible className="w-full">
-          {filteredFaqs.map((faq, index) => (
+          {filteredFAQs.map((faq, index) => (
             <AccordionItem key={index} value={`faq-${index}`}>
               <AccordionTrigger 
                 className="text-left"

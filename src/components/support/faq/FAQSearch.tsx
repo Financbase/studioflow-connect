@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/language";
 import { FAQSearchProps } from "./types";
 
-const FAQSearch = ({ searchQuery, setSearchQuery, onSearch }: FAQSearchProps) => {
+const FAQSearch = ({ searchQuery, setSearchQuery, onSearch, resultsCount, isSearching }: FAQSearchProps) => {
   const { t } = useLanguage();
   
   return (

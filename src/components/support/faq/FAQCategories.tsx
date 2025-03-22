@@ -9,6 +9,7 @@ const FAQCategories = ({
   categories,
   activeCategory,
   setActiveCategory,
+  categoryCounts,
   categoryCount,
   getCategoryIcon
 }: FAQCategoriesProps) => {
@@ -20,16 +21,29 @@ const FAQCategories = ({
     >
       <ScrollArea className="w-full pb-2">
         <TabsList className="inline-flex w-full justify-start h-auto p-1">
-          {categoryCount.map(({category, count}) => (
+          {categoryCount ? categoryCount.map(({category, count}) => (
             <TabsTrigger 
               key={category} 
               value={category}
               className="flex items-center gap-1 capitalize"
             >
-              {getCategoryIcon(category)}
+              {getCategoryIcon && getCategoryIcon(category)}
               {category}
               <Badge variant="outline" className="ml-1 h-5 text-xs">
                 {count}
+              </Badge>
+            </TabsTrigger>
+          )) : 
+          categories.map(category => (
+            <TabsTrigger 
+              key={category} 
+              value={category}
+              className="flex items-center gap-1 capitalize"
+            >
+              {getCategoryIcon && getCategoryIcon(category)}
+              {category}
+              <Badge variant="outline" className="ml-1 h-5 text-xs">
+                {categoryCounts[category] || 0}
               </Badge>
             </TabsTrigger>
           ))}

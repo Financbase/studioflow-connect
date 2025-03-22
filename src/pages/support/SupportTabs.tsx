@@ -119,7 +119,8 @@ const SupportTabs: React.FC<SupportTabsProps> = ({ className }) => {
       <TabsContent value="faq">
         <FAQSection 
           searchQuery={searchQuery} 
-          setSearchQuery={setSearchQuery} 
+          setSearchQuery={setSearchQuery}
+          faqType="general" 
         />
       </TabsContent>
       

@@ -5,9 +5,10 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/language";
-import { faqs } from "@/data/faqs";
-import { musicProductionFAQs } from "@/data/musicProductionFAQs";
-import { FAQ, FAQSectionProps } from "./types";
+import generalFAQs from "@/data/faqs";
+import musicProductionFAQs from "@/data/musicProductionFAQs";
+import technicalFAQs from "@/data/technicalFAQs";
+import { FAQItem, FAQSectionProps } from "./types";
 import FAQSearch from "./FAQSearch";
 import FAQCategories from "./FAQCategories";
 import FAQContent from "./FAQContent";
@@ -15,20 +16,48 @@ import FAQAdvancedView from "./FAQAdvancedView";
 import { getCategoryIcon } from "./faqUtils";
 
 const FAQSection = ({ 
-  searchQuery = "", 
-  setSearchQuery = () => {}, 
-  faqType = 'general' 
+  title,
+  subtitle,
+  faqs,
+  showAdvancedView = false,
+  faqType = 'general',
+  searchQuery: initialSearchQuery = "", 
+  setSearchQuery: externalSetSearchQuery
 }: FAQSectionProps) => {
   const { t, language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [faqData, setFaqData] = useState<FAQ[]>(faqType === 'musicProduction' ? musicProductionFAQs : faqs);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [faqData, setFaqData] = useState<FAQItem[]>(
+    faqType === 'musicProduction' ? musicProductionFAQs : 
+    faqType === 'technical' ? technicalFAQs : 
+    generalFAQs
+  );
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [showAdvanced, setShowAdvanced] = useState(showAdvancedView);
   const [lastSearched, setLastSearched] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<string[]>([]);
   
+  // Update search query state when prop changes
+  useEffect(() => {
+    setSearchQuery(initialSearchQuery);
+  }, [initialSearchQuery]);
+
+  // Sync internal state with external state if provided
+  const handleSearchQueryChange = (query: string) => {
+    setSearchQuery(query);
+    if (externalSetSearchQuery) {
+      externalSetSearchQuery(query);
+    }
+  };
+  
   // Update FAQ data when faqType changes
   useEffect(() => {
-    setFaqData(faqType === 'musicProduction' ? musicProductionFAQs : faqs);
+    if (faqType === 'musicProduction') {
+      setFaqData(musicProductionFAQs);
+    } else if (faqType === 'technical') {
+      setFaqData(technicalFAQs);
+    } else {
+      setFaqData(generalFAQs);
+    }
     setActiveCategory("all");
   }, [faqType]);
   
@@ -37,7 +66,7 @@ const FAQSection = ({
     return ["all", ...uniqueCategories];
   }, [faqData]);
   
-  const filteredFaqs = useMemo(() => {
+  const filteredFAQs = useMemo(() => {
     return faqData.filter(faq => {
       const matchesSearch = 
         faq.question.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -78,11 +107,11 @@ const FAQSection = ({
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
-          <CardTitle>{faqType === 'musicProduction' ? t("kb.music_production") : t("kb.title")}</CardTitle>
+          <CardTitle>{title || (faqType === 'musicProduction' ? t("kb.music_production") : t("kb.title"))}</CardTitle>
           <CardDescription>
-            {faqType === 'musicProduction' 
+            {subtitle || (faqType === 'musicProduction' 
               ? t("kb.expert_tips") 
-              : t("kb.guides")}
+              : t("kb.guides"))}
           </CardDescription>
         </div>
         
@@ -99,15 +128,17 @@ const FAQSection = ({
       <CardContent className="space-y-4">
         <FAQSearch 
           searchQuery={searchQuery} 
-          setSearchQuery={setSearchQuery} 
-          onSearch={handleSearch} 
+          setSearchQuery={handleSearchQueryChange} 
+          onSearch={handleSearch}
+          resultsCount={filteredFAQs.length}
+          isSearching={searchQuery.length > 0}
         />
         
         {showAdvanced && (
           <FAQAdvancedView 
             lastSearched={lastSearched}
             viewHistory={viewHistory}
-            setSearchQuery={setSearchQuery}
+            setSearchQuery={handleSearchQueryChange}
             faqType={faqType}
           />
         )}
@@ -116,15 +147,16 @@ const FAQSection = ({
           categories={categories}
           activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
+          categoryCounts={{}}
           categoryCount={categoryCount}
           getCategoryIcon={getCategoryIcon}
         />
 
         <Tabs value={activeCategory}>
           <FAQContent 
-            filteredFaqs={filteredFaqs}
+            filteredFAQs={filteredFAQs}
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSearchQuery={handleSearchQueryChange}
             handleFaqClick={handleFaqClick}
             t={t}
           />
@@ -132,7 +164,7 @@ const FAQSection = ({
       </CardContent>
       <CardFooter className="pt-0 border-t flex justify-between">
         <div className="text-xs text-muted-foreground">
-          {filteredFaqs.length} {t("kb.results_found")}
+          {filteredFAQs.length} {t("kb.results_found")}
         </div>
         <Button variant="ghost" size="sm" className="gap-1 text-xs">
           <ChevronDown className="h-3 w-3" />
