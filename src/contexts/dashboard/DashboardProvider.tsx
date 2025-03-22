@@ -32,7 +32,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating } = usePricingTier(user, profile);
   const { viewMode, setViewMode } = useViewMode();
   const { widgets, addWidget, removeWidget, moveWidget, customLayout, setCustomLayout, resetWidgets } = useWidgets(viewMode, hasFeatureAccess);
-  const { saveDashboard, resetDashboard } = useDashboardPersistence(user, viewMode, widgets, customLayout);
+  const { saveDashboard, resetDashboard } = useDashboardPersistence(user?.id || '', viewMode, widgets, customLayout);
   
   // Console log to debug auth status
   useEffect(() => {
