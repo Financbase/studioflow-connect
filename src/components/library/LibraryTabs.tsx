@@ -1,102 +1,37 @@
+
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AudioFileList from "./AudioFileList";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import LibraryNavTabs from "@/components/library/LibraryNavTabs";
+import AudioLibraryTab from "@/components/audio/AudioLibraryTab";
+import AudioAnalysisTab from "@/components/audio/AudioAnalysisTab";
 import ContentPlaceholder from "./ContentPlaceholder";
-import RecentlyAdded from "./RecentlyAdded";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
-import { Skeleton } from "@/components/ui/skeleton";
-import { AudioFile } from "./types";
 
 interface LibraryTabsProps {
   activeTab: string;
-  setActiveTab: (value: string) => void;
-  viewMode: "grid" | "list";
-  sortBy: "date" | "name" | "size";
-  filteredSamples: AudioFile[];
-  isLoading?: boolean;
+  onTabChange: (tab: string) => void;
 }
 
-const LibraryTabs = ({ 
-  activeTab, 
-  setActiveTab, 
-  viewMode,
-  sortBy,
-  filteredSamples,
-  isLoading = false
-}: LibraryTabsProps) => {
-  const { t } = useLanguage();
-  
-  // Sort samples based on the selected sort option
-  const sortedSamples = React.useMemo(() => {
-    return [...filteredSamples].sort((a, b) => {
-      if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
-      } else if (sortBy === "size") {
-        // Convert size string to number for comparison
-        const aSize = parseFloat(a.size);
-        const bSize = parseFloat(b.size);
-        return bSize - aSize;
-      } else {
-        // Default sort by date (newest first)
-        if (a.created_at && b.created_at) {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        }
-        return 0;
-      }
-    });
-  }, [filteredSamples, sortBy]);
-  
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-[40px] w-full" />
-        <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" : "space-y-2"}>
-          {Array(8).fill(0).map((_, i) => (
-            viewMode === "grid" ? (
-              <Skeleton key={i} className="aspect-square" />
-            ) : (
-              <Skeleton key={i} className="h-[60px] w-full" />
-            )
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  const categoryContent = (category: string) => {
-    if (category === "all") {
-      return sortedSamples;
-    }
-    
-    // Filter based on category (without the "s" at the end)
-    const typeFilter = category.slice(0, -1).toLowerCase();
-    return sortedSamples.filter(file => 
-      file.type.toLowerCase() === typeFilter
-    );
-  };
-
+const LibraryTabs: React.FC<LibraryTabsProps> = ({ activeTab, onTabChange }) => {
   return (
-    <div className="space-y-6">
-      <div className="min-h-[300px]">
-        <AudioFileList 
-          files={categoryContent(activeTab)} 
-          viewMode={viewMode}
-          emptyMessage={
-            <ContentPlaceholder 
-              title={t(`library.empty.${activeTab}.title`)}
-              description={t(`library.empty.${activeTab}.description`)}
-            />
-          }
-        />
-      </div>
+    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
+      <LibraryNavTabs activeTab={activeTab} onTabChange={onTabChange} />
       
-      {sortedSamples.length > 0 && (
-        <RecentlyAdded 
-          files={sortedSamples.slice(0, 5)} 
-          viewMode={viewMode} 
-        />
-      )}
-    </div>
+      <TabsContent value="all">
+        <AudioLibraryTab filterType="all" />
+      </TabsContent>
+      
+      <TabsContent value="samples">
+        <AudioLibraryTab filterType="sample" />
+      </TabsContent>
+      
+      <TabsContent value="loops">
+        <AudioLibraryTab filterType="loop" />
+      </TabsContent>
+      
+      <TabsContent value="vocals">
+        <AudioLibraryTab filterType="vocal" />
+      </TabsContent>
+    </Tabs>
   );
 };
 

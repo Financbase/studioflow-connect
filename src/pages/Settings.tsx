@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import { TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import GeneralSettings from "@/components/settings/GeneralSettings";
 import AppearanceSettings from "@/components/settings/AppearanceSettings";
 import NotificationSettings from "@/components/settings/NotificationSettings";
@@ -28,13 +28,29 @@ const Settings = () => {
           </div>
 
           <div className="space-y-4">
-            <SettingsNavTabs activeTab={activeTab} onTabChange={setActiveTab} />
-            
-            {activeTab === "general" && <GeneralSettings />}
-            {activeTab === "appearance" && <AppearanceSettings />}
-            {activeTab === "notifications" && <NotificationSettings />}
-            {activeTab === "privacy" && <PrivacySettings />}
-            {activeTab === "subscription" && <SubscriptionSettings />}
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <SettingsNavTabs activeTab={activeTab} onTabChange={setActiveTab} />
+              
+              <TabsContent value="general">
+                <GeneralSettings />
+              </TabsContent>
+              
+              <TabsContent value="appearance">
+                <AppearanceSettings />
+              </TabsContent>
+              
+              <TabsContent value="notifications">
+                <NotificationSettings />
+              </TabsContent>
+              
+              <TabsContent value="privacy">
+                <PrivacySettings />
+              </TabsContent>
+              
+              <TabsContent value="subscription">
+                <SubscriptionSettings />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </main>

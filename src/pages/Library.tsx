@@ -1,53 +1,35 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import StoragePanel from "@/components/library/StoragePanel";
 import LibraryHeader from "@/components/library/LibraryHeader";
 import LibraryMainContent from "@/components/library/LibraryMainContent";
-import { useLibrary } from "@/hooks/use-library";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const Library = () => {
-  const {
-    activeTab,
-    setActiveTab,
-    searchQuery,
-    viewMode,
-    setViewMode,
-    sortBy,
-    setSortBy,
-    isLoading,
-    filteredAudioFiles,
-    handleSearchChange
-  } = useLibrary();
+  const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   return (
     <SidebarLayout>
       <Header />
-      
-      <main className="flex-1 container mx-auto p-4 md:p-6 lg:p-8 bg-background animate-fade-in">
-        <div className="space-y-6">
-          <LibraryHeader />
+      <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <LibraryHeader 
+            searchQuery={searchQuery} 
+            onSearchChange={setSearchQuery}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
           
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <LibraryMainContent
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-              filteredSamples={filteredAudioFiles}
-              isLoading={isLoading}
-            />
-            
-            <div className="space-y-6">
-              <StoragePanel />
-            </div>
-          </div>
+          <LibraryMainContent 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            searchQuery={searchQuery}
+            viewMode={viewMode}
+          />
         </div>
       </main>
     </SidebarLayout>
