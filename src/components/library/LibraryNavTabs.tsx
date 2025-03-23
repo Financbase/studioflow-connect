@@ -1,8 +1,8 @@
 
 import React from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 
 interface LibraryNavTabsProps {
   activeTab: string;
@@ -17,25 +17,23 @@ const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
   const { t } = useLanguage();
 
   return (
-    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList 
-        className={`${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
-        aria-label="Library Navigation Tabs"
-      >
-        <TabsTrigger value="all">
-          {t("library.tabs.all")}
-        </TabsTrigger>
-        <TabsTrigger value="samples">
-          {t("library.tabs.samples")}
-        </TabsTrigger>
-        <TabsTrigger value="loops">
-          {t("library.tabs.loops")}
-        </TabsTrigger>
-        <TabsTrigger value="vocals">
-          {t("library.tabs.vocals")}
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
+    <TabsList 
+      className={`${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
+      aria-label="Library Navigation Tabs"
+    >
+      <TabsTrigger value="all" onClick={() => onTabChange("all")}>
+        {t("library.tabs.all")}
+      </TabsTrigger>
+      <TabsTrigger value="samples" onClick={() => onTabChange("samples")}>
+        {t("library.tabs.samples")}
+      </TabsTrigger>
+      <TabsTrigger value="loops" onClick={() => onTabChange("loops")}>
+        {t("library.tabs.loops")}
+      </TabsTrigger>
+      <TabsTrigger value="vocals" onClick={() => onTabChange("vocals")}>
+        {t("library.tabs.vocals")}
+      </TabsTrigger>
+    </TabsList>
   );
 };
 

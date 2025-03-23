@@ -9,6 +9,7 @@ import settingsTranslations from './settings';
 import navigationTranslations from './navigation';
 import userTranslations from './user';
 import sidebarTranslations from './sidebar';
+import documentationTranslations from './documentation';
 
 const translations = {
   ...categoryTranslations,
@@ -20,7 +21,8 @@ const translations = {
   ...settingsTranslations,
   ...navigationTranslations,
   ...userTranslations,
-  ...sidebarTranslations
+  ...sidebarTranslations,
+  ...documentationTranslations
 };
 
 export { languageNames };

@@ -1,6 +1,6 @@
 
 import React from "react";
-import LibraryNavTabs from "./LibraryNavTabs";
+import { Tabs } from "@/components/ui/tabs";
 import ViewModeToggle from "./ViewModeToggle";
 import SearchAndFilter from "./SearchAndFilter";
 import LibraryTabs from "./LibraryTabs";
@@ -42,10 +42,18 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
   return (
     <div className="lg:col-span-3 space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <LibraryNavTabs 
-          activeTab={activeTab} 
-          onTabChange={handleTabChange} 
-        />
+        <div className="w-full sm:w-auto">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+            <LibraryTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              viewMode={viewMode}
+              sortBy={sortBy}
+              filteredSamples={filteredSamples}
+              isLoading={isLoading}
+            />
+          </Tabs>
+        </div>
         
         <ViewModeToggle 
           viewMode={viewMode} 
@@ -58,15 +66,6 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
         onSearchChange={onSearchChange}
         sortBy={sortBy}
         onSortChange={onSortChange}
-      />
-      
-      <LibraryTabs
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        viewMode={viewMode}
-        sortBy={sortBy}
-        filteredSamples={filteredSamples}
-        isLoading={isLoading}
       />
     </div>
   );

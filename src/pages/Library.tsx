@@ -1,10 +1,10 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
 import LibraryHeader from "@/components/library/LibraryHeader";
 import LibraryMainContent from "@/components/library/LibraryMainContent";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 import { useLibrary } from "@/hooks/use-library";
 
 const Library = () => {

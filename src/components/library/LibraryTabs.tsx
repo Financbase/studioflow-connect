@@ -1,9 +1,10 @@
 
 import React from "react";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
 import LibraryNavTabs from "@/components/library/LibraryNavTabs";
 import AudioLibraryTab from "@/components/audio/AudioLibraryTab";
 import { AudioFile } from "@/components/library/types";
+import { useLanguage } from "@/contexts/language";
 
 interface LibraryTabsProps {
   activeTab: string;
@@ -22,26 +23,28 @@ const LibraryTabs: React.FC<LibraryTabsProps> = ({
   filteredSamples,
   isLoading
 }) => {
+  const { t } = useLanguage();
+  
   return (
-    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
+    <>
       <LibraryNavTabs activeTab={activeTab} onTabChange={onTabChange} />
       
-      <TabsContent value="all">
+      {activeTab === "all" && (
         <AudioLibraryTab filterType="all" />
-      </TabsContent>
+      )}
       
-      <TabsContent value="samples">
+      {activeTab === "samples" && (
         <AudioLibraryTab filterType="sample" />
-      </TabsContent>
+      )}
       
-      <TabsContent value="loops">
+      {activeTab === "loops" && (
         <AudioLibraryTab filterType="loop" />
-      </TabsContent>
+      )}
       
-      <TabsContent value="vocals">
+      {activeTab === "vocals" && (
         <AudioLibraryTab filterType="vocal" />
-      </TabsContent>
-    </Tabs>
+      )}
+    </>
   );
 };
 
