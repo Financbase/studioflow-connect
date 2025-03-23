@@ -206,6 +206,42 @@ const designTranslations = {
     ru: "Скачать JSON",
     pt: "Baixar JSON",
     ar: "تحميل JSON"
+  },
+  "settings.appearance.tabs.themes": {
+    en: "Themes",
+    es: "Temas",
+    fr: "Thèmes",
+    de: "Themen",
+    sv: "Teman",
+    ja: "テーマ",
+    zh: "主题",
+    ru: "Темы",
+    pt: "Temas",
+    ar: "السمات"
+  },
+  "settings.appearance.tabs.palettes": {
+    en: "Color Palettes",
+    es: "Paletas de Colores",
+    fr: "Palettes de Couleurs",
+    de: "Farbpaletten",
+    sv: "Färgpaletter",
+    ja: "カラーパレット",
+    zh: "调色板",
+    ru: "Цветовые Палитры",
+    pt: "Paletas de Cores",
+    ar: "لوحات الألوان"
+  },
+  "settings.appearance.tabs.tokens": {
+    en: "Design Tokens",
+    es: "Tokens de Diseño",
+    fr: "Jetons de Design",
+    de: "Design-Tokens",
+    sv: "Design Tokens",
+    ja: "デザイントークン",
+    zh: "设计令牌",
+    ru: "Токены Дизайна",
+    pt: "Tokens de Design",
+    ar: "رموز التصميم"
   }
 };
 

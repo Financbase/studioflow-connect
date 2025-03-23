@@ -14,9 +14,9 @@ const AppearanceSettings: React.FC = () => {
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid grid-cols-3 mb-6">
-          <TabsTrigger value="themes">{t("settings.appearance.tabs.themes") || "Themes"}</TabsTrigger>
-          <TabsTrigger value="palettes">{t("settings.appearance.tabs.palettes") || "Color Palettes"}</TabsTrigger>
-          <TabsTrigger value="tokens">{t("settings.appearance.tabs.tokens") || "Design Tokens"}</TabsTrigger>
+          <TabsTrigger value="themes">{t("settings.appearance.tabs.themes")}</TabsTrigger>
+          <TabsTrigger value="palettes">{t("settings.appearance.tabs.palettes")}</TabsTrigger>
+          <TabsTrigger value="tokens">{t("settings.appearance.tabs.tokens")}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="themes" className="space-y-6">

@@ -8,27 +8,30 @@ import AppearanceSettings from "@/components/settings/AppearanceSettings";
 import NotificationSettings from "@/components/settings/NotificationSettings";
 import PrivacySettings from "@/components/settings/PrivacySettings";
 import SubscriptionSettings from "@/components/settings/SubscriptionSettings";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const Settings = () => {
+  const { t } = useLanguage();
+
   return (
     <SidebarLayout>
       <Header />
       <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
         <div className="max-w-5xl mx-auto space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">Settings</h1>
+            <h1 className="text-3xl font-bold">{t("settings.title", "Settings")}</h1>
             <p className="text-muted-foreground">
-              Manage your account settings and preferences
+              {t("settings.description", "Manage your account settings and preferences")}
             </p>
           </div>
 
           <Tabs defaultValue="general" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="general">General</TabsTrigger>
-              <TabsTrigger value="appearance">Appearance</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
-              <TabsTrigger value="privacy">Privacy</TabsTrigger>
-              <TabsTrigger value="subscription">Subscription</TabsTrigger>
+              <TabsTrigger value="general">{t("settings.tabs.general", "General")}</TabsTrigger>
+              <TabsTrigger value="appearance">{t("settings.tabs.appearance", "Appearance")}</TabsTrigger>
+              <TabsTrigger value="notifications">{t("settings.tabs.notifications", "Notifications")}</TabsTrigger>
+              <TabsTrigger value="privacy">{t("settings.tabs.privacy", "Privacy")}</TabsTrigger>
+              <TabsTrigger value="subscription">{t("settings.tabs.subscription", "Subscription")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="general" className="space-y-4">
