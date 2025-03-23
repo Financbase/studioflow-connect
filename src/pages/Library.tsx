@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Upload, GridIcon, ListIcon, Tabs, TabsContent, TabsList, TabsTrigger } from "lucide-react";
+import { Upload, GridIcon, ListIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/hooks/use-toast";
@@ -12,7 +12,6 @@ import SearchAndFilter from "@/components/library/SearchAndFilter";
 import LibraryTabs from "@/components/library/LibraryTabs";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 
-// Define AudioFile interface to match what LibraryTabs expects
 interface AudioFile {
   name: string;
   size: string;
@@ -34,7 +33,6 @@ const Library = () => {
   const [sortBy, setSortBy] = useState<"date" | "name" | "size">("date");
   const [isLoading, setIsLoading] = useState(false);
   
-  // Sample data (in a real app, this would come from an API)
   const sampleAudioFiles: AudioFile[] = [
     {
       name: "Deep Bass Loop.wav",
@@ -72,10 +70,8 @@ const Library = () => {
   
   const [audioFiles, setAudioFiles] = useState<AudioFile[]>(sampleAudioFiles);
   
-  // Simulate loading from API
   useEffect(() => {
     setIsLoading(true);
-    // Simulate API call delay
     const timer = setTimeout(() => {
       setAudioFiles(sampleAudioFiles);
       setIsLoading(false);
@@ -84,7 +80,6 @@ const Library = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filter audio files based on search query
   const filteredAudioFiles = audioFiles.filter(file => 
     file.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -98,7 +93,6 @@ const Library = () => {
   };
 
   const handleUpload = () => {
-    // In a real app, this would trigger a file upload dialog
     toast({
       title: t("library.uploadStarted"),
       description: t("library.uploadDescription"),
@@ -124,7 +118,6 @@ const Library = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Main content - 3/4 width on desktop */}
             <div className="lg:col-span-3 space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex space-x-1 p-1 bg-muted rounded-lg">
@@ -200,7 +193,6 @@ const Library = () => {
               />
             </div>
             
-            {/* Sidebar - 1/4 width on desktop */}
             <div className="space-y-6">
               <StoragePanel />
             </div>

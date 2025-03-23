@@ -1,6 +1,6 @@
 
 import React from "react";
-import { MusicOff } from "lucide-react";
+import { Music } from "lucide-react";
 
 interface ContentPlaceholderProps {
   title: string;
@@ -11,7 +11,7 @@ interface ContentPlaceholderProps {
 const ContentPlaceholder: React.FC<ContentPlaceholderProps> = ({
   title,
   description,
-  icon = <MusicOff className="h-12 w-12 text-muted-foreground" />,
+  icon = <Music className="h-12 w-12 text-muted-foreground" />,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
