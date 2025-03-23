@@ -182,6 +182,115 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Вид установлен на",
     pt: "Visualização definida para",
     ar: "تم تعيين العرض إلى"
+  }),
+  // Adding view mode specific translations
+  "view.simple": ensureAllLanguages({
+    en: "Simple",
+    es: "Simple",
+    fr: "Simple",
+    de: "Einfach",
+    sv: "Enkel",
+    ja: "シンプル",
+    zh: "简单",
+    ru: "Простой",
+    pt: "Simples",
+    ar: "بسيط"
+  }),
+  "view.advanced": ensureAllLanguages({
+    en: "Advanced",
+    es: "Avanzado",
+    fr: "Avancé",
+    de: "Erweitert",
+    sv: "Avancerad",
+    ja: "高度",
+    zh: "高级",
+    ru: "Продвинутый",
+    pt: "Avançado",
+    ar: "متقدم"
+  }),
+  "view.custom": ensureAllLanguages({
+    en: "Custom",
+    es: "Personalizado",
+    fr: "Personnalisé",
+    de: "Benutzerdefiniert",
+    sv: "Anpassad",
+    ja: "カスタム",
+    zh: "自定义",
+    ru: "Пользовательский",
+    pt: "Personalizado",
+    ar: "مخصص"
+  }),
+  "label.dashboardview": ensureAllLanguages({
+    en: "Dashboard View",
+    es: "Vista del Panel",
+    fr: "Vue du Tableau de Bord",
+    de: "Dashboard-Ansicht",
+    sv: "Instrumentpanelvy",
+    ja: "ダッシュボード表示",
+    zh: "仪表板视图",
+    ru: "Вид панели управления",
+    pt: "Visualização do Painel",
+    ar: "عرض لوحة المعلومات"
+  }),
+  "tooltips.simpleview": ensureAllLanguages({
+    en: "Simple overview of essential tools",
+    es: "Vista simple de herramientas esenciales",
+    fr: "Aperçu simple des outils essentiels",
+    de: "Einfache Übersicht über wesentliche Tools",
+    sv: "Enkel översikt över väsentliga verktyg",
+    ja: "必須ツールの簡単な概要",
+    zh: "基本工具的简单概览",
+    ru: "Простой обзор основных инструментов",
+    pt: "Visão simples de ferramentas essenciais",
+    ar: "نظرة عامة بسيطة على الأدوات الأساسية"
+  }),
+  "tooltips.advancedview": ensureAllLanguages({
+    en: "Detailed view with all available tools",
+    es: "Vista detallada con todas las herramientas disponibles",
+    fr: "Vue détaillée avec tous les outils disponibles",
+    de: "Detaillierte Ansicht mit allen verfügbaren Tools",
+    sv: "Detaljerad vy med alla tillgängliga verktyg",
+    ja: "利用可能なすべてのツールを含む詳細ビュー",
+    zh: "包含所有可用工具的详细视图",
+    ru: "Подробный вид со всеми доступными инструментами",
+    pt: "Visualização detalhada com todas as ferramentas disponíveis",
+    ar: "عرض مفصل مع جميع الأدوات المتاحة"
+  }),
+  "tooltips.customview": ensureAllLanguages({
+    en: "Customize your dashboard layout",
+    es: "Personaliza el diseño de tu panel",
+    fr: "Personnalisez la disposition de votre tableau de bord",
+    de: "Passen Sie Ihr Dashboard-Layout an",
+    sv: "Anpassa din instrumentpanelslayout",
+    ja: "ダッシュボードレイアウトをカスタマイズする",
+    zh: "自定义仪表板布局",
+    ru: "Настройте макет панели управления",
+    pt: "Personalize o layout do seu painel",
+    ar: "تخصيص تخطيط لوحة المعلومات الخاصة بك"
+  }),
+  "tooltips.proonly": ensureAllLanguages({
+    en: "Available only in Pro plan",
+    es: "Disponible solo en el plan Pro",
+    fr: "Disponible uniquement dans le plan Pro",
+    de: "Nur im Pro-Plan verfügbar",
+    sv: "Endast tillgängligt i Pro-planen",
+    ja: "Proプランでのみ利用可能",
+    zh: "仅在专业版中可用",
+    ru: "Доступно только в плане Pro",
+    pt: "Disponível apenas no plano Pro",
+    ar: "متوفر فقط في خطة برو"
+  }),
+  "tooltips.featureNotAvailable": ensureAllLanguages({
+    en: "Feature not available",
+    es: "Función no disponible",
+    fr: "Fonctionnalité non disponible",
+    de: "Funktion nicht verfügbar",
+    sv: "Funktion inte tillgänglig",
+    ja: "機能は利用できません",
+    zh: "功能不可用",
+    ru: "Функция недоступна",
+    pt: "Recurso não disponível",
+    ar: "الميزة غير متوفرة"
   })
 };
 
