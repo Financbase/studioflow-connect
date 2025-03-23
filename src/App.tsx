@@ -10,6 +10,17 @@ import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
+import {
+  AdminUsers,
+  AdminTickets,
+  AdminSessions,
+  AdminAnalytics,
+  AdminRemote,
+  AdminStats,
+  AdminNotifications,
+  AdminHelp,
+  AdminSettings
+} from "./pages/admin";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Support from "./pages/Support";
@@ -157,12 +168,84 @@ const App = () => {
                         } 
                       />
                       
-                      {/* Admin Route */}
+                      {/* Admin Routes */}
                       <Route 
                         path="/admin" 
                         element={
                           <ProtectedRoute>
                             <AdminDashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/users" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminUsers />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/tickets" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminTickets />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/sessions" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminSessions />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/analytics" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminAnalytics />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/remote" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminRemote />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/stats" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminStats />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/notifications" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminNotifications />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/help" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminHelp />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/admin/settings" 
+                        element={
+                          <ProtectedRoute>
+                            <AdminSettings />
                           </ProtectedRoute>
                         } 
                       />
