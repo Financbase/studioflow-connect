@@ -3,6 +3,9 @@ import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { useUploadProgress } from '@/hooks/use-upload-progress';
+import { useFileValidation } from '@/hooks/use-file-validation';
+import { useUploadError } from '@/hooks/use-upload-error';
 
 export interface FileUploadOptions {
   bucketName: string;
@@ -35,88 +38,53 @@ export function useFileUpload(options: FileUploadOptions) {
     onUploadError
   } = options;
   
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
   const [results, setResults] = useState<UploadResult[]>([]);
+  const { isUploading, uploadProgress, startUpload, updateProgress, completeUpload, resetProgress } = useUploadProgress();
+  const { validateFile, validateFiles } = useFileValidation({ allowedFileTypes, maxFileSize });
+  const { error, handleError, clearError } = useUploadError();
   
   const resetState = useCallback(() => {
-    setIsUploading(false);
-    setUploadProgress({});
+    resetProgress();
     setResults([]);
-  }, []);
-  
-  const validateFile = useCallback((file: File): string | null => {
-    // Check file type
-    if (allowedFileTypes.length > 0) {
-      const isValidType = allowedFileTypes.some(type => {
-        // Handle wildcard file types (e.g., "audio/*")
-        if (type.endsWith('/*')) {
-          const category = type.split('/')[0];
-          return file.type.startsWith(`${category}/`);
-        }
-        return file.type === type;
-      });
-      
-      if (!isValidType) {
-        return `${file.name} is not an accepted file type.`;
-      }
-    }
-    
-    // Check file size
-    if (maxFileSize && file.size > maxFileSize) {
-      return `${file.name} exceeds the maximum file size.`;
-    }
-    
-    return null;
-  }, [allowedFileTypes, maxFileSize]);
+    clearError();
+  }, [resetProgress, clearError]);
   
   const uploadFiles = useCallback(async (files: File[]): Promise<UploadResult[]> => {
     if (files.length === 0) return [];
     
-    setIsUploading(true);
-    const newUploadProgress: Record<string, number> = {};
+    startUpload();
     const uploadResults: UploadResult[] = [];
     
     if (onUploadStart) {
       onUploadStart(files);
     }
     
-    for (const file of files) {
-      // Validate file
+    // Validate all files first
+    const validFiles = validateFiles(files);
+    
+    // Add validation failures to results
+    const invalidFiles = files.filter(file => !validFiles.includes(file));
+    for (const file of invalidFiles) {
       const validationError = validateFile(file);
-      if (validationError) {
-        uploadResults.push({
-          file,
-          success: false,
-          error: validationError
-        });
-        
-        if (onUploadError) {
-          onUploadError(new Error(validationError), file);
-        }
-        
-        continue;
-      }
+      uploadResults.push({
+        file,
+        success: false,
+        error: validationError || 'Validation failed'
+      });
       
+      if (onUploadError && validationError) {
+        onUploadError(new Error(validationError), file);
+      }
+    }
+    
+    // Upload all valid files
+    for (const file of validFiles) {
       // Generate unique file name
       const fileExt = file.name.split('.').pop();
       const fileName = `${uuidv4()}.${fileExt}`;
       const filePath = folderPath ? `${folderPath}/${fileName}` : fileName;
       
       try {
-        // Create an upload event handler that works with Supabase's API
-        const handleProgress = (event: ProgressEvent) => {
-          if (event.lengthComputable) {
-            const progressValue = (event.loaded / event.total) * 100;
-            newUploadProgress[filePath] = progressValue;
-            setUploadProgress({ ...newUploadProgress });
-            
-            if (onUploadProgress) {
-              onUploadProgress(progressValue, file);
-            }
-          }
-        };
-
         // Upload file to Supabase storage
         const { data, error } = await supabase.storage
           .from(bucketName)
@@ -126,8 +94,7 @@ export function useFileUpload(options: FileUploadOptions) {
           });
         
         // Update progress to 100% when complete since Supabase doesn't use onUploadProgress
-        newUploadProgress[filePath] = 100;
-        setUploadProgress({ ...newUploadProgress });
+        updateProgress(filePath, 100);
         if (onUploadProgress) {
           onUploadProgress(100, file);
         }
@@ -157,23 +124,32 @@ export function useFileUpload(options: FileUploadOptions) {
           onUploadError(error, file);
         }
         
-        toast({
-          title: "Upload failed",
-          description: `Could not upload ${file.name}: ${error.message}`,
-          variant: "destructive"
-        });
+        handleError(error, file.name);
       }
     }
     
     setResults(uploadResults);
-    setIsUploading(false);
+    completeUpload();
     
     if (onUploadComplete) {
       onUploadComplete(uploadResults);
     }
     
     return uploadResults;
-  }, [bucketName, folderPath, validateFile, onUploadStart, onUploadProgress, onUploadComplete, onUploadError]);
+  }, [
+    bucketName, 
+    folderPath, 
+    validateFiles, 
+    validateFile, 
+    startUpload, 
+    updateProgress, 
+    completeUpload, 
+    onUploadStart, 
+    onUploadProgress, 
+    onUploadComplete, 
+    onUploadError,
+    handleError
+  ]);
   
   const getUploadUrl = useCallback(async (path: string): Promise<string | null> => {
     try {
