@@ -10,6 +10,7 @@ export const useAudioAnalysis = (audioFile: AudioAsset, audioRef: React.RefObjec
   const [audioSource, setAudioSource] = useState<MediaElementAudioSourceNode | null>(null);
   const [analyzer, setAnalyzer] = useState<AnalyserNode | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [visualizationType, setVisualizationType] = useState<string>("waveform");
   
   const controls = useAudioControls(audioRef);
   
@@ -41,9 +42,10 @@ export const useAudioAnalysis = (audioFile: AudioAsset, audioRef: React.RefObjec
       console.log("Audio context initialized successfully");
     } catch (error) {
       console.error("Failed to initialize audio context:", error);
-      toast.error({
+      toast({
         title: "Audio Error",
-        description: "Could not initialize audio analysis. Please try refreshing the page."
+        description: "Could not initialize audio analysis. Please try refreshing the page.",
+        variant: "destructive"
       });
     }
   };
@@ -97,6 +99,8 @@ export const useAudioAnalysis = (audioFile: AudioAsset, audioRef: React.RefObjec
   return {
     ...controls,
     audioData,
+    visualizationType,
+    setVisualizationType,
     initializeAudioContext,
     cleanupAudioContext,
     audioSource,

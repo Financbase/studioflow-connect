@@ -104,22 +104,33 @@ export function useFileUpload(options: FileUploadOptions) {
       const filePath = folderPath ? `${folderPath}/${fileName}` : fileName;
       
       try {
+        // Create an upload event handler that works with Supabase's API
+        const handleProgress = (event: ProgressEvent) => {
+          if (event.lengthComputable) {
+            const progressValue = (event.loaded / event.total) * 100;
+            newUploadProgress[filePath] = progressValue;
+            setUploadProgress({ ...newUploadProgress });
+            
+            if (onUploadProgress) {
+              onUploadProgress(progressValue, file);
+            }
+          }
+        };
+
         // Upload file to Supabase storage
         const { data, error } = await supabase.storage
           .from(bucketName)
           .upload(filePath, file, {
             cacheControl: '3600',
-            upsert: false,
-            onUploadProgress: (progress) => {
-              const progressValue = (progress.loaded / progress.total) * 100;
-              newUploadProgress[filePath] = progressValue;
-              setUploadProgress({ ...newUploadProgress });
-              
-              if (onUploadProgress) {
-                onUploadProgress(progressValue, file);
-              }
-            }
+            upsert: false
           });
+        
+        // Update progress to 100% when complete since Supabase doesn't use onUploadProgress
+        newUploadProgress[filePath] = 100;
+        setUploadProgress({ ...newUploadProgress });
+        if (onUploadProgress) {
+          onUploadProgress(100, file);
+        }
         
         if (error) {
           throw error;
