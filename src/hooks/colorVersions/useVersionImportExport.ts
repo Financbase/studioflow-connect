@@ -4,10 +4,10 @@ import { toast } from "@/components/ui/use-toast";
 
 export function useVersionImportExport(
   versions: ColorVersion[],
-  persistVersions: (updatedVersions: ColorVersion[]) => void
+  setVersions: (versions: ColorVersion[]) => void
 ) {
   // Export a version as a JSON string
-  const exportVersion = (versionId: string): string | null => {
+  const exportVersionAsString = (versionId: string): string | null => {
     const version = versions.find(v => v.id === versionId);
     
     if (!version) {
@@ -35,7 +35,7 @@ export function useVersionImportExport(
   };
   
   // Import a version from a JSON string
-  const importVersion = (jsonString: string): ColorVersion | null => {
+  const importVersionFromString = (jsonString: string): ColorVersion | null => {
     try {
       const importedData = JSON.parse(jsonString);
       
@@ -61,7 +61,7 @@ export function useVersionImportExport(
       
       // Add to versions list
       const updatedVersions = [...versions, newVersion];
-      persistVersions(updatedVersions);
+      setVersions(updatedVersions);
       
       toast({
         title: "Import Successful",
@@ -71,16 +71,18 @@ export function useVersionImportExport(
       return newVersion;
     } catch (error) {
       toast({
+        variant: "destructive",
         title: "Import Failed",
-        description: "The provided data is not a valid theme version",
-        variant: "destructive"
+        description: "The provided data is not a valid theme version"
       });
       return null;
     }
   };
   
   return {
-    exportVersion,
-    importVersion
+    exportVersionAsString,
+    importVersionFromString,
+    exportVersion: exportVersionAsString,
+    importVersion: importVersionFromString
   };
 }
