@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { WidgetId } from "@/contexts/dashboard/types";
 import { getWidgetIcon, getWidgetLabel, getWidgetDescription } from "./utils";
+import { useLanguage } from "@/contexts/language";
 
 interface WidgetListProps {
   widgets: WidgetId[];
@@ -21,6 +22,8 @@ const WidgetList = ({
   pricingTier,
   onToggleWidget 
 }: WidgetListProps) => {
+  const { t, isInitialized } = useLanguage();
+  
   return (
     <div className="space-y-4">
       {widgets.map((widgetId) => {
@@ -32,14 +35,21 @@ const WidgetList = ({
               <div className="flex-1">
                 <Label htmlFor={`widget-${widgetId}`} className="flex items-center gap-2 text-foreground font-medium">
                   {getWidgetIcon(widgetId)}
-                  {getWidgetLabel(widgetId)}
+                  {getWidgetLabel(widgetId, isInitialized ? t : undefined)}
                   {!hasAccess && (
                     <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">
-                      {pricingTier === 'free' ? 'Premium' : 'Pro'}
+                      {isInitialized 
+                        ? pricingTier === 'free' 
+                          ? t("widgets.premium") 
+                          : t("widgets.pro")
+                        : pricingTier === 'free' ? 'Premium' : 'Pro'
+                      }
                     </span>
                   )}
                 </Label>
-                <p className="text-xs text-muted-foreground pl-6">{getWidgetDescription(widgetId)}</p>
+                <p className="text-xs text-muted-foreground pl-6">
+                  {getWidgetDescription(widgetId, isInitialized ? t : undefined)}
+                </p>
               </div>
               <Switch
                 id={`widget-${widgetId}`}

@@ -9,6 +9,7 @@ export interface LanguageContextType {
   t: (key: string) => string;
   getTranslationObject: () => Record<string, string>;
   translateDynamic: (text: string) => string;
+  isInitialized: boolean;
 }
 
 export interface LanguageProviderProps {

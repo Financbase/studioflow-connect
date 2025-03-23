@@ -17,7 +17,7 @@ const MainDashboardContent = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const { hasFeatureAccess } = useDashboard();
-  const { t } = useLanguage();
+  const { t, isInitialized } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,6 +26,12 @@ const MainDashboardContent = () => {
     
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (isInitialized) {
+      console.log("Language provider initialized in MainDashboardContent");
+    }
+  }, [isInitialized]);
 
   const handleNavigate = (path: string, featureId?: WidgetId) => {
     if (featureId && !hasFeatureAccess(featureId)) {
@@ -46,6 +52,12 @@ const MainDashboardContent = () => {
   const handleViewActivity = () => {
     navigate('/activity');
   };
+
+  // Debug translation access
+  console.log("Dashboard translations available:", 
+    t("dashboard.knowledgeBase"), 
+    t("dashboard.knowledgeBaseDescription")
+  );
 
   return (
     <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>

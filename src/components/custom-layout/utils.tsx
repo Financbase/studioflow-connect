@@ -37,7 +37,19 @@ export const getWidgetIcon = (widgetId: WidgetId) => {
 };
 
 // Get a user-friendly label for each widget
-export const getWidgetLabel = (widgetId: WidgetId) => {
+export const getWidgetLabel = (widgetId: WidgetId, t?: (key: string) => string) => {
+  // Use translations if available
+  if (t) {
+    const translationKey = `widgets.${widgetId}`;
+    const translation = t(translationKey);
+    
+    // If translation exists and isn't just returning the key (fallback behavior)
+    if (translation && translation !== translationKey) {
+      return translation;
+    }
+  }
+  
+  // Fallback to hardcoded English labels
   switch (widgetId) {
     case 'system':
       return 'System Monitor';
@@ -61,7 +73,19 @@ export const getWidgetLabel = (widgetId: WidgetId) => {
 };
 
 // Get a description for each widget
-export const getWidgetDescription = (widgetId: WidgetId) => {
+export const getWidgetDescription = (widgetId: WidgetId, t?: (key: string) => string) => {
+  // Use translations if available
+  if (t) {
+    const translationKey = `widgets.${widgetId}Description`;
+    const translation = t(translationKey);
+    
+    // If translation exists and isn't just returning the key (fallback behavior)
+    if (translation && translation !== translationKey) {
+      return translation;
+    }
+  }
+  
+  // Fallback to hardcoded English descriptions
   switch (widgetId) {
     case 'system':
       return 'Monitor CPU, memory, and disk usage';

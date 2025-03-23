@@ -10,6 +10,7 @@ export const LanguageContext = createContext<LanguageContextType | undefined>(un
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>("en");
+  const [isInitialized, setIsInitialized] = useState(false);
   
   useEffect(() => {
     // Try to get stored language from localStorage
@@ -26,7 +27,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       console.log("Sample translation keys:", 
         Object.keys(translations).filter(key => key.startsWith("dashboard")).slice(0, 5)
       );
+      
+      // Log all dashboard keys for debugging
+      const dashboardKeys = Object.keys(translations).filter(key => key.startsWith("dashboard"));
+      console.log("All dashboard translation keys:", dashboardKeys);
     }
+    
+    setIsInitialized(true);
   }, []);
   
   const setLanguage = (lang: Language) => {
@@ -52,6 +59,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     } else {
       document.documentElement.dir = 'ltr';
     }
+    
+    console.log(`Language changed to ${lang} with ${Object.keys(translations).length} translation keys available`);
   };
   
   // Get translation for a given key
@@ -60,7 +69,15 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       console.warn(`Translation key not found: ${key}`);
       return key;
     }
-    return translations[key][language] || translations[key].en;
+    
+    const result = translations[key][language] || translations[key].en;
+    
+    // Debug log missing translations for current language
+    if (!translations[key][language] && language !== 'en') {
+      console.warn(`Missing ${language} translation for key: ${key}`);
+    }
+    
+    return result;
   };
   
   // Get all translations for current language
@@ -89,7 +106,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     translations,
     t,
     getTranslationObject,
-    translateDynamic
+    translateDynamic,
+    isInitialized
   };
   
   return (

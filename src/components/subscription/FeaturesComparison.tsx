@@ -2,6 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/language";
 
 interface Feature {
   name: string;
@@ -17,13 +18,15 @@ interface FeaturesComparisonProps {
 }
 
 const FeaturesComparison: React.FC<FeaturesComparisonProps> = ({ planFeatures }) => {
+  const { t, isInitialized } = useLanguage();
+  
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Detailed Feature Comparison</CardTitle>
+          <CardTitle>{isInitialized ? t("subscription.featureComparison") : "Detailed Feature Comparison"}</CardTitle>
           <CardDescription>
-            Compare all available features across different subscription plans
+            {isInitialized ? t("subscription.featureComparisonDescription") : "Compare all available features across different subscription plans"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -31,11 +34,11 @@ const FeaturesComparison: React.FC<FeaturesComparisonProps> = ({ planFeatures })
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">Feature</th>
-                  <th className="text-center py-3 px-4">Free</th>
-                  <th className="text-center py-3 px-4">Standard</th>
-                  <th className="text-center py-3 px-4">Pro</th>
-                  <th className="text-center py-3 px-4">Enterprise</th>
+                  <th className="text-left py-3 px-4">{isInitialized ? t("subscription.feature") : "Feature"}</th>
+                  <th className="text-center py-3 px-4">{isInitialized ? t("subscription.free") : "Free"}</th>
+                  <th className="text-center py-3 px-4">{isInitialized ? t("subscription.standard") : "Standard"}</th>
+                  <th className="text-center py-3 px-4">{isInitialized ? t("subscription.pro") : "Pro"}</th>
+                  <th className="text-center py-3 px-4">{isInitialized ? t("subscription.enterprise") : "Enterprise"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -71,39 +74,45 @@ const FeaturesComparison: React.FC<FeaturesComparisonProps> = ({ planFeatures })
 };
 
 const FeatureCategories = () => {
+  const { t, isInitialized } = useLanguage();
+  
+  // Inspired by features from XO, Melody Sauce, and Scaler
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-green-500" />
-            Audio Production Features
+            {isInitialized ? t("features.audioProduction") : "Audio Production Features"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Our platform provides a comprehensive set of tools for audio production, from basic recording to advanced mixing and mastering.
+            {isInitialized 
+              ? t("features.audioProductionDescription") 
+              : "Our platform provides a comprehensive set of tools for audio production, from basic recording to advanced mixing and mastering."
+            }
           </p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Multi-track recording and editing</span>
+              <span>{isInitialized ? t("features.multiTrack") : "Multi-track recording and editing"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Professional mixing console</span>
+              <span>{isInitialized ? t("features.mixingConsole") : "Professional mixing console"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Suite of audio effects and processors</span>
+              <span>{isInitialized ? t("features.audioEffects") : "Suite of audio effects and processors"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>MIDI sequencing and editing</span>
+              <span>{isInitialized ? t("features.midiSequencing") : "MIDI sequencing and editing"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Virtual instrument support</span>
+              <span>{isInitialized ? t("features.virtualInstrument") : "Virtual instrument support"}</span>
             </li>
           </ul>
         </CardContent>
@@ -113,33 +122,36 @@ const FeatureCategories = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-green-500" />
-            AI-Powered Tools
+            {isInitialized ? t("features.aiTools") : "AI-Powered Tools"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Leverage cutting-edge AI technology to enhance your audio production workflow and creativity.
+            {isInitialized
+              ? t("features.aiToolsDescription")
+              : "Leverage cutting-edge AI technology to enhance your audio production workflow and creativity."
+            }
           </p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Intelligent auto-mixing</span>
+              <span>{isInitialized ? t("features.autoMixing") : "Intelligent auto-mixing"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>AI-assisted mastering</span>
+              <span>{isInitialized ? t("features.aiMastering") : "AI-assisted mastering"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Smart instrument tuning</span>
+              <span>{isInitialized ? t("features.instrumentTuning") : "Smart instrument tuning"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Vocal correction and enhancement</span>
+              <span>{isInitialized ? t("features.vocalEnhancement") : "Vocal correction and enhancement"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Creative suggestion engine</span>
+              <span>{isInitialized ? t("features.creativeEngine") : "Creative suggestion engine"}</span>
             </li>
           </ul>
         </CardContent>
@@ -149,33 +161,36 @@ const FeatureCategories = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-green-500" />
-            Creative Wellness
+            {isInitialized ? t("features.creativeWellness") : "Creative Wellness"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Tools and resources to support your mental health and maximize creative productivity.
+            {isInitialized
+              ? t("features.creativeWellnessDescription")
+              : "Tools and resources to support your mental health and maximize creative productivity."
+            }
           </p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Workflow analysis and optimization</span>
+              <span>{isInitialized ? t("features.workflowAnalysis") : "Workflow analysis and optimization"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Creative block assistance</span>
+              <span>{isInitialized ? t("features.creativeBlock") : "Creative block assistance"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Focus and productivity tools</span>
+              <span>{isInitialized ? t("features.focusTools") : "Focus and productivity tools"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Session planning and goal setting</span>
+              <span>{isInitialized ? t("features.sessionPlanning") : "Session planning and goal setting"}</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>Progress tracking and analytics</span>
+              <span>{isInitialized ? t("features.progressTracking") : "Progress tracking and analytics"}</span>
             </li>
           </ul>
         </CardContent>
