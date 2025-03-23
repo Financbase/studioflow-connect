@@ -3,6 +3,18 @@ import { Language } from "../types";
 import { processTranslations } from "../utils";
 
 const headerTranslations = {
+  "header.title": {
+    en: "StudioFlow",
+    es: "StudioFlow",
+    fr: "StudioFlow",
+    de: "StudioFlow",
+    sv: "StudioFlow",
+    ja: "StudioFlow",
+    zh: "StudioFlow",
+    ru: "StudioFlow",
+    pt: "StudioFlow",
+    ar: "StudioFlow"
+  },
   "header.documentation": {
     en: "Documentation",
     es: "Documentación",
@@ -15,29 +27,41 @@ const headerTranslations = {
     pt: "Documentação",
     ar: "التوثيق"
   },
-  "header.need_help": {
-    en: "Need Help?",
-    es: "¿Necesitas Ayuda?",
-    fr: "Besoin d'Aide?",
-    de: "Brauchen Sie Hilfe?",
-    sv: "Behöver du hjälp?",
-    ja: "お手伝いが必要ですか？",
-    zh: "需要帮助吗？",
-    ru: "Нужна помощь?",
-    pt: "Precisa de Ajuda?",
-    ar: "تحتاج مساعدة؟"
+  "header.settings": {
+    en: "Settings",
+    es: "Configuración",
+    fr: "Paramètres",
+    de: "Einstellungen",
+    sv: "Inställningar",
+    ja: "設定",
+    zh: "设置",
+    ru: "Настройки",
+    pt: "Configurações",
+    ar: "الإعدادات"
   },
-  "header.welcome": {
-    en: "Welcome to StudioFlow X",
-    es: "Bienvenido a StudioFlow X",
-    fr: "Bienvenue sur StudioFlow X",
-    de: "Willkommen bei StudioFlow X",
-    sv: "Välkommen till StudioFlow X",
-    ja: "StudioFlow Xへようこそ",
-    zh: "欢迎使用StudioFlow X",
-    ru: "Добро пожаловать в StudioFlow X",
-    pt: "Bem-vindo ao StudioFlow X",
-    ar: "مرحبًا بك في StudioFlow X"
+  "header.profile": {
+    en: "Profile",
+    es: "Perfil",
+    fr: "Profil",
+    de: "Profil",
+    sv: "Profil",
+    ja: "プロフィール",
+    zh: "个人资料",
+    ru: "Профиль",
+    pt: "Perfil",
+    ar: "الملف الشخصي"
+  },
+  "header.zenMode": {
+    en: "Zen Mode",
+    es: "Modo Zen",
+    fr: "Mode Zen",
+    de: "Zen-Modus",
+    sv: "Zen-läge",
+    ja: "ゼンモード",
+    zh: "禅模式",
+    ru: "Режим Дзен",
+    pt: "Modo Zen",
+    ar: "وضع زن"
   }
 };
 

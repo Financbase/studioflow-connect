@@ -1,7 +1,7 @@
 
 import { Language } from "../../types";
+import { processTranslations } from "../../utils";
 
-// Names of languages in their own language
 export const languageNames: Record<Language, Record<Language, string>> = {
   en: {
     en: "English",
@@ -124,3 +124,5 @@ export const languageNames: Record<Language, Record<Language, string>> = {
     ar: "العربية"
   }
 };
+
+export default processTranslations(languageNames);

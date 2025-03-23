@@ -57,6 +57,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
   
   const translateDynamic = (text: string): string => {
+    // This could be enhanced to use a translation service API
+    // or to support interpolation of keys within text
     return text;
   };
   
