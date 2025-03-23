@@ -19,19 +19,19 @@ const Settings = () => {
       <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
         <div className="max-w-5xl mx-auto space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">{t("settings.title", "Settings")}</h1>
+            <h1 className="text-3xl font-bold">{t("settings.title")}</h1>
             <p className="text-muted-foreground">
-              {t("settings.description", "Manage your account settings and preferences")}
+              {t("settings.description")}
             </p>
           </div>
 
           <Tabs defaultValue="general" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="general">{t("settings.tabs.general", "General")}</TabsTrigger>
-              <TabsTrigger value="appearance">{t("settings.tabs.appearance", "Appearance")}</TabsTrigger>
-              <TabsTrigger value="notifications">{t("settings.tabs.notifications", "Notifications")}</TabsTrigger>
-              <TabsTrigger value="privacy">{t("settings.tabs.privacy", "Privacy")}</TabsTrigger>
-              <TabsTrigger value="subscription">{t("settings.tabs.subscription", "Subscription")}</TabsTrigger>
+              <TabsTrigger value="general">{t("settings.tabs.general")}</TabsTrigger>
+              <TabsTrigger value="appearance">{t("settings.tabs.appearance")}</TabsTrigger>
+              <TabsTrigger value="notifications">{t("settings.tabs.notifications")}</TabsTrigger>
+              <TabsTrigger value="privacy">{t("settings.tabs.privacy")}</TabsTrigger>
+              <TabsTrigger value="subscription">{t("settings.tabs.subscription")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="general" className="space-y-4">
