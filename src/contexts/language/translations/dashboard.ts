@@ -183,7 +183,7 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     pt: "Visualização definida para",
     ar: "تم تعيين العرض إلى"
   }),
-  // Adding view mode specific translations
+  // View mode specific translations
   "view.simple": ensureAllLanguages({
     en: "Simple",
     es: "Simple",
@@ -291,6 +291,116 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Функция недоступна",
     pt: "Recurso não disponível",
     ar: "الميزة غير متوفرة"
+  }),
+  // New additions for the knowledge base section
+  "dashboard.knowledgeBase": ensureAllLanguages({
+    en: "Knowledge Base",
+    es: "Base de Conocimiento",
+    fr: "Base de Connaissances",
+    de: "Wissensdatenbank",
+    sv: "Kunskapsbas",
+    ja: "ナレッジベース",
+    zh: "知识库",
+    ru: "База знаний",
+    pt: "Base de Conhecimento",
+    ar: "قاعدة المعرفة"
+  }),
+  "dashboard.knowledgeBaseDescription": ensureAllLanguages({
+    en: "Access music production resources and tutorials",
+    es: "Accede a recursos y tutoriales de producción musical",
+    fr: "Accédez aux ressources et tutoriels de production musicale",
+    de: "Zugriff auf Musikproduktionsressourcen und Tutorials",
+    sv: "Få tillgång till musikproduktionsresurser och handledningar",
+    ja: "音楽制作のリソースとチュートリアルにアクセス",
+    zh: "访问音乐制作资源和教程",
+    ru: "Доступ к ресурсам и урокам по производству музыки",
+    pt: "Acesse recursos e tutoriais de produção musical",
+    ar: "الوصول إلى موارد وبرامج تعليمية لإنتاج الموسيقى"
+  }),
+  "dashboard.exploreKnowledge": ensureAllLanguages({
+    en: "Explore Knowledge",
+    es: "Explorar Conocimiento",
+    fr: "Explorer les Connaissances",
+    de: "Wissen Erkunden",
+    sv: "Utforska Kunskap",
+    ja: "知識を探る",
+    zh: "探索知识",
+    ru: "Исследовать знания",
+    pt: "Explorar Conhecimento",
+    ar: "استكشاف المعرفة"
+  }),
+  "dashboard.studioTechniques": ensureAllLanguages({
+    en: "Studio Techniques",
+    es: "Técnicas de Estudio",
+    fr: "Techniques de Studio",
+    de: "Studio-Techniken",
+    sv: "Studioteknik",
+    ja: "スタジオテクニック",
+    zh: "录音室技术",
+    ru: "Студийные техники",
+    pt: "Técnicas de Estúdio",
+    ar: "تقنيات الاستوديو"
+  }),
+  "dashboard.studioTechniquesDescription": ensureAllLanguages({
+    en: "Recording, mixing, and mastering tutorials",
+    es: "Tutoriales de grabación, mezcla y masterización",
+    fr: "Tutoriels d'enregistrement, de mixage et de mastering",
+    de: "Tutorials für Aufnahme, Mixing und Mastering",
+    sv: "Handledningar för inspelning, mixning och mastering",
+    ja: "レコーディング、ミキシング、マスタリングのチュートリアル",
+    zh: "录音、混音和母带处理教程",
+    ru: "Уроки записи, сведения и мастеринга",
+    pt: "Tutoriais de gravação, mixagem e masterização",
+    ar: "دروس التسجيل والمزج والماسترينغ"
+  }),
+  "dashboard.audioTroubleshooting": ensureAllLanguages({
+    en: "Audio Troubleshooting",
+    es: "Solución de Problemas de Audio",
+    fr: "Dépannage Audio",
+    de: "Audio-Fehlerbehebung",
+    sv: "Felsökning av Ljud",
+    ja: "オーディオトラブルシューティング",
+    zh: "音频故障排除",
+    ru: "Устранение неполадок аудио",
+    pt: "Resolução de Problemas de Áudio",
+    ar: "استكشاف مشكلات الصوت وإصلاحها"
+  }),
+  "dashboard.audioTroubleshootingDescription": ensureAllLanguages({
+    en: "Common issues and solutions",
+    es: "Problemas comunes y soluciones",
+    fr: "Problèmes courants et solutions",
+    de: "Häufige Probleme und Lösungen",
+    sv: "Vanliga problem och lösningar",
+    ja: "一般的な問題と解決策",
+    zh: "常见问题和解决方案",
+    ru: "Распространенные проблемы и решения",
+    pt: "Problemas comuns e soluções",
+    ar: "المشكلات الشائعة والحلول"
+  }),
+  // Toast messages used in MainDashboardContent
+  "toast.premiumFeature": ensureAllLanguages({
+    en: "Premium Feature",
+    es: "Función Premium",
+    fr: "Fonctionnalité Premium",
+    de: "Premium-Funktion",
+    sv: "Premiumfunktion",
+    ja: "プレミアム機能",
+    zh: "高级功能",
+    ru: "Премиум функция",
+    pt: "Recurso Premium",
+    ar: "ميزة متميزة"
+  }),
+  "toast.upgradeRequired": ensureAllLanguages({
+    en: "Upgrade your plan to access this feature",
+    es: "Actualiza tu plan para acceder a esta función",
+    fr: "Mettez à niveau votre forfait pour accéder à cette fonctionnalité",
+    de: "Upgraden Sie Ihren Plan, um auf diese Funktion zuzugreifen",
+    sv: "Uppgradera din plan för att få tillgång till den här funktionen",
+    ja: "この機能にアクセスするにはプランをアップグレードしてください",
+    zh: "升级您的计划以访问此功能",
+    ru: "Обновите свой план, чтобы получить доступ к этой функции",
+    pt: "Atualize seu plano para acessar este recurso",
+    ar: "قم بترقية خطتك للوصول إلى هذه الميزة"
   })
 };
 

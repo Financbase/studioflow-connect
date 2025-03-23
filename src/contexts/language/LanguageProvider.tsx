@@ -20,6 +20,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     
     // Debug output to verify translations are loaded
     console.log("Translation keys loaded:", Object.keys(translations).length);
+    
+    // Print some example keys to check they're properly available
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Sample translation keys:", 
+        Object.keys(translations).filter(key => key.startsWith("dashboard")).slice(0, 5)
+      );
+    }
   }, []);
   
   const setLanguage = (lang: Language) => {
@@ -74,18 +81,19 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     return text;
   };
   
+  // Create the context value
+  const contextValue: LanguageContextType = {
+    language, 
+    currentLanguage: language,
+    setLanguage,
+    translations,
+    t,
+    getTranslationObject,
+    translateDynamic
+  };
+  
   return (
-    <LanguageContext.Provider 
-      value={{ 
-        language, 
-        currentLanguage: language,
-        setLanguage,
-        translations,
-        t,
-        getTranslationObject,
-        translateDynamic
-      }}
-    >
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
