@@ -63,8 +63,16 @@ export const useWidgetVisibility = () => {
     collapsedPercentage: widgets.length > 0 
       ? Math.round((collapsedWidgets.length / widgets.length) * 100) 
       : 0,
-    customizationActive: viewMode === 'custom'
-  }), [widgets, getAllVisibleWidgets, collapsedWidgets, viewMode]);
+    customizationActive: viewMode === 'custom',
+    widgetStatuses: widgets.reduce((acc, widgetId) => {
+      acc[widgetId] = {
+        visible: isWidgetVisible(widgetId),
+        collapsed: isWidgetCollapsed(widgetId),
+        accessible: hasFeatureAccess(widgetId)
+      };
+      return acc;
+    }, {} as Record<string, {visible: boolean, collapsed: boolean, accessible: boolean}>)
+  }), [widgets, getAllVisibleWidgets, collapsedWidgets, viewMode, isWidgetVisible, isWidgetCollapsed, hasFeatureAccess]);
   
   return {
     isWidgetVisible,
