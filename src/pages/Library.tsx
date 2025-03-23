@@ -3,19 +3,16 @@ import React, { useState, useEffect } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Upload, GridIcon, ListIcon } from "lucide-react";
+import { Upload, GridIcon, ListIcon, Tabs, TabsContent, TabsList, TabsTrigger } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/hooks/use-auth";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import StoragePanel from "@/components/library/StoragePanel";
 import SearchAndFilter from "@/components/library/SearchAndFilter";
 import LibraryTabs from "@/components/library/LibraryTabs";
-import { useAudioAssets } from "@/hooks/use-audio-assets";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
-import { AudioAsset } from "@/types/supabase";
 
-// Define the AudioFile interface that's expected by the components
+// Define AudioFile interface to match what LibraryTabs expects
 interface AudioFile {
   name: string;
   size: string;
@@ -29,135 +26,183 @@ interface AudioFile {
 const Library = () => {
   const { themeVariant } = useTheme();
   const { user } = useAuth();
+  const { t } = useLanguage();
+  
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"date" | "name" | "size">("date");
-  const { t } = useLanguage();
+  const [isLoading, setIsLoading] = useState(false);
   
-  const { assets, loading, refreshAssets } = useAudioAssets(user);
+  // Sample data (in a real app, this would come from an API)
+  const sampleAudioFiles: AudioFile[] = [
+    {
+      name: "Deep Bass Loop.wav",
+      size: "2.4 MB",
+      duration: "0:32",
+      type: "loop",
+      id: "loop-1",
+      created_at: "2023-04-15T09:23:00Z"
+    },
+    {
+      name: "Drum Sample Pack.zip",
+      size: "45.2 MB",
+      duration: "4:10",
+      type: "sample",
+      id: "sample-1",
+      created_at: "2023-04-12T15:47:00Z"
+    },
+    {
+      name: "Vocal Performance.mp3",
+      size: "8.7 MB",
+      duration: "3:27",
+      type: "vocal",
+      id: "vocal-1",
+      created_at: "2023-04-10T18:32:00Z"
+    },
+    {
+      name: "Synth Melody.wav",
+      size: "4.1 MB",
+      duration: "0:45",
+      type: "loop",
+      id: "loop-2",
+      created_at: "2023-04-08T11:19:00Z"
+    }
+  ];
   
-  // Function to convert AudioAsset to AudioFile
-  const mapAssetsToAudioFiles = (assets: AudioAsset[]): AudioFile[] => {
-    return assets.map(asset => ({
-      id: asset.id,
-      name: asset.name,
-      size: formatFileSize(asset.size),
-      duration: "0:00", // Default duration since AudioAsset doesn't have this property
-      type: asset.type,
-      url: asset.storage_path,
-      created_at: asset.created_at
-    }));
-  };
+  const [audioFiles, setAudioFiles] = useState<AudioFile[]>(sampleAudioFiles);
+  
+  // Simulate loading from API
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate API call delay
+    const timer = setTimeout(() => {
+      setAudioFiles(sampleAudioFiles);
+      setIsLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
-  // Helper function to format file size
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-  };
-  
-  // Filter assets based on search query
-  const filteredAssets = assets.filter(asset => 
-    asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    asset.type.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter audio files based on search query
+  const filteredAudioFiles = audioFiles.filter(file => 
+    file.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Convert filtered assets to AudioFile format
-  const filteredAudioFiles = mapAssetsToAudioFiles(filteredAssets);
-
-  // Mock library data as fallback
-  const audioSamples: AudioFile[] = [
-    { name: "Acoustic Guitar.wav", size: "24.5 MB", duration: "5:42", type: "Instrument" },
-    { name: "Drum Loop 120BPM.wav", size: "8.2 MB", duration: "0:32", type: "Loop" },
-    { name: "Strings Ensemble.mp3", size: "18.7 MB", duration: "3:15", type: "Instrument" },
-    { name: "Vocal Stem.wav", size: "35.1 MB", duration: "4:12", type: "Vocal" },
-    { name: "Bass Line.wav", size: "15.3 MB", duration: "1:45", type: "Bass" },
-  ];
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleUploadClick = () => {
-    toast({
-      title: "Upload Audio",
-      description: "Select audio files to add to your library",
-    });
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    setViewMode(mode);
   };
 
-  useEffect(() => {
-    if (user) {
-      refreshAssets();
-    }
-  }, [user, refreshAssets]);
+  const handleUpload = () => {
+    // In a real app, this would trigger a file upload dialog
+    toast({
+      title: t("library.uploadStarted"),
+      description: t("library.uploadDescription"),
+    });
+  };
 
   return (
     <SidebarLayout>
       <Header />
-      <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
-        <div className="max-w-[1200px] mx-auto space-y-6 animate-fade-in">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      
+      <main className="flex-1 container mx-auto p-4 md:p-6 lg:p-8 bg-background animate-fade-in">
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold">{t("library.title")}</h1>
               <p className="text-muted-foreground">{t("library.description")}</p>
             </div>
-            <Button className="gap-2" onClick={handleUploadClick}>
-              <Upload className="w-4 h-4" />
+            
+            <Button onClick={handleUpload} className="gap-2">
+              <Upload className="h-4 w-4" />
               {t("library.upload")}
             </Button>
           </div>
-
-          <div className="flex items-center justify-between">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
-              <TabsList>
-                <TabsTrigger value="all">{t("library.tabs.all")}</TabsTrigger>
-                <TabsTrigger value="samples">{t("library.tabs.samples")}</TabsTrigger>
-                <TabsTrigger value="loops">{t("library.tabs.loops")}</TabsTrigger>
-                <TabsTrigger value="vocals">{t("library.tabs.vocals")}</TabsTrigger>
-              </TabsList>
-            </Tabs>
-            
-            <div className="flex items-center gap-2">
-              <Button
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="icon"
-                onClick={() => setViewMode("grid")}
-                className="h-8 w-8"
-              >
-                <GridIcon className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "outline"}
-                size="icon"
-                onClick={() => setViewMode("list")}
-                className="h-8 w-8"
-              >
-                <ListIcon className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <SearchAndFilter 
-            searchQuery={searchQuery} 
-            onSearchChange={handleSearch} 
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <StoragePanel />
-            <div className="md:col-span-3">
-              <LibraryTabs 
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Main content - 3/4 width on desktop */}
+            <div className="lg:col-span-3 space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex space-x-1 p-1 bg-muted rounded-lg">
+                  <TabsList 
+                    className={`bg-transparent ${themeVariant === "windows" ? "gap-0" : "gap-1"}`}
+                    aria-label="Library Navigation Tabs"
+                  >
+                    <TabsTrigger 
+                      value="all" 
+                      onClick={() => setActiveTab("all")}
+                      className={activeTab === "all" ? "bg-background data-[state=active]:bg-background" : ""}
+                    >
+                      {t("library.tabs.all")}
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="samples" 
+                      onClick={() => setActiveTab("samples")}
+                      className={activeTab === "samples" ? "bg-background data-[state=active]:bg-background" : ""}
+                    >
+                      {t("library.tabs.samples")}
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="loops" 
+                      onClick={() => setActiveTab("loops")}
+                      className={activeTab === "loops" ? "bg-background data-[state=active]:bg-background" : ""}
+                    >
+                      {t("library.tabs.loops")}
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="vocals" 
+                      onClick={() => setActiveTab("vocals")}
+                      className={activeTab === "vocals" ? "bg-background data-[state=active]:bg-background" : ""}
+                    >
+                      {t("library.tabs.vocals")}
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "outline"}
+                    size="icon"
+                    onClick={() => handleViewModeChange("grid")}
+                    className="h-8 w-8"
+                  >
+                    <GridIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "outline"}
+                    size="icon"
+                    onClick={() => handleViewModeChange("list")}
+                    className="h-8 w-8"
+                  >
+                    <ListIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <SearchAndFilter
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchChange}
+                sortBy={sortBy}
+                onSortChange={(value) => setSortBy(value)}
+              />
+              
+              <LibraryTabs
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 viewMode={viewMode}
                 sortBy={sortBy}
-                filteredSamples={filteredAudioFiles.length > 0 ? filteredAudioFiles : audioSamples}
-                isLoading={loading}
+                filteredSamples={filteredAudioFiles}
+                isLoading={isLoading}
               />
+            </div>
+            
+            {/* Sidebar - 1/4 width on desktop */}
+            <div className="space-y-6">
+              <StoragePanel />
             </div>
           </div>
         </div>

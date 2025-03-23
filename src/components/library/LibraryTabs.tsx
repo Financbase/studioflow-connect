@@ -37,22 +37,24 @@ const LibraryTabs = ({
   const { t } = useLanguage();
   
   // Sort samples based on the selected sort option
-  const sortedSamples = [...filteredSamples].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name);
-    } else if (sortBy === "size") {
-      // Convert size string to number for comparison
-      const aSize = parseFloat(a.size);
-      const bSize = parseFloat(b.size);
-      return bSize - aSize;
-    } else {
-      // Default sort by date (newest first)
-      if (a.created_at && b.created_at) {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  const sortedSamples = React.useMemo(() => {
+    return [...filteredSamples].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === "size") {
+        // Convert size string to number for comparison
+        const aSize = parseFloat(a.size);
+        const bSize = parseFloat(b.size);
+        return bSize - aSize;
+      } else {
+        // Default sort by date (newest first)
+        if (a.created_at && b.created_at) {
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        }
+        return 0;
       }
-      return 0;
-    }
-  });
+    });
+  }, [filteredSamples, sortBy]);
   
   if (isLoading) {
     return (
@@ -76,29 +78,34 @@ const LibraryTabs = ({
       return sortedSamples;
     }
     
-    // Filter based on category
+    // Filter based on category (without the "s" at the end)
+    const typeFilter = category.slice(0, -1).toLowerCase();
     return sortedSamples.filter(file => 
-      file.type.toLowerCase() === category.slice(0, -1).toLowerCase()
+      file.type.toLowerCase() === typeFilter
     );
   };
 
   return (
     <div className="space-y-6">
-      <AudioFileList 
-        files={categoryContent(activeTab)} 
-        viewMode={viewMode}
-        emptyMessage={
-          <ContentPlaceholder 
-            title={t(`library.empty.${activeTab}.title`)}
-            description={t(`library.empty.${activeTab}.description`)}
-          />
-        }
-      />
+      <div className="min-h-[300px]">
+        <AudioFileList 
+          files={categoryContent(activeTab)} 
+          viewMode={viewMode}
+          emptyMessage={
+            <ContentPlaceholder 
+              title={t(`library.empty.${activeTab}.title`)}
+              description={t(`library.empty.${activeTab}.description`)}
+            />
+          }
+        />
+      </div>
       
-      <RecentlyAdded 
-        files={sortedSamples.slice(0, 5)} 
-        viewMode={viewMode} 
-      />
+      {sortedSamples.length > 0 && (
+        <RecentlyAdded 
+          files={sortedSamples.slice(0, 5)} 
+          viewMode={viewMode} 
+        />
+      )}
     </div>
   );
 };

@@ -1,100 +1,58 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from "react";
 
 interface AudioWaveformProps {
-  fileUrl?: string;
-  isPlaying?: boolean;
   height?: number;
-  barWidth?: number;
-  barGap?: number;
+  color?: string;
+  backgroundColor?: string;
 }
 
-const AudioWaveform: React.FC<AudioWaveformProps> = ({
-  fileUrl,
-  isPlaying = false,
-  height = 40,
-  barWidth = 2,
-  barGap = 1
+const AudioWaveform: React.FC<AudioWaveformProps> = ({ 
+  height = 50, 
+  color = "currentColor",
+  backgroundColor = "transparent"
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Generate a stable random pattern for the waveform
+  const generateWaveformData = (length: number, seed: number = 1) => {
+    const result = [];
+    let value = seed;
     
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // Set canvas dimensions
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr;
-    canvas.height = height * dpr;
-    
-    // Scale the context
-    ctx.scale(dpr, dpr);
-    
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Generate waveform data (in a real implementation, this would come from the audio file)
-    // For now, we'll generate random data to simulate a waveform
-    const totalBars = Math.floor(canvas.offsetWidth / (barWidth + barGap));
-    const waveformData = Array.from({ length: totalBars }, () => Math.random());
-    
-    // Draw waveform
-    const drawWaveform = () => {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < length; i++) {
+      // Pseudo-random number generator using a simple linear congruential generator
+      value = (value * 1664525 + 1013904223) % 4294967296;
+      const normalizedValue = value / 4294967296;
       
-      // Set color based on playing state
-      ctx.fillStyle = isPlaying ? '#3b82f6' : '#64748b';
-      
-      // Draw bars
-      waveformData.forEach((amplitude, index) => {
-        const x = index * (barWidth + barGap);
-        const barHeight = Math.max(2, amplitude * (height * 0.8)); // Ensure minimum height
-        const y = (height - barHeight) / 2;
-        
-        ctx.fillRect(x, y, barWidth, barHeight);
-      });
-    };
-    
-    drawWaveform();
-    
-    // If playing, animate the waveform
-    let animationId: number;
-    if (isPlaying) {
-      let offset = 0;
-      const animate = () => {
-        offset += 0.05;
-        
-        // Update waveform data with a "moving" effect
-        waveformData.forEach((_, index) => {
-          const sinValue = Math.sin(index * 0.2 + offset);
-          waveformData[index] = 0.3 + (Math.abs(sinValue) * 0.7);
-        });
-        
-        drawWaveform();
-        animationId = requestAnimationFrame(animate);
-      };
-      
-      animate();
+      // Create a more natural waveform pattern by using a sine function
+      const amplitude = 0.3 + 0.7 * Math.pow(Math.sin(i * 0.2), 2);
+      result.push(0.2 + amplitude * normalizedValue);
     }
     
-    // Cleanup
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, [fileUrl, isPlaying, height, barWidth, barGap]);
+    return result;
+  };
+
+  const waveformData = React.useMemo(() => generateWaveformData(40), []);
   
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="w-full h-full" 
-      style={{ height: `${height}px` }} 
-    />
+    <svg
+      width="100%"
+      height={height}
+      viewBox={`0 0 ${waveformData.length} 1`}
+      preserveAspectRatio="none"
+      style={{ backgroundColor }}
+    >
+      {waveformData.map((value, index) => (
+        <rect
+          key={index}
+          x={index}
+          y={0.5 - value / 2}
+          width={0.6}
+          height={value}
+          fill={color}
+          fillOpacity={0.7}
+          rx={0.1}
+        />
+      ))}
+    </svg>
   );
 };
 

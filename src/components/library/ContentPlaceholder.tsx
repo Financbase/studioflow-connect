@@ -1,25 +1,26 @@
 
 import React from "react";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { MusicOff } from "lucide-react";
 
 interface ContentPlaceholderProps {
   title: string;
   description: string;
+  icon?: React.ReactNode;
 }
 
-const ContentPlaceholder = ({ title, description }: ContentPlaceholderProps) => {
+const ContentPlaceholder: React.FC<ContentPlaceholderProps> = ({
+  title,
+  description,
+  icon = <MusicOff className="h-12 w-12 text-muted-foreground" />,
+}) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center justify-center h-32 text-muted-foreground">
-          <p>{title} content will be displayed here</p>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+      <div className="rounded-full bg-muted p-4 mb-4">
+        {icon}
+      </div>
+      <h3 className="text-lg font-medium mb-2">{title}</h3>
+      <p className="text-muted-foreground max-w-md">{description}</p>
+    </div>
   );
 };
 

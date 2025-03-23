@@ -39,6 +39,30 @@ const libraryTranslations: Record<string, Record<Language, string>> = {
     pt: "Enviar Recursos",
     ar: "تحميل الملفات"
   }),
+  "library.uploadStarted": ensureAllLanguages({
+    en: "Upload Started",
+    es: "Carga Iniciada",
+    fr: "Téléchargement Commencé",
+    de: "Upload Gestartet",
+    sv: "Uppladdning Startad",
+    ja: "アップロード開始",
+    zh: "上传已开始",
+    ru: "Загрузка начата",
+    pt: "Upload Iniciado",
+    ar: "بدأ التحميل"
+  }),
+  "library.uploadDescription": ensureAllLanguages({
+    en: "Your files are being uploaded to the library",
+    es: "Tus archivos se están subiendo a la biblioteca",
+    fr: "Vos fichiers sont en cours de téléchargement vers la bibliothèque",
+    de: "Ihre Dateien werden in die Bibliothek hochgeladen",
+    sv: "Dina filer laddas upp till biblioteket",
+    ja: "ファイルがライブラリにアップロードされています",
+    zh: "您的文件正在上传到库中",
+    ru: "Ваши файлы загружаются в библиотеку",
+    pt: "Seus arquivos estão sendo enviados para a biblioteca",
+    ar: "يتم تحميل ملفاتك إلى المكتبة"
+  }),
   "library.tabs.all": ensureAllLanguages({
     en: "All Files",
     es: "Todos los Archivos",

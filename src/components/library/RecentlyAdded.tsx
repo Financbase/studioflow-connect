@@ -27,7 +27,7 @@ const RecentlyAdded = ({ files, viewMode = "grid" }: RecentlyAddedProps) => {
   if (files.length === 0) return null;
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader>
         <div className="flex items-center space-x-2">
           <Calendar className="h-5 w-5 text-muted-foreground" />
@@ -42,15 +42,15 @@ const RecentlyAdded = ({ files, viewMode = "grid" }: RecentlyAddedProps) => {
           <div className="flex w-max space-x-4">
             {files.map((file, index) => (
               <div
-                key={index}
+                key={file.id || index}
                 className="w-[250px] rounded-md border p-3 hover:border-primary/50 transition-colors group"
               >
                 <div className="aspect-[2/1] relative bg-black/5 dark:bg-white/5 rounded mb-2">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <FileAudio className="h-8 w-8 text-primary" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 z-10">
+                    <FileAudio className="h-8 w-8 text-white" />
                   </div>
                   <div className="absolute inset-0 p-2 flex items-end">
-                    <AudioWaveform height={30} />
+                    <AudioWaveform height={30} color="var(--color-primary)" />
                   </div>
                 </div>
                 <div className="space-y-1">
