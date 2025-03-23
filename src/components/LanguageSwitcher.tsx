@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Languages, Check } from "lucide-react";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
-import { Language } from "@/contexts/language/types";
-import { flagEmojis } from "@/contexts/language/utils";
-import { languageNames } from "@/contexts/language/translations/categories/languageNames";
+import { useLanguage } from "@/contexts/language";
+import { Language } from "@/contexts/language";
+import { flagEmojis } from "@/contexts/language";
+import { languageNames } from "@/contexts/language";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

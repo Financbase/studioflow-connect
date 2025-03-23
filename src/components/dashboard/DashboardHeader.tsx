@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock } from "lucide-react";
 import { format } from "date-fns";
 import DashboardActions from "./DashboardActions";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 import { useDashboard } from "@/contexts/dashboard";
 
 interface DashboardHeaderProps {

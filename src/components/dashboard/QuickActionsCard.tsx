@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useDashboard } from "@/contexts/dashboard";
 import { toast } from "@/hooks/use-toast";
 import { WidgetId } from "@/contexts/dashboard/types";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 
 const QuickActionsCard = () => {
   const { hasFeatureAccess } = useDashboard();
