@@ -146,6 +146,54 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     ru: "ОСНОВНАЯ НАВИГАЦИЯ",
     pt: "NAVEGAÇÃO PRINCIPAL",
     ar: "التنقل الرئيسي"
+  }),
+  "dashboard.system_performance": ensureAllLanguages({
+    en: "System Performance",
+    es: "Rendimiento del Sistema",
+    fr: "Performance du Système",
+    de: "Systemleistung",
+    sv: "Systemprestanda",
+    ja: "システムパフォーマンス",
+    zh: "系统性能",
+    ru: "Производительность системы",
+    pt: "Desempenho do Sistema",
+    ar: "أداء النظام"
+  }),
+  "dashboard.performance_metrics": ensureAllLanguages({
+    en: "CPU, Memory and Network usage over time",
+    es: "Uso de CPU, Memoria y Red a lo largo del tiempo",
+    fr: "Utilisation CPU, Mémoire et Réseau au fil du temps",
+    de: "CPU-, Speicher- und Netzwerknutzung im Zeitverlauf",
+    sv: "CPU-, minnes- och nätverksanvändning över tid",
+    ja: "CPU、メモリ、ネットワークの使用状況の推移",
+    zh: "CPU、内存和网络使用情况随时间变化",
+    ru: "Использование ЦП, памяти и сети с течением времени",
+    pt: "Uso de CPU, Memória e Rede ao longo do tempo",
+    ar: "استخدام وحدة المعالجة المركزية والذاكرة والشبكة بمرور الوقت"
+  }),
+  "dashboard.weekly_activity": ensureAllLanguages({
+    en: "Weekly User Activity",
+    es: "Actividad Semanal de Usuarios",
+    fr: "Activité Hebdomadaire des Utilisateurs",
+    de: "Wöchentliche Benutzeraktivität",
+    sv: "Veckovis användaraktivitet",
+    ja: "週間ユーザーアクティビティ",
+    zh: "每周用户活动",
+    ru: "Еженедельная активность пользователей",
+    pt: "Atividade Semanal de Usuários",
+    ar: "نشاط المستخدم الأسبوعي"
+  }),
+  "dashboard.active_idle_sessions": ensureAllLanguages({
+    en: "Active vs. idle sessions per day",
+    es: "Sesiones activas vs. inactivas por día",
+    fr: "Sessions actives vs. inactives par jour",
+    de: "Aktive vs. inaktive Sitzungen pro Tag",
+    sv: "Aktiva vs. inaktiva sessioner per dag",
+    ja: "1日あたりのアクティブセッションとアイドルセッション",
+    zh: "每日活跃与空闲会话对比",
+    ru: "Активные и неактивные сессии в день",
+    pt: "Sessões ativas vs. inativas por dia",
+    ar: "الجلسات النشطة مقابل الخاملة يوميًا"
   })
 };
 

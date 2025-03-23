@@ -1,63 +1,54 @@
 
-import { Language } from "../types";
-
-// Import categories
-import categoriesTranslations from './categories';
-import commonTranslations from './common';
-import dashboardTranslations from './dashboard';
-import connectTranslations from './connect';
-import designTranslations from './design';
-import knowledgeTranslations from './knowledge';
-import mobileTranslations from './mobile';
-import navigationTranslations from './navigation';
-import projectsTranslations from './projects';
-import settingsTranslations from './settings';
-import sidebarTranslations from './sidebar';
-import supportTranslations from './support';
-import toastTranslations from './toast';
-import userTranslations from './user';
-import widgetsTranslations from './widgets';
-import libraryTranslations from './library';
-import aiToolsTranslations from './aitools';
-import colorPaletteTranslations from './colorPalette';
-import adminTranslations from './admin';
-import documentationTranslations from './documentation';
-import designTokensTranslations from './designTokens';
-import languagesTranslations from './languages';
-import footerTranslations from './footer';
-import headerTranslations from './header';
-
-// Import languageNames from categories exports
-import { languageNames } from './categories';
+import categoryTranslations, { languageNames } from "./categories";
+import adminTranslations from "./admin";
+import widgetsTranslations from "./widgets";
+import navigationTranslations from "./navigation";
+import dashboardTranslations from "./dashboard";
+import supportTranslations from "./support";
+import designTranslations from "./design";
+import designTokenTranslations from "./designTokens";
+import commonTranslations from "./common";
+import footerTranslations from "./footer";
+import headerTranslations from "./header";
+import mobileTranslations from "./mobile";
+import projectTranslations from "./projects";
+import toastTranslations from "./toast";
+import userTranslations from "./user";
+import aiToolsTranslations from "./aitools";
+import documentationTranslations from "./documentation";
+import libraryTranslations from "./library";
+import settingsTranslations from "./settings";
+import colorPaletteTranslations from "./colorPalette";
+import knowledgeTranslations from "./knowledge";
+import connectTranslations from "./connect";
+import languagesTranslations from "./languages";
 
 // Combine all translations
-const translations: Record<string, Record<Language, string>> = {
-  ...categoriesTranslations,
-  ...commonTranslations,
-  ...dashboardTranslations,
-  ...connectTranslations,
-  ...designTranslations,
-  ...knowledgeTranslations,
-  ...mobileTranslations,
+const translations = {
+  ...categoryTranslations,
+  ...adminTranslations,
+  ...widgetsTranslations,
   ...navigationTranslations,
-  ...projectsTranslations,
-  ...settingsTranslations,
-  ...sidebarTranslations,
+  ...dashboardTranslations,
   ...supportTranslations,
+  ...designTranslations,
+  ...designTokenTranslations,
+  ...commonTranslations,
+  ...footerTranslations,
+  ...headerTranslations,
+  ...mobileTranslations,
+  ...projectTranslations,
   ...toastTranslations,
   ...userTranslations,
-  ...widgetsTranslations,
-  ...libraryTranslations,
   ...aiToolsTranslations,
-  ...colorPaletteTranslations,
-  ...adminTranslations,
   ...documentationTranslations,
-  ...designTokensTranslations,
-  ...languagesTranslations,
-  ...footerTranslations,
-  ...headerTranslations
+  ...libraryTranslations,
+  ...settingsTranslations,
+  ...colorPaletteTranslations,
+  ...knowledgeTranslations,
+  ...connectTranslations,
+  ...languagesTranslations
 };
 
-// Export translations and languageNames
 export { languageNames };
 export default translations;
