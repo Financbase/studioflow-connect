@@ -1,3 +1,4 @@
+
 import { Language } from "../types";
 
 type TranslationRecord = Record<Language, string>;
@@ -162,6 +163,96 @@ const dashboardTranslations: Record<string, TranslationRecord> = {
     ru: "Пользователь",
     pt: "Usuário",
     ar: "مستخدم"
+  },
+  
+  // Activity actions
+  "dashboard.activity.created": {
+    en: "created",
+    es: "creó",
+    fr: "a créé",
+    de: "erstellte",
+    sv: "skapade",
+    ja: "作成しました",
+    zh: "创建了",
+    ru: "создал(а)",
+    pt: "criou",
+    ar: "أنشأ"
+  },
+  "dashboard.activity.commented": {
+    en: "commented on",
+    es: "comentó en",
+    fr: "a commenté",
+    de: "kommentierte",
+    sv: "kommenterade",
+    ja: "コメントしました",
+    zh: "评论了",
+    ru: "прокомментировал(а)",
+    pt: "comentou em",
+    ar: "علق على"
+  },
+  "dashboard.activity.shared": {
+    en: "shared",
+    es: "compartió",
+    fr: "a partagé",
+    de: "teilte",
+    sv: "delade",
+    ja: "共有しました",
+    zh: "分享了",
+    ru: "поделился(ась)",
+    pt: "compartilhou",
+    ar: "شارك"
+  },
+  "dashboard.activity.uploaded": {
+    en: "uploaded",
+    es: "subió",
+    fr: "a téléchargé",
+    de: "lud hoch",
+    sv: "laddade upp",
+    ja: "アップロードしました",
+    zh: "上传了",
+    ru: "загрузил(а)",
+    pt: "carregou",
+    ar: "رفع"
+  },
+  "dashboard.activity.edited": {
+    en: "edited",
+    es: "editó",
+    fr: "a édité",
+    de: "bearbeitete",
+    sv: "redigerade",
+    ja: "編集しました",
+    zh: "编辑了",
+    ru: "отредактировал(а)",
+    pt: "editou",
+    ar: "حرر"
+  },
+  
+  // Dashboard sections
+  "dashboard.recentActivity": {
+    en: "Recent Activity",
+    es: "Actividad Reciente",
+    fr: "Activité Récente",
+    de: "Neueste Aktivitäten",
+    sv: "Senaste Aktivitet",
+    ja: "最近のアクティビティ",
+    zh: "最近活动",
+    ru: "Недавняя активность",
+    pt: "Atividade Recente",
+    ar: "النشاط الأخير"
+  },
+  
+  // View all button
+  "dashboard.viewAll": {
+    en: "View All",
+    es: "Ver Todo",
+    fr: "Voir Tout",
+    de: "Alle Anzeigen",
+    sv: "Visa Alla",
+    ja: "すべて表示",
+    zh: "查看全部",
+    ru: "Показать все",
+    pt: "Ver Tudo",
+    ar: "عرض الكل"
   },
   
   // Plan names for translation

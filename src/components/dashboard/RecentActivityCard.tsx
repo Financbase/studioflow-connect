@@ -4,8 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/contexts/language";
+import { Button } from "@/components/ui/button";
 
-const RecentActivityCard = () => {
+interface RecentActivityCardProps {
+  onViewActivity?: () => void;
+}
+
+const RecentActivityCard: React.FC<RecentActivityCardProps> = ({ onViewActivity }) => {
   const { t, isInitialized } = useLanguage();
   
   // Example recent activities
@@ -55,9 +60,16 @@ const RecentActivityCard = () => {
   return (
     <Card className="dashboard-card h-full">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">
-          {isInitialized ? t("dashboard.recentActivity") : "Recent Activity"}
-        </CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg">
+            {isInitialized ? t("dashboard.recentActivity") : "Recent Activity"}
+          </CardTitle>
+          {onViewActivity && (
+            <Button variant="ghost" size="sm" onClick={onViewActivity}>
+              {isInitialized ? t("dashboard.viewAll") : "View All"}
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="p-0">
         <ScrollArea className="h-[280px] px-6">
