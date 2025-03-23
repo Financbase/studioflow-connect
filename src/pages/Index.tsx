@@ -22,11 +22,12 @@ import Breadcrumbs from "@/components/navigation/breadcrumbs";
 import { toast } from "@/hooks/use-toast";
 import useErrorHandling from "@/hooks/use-error-handling";
 import ViewSelector from "@/components/ViewSelector";
+import MainDashboardContent from "@/components/dashboard/MainDashboardContent";
 
 const Index = () => {
   const { themeVariant } = useTheme();
   const { t } = useLanguage();
-  const { isWidgetVisible, hasFeatureAccess } = useDashboard();
+  const { isWidgetVisible, hasFeatureAccess, viewMode } = useDashboard();
   const isMobile = useIsMobile();
   const { getContainerClass } = useResponsiveLayout();
   const { handleError } = useErrorHandling();
@@ -55,7 +56,7 @@ const Index = () => {
   ];
 
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground antialiased`}>
+    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
       <Header />
       
       <PageContainer isMain padded="lg" maxWidth="xl" className="animate-fade-in">
@@ -65,86 +66,94 @@ const Index = () => {
               <Breadcrumbs items={breadcrumbItems} />
             </div>
             
-            <section className="space-y-2 mb-6">
+            <section className="space-y-2 mb-8">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">{t("dashboard.title")}</h1>
               <p className="text-lg text-muted-foreground text-balance">
                 {t("dashboard.subtitle")}
               </p>
             </section>
             
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-end mb-6">
               <ViewSelector />
             </div>
             
-            <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+            <Separator className={`mb-8 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
             
             {isMobile ? (
               <MobileCompanion />
             ) : (
-              <div className="space-y-8 py-6">
-                {/* Always show StudioFlow Connect as the main MVP feature */}
-                {isWidgetVisible('connect') && (
-                  <>
-                    <DashboardWidget id="connect" title="StudioFlow Connect">
-                      <StudioFlowConnect />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
+              <>
+                {viewMode === 'simple' && (
+                  <div className="mb-12">
+                    <MainDashboardContent />
+                  </div>
                 )}
                 
-                {isWidgetVisible('system') && hasFeatureAccess('system') && (
-                  <>
-                    <DashboardWidget id="system" title={t("widgets.system")} isPremiumFeature>
-                      <SystemMonitor />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
-                )}
-                
-                {isWidgetVisible('vm') && hasFeatureAccess('vm') && (
-                  <>
-                    <DashboardWidget id="vm" title="Virtual Machine Controller" isPremiumFeature>
-                      <VMController />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
-                )}
-                
-                {isWidgetVisible('daw') && hasFeatureAccess('daw') && (
-                  <>
-                    <DashboardWidget id="daw" title="DAW Workflow Integration" isPremiumFeature>
-                      <DAWWorkflow />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
-                )}
-                
-                {isWidgetVisible('audio') && hasFeatureAccess('audio') && (
-                  <>
-                    <DashboardWidget id="audio" title="Audio Analysis">
-                      <AudioAnalyzer />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
-                )}
-                
-                {isWidgetVisible('ai') && hasFeatureAccess('ai') && (
-                  <>
-                    <DashboardWidget id="ai" title="AI-Powered Tools" isPremiumFeature>
-                      <AITools />
-                    </DashboardWidget>
-                    <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
-                  </>
-                )}
-                
-                {isWidgetVisible('marketplace') && hasFeatureAccess('marketplace') && (
-                  <>
-                    <DashboardWidget id="marketplace" title="Studio Marketplace" isPremiumFeature>
-                      <StudioMarketplace />
-                    </DashboardWidget>
-                  </>
-                )}
-              </div>
+                <div className="space-y-10 py-4">
+                  {/* Always show StudioFlow Connect as the main MVP feature */}
+                  {isWidgetVisible('connect') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="connect" title="StudioFlow Connect">
+                        <StudioFlowConnect />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('system') && hasFeatureAccess('system') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="system" title={t("widgets.system")} isPremiumFeature>
+                        <SystemMonitor />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('vm') && hasFeatureAccess('vm') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="vm" title="Virtual Machine Controller" isPremiumFeature>
+                        <VMController />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('daw') && hasFeatureAccess('daw') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="daw" title="DAW Workflow Integration" isPremiumFeature>
+                        <DAWWorkflow />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('audio') && hasFeatureAccess('audio') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="audio" title="Audio Analysis">
+                        <AudioAnalyzer />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('ai') && hasFeatureAccess('ai') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="ai" title="AI-Powered Tools" isPremiumFeature>
+                        <AITools />
+                      </DashboardWidget>
+                      <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
+                    </div>
+                  )}
+                  
+                  {isWidgetVisible('marketplace') && hasFeatureAccess('marketplace') && (
+                    <div className="mb-10">
+                      <DashboardWidget id="marketplace" title="Studio Marketplace" isPremiumFeature>
+                        <StudioMarketplace />
+                      </DashboardWidget>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </>
         )}
@@ -158,7 +167,7 @@ const Index = () => {
         )}
       </PageContainer>
       
-      <footer className={`border-t py-6 ${themeVariant === "windows" ? "border-t-2" : ""}`}>
+      <footer className={`mt-auto border-t py-6 ${themeVariant === "windows" ? "border-t-2" : ""}`}>
         <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>{t("footer.copyright")}</p>
           <div className="flex gap-6">

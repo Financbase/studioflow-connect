@@ -49,11 +49,15 @@ const ViewSelector = () => {
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm font-medium text-muted-foreground mr-2">{t("label.dashboardview")}:</span>
-      <ToggleGroup type="single" value={viewMode} onValueChange={handleViewChange}>
+      <ToggleGroup type="single" value={viewMode} onValueChange={handleViewChange} className="bg-muted/50 p-1 rounded-lg border border-border/50">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <ToggleGroupItem value="simple" aria-label="Simple View">
+              <ToggleGroupItem 
+                value="simple" 
+                aria-label="Simple View"
+                className="data-[state=on]:bg-background data-[state=on]:shadow-sm"
+              >
                 <LayoutDashboard className="h-4 w-4 mr-1" />
                 <span className="hidden sm:inline">{t("view.simple")}</span>
               </ToggleGroupItem>
@@ -67,7 +71,11 @@ const ViewSelector = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <ToggleGroupItem value="advanced" aria-label="Advanced View">
+              <ToggleGroupItem 
+                value="advanced" 
+                aria-label="Advanced View"
+                className="data-[state=on]:bg-background data-[state=on]:shadow-sm"
+              >
                 <LayoutPanelTop className="h-4 w-4 mr-1" />
                 <span className="hidden sm:inline">{t("view.advanced")}</span>
               </ToggleGroupItem>
@@ -85,7 +93,7 @@ const ViewSelector = () => {
                 value="custom" 
                 aria-label="Custom View"
                 disabled={pricingTier !== "pro"}
-                className="relative"
+                className="relative data-[state=on]:bg-background data-[state=on]:shadow-sm"
               >
                 <Settings2 className="h-4 w-4 mr-1" />
                 <span className="hidden sm:inline">{t("view.custom")}</span>

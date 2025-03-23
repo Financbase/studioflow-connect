@@ -3,7 +3,7 @@ import React from "react";
 import { Panel } from "@/components/ui/panel";
 import { useTheme } from "@/contexts/ThemeContext";
 import WidgetSection from "@/components/WidgetSection";
-import { WidgetId } from "@/contexts/DashboardContext";
+import { WidgetId } from "@/contexts/dashboard";
 
 interface DashboardWidgetProps {
   id: WidgetId;
@@ -23,8 +23,13 @@ const DashboardWidget = ({ id, title, isPremiumFeature = false, children }: Dash
   
   return (
     <WidgetSection id={id} title={title} isPremiumFeature={isPremiumFeature}>
-      <Panel variant={isElevated ? "elevated" : "default"}>
-        {children}
+      <Panel 
+        variant={isElevated ? "elevated" : "default"}
+        className="dashboard-widget-panel bg-card/80 backdrop-blur-sm overflow-hidden"
+      >
+        <div className="p-4 md:p-6">
+          {children}
+        </div>
       </Panel>
     </WidgetSection>
   );

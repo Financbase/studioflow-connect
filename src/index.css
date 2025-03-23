@@ -146,6 +146,14 @@
 }
 
 /* Dashboard-specific styles */
+.dashboard-widget-panel {
+  @apply relative overflow-hidden border border-border/60 shadow-sm transition-all duration-300;
+}
+
+.dashboard-widget-panel:hover {
+  @apply shadow-md border-border/80;
+}
+
 .dashboard-stat-card {
   @apply relative overflow-hidden;
 }
