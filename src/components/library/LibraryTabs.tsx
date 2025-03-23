@@ -1,6 +1,5 @@
 
 import React from "react";
-import { TabsContent } from "@/components/ui/tabs";
 import LibraryNavTabs from "@/components/library/LibraryNavTabs";
 import AudioLibraryTab from "@/components/audio/AudioLibraryTab";
 import { AudioFile } from "@/components/library/types";
@@ -26,25 +25,33 @@ const LibraryTabs: React.FC<LibraryTabsProps> = ({
   const { t } = useLanguage();
   
   return (
-    <>
+    <div>
       <LibraryNavTabs activeTab={activeTab} onTabChange={onTabChange} />
       
       {activeTab === "all" && (
-        <AudioLibraryTab filterType="all" />
+        <div className="mt-4">
+          <AudioLibraryTab filterType="all" />
+        </div>
       )}
       
       {activeTab === "samples" && (
-        <AudioLibraryTab filterType="sample" />
+        <div className="mt-4">
+          <AudioLibraryTab filterType="sample" />
+        </div>
       )}
       
       {activeTab === "loops" && (
-        <AudioLibraryTab filterType="loop" />
+        <div className="mt-4">
+          <AudioLibraryTab filterType="loop" />
+        </div>
       )}
       
       {activeTab === "vocals" && (
-        <AudioLibraryTab filterType="vocal" />
+        <div className="mt-4">
+          <AudioLibraryTab filterType="vocal" />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

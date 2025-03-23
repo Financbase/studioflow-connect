@@ -1,6 +1,6 @@
 
 import React from "react";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/language";
 
@@ -17,23 +17,48 @@ const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
   const { t } = useLanguage();
 
   return (
-    <TabsList 
-      className={`${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
-      aria-label="Library Navigation Tabs"
-    >
-      <TabsTrigger value="all" onClick={() => onTabChange("all")}>
+    <div className="flex space-x-1">
+      <button
+        className={`px-3 py-1.5 text-sm font-medium rounded-md ${
+          activeTab === "all" 
+            ? "bg-primary text-primary-foreground" 
+            : "text-muted-foreground hover:text-foreground hover:bg-accent"
+        }`}
+        onClick={() => onTabChange("all")}
+      >
         {t("library.tabs.all")}
-      </TabsTrigger>
-      <TabsTrigger value="samples" onClick={() => onTabChange("samples")}>
+      </button>
+      <button
+        className={`px-3 py-1.5 text-sm font-medium rounded-md ${
+          activeTab === "samples" 
+            ? "bg-primary text-primary-foreground" 
+            : "text-muted-foreground hover:text-foreground hover:bg-accent"
+        }`}
+        onClick={() => onTabChange("samples")}
+      >
         {t("library.tabs.samples")}
-      </TabsTrigger>
-      <TabsTrigger value="loops" onClick={() => onTabChange("loops")}>
+      </button>
+      <button
+        className={`px-3 py-1.5 text-sm font-medium rounded-md ${
+          activeTab === "loops" 
+            ? "bg-primary text-primary-foreground" 
+            : "text-muted-foreground hover:text-foreground hover:bg-accent"
+        }`}
+        onClick={() => onTabChange("loops")}
+      >
         {t("library.tabs.loops")}
-      </TabsTrigger>
-      <TabsTrigger value="vocals" onClick={() => onTabChange("vocals")}>
+      </button>
+      <button
+        className={`px-3 py-1.5 text-sm font-medium rounded-md ${
+          activeTab === "vocals" 
+            ? "bg-primary text-primary-foreground" 
+            : "text-muted-foreground hover:text-foreground hover:bg-accent"
+        }`}
+        onClick={() => onTabChange("vocals")}
+      >
         {t("library.tabs.vocals")}
-      </TabsTrigger>
-    </TabsList>
+      </button>
+    </div>
   );
 };
 

@@ -5,34 +5,37 @@ import Header from "@/components/Header";
 import StudioFlowConnect from "@/components/StudioFlowConnect";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/language";
 
 const Connect = () => {
+  const { t } = useLanguage();
+  
   return (
     <SidebarLayout>
       <Header />
       <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
         <div className="max-w-[1200px] mx-auto space-y-6 animate-fade-in">
           <div>
-            <h1 className="text-3xl font-bold">StudioFlow Connect</h1>
+            <h1 className="text-3xl font-bold">{t("connect.title")}</h1>
             <p className="text-muted-foreground">
-              Cross-platform storage access and audio device connectivity
+              {t("connect.subtitle")}
             </p>
           </div>
 
           <Tabs defaultValue="connect" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="connect">Connect</TabsTrigger>
-              <TabsTrigger value="devices">Devices</TabsTrigger>
-              <TabsTrigger value="storage">Storage</TabsTrigger>
-              <TabsTrigger value="plugins">Plugins</TabsTrigger>
+              <TabsTrigger value="connect">{t("connect.tabs.connect")}</TabsTrigger>
+              <TabsTrigger value="devices">{t("connect.tabs.devices")}</TabsTrigger>
+              <TabsTrigger value="storage">{t("connect.tabs.storage")}</TabsTrigger>
+              <TabsTrigger value="plugins">{t("connect.tabs.plugins")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="connect" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>StudioFlow Connect</CardTitle>
+                  <CardTitle>{t("connect.cards.connect.title")}</CardTitle>
                   <CardDescription>
-                    Connect your storage devices, plugins, and hardware
+                    {t("connect.cards.connect.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -44,9 +47,9 @@ const Connect = () => {
             <TabsContent value="devices" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Connected Devices</CardTitle>
+                  <CardTitle>{t("connect.cards.devices.title")}</CardTitle>
                   <CardDescription>
-                    Manage your audio interfaces and MIDI controllers
+                    {t("connect.cards.devices.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -58,9 +61,9 @@ const Connect = () => {
             <TabsContent value="storage" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Storage Management</CardTitle>
+                  <CardTitle>{t("connect.cards.storage.title")}</CardTitle>
                   <CardDescription>
-                    Manage your connected storage devices
+                    {t("connect.cards.storage.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -72,9 +75,9 @@ const Connect = () => {
             <TabsContent value="plugins" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Plugin Bridge</CardTitle>
+                  <CardTitle>{t("connect.cards.plugins.title")}</CardTitle>
                   <CardDescription>
-                    Manage cross-platform plugin compatibility
+                    {t("connect.cards.plugins.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -1,10 +1,10 @@
 
 import React from "react";
-import { Tabs } from "@/components/ui/tabs";
 import ViewModeToggle from "./ViewModeToggle";
 import SearchAndFilter from "./SearchAndFilter";
 import LibraryTabs from "./LibraryTabs";
 import { AudioFile } from "./types";
+import { useLanguage } from "@/contexts/language";
 
 interface LibraryMainContentProps {
   activeTab: string;
@@ -31,6 +31,8 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
   filteredSamples,
   isLoading
 }) => {
+  const { t } = useLanguage();
+  
   const handleViewModeChange = (mode: "grid" | "list") => {
     setViewMode(mode);
   };
@@ -43,16 +45,14 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
     <div className="lg:col-span-3 space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="w-full sm:w-auto">
-          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <LibraryTabs
-              activeTab={activeTab}
-              onTabChange={handleTabChange}
-              viewMode={viewMode}
-              sortBy={sortBy}
-              filteredSamples={filteredSamples}
-              isLoading={isLoading}
-            />
-          </Tabs>
+          <LibraryTabs
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            viewMode={viewMode}
+            sortBy={sortBy}
+            filteredSamples={filteredSamples}
+            isLoading={isLoading}
+          />
         </div>
         
         <ViewModeToggle 
