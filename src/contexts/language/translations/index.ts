@@ -9,6 +9,7 @@ import supportTranslations from "./support";
 import mobileTranslations from "./mobile";
 import commonTranslations from "./common";
 import toastTranslations from "./toast";
+import designTranslations from "./design";
 
 // Combine all translations
 const translations = {
@@ -21,7 +22,8 @@ const translations = {
   ...supportTranslations,
   ...mobileTranslations,
   ...commonTranslations,
-  ...toastTranslations
+  ...toastTranslations,
+  ...designTranslations
 };
 
 export { languageNames };
