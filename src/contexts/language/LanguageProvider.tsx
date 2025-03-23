@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { Language, LanguageContextType, LanguageProviderProps } from "./types";
@@ -66,7 +65,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   // Get translation for a given key
   const t = (key: string): string => {
     if (!translations[key]) {
-      console.warn(`Translation key not found: ${key}`);
+      // Log missing keys but with specific category info to help debugging
+      const category = key.split('.')[0];
+      console.warn(`Translation key not found: ${key} (category: ${category})`);
       return key;
     }
     
@@ -93,8 +94,14 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   
   // Translate dynamic content
   const translateDynamic = (text: string): string => {
-    // This function could be enhanced to use a translation service API
-    // or to support interpolation of keys within text
+    // Check if text contains translation keys in the format {{key}}
+    if (text && text.includes('{{') && text.includes('}}')) {
+      return text.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
+        return t(key.trim());
+      });
+    }
+    
+    // Otherwise return the text as is
     return text;
   };
   

@@ -14,11 +14,18 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onZenModeActivate }) => {
   const user = useUser();
-  const { t } = useLanguage();
+  const { t, isInitialized } = useLanguage();
   const { pricingTier } = useDashboard();
   const currentTime = new Date();
   
   const getGreeting = () => {
+    if (!isInitialized) {
+      const hour = currentTime.getHours();
+      if (hour < 12) return "Good morning";
+      if (hour < 18) return "Good afternoon";
+      return "Good evening";
+    }
+    
     const hour = currentTime.getHours();
     if (hour < 12) return t("dashboard.greeting.morning");
     if (hour < 18) return t("dashboard.greeting.afternoon");
@@ -29,7 +36,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onZenModeActivate }) 
     if (user?.user_metadata?.full_name) {
       return user.user_metadata.full_name.split(' ')[0];
     }
-    return user?.email?.split('@')[0] || t("dashboard.user");
+    return user?.email?.split('@')[0] || (isInitialized ? t("dashboard.user") : "User");
+  };
+  
+  const getPlanName = () => {
+    if (!isInitialized) return pricingTier.charAt(0).toUpperCase() + pricingTier.slice(1);
+    
+    return t(`plan.${pricingTier}`);
   };
   
   return (
@@ -41,7 +54,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onZenModeActivate }) 
           </h1>
           {pricingTier !== 'free' && (
             <Badge variant={pricingTier === 'pro' ? "default" : "outline"} className="ml-2">
-              {pricingTier.charAt(0).toUpperCase() + pricingTier.slice(1)}
+              {getPlanName()}
             </Badge>
           )}
         </div>

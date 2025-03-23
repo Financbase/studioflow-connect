@@ -1,54 +1,54 @@
 
-import categoryTranslations from "./categories";
-import commonTranslations from "./common";
+import { Language } from "../types";
+import categoryTranslations, { languageNames } from "./categories";
 import dashboardTranslations from "./dashboard";
-import designTranslations from "./design";
+import commonTranslations from "./common";
 import headerTranslations from "./header";
-import navigationTranslations from "./navigation";
-import sidebarTranslations from "./sidebar";
-import settingsTranslations from "./settings";
-import userTranslations from "./user";
-import toastTranslations from "./toast";
-import widgetsTranslations from "./widgets";
-import colorPaletteTranslations from "./colorPalette";
-import designTokensTranslations from "./designTokens";
-import knowledgeTranslations from "./knowledge";
 import footerTranslations from "./footer";
-import mobileTranslations from "./mobile";
-import languagesTranslations from "./languages";
-import supportTranslations from "./support";
-import aiToolsTranslations from "./aitools";
+import sidebarTranslations from "./sidebar";
 import libraryTranslations from "./library";
-import documentationTranslations from "./documentation";
-import connectTranslations from "./connect";
+import settingsTranslations from "./settings";
+import aiToolsTranslations from "./aitools";
+import designTranslations from "./design";
+import navigationTranslations from "./navigation";
 import projectsTranslations from "./projects";
-import { languageNames } from "./categories/languageNames";
+import connectTranslations from "./connect";
+import mobileTranslations from "./mobile";
+import designTokensTranslations from "./designTokens";
+import colorPaletteTranslations from "./colorPalette";
+import widgetsTranslations from "./widgets";
+import supportTranslations from "./support";
+import toastTranslations from "./toast";
+import languagesTranslations from "./languages";
+import userTranslations from "./user";
+import documentationTranslations from "./documentation";
+import knowledgeTranslations from "./knowledge";
 
-// Combine all translations
-const translations = {
-  ...categoryTranslations,
+// Combine all translation categories
+const translations: Record<string, Record<Language, string>> = {
   ...commonTranslations,
-  ...dashboardTranslations,
-  ...designTranslations,
+  ...categoryTranslations,
   ...headerTranslations,
-  ...navigationTranslations,
-  ...sidebarTranslations,
-  ...settingsTranslations,
-  ...userTranslations,
-  ...toastTranslations,
-  ...widgetsTranslations,
-  ...colorPaletteTranslations,
-  ...designTokensTranslations,
-  ...knowledgeTranslations,
   ...footerTranslations,
-  ...mobileTranslations,
-  ...languagesTranslations,
-  ...supportTranslations,
-  ...aiToolsTranslations,
+  ...sidebarTranslations,
+  ...dashboardTranslations,
   ...libraryTranslations,
-  ...documentationTranslations,
+  ...settingsTranslations,
+  ...aiToolsTranslations,
+  ...designTranslations,
+  ...navigationTranslations,
+  ...projectsTranslations,
   ...connectTranslations,
-  ...projectsTranslations
+  ...mobileTranslations,
+  ...designTokensTranslations,
+  ...colorPaletteTranslations,
+  ...widgetsTranslations,
+  ...supportTranslations,
+  ...toastTranslations,
+  ...languagesTranslations,
+  ...userTranslations,
+  ...documentationTranslations,
+  ...knowledgeTranslations
 };
 
 export { languageNames };

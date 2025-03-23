@@ -2,6 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useLanguage } from "@/contexts/language";
 
 interface QuickStatProps {
   title: string;
@@ -12,33 +13,35 @@ interface QuickStatProps {
 }
 
 const QuickOverview = () => {
+  const { t, isInitialized } = useLanguage();
+  
   // Quick stats for the dashboard
   const quickStats = [
     { 
-      title: "Audio Projects", 
+      title: isInitialized ? t("dashboard.stats.audioProjects") : "Audio Projects", 
       value: "12", 
-      description: "Active projects", 
+      description: isInitialized ? t("dashboard.stats.activeProjects") : "Active projects", 
       change: "+2",
       color: "progress-gradient-purple"
     },
     { 
-      title: "Connected Devices", 
+      title: isInitialized ? t("dashboard.stats.connectedDevices") : "Connected Devices", 
       value: "3", 
-      description: "Available devices", 
+      description: isInitialized ? t("dashboard.stats.availableDevices") : "Available devices", 
       change: "+1",
       color: "progress-gradient-blue"
     },
     { 
-      title: "Storage Used", 
+      title: isInitialized ? t("dashboard.stats.storageUsed") : "Storage Used", 
       value: "45%", 
-      description: "15GB of 30GB", 
+      description: isInitialized ? t("dashboard.stats.storageDetails") : "15GB of 30GB", 
       change: "+5%",
       color: "progress-gradient-amber"
     },
     { 
-      title: "Recent Activity", 
+      title: isInitialized ? t("dashboard.stats.recentActivity") : "Recent Activity", 
       value: "24", 
-      description: "Actions this week", 
+      description: isInitialized ? t("dashboard.stats.actionsThisWeek") : "Actions this week", 
       change: "+10",
       color: "progress-gradient-purple"
     }
@@ -46,7 +49,9 @@ const QuickOverview = () => {
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">Quick Overview</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        {isInitialized ? t("dashboard.quickOverview") : "Quick Overview"}
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {quickStats.map((stat, index) => (
           <Card key={index} className="dashboard-stat-card">

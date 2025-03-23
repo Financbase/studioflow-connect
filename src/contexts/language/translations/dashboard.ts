@@ -1,45 +1,121 @@
-
 import { Language } from "../types";
-import { ensureAllLanguages } from "../utils";
 
-const dashboardTranslations: Record<string, Record<Language, string>> = {
-  "dashboard.title": ensureAllLanguages({
-    en: "Dashboard",
-    es: "Panel de Control",
-    fr: "Tableau de Bord",
-    de: "Dashboard",
-    sv: "Instrumentpanel",
-    ja: "ダッシュボード",
-    zh: "仪表盘",
-    ru: "Панель управления",
-    pt: "Painel",
-    ar: "لوحة التحكم"
-  }),
-  "dashboard.subtitle": ensureAllLanguages({
-    en: "Manage your music production workflow",
-    es: "Gestiona tu flujo de trabajo de producción musical",
-    fr: "Gérez votre flux de travail de production musicale",
-    de: "Verwalten Sie Ihren Musikproduktionsworkflow",
-    sv: "Hantera ditt musikproduktionsarbetsflöde",
-    ja: "音楽制作ワークフローを管理する",
-    zh: "管理您的音乐制作工作流程",
-    ru: "Управляйте рабочим процессом создания музыки",
-    pt: "Gerencie seu fluxo de trabalho de produção musical",
-    ar: "إدارة سير عمل إنتاج الموسيقى الخاص بك"
-  }),
-  "dashboard.loading": ensureAllLanguages({
-    en: "Loading dashboard...",
-    es: "Cargando panel...",
-    fr: "Chargement du tableau de bord...",
-    de: "Dashboard wird geladen...",
-    sv: "Laddar instrumentpanelen...",
-    ja: "ダッシュボードを読み込んでいます...",
-    zh: "加载仪表板...",
-    ru: "Загрузка панели управления...",
-    pt: "Carregando painel...",
-    ar: "جاري تحميل لوحة المعلومات..."
-  }),
-  "dashboard.greeting.morning": ensureAllLanguages({
+type TranslationRecord = Record<Language, string>;
+
+const dashboardTranslations: Record<string, TranslationRecord> = {
+  // Dashboard quick overview
+  "dashboard.quickOverview": {
+    en: "Quick Overview",
+    es: "Resumen Rápido",
+    fr: "Aperçu Rapide",
+    de: "Schnellübersicht",
+    sv: "Snabb Översikt",
+    ja: "クイック概要",
+    zh: "快速概览",
+    ru: "Быстрый обзор",
+    pt: "Visão Rápida",
+    ar: "نظرة سريعة"
+  },
+  
+  // Dashboard stats
+  "dashboard.stats.audioProjects": {
+    en: "Audio Projects",
+    es: "Proyectos de Audio",
+    fr: "Projets Audio",
+    de: "Audio-Projekte",
+    sv: "Ljudprojekt",
+    ja: "オーディオプロジェクト",
+    zh: "音频项目",
+    ru: "Аудио проекты",
+    pt: "Projetos de Áudio",
+    ar: "مشاريع صوتية"
+  },
+  "dashboard.stats.activeProjects": {
+    en: "Active projects",
+    es: "Proyectos activos",
+    fr: "Projets actifs",
+    de: "Aktive Projekte",
+    sv: "Aktiva projekt",
+    ja: "アクティブなプロジェクト",
+    zh: "活跃项目",
+    ru: "Активные проекты",
+    pt: "Projetos ativos",
+    ar: "مشاريع نشطة"
+  },
+  "dashboard.stats.connectedDevices": {
+    en: "Connected Devices",
+    es: "Dispositivos Conectados",
+    fr: "Appareils Connectés",
+    de: "Verbundene Geräte",
+    sv: "Anslutna Enheter",
+    ja: "接続されたデバイス",
+    zh: "已连接设备",
+    ru: "Подключенные устройства",
+    pt: "Dispositivos Conectados",
+    ar: "الأجهزة المتصلة"
+  },
+  "dashboard.stats.availableDevices": {
+    en: "Available devices",
+    es: "Dispositivos disponibles",
+    fr: "Appareils disponibles",
+    de: "Verfügbare Geräte",
+    sv: "Tillgängliga enheter",
+    ja: "利用可能なデバイス",
+    zh: "可用设备",
+    ru: "Доступные устройства",
+    pt: "Dispositivos disponíveis",
+    ar: "الأجهزة المتاحة"
+  },
+  "dashboard.stats.storageUsed": {
+    en: "Storage Used",
+    es: "Almacenamiento Usado",
+    fr: "Stockage Utilisé",
+    de: "Speichernutzung",
+    sv: "Använt Lagringsutrymme",
+    ja: "使用ストレージ",
+    zh: "已用存储",
+    ru: "Использовано хранилища",
+    pt: "Armazenamento Utilizado",
+    ar: "التخزين المستخدم"
+  },
+  "dashboard.stats.storageDetails": {
+    en: "15GB of 30GB",
+    es: "15GB de 30GB",
+    fr: "15Go sur 30Go",
+    de: "15GB von 30GB",
+    sv: "15GB av 30GB",
+    ja: "30GBの内15GB",
+    zh: "15GB/30GB",
+    ru: "15ГБ из 30ГБ",
+    pt: "15GB de 30GB",
+    ar: "15 جيجابايت من 30 جيجابايت"
+  },
+  "dashboard.stats.recentActivity": {
+    en: "Recent Activity",
+    es: "Actividad Reciente",
+    fr: "Activité Récente",
+    de: "Neueste Aktivitäten",
+    sv: "Senaste Aktivitet",
+    ja: "最近のアクティビティ",
+    zh: "最近活动",
+    ru: "Недавняя активность",
+    pt: "Atividade Recente",
+    ar: "النشاط الأخير"
+  },
+  "dashboard.stats.actionsThisWeek": {
+    en: "Actions this week",
+    es: "Acciones esta semana",
+    fr: "Actions cette semaine",
+    de: "Aktionen diese Woche",
+    sv: "Åtgärder denna vecka",
+    ja: "今週のアクション",
+    zh: "本周操作",
+    ru: "Действия за эту неделю",
+    pt: "Ações desta semana",
+    ar: "الإجراءات هذا الأسبوع"
+  },
+  // Greetings
+  "dashboard.greeting.morning": {
     en: "Good morning",
     es: "Buenos días",
     fr: "Bonjour",
@@ -50,8 +126,8 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Доброе утро",
     pt: "Bom dia",
     ar: "صباح الخير"
-  }),
-  "dashboard.greeting.afternoon": ensureAllLanguages({
+  },
+  "dashboard.greeting.afternoon": {
     en: "Good afternoon",
     es: "Buenas tardes",
     fr: "Bon après-midi",
@@ -62,8 +138,8 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Добрый день",
     pt: "Boa tarde",
     ar: "مساء الخير"
-  }),
-  "dashboard.greeting.evening": ensureAllLanguages({
+  },
+  "dashboard.greeting.evening": {
     en: "Good evening",
     es: "Buenas noches",
     fr: "Bonsoir",
@@ -74,8 +150,8 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Добрый вечер",
     pt: "Boa noite",
     ar: "مساء الخير"
-  }),
-  "dashboard.user": ensureAllLanguages({
+  },
+  "dashboard.user": {
     en: "User",
     es: "Usuario",
     fr: "Utilisateur",
@@ -85,323 +161,58 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     zh: "用户",
     ru: "Пользователь",
     pt: "Usuário",
-    ar: "المستخدم"
-  }),
-  "dashboard.quickActions": ensureAllLanguages({
-    en: "Quick Actions",
-    es: "Acciones Rápidas",
-    fr: "Actions Rapides",
-    de: "Schnellaktionen",
-    sv: "Snabbåtgärder",
-    ja: "クイックアクション",
-    zh: "快捷操作",
-    ru: "Быстрые действия",
-    pt: "Ações Rápidas",
-    ar: "إجراءات سريعة"
-  }),
-  "dashboard.frequentlyUsed": ensureAllLanguages({
-    en: "Frequently used tools and actions",
-    es: "Herramientas y acciones de uso frecuente",
-    fr: "Outils et actions fréquemment utilisés",
-    de: "Häufig verwendete Tools und Aktionen",
-    sv: "Ofta använda verktyg och åtgärder",
-    ja: "よく使うツールとアクション",
-    zh: "常用工具和操作",
-    ru: "Часто используемые инструменты и действия",
-    pt: "Ferramentas e ações usadas com frequência",
-    ar: "الأدوات والإجراءات المستخدمة بشكل متكرر"
-  }),
-  "dashboard.newProject": ensureAllLanguages({
-    en: "New Project",
-    es: "Nuevo Proyecto",
-    fr: "Nouveau Projet",
-    de: "Neues Projekt",
-    sv: "Nytt Projekt",
-    ja: "新規プロジェクト",
-    zh: "新项目",
-    ru: "Новый проект",
-    pt: "Novo Projeto",
-    ar: "مشروع جديد"
-  }),
-  "dashboard.myLibrary": ensureAllLanguages({
-    en: "My Library",
-    es: "Mi Biblioteca",
-    fr: "Ma Bibliothèque",
-    de: "Meine Bibliothek",
-    sv: "Mitt Bibliotek",
-    ja: "マイライブラリ",
-    zh: "我的库",
-    ru: "Моя библиотека",
-    pt: "Minha Biblioteca",
-    ar: "مكتبتي"
-  }),
-  "dashboard.connect": ensureAllLanguages({
-    en: "Connect",
-    es: "Conectar",
-    fr: "Connecter",
-    de: "Verbinden",
-    sv: "Anslut",
-    ja: "接続",
-    zh: "连接",
-    ru: "Подключить",
-    pt: "Conectar",
-    ar: "توصيل"
-  }),
-  "dashboard.aiTools": ensureAllLanguages({
-    en: "AI Tools",
-    es: "Herramientas de IA",
-    fr: "Outils d'IA",
-    de: "KI-Werkzeuge",
-    sv: "AI-verktyg",
-    ja: "AIツール",
-    zh: "AI工具",
-    ru: "ИИ инструменты",
-    pt: "Ferramentas de IA",
-    ar: "أدوات الذكاء الاصطناعي"
-  }),
-  "dashboard.viewChanged": ensureAllLanguages({
-    en: "View Changed",
-    es: "Vista Cambiada",
-    fr: "Vue Modifiée",
-    de: "Ansicht Geändert",
-    sv: "Vy Ändrad",
-    ja: "表示が変更されました",
-    zh: "视图已更改",
-    ru: "Вид Изменен",
-    pt: "Visualização Alterada",
-    ar: "تم تغيير العرض"
-  }),
-  "dashboard.viewSet": ensureAllLanguages({
-    en: "View set to",
-    es: "Vista establecida a",
-    fr: "Vue définie sur",
-    de: "Ansicht eingestellt auf",
-    sv: "Vy inställd på",
-    ja: "表示が設定されました：",
-    zh: "视图设置为",
-    ru: "Вид установлен на",
-    pt: "Visualização definida para",
-    ar: "تم تعيين العرض إلى"
-  }),
-  // View mode specific translations
-  "view.simple": ensureAllLanguages({
-    en: "Simple",
-    es: "Simple",
-    fr: "Simple",
-    de: "Einfach",
-    sv: "Enkel",
-    ja: "シンプル",
-    zh: "简单",
-    ru: "Простой",
-    pt: "Simples",
-    ar: "بسيط"
-  }),
-  "view.advanced": ensureAllLanguages({
-    en: "Advanced",
-    es: "Avanzado",
-    fr: "Avancé",
-    de: "Erweitert",
-    sv: "Avancerad",
-    ja: "高度",
-    zh: "高级",
-    ru: "Продвинутый",
-    pt: "Avançado",
-    ar: "متقدم"
-  }),
-  "view.custom": ensureAllLanguages({
-    en: "Custom",
-    es: "Personalizado",
-    fr: "Personnalisé",
-    de: "Benutzerdefiniert",
-    sv: "Anpassad",
-    ja: "カスタム",
-    zh: "自定义",
-    ru: "Пользовательский",
-    pt: "Personalizado",
-    ar: "مخصص"
-  }),
-  "label.dashboardview": ensureAllLanguages({
-    en: "Dashboard View",
-    es: "Vista del Panel",
-    fr: "Vue du Tableau de Bord",
-    de: "Dashboard-Ansicht",
-    sv: "Instrumentpanelvy",
-    ja: "ダッシュボード表示",
-    zh: "仪表板视图",
-    ru: "Вид панели управления",
-    pt: "Visualização do Painel",
-    ar: "عرض لوحة المعلومات"
-  }),
-  "tooltips.simpleview": ensureAllLanguages({
-    en: "Simple overview of essential tools",
-    es: "Vista simple de herramientas esenciales",
-    fr: "Aperçu simple des outils essentiels",
-    de: "Einfache Übersicht über wesentliche Tools",
-    sv: "Enkel översikt över väsentliga verktyg",
-    ja: "必須ツールの簡単な概要",
-    zh: "基本工具的简单概览",
-    ru: "Простой обзор основных инструментов",
-    pt: "Visão simples de ferramentas essenciais",
-    ar: "نظرة عامة بسيطة على الأدوات الأساسية"
-  }),
-  "tooltips.advancedview": ensureAllLanguages({
-    en: "Detailed view with all available tools",
-    es: "Vista detallada con todas las herramientas disponibles",
-    fr: "Vue détaillée avec tous les outils disponibles",
-    de: "Detaillierte Ansicht mit allen verfügbaren Tools",
-    sv: "Detaljerad vy med alla tillgängliga verktyg",
-    ja: "利用可能なすべてのツールを含む詳細ビュー",
-    zh: "包含所有可用工具的详细视图",
-    ru: "Подробный вид со всеми доступными инструментами",
-    pt: "Visualização detalhada com todas as ferramentas disponíveis",
-    ar: "عرض مفصل مع جميع الأدوات المتاحة"
-  }),
-  "tooltips.customview": ensureAllLanguages({
-    en: "Customize your dashboard layout",
-    es: "Personaliza el diseño de tu panel",
-    fr: "Personnalisez la disposition de votre tableau de bord",
-    de: "Passen Sie Ihr Dashboard-Layout an",
-    sv: "Anpassa din instrumentpanelslayout",
-    ja: "ダッシュボードレイアウトをカスタマイズする",
-    zh: "自定义仪表板布局",
-    ru: "Настройте макет панели управления",
-    pt: "Personalize o layout do seu painel",
-    ar: "تخصيص تخطيط لوحة المعلومات الخاصة بك"
-  }),
-  "tooltips.proonly": ensureAllLanguages({
-    en: "Available only in Pro plan",
-    es: "Disponible solo en el plan Pro",
-    fr: "Disponible uniquement dans le plan Pro",
-    de: "Nur im Pro-Plan verfügbar",
-    sv: "Endast tillgängligt i Pro-planen",
-    ja: "Proプランでのみ利用可能",
-    zh: "仅在专业版中可用",
-    ru: "Доступно только в плане Pro",
-    pt: "Disponível apenas no plano Pro",
-    ar: "متوفر فقط في خطة برو"
-  }),
-  "tooltips.featureNotAvailable": ensureAllLanguages({
-    en: "Feature not available",
-    es: "Función no disponible",
-    fr: "Fonctionnalité non disponible",
-    de: "Funktion nicht verfügbar",
-    sv: "Funktion inte tillgänglig",
-    ja: "機能は利用できません",
-    zh: "功能不可用",
-    ru: "Функция недоступна",
-    pt: "Recurso não disponível",
-    ar: "الميزة غير متوفرة"
-  }),
-  // New additions for the knowledge base section
-  "dashboard.knowledgeBase": ensureAllLanguages({
-    en: "Knowledge Base",
-    es: "Base de Conocimiento",
-    fr: "Base de Connaissances",
-    de: "Wissensdatenbank",
-    sv: "Kunskapsbas",
-    ja: "ナレッジベース",
-    zh: "知识库",
-    ru: "База знаний",
-    pt: "Base de Conhecimento",
-    ar: "قاعدة المعرفة"
-  }),
-  "dashboard.knowledgeBaseDescription": ensureAllLanguages({
-    en: "Access music production resources and tutorials",
-    es: "Accede a recursos y tutoriales de producción musical",
-    fr: "Accédez aux ressources et tutoriels de production musicale",
-    de: "Zugriff auf Musikproduktionsressourcen und Tutorials",
-    sv: "Få tillgång till musikproduktionsresurser och handledningar",
-    ja: "音楽制作のリソースとチュートリアルにアクセス",
-    zh: "访问音乐制作资源和教程",
-    ru: "Доступ к ресурсам и урокам по производству музыки",
-    pt: "Acesse recursos e tutoriais de produção musical",
-    ar: "الوصول إلى موارد وبرامج تعليمية لإنتاج الموسيقى"
-  }),
-  "dashboard.exploreKnowledge": ensureAllLanguages({
-    en: "Explore Knowledge",
-    es: "Explorar Conocimiento",
-    fr: "Explorer les Connaissances",
-    de: "Wissen Erkunden",
-    sv: "Utforska Kunskap",
-    ja: "知識を探る",
-    zh: "探索知识",
-    ru: "Исследовать знания",
-    pt: "Explorar Conhecimento",
-    ar: "استكشاف المعرفة"
-  }),
-  "dashboard.studioTechniques": ensureAllLanguages({
-    en: "Studio Techniques",
-    es: "Técnicas de Estudio",
-    fr: "Techniques de Studio",
-    de: "Studio-Techniken",
-    sv: "Studioteknik",
-    ja: "スタジオテクニック",
-    zh: "录音室技术",
-    ru: "Студийные техники",
-    pt: "Técnicas de Estúdio",
-    ar: "تقنيات الاستوديو"
-  }),
-  "dashboard.studioTechniquesDescription": ensureAllLanguages({
-    en: "Recording, mixing, and mastering tutorials",
-    es: "Tutoriales de grabación, mezcla y masterización",
-    fr: "Tutoriels d'enregistrement, de mixage et de mastering",
-    de: "Tutorials für Aufnahme, Mixing und Mastering",
-    sv: "Handledningar för inspelning, mixning och mastering",
-    ja: "レコーディング、ミキシング、マスタリングのチュートリアル",
-    zh: "录音、混音和母带处理教程",
-    ru: "Уроки записи, сведения и мастеринга",
-    pt: "Tutoriais de gravação, mixagem e masterização",
-    ar: "دروس التسجيل والمزج والماسترينغ"
-  }),
-  "dashboard.audioTroubleshooting": ensureAllLanguages({
-    en: "Audio Troubleshooting",
-    es: "Solución de Problemas de Audio",
-    fr: "Dépannage Audio",
-    de: "Audio-Fehlerbehebung",
-    sv: "Felsökning av Ljud",
-    ja: "オーディオトラブルシューティング",
-    zh: "音频故障排除",
-    ru: "Устранение неполадок аудио",
-    pt: "Resolução de Problemas de Áudio",
-    ar: "استكشاف مشكلات الصوت وإصلاحها"
-  }),
-  "dashboard.audioTroubleshootingDescription": ensureAllLanguages({
-    en: "Common issues and solutions",
-    es: "Problemas comunes y soluciones",
-    fr: "Problèmes courants et solutions",
-    de: "Häufige Probleme und Lösungen",
-    sv: "Vanliga problem och lösningar",
-    ja: "一般的な問題と解決策",
-    zh: "常见问题和解决方案",
-    ru: "Распространенные проблемы и решения",
-    pt: "Problemas comuns e soluções",
-    ar: "المشكلات الشائعة والحلول"
-  }),
-  // Toast messages used in MainDashboardContent
-  "toast.premiumFeature": ensureAllLanguages({
-    en: "Premium Feature",
-    es: "Función Premium",
-    fr: "Fonctionnalité Premium",
-    de: "Premium-Funktion",
-    sv: "Premiumfunktion",
-    ja: "プレミアム機能",
-    zh: "高级功能",
-    ru: "Премиум функция",
-    pt: "Recurso Premium",
-    ar: "ميزة متميزة"
-  }),
-  "toast.upgradeRequired": ensureAllLanguages({
-    en: "Upgrade your plan to access this feature",
-    es: "Actualiza tu plan para acceder a esta función",
-    fr: "Mettez à niveau votre forfait pour accéder à cette fonctionnalité",
-    de: "Upgraden Sie Ihren Plan, um auf diese Funktion zuzugreifen",
-    sv: "Uppgradera din plan för att få tillgång till den här funktionen",
-    ja: "この機能にアクセスするにはプランをアップグレードしてください",
-    zh: "升级您的计划以访问此功能",
-    ru: "Обновите свой план, чтобы получить доступ к этой функции",
-    pt: "Atualize seu plano para acessar este recurso",
-    ar: "قم بترقية خطتك للوصول إلى هذه الميزة"
-  })
+    ar: "مستخدم"
+  },
+  
+  // Plan names for translation
+  "plan.free": {
+    en: "Free",
+    es: "Gratis",
+    fr: "Gratuit",
+    de: "Kostenlos",
+    sv: "Gratis",
+    ja: "無料",
+    zh: "免费",
+    ru: "Бесплатный",
+    pt: "Gratuito",
+    ar: "مجاني"
+  },
+  "plan.standard": {
+    en: "Standard",
+    es: "Estándar",
+    fr: "Standard",
+    de: "Standard",
+    sv: "Standard",
+    ja: "スタンダード",
+    zh: "标准",
+    ru: "Стандарт",
+    pt: "Padrão",
+    ar: "قياسي"
+  },
+  "plan.pro": {
+    en: "Pro",
+    es: "Pro",
+    fr: "Pro",
+    de: "Pro",
+    sv: "Pro",
+    ja: "プロ",
+    zh: "专业",
+    ru: "Про",
+    pt: "Pro",
+    ar: "احترافي"
+  },
+  "plan.enterprise": {
+    en: "Enterprise",
+    es: "Empresa",
+    fr: "Entreprise",
+    de: "Unternehmen",
+    sv: "Företag",
+    ja: "エンタープライズ",
+    zh: "企业版",
+    ru: "Корпоративный",
+    pt: "Empresarial",
+    ar: "المؤسسة"
+  }
 };
 
 export default dashboardTranslations;

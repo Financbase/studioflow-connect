@@ -1,7 +1,9 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileMusic, Upload, Bluetooth, Share2 } from "lucide-react";
+import { useLanguage } from "@/contexts/language";
 
 interface ActivityItem {
   id: number;
@@ -16,34 +18,36 @@ interface RecentActivityCardProps {
 }
 
 const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps) => {
+  const { t, isInitialized } = useLanguage();
+  
   // Recent activity for timeline with icons
   const recentActivity: ActivityItem[] = [
     { 
       id: 1, 
-      action: "Project Created", 
-      name: "Ambient Soundscape", 
-      time: "2 hours ago",
+      action: isInitialized ? t("activity.projectCreated") : "Project Created", 
+      name: isInitialized ? t("activity.ambientSoundscape") : "Ambient Soundscape", 
+      time: isInitialized ? t("activity.hoursAgo", { hours: "2" }) : "2 hours ago",
       icon: <FileMusic className="h-4 w-4 text-blue-500" />
     },
     { 
       id: 2, 
-      action: "File Uploaded", 
+      action: isInitialized ? t("activity.fileUploaded") : "File Uploaded", 
       name: "vocal_take_final.wav", 
-      time: "Yesterday",
+      time: isInitialized ? t("activity.yesterday") : "Yesterday",
       icon: <Upload className="h-4 w-4 text-green-500" />
     },
     { 
       id: 3, 
-      action: "Device Connected", 
+      action: isInitialized ? t("activity.deviceConnected") : "Device Connected", 
       name: "Focusrite Scarlett 2i2", 
-      time: "3 days ago",
+      time: isInitialized ? t("activity.daysAgo", { days: "3" }) : "3 days ago",
       icon: <Bluetooth className="h-4 w-4 text-purple-500" />
     },
     { 
       id: 4, 
-      action: "Project Shared", 
-      name: "Summer Beats EP", 
-      time: "1 week ago",
+      action: isInitialized ? t("activity.projectShared") : "Project Shared", 
+      name: isInitialized ? t("activity.summerBeatsEP") : "Summer Beats EP", 
+      time: isInitialized ? t("activity.weekAgo") : "1 week ago",
       icon: <Share2 className="h-4 w-4 text-amber-500" />
     }
   ];
@@ -52,11 +56,13 @@ const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps) => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Your latest actions and updates</CardDescription>
+          <CardTitle>{isInitialized ? t("activity.recentActivity") : "Recent Activity"}</CardTitle>
+          <CardDescription>{isInitialized ? t("activity.latestActions") : "Your latest actions and updates"}</CardDescription>
         </div>
         {onViewActivity && (
-          <Button variant="ghost" size="sm" onClick={onViewActivity}>View all</Button>
+          <Button variant="ghost" size="sm" onClick={onViewActivity}>
+            {isInitialized ? t("activity.viewAll") : "View all"}
+          </Button>
         )}
       </CardHeader>
       <CardContent>
