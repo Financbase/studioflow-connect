@@ -5,13 +5,14 @@ import { AudioAsset } from '@/types/supabase';
 import { Panel } from '../ui/panel';
 
 interface AudioLibraryTabProps {
-  onSelectAudio: (audioAsset: AudioAsset) => void;
+  onSelectAudio?: (audioAsset: AudioAsset) => void;
+  filterType?: string;
 }
 
-const AudioLibraryTab: React.FC<AudioLibraryTabProps> = ({ onSelectAudio }) => {
+const AudioLibraryTab: React.FC<AudioLibraryTabProps> = ({ onSelectAudio, filterType = "all" }) => {
   return (
     <Panel variant="elevated">
-      <AudioAssetLibrary onSelectAudio={onSelectAudio} />
+      <AudioAssetLibrary onSelectAudio={onSelectAudio} filterType={filterType} />
     </Panel>
   );
 };

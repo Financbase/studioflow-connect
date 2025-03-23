@@ -4,16 +4,7 @@ import LibraryNavTabs from "./LibraryNavTabs";
 import ViewModeToggle from "./ViewModeToggle";
 import SearchAndFilter from "./SearchAndFilter";
 import LibraryTabs from "./LibraryTabs";
-
-interface AudioFile {
-  name: string;
-  size: string;
-  duration: string;
-  type: string;
-  id?: string;
-  url?: string;
-  created_at?: string;
-}
+import { AudioFile } from "./types";
 
 interface LibraryMainContentProps {
   activeTab: string;
@@ -44,12 +35,16 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
     setViewMode(mode);
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="lg:col-span-3 space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <LibraryNavTabs 
           activeTab={activeTab} 
-          onTabChange={setActiveTab} 
+          onTabChange={handleTabChange} 
         />
         
         <ViewModeToggle 
@@ -67,7 +62,7 @@ const LibraryMainContent: React.FC<LibraryMainContentProps> = ({
       
       <LibraryTabs
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        onTabChange={handleTabChange}
         viewMode={viewMode}
         sortBy={sortBy}
         filteredSamples={filteredSamples}
