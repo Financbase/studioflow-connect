@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Play, MoreVertical, FileAudio } from "lucide-react";
 import {
@@ -13,15 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import AudioWaveform from "./AudioWaveform";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
-
-interface AudioFile {
-  name: string;
-  size: string;
-  duration: string;
-  type: string;
-  id?: string;
-  url?: string;
-}
+import { AudioFile } from "./types";
 
 interface AudioFileListProps {
   files: AudioFile[];

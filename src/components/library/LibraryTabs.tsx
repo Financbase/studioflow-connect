@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AudioFileList from "./AudioFileList";
@@ -6,16 +5,7 @@ import ContentPlaceholder from "./ContentPlaceholder";
 import RecentlyAdded from "./RecentlyAdded";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface AudioFile {
-  name: string;
-  size: string;
-  duration: string;
-  type: string;
-  id?: string;
-  url?: string;
-  created_at?: string;
-}
+import { AudioFile } from "./types";
 
 interface LibraryTabsProps {
   activeTab: string;

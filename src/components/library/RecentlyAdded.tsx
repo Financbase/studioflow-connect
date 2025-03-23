@@ -1,20 +1,10 @@
-
 import React from "react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { FileAudio, Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 import AudioWaveform from "./AudioWaveform";
-
-interface AudioFile {
-  name: string;
-  size: string;
-  duration: string;
-  type: string;
-  id?: string;
-  url?: string;
-  created_at?: string;
-}
+import { AudioFile } from "./types";
 
 interface RecentlyAddedProps {
   files: AudioFile[];
