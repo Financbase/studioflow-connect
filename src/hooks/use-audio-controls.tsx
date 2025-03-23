@@ -1,128 +1,173 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
 
-export interface AudioControlsState {
-  isPlaying: boolean;
-  volume: number;
-  isMuted: boolean;
-  currentTime: number;
-  duration: number;
-  visualizationType: string;
-}
-
-export function useAudioControls(audioRef: React.RefObject<HTMLAudioElement>) {
-  const [state, setState] = useState<AudioControlsState>({
-    isPlaying: false,
-    volume: 50,
-    isMuted: false,
-    currentTime: 0,
-    duration: 0,
-    visualizationType: 'waveform'
-  });
+export function useAudioControls(audioRef: RefObject<HTMLAudioElement>) {
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
-  const previousVolumeRef = useRef<number>(50);
-
+  const previousVolume = useRef(volume);
+  
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    // Initialize volume
-    audio.volume = state.volume / 100;
-    audio.muted = state.isMuted;
-
-    const handlePlay = () => setState(prev => ({ ...prev, isPlaying: true }));
-    const handlePause = () => setState(prev => ({ ...prev, isPlaying: false }));
-    const handleTimeUpdate = () => setState(prev => ({ ...prev, currentTime: audio.currentTime }));
-    const handleDurationChange = () => setState(prev => ({ ...prev, duration: audio.duration }));
-    const handleEnded = () => setState(prev => ({ ...prev, isPlaying: false, currentTime: 0 }));
     
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleDurationChange = () => setDuration(audio.duration);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleVolumeChange = () => setVolume(audio.volume * 100);
+    const handleWaiting = () => setIsLoading(true);
+    const handleCanPlay = () => setIsLoading(false);
+    const handleError = () => {
+      setError('An error occurred while playing the audio');
+      setIsLoading(false);
+    };
+    
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('durationchange', handleDurationChange);
     audio.addEventListener('play', handlePlay);
     audio.addEventListener('pause', handlePause);
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('loadedmetadata', handleDurationChange);
-    audio.addEventListener('durationchange', handleDurationChange);
-    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('volumechange', handleVolumeChange);
+    audio.addEventListener('waiting', handleWaiting);
+    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('error', handleError);
+    
+    // Apply initial volume
+    audio.volume = volume / 100;
     
     return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('durationchange', handleDurationChange);
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('loadedmetadata', handleDurationChange);
-      audio.removeEventListener('durationchange', handleDurationChange);
-      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('volumechange', handleVolumeChange);
+      audio.removeEventListener('waiting', handleWaiting);
+      audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('error', handleError);
     };
-  }, [audioRef, state.volume, state.isMuted]);
-
+  }, [audioRef, volume]);
+  
+  // Update audio volume when volume state changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    if (!isMuted) {
+      audio.volume = volume / 100;
+    }
+  }, [audioRef, volume, isMuted]);
+  
+  // Handle mute/unmute
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.muted = isMuted;
+    
+    if (isMuted) {
+      previousVolume.current = volume;
+    }
+  }, [audioRef, isMuted, volume]);
+  
   const play = () => {
-    if (audioRef.current) {
-      audioRef.current.play()
-        .catch(error => console.error("Error playing audio:", error));
-    }
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.play().catch(err => {
+      console.error('Error playing audio:', err);
+      setError('Could not play audio. Try clicking play again.');
+    });
   };
-
+  
   const pause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-  };
-
-  const stop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setState(prev => ({ ...prev, currentTime: 0 }));
-    }
-  };
-
-  const seek = (time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setState(prev => ({ ...prev, currentTime: time }));
-    }
-  };
-
-  const setVolume = (value: number) => {
-    if (state.isMuted && value > 0) {
-      toggleMute(); // Unmute if volume is increased while muted
-    }
+    const audio = audioRef.current;
+    if (!audio) return;
     
-    if (audioRef.current) {
-      audioRef.current.volume = value / 100;
-    }
-    
-    setState(prev => ({ ...prev, volume: value }));
+    audio.pause();
   };
-
-  const toggleMute = () => {
-    if (state.isMuted) {
-      // Unmute
-      if (audioRef.current) {
-        audioRef.current.muted = false;
-        audioRef.current.volume = previousVolumeRef.current / 100;
-      }
-      setState(prev => ({ ...prev, isMuted: false, volume: previousVolumeRef.current }));
+  
+  const togglePlay = () => {
+    if (isPlaying) {
+      pause();
     } else {
-      // Mute
-      previousVolumeRef.current = state.volume;
-      if (audioRef.current) {
-        audioRef.current.muted = true;
-      }
-      setState(prev => ({ ...prev, isMuted: true }));
+      play();
     }
   };
-
-  const setVisualizationType = (type: string) => {
-    setState(prev => ({ ...prev, visualizationType: type }));
+  
+  const seek = (time: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.currentTime = time;
+    setCurrentTime(time);
   };
-
+  
+  const changeVolume = (newVolume: number) => {
+    setVolume(newVolume);
+    if (isMuted && newVolume > 0) {
+      setIsMuted(false);
+    }
+  };
+  
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    if (isMuted && volume === 0) {
+      // If we're unmuting but volume is 0, restore previous volume
+      setVolume(previousVolume.current || 50);
+    }
+  };
+  
+  const stop = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.pause();
+    audio.currentTime = 0;
+    setCurrentTime(0);
+  };
+  
+  const skipForward = (seconds = 10) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const newTime = Math.min(audio.currentTime + seconds, duration);
+    seek(newTime);
+  };
+  
+  const skipBackward = (seconds = 10) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const newTime = Math.max(audio.currentTime - seconds, 0);
+    seek(newTime);
+  };
+  
+  const clearError = () => {
+    setError(null);
+  };
+  
   return {
-    ...state,
+    currentTime,
+    duration,
+    isPlaying,
+    volume,
+    isMuted,
+    isLoading,
+    error,
     play,
     pause,
-    stop,
+    togglePlay,
     seek,
-    setVolume,
+    setVolume: changeVolume,
     toggleMute,
-    setVisualizationType,
+    stop,
+    skipForward,
+    skipBackward,
+    clearError
   };
 }

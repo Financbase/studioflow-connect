@@ -53,18 +53,18 @@ export function usePerformanceMonitoring(options = { enabled: true }) {
           description: 'Time to First Byte'
         });
         
-        // DOM Content Loaded
+        // DOM Content Loaded - fixed navigationStart reference
         collectedMetrics.push({
           name: 'DOM Content Loaded',
-          value: Math.round(navigationTiming.domContentLoadedEventEnd - navigationTiming.navigationStart),
+          value: Math.round(navigationTiming.domContentLoadedEventEnd - navigationTiming.startTime),
           unit: 'ms',
           description: 'DOM Content Loaded event time'
         });
         
-        // Load event
+        // Load event - fixed navigationStart reference
         collectedMetrics.push({
           name: 'Page Load',
-          value: Math.round(navigationTiming.loadEventEnd - navigationTiming.navigationStart),
+          value: Math.round(navigationTiming.loadEventEnd - navigationTiming.startTime),
           unit: 'ms',
           description: 'Total page load time'
         });
@@ -88,15 +88,17 @@ export function usePerformanceMonitoring(options = { enabled: true }) {
         });
       }
       
-      // Add memory usage if available
-      if (performance.memory) {
-        const memoryInfo = performance.memory as any;
-        collectedMetrics.push({
-          name: 'JS Heap Size',
-          value: Math.round(memoryInfo.usedJSHeapSize / (1024 * 1024) * 100) / 100,
-          unit: 'MB',
-          description: 'JavaScript heap size used'
-        });
+      // Add memory usage if available - with proper type checking
+      if ('memory' in performance) {
+        const memoryInfo = (performance as any).memory;
+        if (memoryInfo) {
+          collectedMetrics.push({
+            name: 'JS Heap Size',
+            value: Math.round(memoryInfo.usedJSHeapSize / (1024 * 1024) * 100) / 100,
+            unit: 'MB',
+            description: 'JavaScript heap size used'
+          });
+        }
       }
       
       setMetrics(collectedMetrics);

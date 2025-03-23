@@ -24,7 +24,7 @@ export const useRecommendationFilter = (
       filtered = filtered.filter(rec => 
         rec.title.toLowerCase().includes(searchLower) || 
         rec.description.toLowerCase().includes(searchLower) ||
-        rec.tags?.some(tag => tag.toLowerCase().includes(searchLower))
+        (rec.tags && rec.tags.some(tag => tag.toLowerCase().includes(searchLower)))
       );
     }
     
@@ -53,10 +53,10 @@ export const useRecommendationFilter = (
     if (sortBy) {
       switch (sortBy) {
         case 'newest':
-          filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          filtered.sort((a, b) => ((b.createdAt ?? 0) - (a.createdAt ?? 0)));
           break;
         case 'popularity':
-          filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+          filtered.sort((a, b) => ((b.popularity ?? 0) - (a.popularity ?? 0)));
           break;
         case 'relevance':
           // This would normally be handled server-side with a more sophisticated algorithm
@@ -76,7 +76,7 @@ export const useRecommendationFilter = (
               if (bTitle.startsWith(searchLower) && !aTitle.startsWith(searchLower)) return 1;
               
               // Default to popularity
-              return (b.popularity || 0) - (a.popularity || 0);
+              return ((b.popularity ?? 0) - (a.popularity ?? 0));
             });
           }
           break;
