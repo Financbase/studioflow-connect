@@ -7,15 +7,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuPortal
+  DropdownMenuGroup
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Languages, Check } from "lucide-react";
-import { useLanguage, Language, flagEmojis, languageNames } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language";
+import { Language, flagEmojis, languageNames } from "@/contexts/language";
 import { useTheme } from "@/contexts/ThemeContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -28,12 +25,6 @@ const LanguageSwitcher = () => {
     const event = new CustomEvent("languageChange", { detail: { language } });
     window.dispatchEvent(event);
   }, [language]);
-  
-  // Group languages by region for a more organized dropdown
-  const languageGroups = {
-    west: ['en', 'es', 'fr', 'de', 'pt'] as Language[],
-    east: ['ja', 'zh', 'ru', 'sv', 'ar'] as Language[]
-  };
   
   return (
     <DropdownMenu>

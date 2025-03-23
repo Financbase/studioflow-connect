@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import PlanSwitcher from "@/components/PlanSwitcher";
 import { CustomLayoutEditor } from "@/components/custom-layout";
 import { UserProfile } from "@/types/supabase";
 import { PricingTier } from "@/contexts/dashboard/types";
+import { useLanguage } from "@/contexts/language";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -19,17 +21,7 @@ interface MobileMenuProps {
   onSignOut: () => void;
   pricingTier: PricingTier;
   setPricingTier: (tier: PricingTier) => void;
-  t: (key: string) => string;
 }
-
-const MobileMenuLabels = {
-  dashboard: "Dashboard",
-  docs: "Documentation",
-  admin: "Admin Panel",
-  support: "Support Center",
-  settings: "Settings",
-  signout: "Sign Out"
-};
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
   isOpen,
@@ -39,9 +31,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   isAdmin,
   onSignOut,
   pricingTier,
-  setPricingTier,
-  t
+  setPricingTier
 }) => {
+  const { t } = useLanguage();
+  
   const closeMobileMenu = () => {
     onOpenChange(false);
   };
@@ -51,7 +44,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="ml-1">
           <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">{t("mobile.toggleMenu")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
@@ -59,10 +52,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           <div className="flex items-center gap-2 py-4">
             <Avatar className="h-10 w-10">
               <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback>{profile?.username?.slice(0, 2).toUpperCase() || "U"}</AvatarFallback>
+              <AvatarFallback>{profile?.username?.slice(0, 2).toUpperCase() || t("dashboard.user")}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{profile?.full_name || profile?.username || "User"}</p>
+              <p className="text-sm font-medium">{profile?.full_name || profile?.username || t("dashboard.user")}</p>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
           </div>
@@ -75,7 +68,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
               onClick={closeMobileMenu}
             >
-              {MobileMenuLabels.dashboard}
+              {t("nav.dashboard")}
             </Link>
             <Link 
               to="/support" 
@@ -83,14 +76,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               onClick={closeMobileMenu}
             >
               <TicketPlus className="h-4 w-4" />
-              {MobileMenuLabels.support}
+              {t("nav.support")}
             </Link>
             <Link 
               to="/docs" 
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
               onClick={closeMobileMenu}
             >
-              {MobileMenuLabels.docs}
+              {t("header.documentation")}
             </Link>
             {isAdmin && (
               <Link 
@@ -99,7 +92,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 onClick={closeMobileMenu}
               >
                 <Shield className="h-4 w-4" />
-                {MobileMenuLabels.admin}
+                {t("nav.admin")}
               </Link>
             )}
           </div>
@@ -107,7 +100,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           <Separator />
           
           <div className="py-4">
-            <p className="px-3 text-sm font-medium mb-2">{MobileMenuLabels.settings}</p>
+            <p className="px-3 text-sm font-medium mb-2">{t("user.settings")}</p>
             <div className="space-y-3 px-3">
               <PlanSwitcher currentPlan={pricingTier} onPlanChange={setPricingTier} />
               <CustomLayoutEditor />
@@ -123,7 +116,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               onClick={onSignOut}
             >
               <LogOut className="h-4 w-4" />
-              {MobileMenuLabels.signout}
+              {t("user.signout")}
             </Button>
           </div>
         </div>

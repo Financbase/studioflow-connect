@@ -11,7 +11,7 @@ import StudioFlowConnect from "@/components/StudioFlowConnect";
 import MobileCompanion from "@/components/MobileCompanion";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/language";
 import { Link } from "react-router-dom";
 import DashboardWidget from "@/components/DashboardWidget";
 import { useDashboard, WidgetId } from "@/contexts/dashboard";
@@ -41,18 +41,18 @@ const Index = () => {
         setIsLoading(false);
       } catch (error) {
         handleError(error, {
-          title: "Dashboard Error"
+          title: t("errors.dashboardError")
         });
         setIsLoading(false);
       }
     }, 300);
     
     return () => clearTimeout(timer);
-  }, [handleError]);
+  }, [handleError, t]);
 
   // Define breadcrumb items
   const breadcrumbItems = [
-    { label: "Dashboard", href: "/" }
+    { label: t("nav.dashboard"), href: "/" }
   ];
 
   return (
@@ -93,7 +93,7 @@ const Index = () => {
                   {/* Always show StudioFlow Connect as the main MVP feature */}
                   {isWidgetVisible('connect') && (
                     <div className="mb-10">
-                      <DashboardWidget id="connect" title="StudioFlow Connect">
+                      <DashboardWidget id="connect" title={t("widgets.connect")}>
                         <StudioFlowConnect />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
@@ -111,7 +111,7 @@ const Index = () => {
                   
                   {isWidgetVisible('vm') && hasFeatureAccess('vm') && (
                     <div className="mb-10">
-                      <DashboardWidget id="vm" title="Virtual Machine Controller" isPremiumFeature>
+                      <DashboardWidget id="vm" title={t("widgets.vm")} isPremiumFeature>
                         <VMController />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
@@ -120,7 +120,7 @@ const Index = () => {
                   
                   {isWidgetVisible('daw') && hasFeatureAccess('daw') && (
                     <div className="mb-10">
-                      <DashboardWidget id="daw" title="DAW Workflow Integration" isPremiumFeature>
+                      <DashboardWidget id="daw" title={t("widgets.daw")} isPremiumFeature>
                         <DAWWorkflow />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
@@ -129,7 +129,7 @@ const Index = () => {
                   
                   {isWidgetVisible('audio') && hasFeatureAccess('audio') && (
                     <div className="mb-10">
-                      <DashboardWidget id="audio" title="Audio Analysis">
+                      <DashboardWidget id="audio" title={t("widgets.audio")}>
                         <AudioAnalyzer />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
@@ -138,7 +138,7 @@ const Index = () => {
                   
                   {isWidgetVisible('ai') && hasFeatureAccess('ai') && (
                     <div className="mb-10">
-                      <DashboardWidget id="ai" title="AI-Powered Tools" isPremiumFeature>
+                      <DashboardWidget id="ai" title={t("widgets.ai")} isPremiumFeature>
                         <AITools />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
@@ -147,7 +147,7 @@ const Index = () => {
                   
                   {isWidgetVisible('marketplace') && hasFeatureAccess('marketplace') && (
                     <div className="mb-10">
-                      <DashboardWidget id="marketplace" title="Studio Marketplace" isPremiumFeature>
+                      <DashboardWidget id="marketplace" title={t("widgets.marketplace")} isPremiumFeature>
                         <StudioMarketplace />
                       </DashboardWidget>
                     </div>
@@ -161,7 +161,7 @@ const Index = () => {
         {isLoading && (
           <div className="flex items-center justify-center py-20">
             <div className="animate-pulse-soft text-center">
-              <p className="text-muted-foreground">Loading dashboard...</p>
+              <p className="text-muted-foreground">{t("dashboard.loading")}</p>
             </div>
           </div>
         )}

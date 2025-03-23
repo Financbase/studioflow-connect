@@ -21,7 +21,7 @@ import {
   ViewMode 
 } from "@/contexts/dashboard";
 import { toast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/language";
 
 const ViewSelector = () => {
   const { viewMode, setViewMode, pricingTier } = useDashboard();
@@ -31,8 +31,8 @@ const ViewSelector = () => {
     if (value) {
       if (value === "custom" && pricingTier !== "pro") {
         toast({
-          title: "Feature not available",
-          description: "Custom layout is only available with the Pro plan",
+          title: t("tooltips.featureNotAvailable"),
+          description: t("tooltips.proonly"),
           variant: "destructive"
         });
         return;
@@ -40,8 +40,8 @@ const ViewSelector = () => {
       
       setViewMode(value as ViewMode);
       toast({
-        title: "View Changed",
-        description: `Dashboard view set to ${value}`,
+        title: t("dashboard.viewChanged"),
+        description: `${t("dashboard.viewSet")} ${t(`view.${value}`)}`,
       });
     }
   };
@@ -55,7 +55,7 @@ const ViewSelector = () => {
             <TooltipTrigger asChild>
               <ToggleGroupItem 
                 value="simple" 
-                aria-label="Simple View"
+                aria-label={t("view.simple")}
                 className="data-[state=on]:bg-background data-[state=on]:shadow-sm"
               >
                 <LayoutDashboard className="h-4 w-4 mr-1" />
@@ -73,7 +73,7 @@ const ViewSelector = () => {
             <TooltipTrigger asChild>
               <ToggleGroupItem 
                 value="advanced" 
-                aria-label="Advanced View"
+                aria-label={t("view.advanced")}
                 className="data-[state=on]:bg-background data-[state=on]:shadow-sm"
               >
                 <LayoutPanelTop className="h-4 w-4 mr-1" />
@@ -91,7 +91,7 @@ const ViewSelector = () => {
             <TooltipTrigger asChild>
               <ToggleGroupItem 
                 value="custom" 
-                aria-label="Custom View"
+                aria-label={t("view.custom")}
                 disabled={pricingTier !== "pro"}
                 className="relative data-[state=on]:bg-background data-[state=on]:shadow-sm"
               >

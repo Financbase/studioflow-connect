@@ -74,6 +74,54 @@ const dashboardTranslations = {
     ru: "Пользователь",
     pt: "Usuário",
     ar: "مستخدم"
+  },
+  "dashboard.loading": {
+    en: "Loading dashboard...",
+    es: "Cargando panel...",
+    fr: "Chargement du tableau de bord...",
+    de: "Dashboard wird geladen...",
+    sv: "Laddar instrumentpanel...",
+    ja: "ダッシュボードを読み込んでいます...",
+    zh: "正在加载仪表板...",
+    ru: "Загрузка панели...",
+    pt: "Carregando painel...",
+    ar: "جار تحميل لوحة القيادة..."
+  },
+  "dashboard.viewChanged": {
+    en: "View Changed",
+    es: "Vista Cambiada",
+    fr: "Vue Modifiée",
+    de: "Ansicht Geändert",
+    sv: "Vy Ändrad",
+    ja: "表示が変更されました",
+    zh: "视图已更改",
+    ru: "Вид Изменен",
+    pt: "Visualização Alterada",
+    ar: "تم تغيير العرض"
+  },
+  "dashboard.viewSet": {
+    en: "Dashboard view set to",
+    es: "Vista del panel establecida en",
+    fr: "Vue du tableau de bord définie sur",
+    de: "Dashboard-Ansicht eingestellt auf",
+    sv: "Instrumentpanelvy inställd på",
+    ja: "ダッシュボードの表示が次に設定されました：",
+    zh: "仪表板视图设置为",
+    ru: "Вид панели установлен на",
+    pt: "Visualização do painel definida para",
+    ar: "تم تعيين عرض لوحة القيادة إلى"
+  },
+  "errors.dashboardError": {
+    en: "Dashboard Error",
+    es: "Error del Panel",
+    fr: "Erreur du Tableau de Bord",
+    de: "Dashboard-Fehler",
+    sv: "Instrumentpanelsfel",
+    ja: "ダッシュボードエラー",
+    zh: "仪表板错误",
+    ru: "Ошибка Панели",
+    pt: "Erro no Painel",
+    ar: "خطأ في لوحة القيادة"
   }
 };
 

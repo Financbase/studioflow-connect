@@ -10,14 +10,14 @@ import MobileMenu from "./header/MobileMenu";
 import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/language";
 
 const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const { isActive, toggle } = useZenMode();
   const { user, profile, signOut } = useAuth();
-  const { t: translate, currentLanguage, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isMounted = React.useRef(false);
@@ -53,10 +53,7 @@ const Header = () => {
         
         {/* Navigation Links */}
         {!isMobile && (
-          <NavLinks 
-            isAdmin={isAdmin} 
-            t={(key) => translate(key)}
-          />
+          <NavLinks isAdmin={isAdmin} />
         )}
         
         <div className="ml-auto flex items-center space-x-2">
@@ -71,9 +68,8 @@ const Header = () => {
             profile={profile}
             isAdmin={isAdmin}
             onSignOut={signOut}
-            t={(key) => translate(key)}
-            currentLanguage={currentLanguage}
-            onLanguageChange={setLanguage}
+            currentLanguage={language}
+            onLanguageChange={(lang) => setLanguage(lang as any)}
           />
           
           {/* Mobile Menu Button (visible on small screens) */}
@@ -87,7 +83,6 @@ const Header = () => {
               onSignOut={signOut}
               pricingTier={profile?.plan || 'free'}
               setPricingTier={() => {}} // This is a placeholder, ideally should be implemented fully
-              t={(key) => translate(key)}
             />
           )}
         </div>
