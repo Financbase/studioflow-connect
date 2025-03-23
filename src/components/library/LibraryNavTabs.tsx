@@ -1,6 +1,6 @@
 
 import React from "react";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 
@@ -18,39 +18,41 @@ const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
 
   return (
     <div className="flex space-x-1 p-1 bg-muted rounded-lg">
-      <TabsList 
-        className={`bg-transparent ${themeVariant === "windows" ? "gap-0" : "gap-1"}`}
-        aria-label="Library Navigation Tabs"
-      >
-        <TabsTrigger 
-          value="all" 
-          onClick={() => onTabChange("all")}
-          className={activeTab === "all" ? "bg-background data-[state=active]:bg-background" : ""}
+      <Tabs defaultValue={activeTab} className="w-full">
+        <TabsList 
+          className={`bg-transparent ${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
+          aria-label="Library Navigation Tabs"
         >
-          {t("library.tabs.all")}
-        </TabsTrigger>
-        <TabsTrigger 
-          value="samples" 
-          onClick={() => onTabChange("samples")}
-          className={activeTab === "samples" ? "bg-background data-[state=active]:bg-background" : ""}
-        >
-          {t("library.tabs.samples")}
-        </TabsTrigger>
-        <TabsTrigger 
-          value="loops" 
-          onClick={() => onTabChange("loops")}
-          className={activeTab === "loops" ? "bg-background data-[state=active]:bg-background" : ""}
-        >
-          {t("library.tabs.loops")}
-        </TabsTrigger>
-        <TabsTrigger 
-          value="vocals" 
-          onClick={() => onTabChange("vocals")}
-          className={activeTab === "vocals" ? "bg-background data-[state=active]:bg-background" : ""}
-        >
-          {t("library.tabs.vocals")}
-        </TabsTrigger>
-      </TabsList>
+          <TabsTrigger 
+            value="all" 
+            onClick={() => onTabChange("all")}
+            className={activeTab === "all" ? "bg-background data-[state=active]:bg-background" : ""}
+          >
+            {t("library.tabs.all")}
+          </TabsTrigger>
+          <TabsTrigger 
+            value="samples" 
+            onClick={() => onTabChange("samples")}
+            className={activeTab === "samples" ? "bg-background data-[state=active]:bg-background" : ""}
+          >
+            {t("library.tabs.samples")}
+          </TabsTrigger>
+          <TabsTrigger 
+            value="loops" 
+            onClick={() => onTabChange("loops")}
+            className={activeTab === "loops" ? "bg-background data-[state=active]:bg-background" : ""}
+          >
+            {t("library.tabs.loops")}
+          </TabsTrigger>
+          <TabsTrigger 
+            value="vocals" 
+            onClick={() => onTabChange("vocals")}
+            className={activeTab === "vocals" ? "bg-background data-[state=active]:bg-background" : ""}
+          >
+            {t("library.tabs.vocals")}
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
     </div>
   );
 };

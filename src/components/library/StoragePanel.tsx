@@ -1,51 +1,42 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, HardDrive } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 
-const StoragePanel: React.FC = () => {
+const StoragePanel = () => {
   const { t } = useLanguage();
+  // Mock data - in a real app, this would come from a hook or API
+  const usedStorage = 15;
+  const totalStorage = 30;
+  const usedPercentage = (usedStorage / totalStorage) * 100;
   
-  // Mock data - in a real app this would come from an API
-  const storageData = {
-    total: 20, // GB
-    used: 8.4, // GB
-    free: 11.6, // GB
-    percentage: 42, // %
-  };
-
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <div className="flex items-center space-x-2">
-          <HardDrive className="h-5 w-5 text-muted-foreground" />
-          <CardTitle className="text-lg">{t("library.storagePanel.title")}</CardTitle>
-        </div>
-        <CardDescription>
-          {storageData.used.toFixed(1)} GB / {storageData.total} GB
-        </CardDescription>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-medium">
+          {t("library.storagePanel.title")}
+        </CardTitle>
       </CardHeader>
       <CardContent className="pb-2">
-        <Progress value={storageData.percentage} className="h-2 mb-4" />
-        
-        <div className="grid grid-cols-2 gap-4 text-center text-sm">
-          <div>
-            <p className="text-muted-foreground">{t("library.storagePanel.used")}</p>
-            <p className="font-medium">{storageData.used.toFixed(1)} GB</p>
+        <Progress value={usedPercentage} className="h-2 mb-4" />
+        <div className="flex justify-between text-sm mb-1.5">
+          <div className="flex flex-col">
+            <span className="text-muted-foreground mb-1">{t("library.storagePanel.used")}</span>
+            <span className="font-medium">{usedStorage} GB</span>
           </div>
-          <div>
-            <p className="text-muted-foreground">{t("library.storagePanel.free")}</p>
-            <p className="font-medium">{storageData.free.toFixed(1)} GB</p>
+          <div className="flex flex-col items-end">
+            <span className="text-muted-foreground mb-1">{t("library.storagePanel.free")}</span>
+            <span className="font-medium">{totalStorage - usedStorage} GB</span>
           </div>
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="ghost" size="sm" className="w-full text-primary">
-          <span>{t("library.storagePanel.upgrade")}</span>
-          <ArrowRight className="ml-2 h-4 w-4" />
+        <Button variant="outline" className="w-full gap-1 text-primary" size="sm">
+          {t("library.storagePanel.upgrade")}
+          <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       </CardFooter>
     </Card>
