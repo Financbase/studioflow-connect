@@ -1,9 +1,9 @@
 
 import { Language } from "../../types";
-import { processTranslations } from "../../utils";
+import { ensureAllLanguages } from "../../utils";
 
-const viewTranslations = {
-  "view.simple": {
+const viewTranslations: Record<string, Record<Language, string>> = {
+  "view.simple": ensureAllLanguages({
     en: "Simple",
     es: "Simple",
     fr: "Simple",
@@ -14,8 +14,8 @@ const viewTranslations = {
     ru: "Простой",
     pt: "Simples",
     ar: "بسيط"
-  },
-  "view.advanced": {
+  }),
+  "view.advanced": ensureAllLanguages({
     en: "Advanced",
     es: "Avanzado",
     fr: "Avancé",
@@ -26,8 +26,8 @@ const viewTranslations = {
     ru: "Расширенный",
     pt: "Avançado",
     ar: "متقدم"
-  },
-  "view.custom": {
+  }),
+  "view.custom": ensureAllLanguages({
     en: "Custom",
     es: "Personalizado",
     fr: "Personnalisé",
@@ -35,10 +35,34 @@ const viewTranslations = {
     sv: "Anpassad",
     ja: "カスタム",
     zh: "自定义",
-    ru: "Настраиваемый",
+    ru: "Пользовательский",
     pt: "Personalizado",
     ar: "مخصص"
-  }
+  }),
+  "label.dashboardview": ensureAllLanguages({
+    en: "Dashboard View",
+    es: "Vista del Panel",
+    fr: "Vue du Tableau de Bord",
+    de: "Dashboard-Ansicht",
+    sv: "Instrumentpanelsvy",
+    ja: "ダッシュボード表示",
+    zh: "仪表板视图",
+    ru: "Вид Панели Управления",
+    pt: "Visualização do Painel",
+    ar: "عرض لوحة المعلومات"
+  }),
+  "label.language": ensureAllLanguages({
+    en: "Language",
+    es: "Idioma",
+    fr: "Langue",
+    de: "Sprache",
+    sv: "Språk",
+    ja: "言語",
+    zh: "语言",
+    ru: "Язык",
+    pt: "Idioma",
+    ar: "اللغة"
+  })
 };
 
-export default processTranslations(viewTranslations);
+export default viewTranslations;

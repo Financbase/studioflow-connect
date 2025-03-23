@@ -5,7 +5,7 @@ import { ensureAllLanguages } from "../utils";
 const sidebarTranslations: Record<string, Record<Language, string>> = {
   "sidebar.dashboard": ensureAllLanguages({
     en: "Dashboard",
-    es: "Panel",
+    es: "Panel de Control",
     fr: "Tableau de Bord",
     de: "Dashboard",
     sv: "Instrumentpanel",
@@ -49,13 +49,13 @@ const sidebarTranslations: Record<string, Record<Language, string>> = {
     zh: "连接",
     ru: "Подключение",
     pt: "Conectar",
-    ar: "توصيل"
+    ar: "اتصال"
   }),
   "sidebar.aiTools": ensureAllLanguages({
     en: "AI Tools",
     es: "Herramientas de IA",
-    fr: "Outils d'IA",
-    de: "KI-Werkzeuge",
+    fr: "Outils IA",
+    de: "KI-Tools",
     sv: "AI-verktyg",
     ja: "AIツール",
     zh: "AI工具",
@@ -69,7 +69,7 @@ const sidebarTranslations: Record<string, Record<Language, string>> = {
     fr: "Documentation",
     de: "Dokumentation",
     sv: "Dokumentation",
-    ja: "ドキュメンテーション",
+    ja: "ドキュメント",
     zh: "文档",
     ru: "Документация",
     pt: "Documentação",

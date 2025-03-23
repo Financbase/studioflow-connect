@@ -5,7 +5,7 @@ import { ensureAllLanguages } from "../utils";
 const navigationTranslations: Record<string, Record<Language, string>> = {
   "nav.dashboard": ensureAllLanguages({
     en: "Dashboard",
-    es: "Panel",
+    es: "Panel de Control",
     fr: "Tableau de Bord",
     de: "Dashboard",
     sv: "Instrumentpanel",
@@ -30,13 +30,13 @@ const navigationTranslations: Record<string, Record<Language, string>> = {
   "nav.admin": ensureAllLanguages({
     en: "Admin",
     es: "Administrador",
-    fr: "Administration",
-    de: "Administration",
+    fr: "Admin",
+    de: "Admin",
     sv: "Admin",
     ja: "管理者",
     zh: "管理员",
     ru: "Администратор",
-    pt: "Administração",
+    pt: "Admin",
     ar: "المشرف"
   }),
   "header.documentation": ensureAllLanguages({
@@ -50,18 +50,6 @@ const navigationTranslations: Record<string, Record<Language, string>> = {
     ru: "Документация",
     pt: "Documentação",
     ar: "التوثيق"
-  }),
-  "mobile.toggleMenu": ensureAllLanguages({
-    en: "Toggle Menu",
-    es: "Alternar Menú",
-    fr: "Basculer le Menu",
-    de: "Menü umschalten",
-    sv: "Växla Meny",
-    ja: "メニュー切替",
-    zh: "切换菜单",
-    ru: "Переключить меню",
-    pt: "Alternar Menu",
-    ar: "تبديل القائمة"
   })
 };
 

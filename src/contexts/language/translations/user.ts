@@ -28,40 +28,28 @@ const userTranslations: Record<string, Record<Language, string>> = {
     ar: "الإعدادات"
   }),
   "user.help": ensureAllLanguages({
-    en: "Help & Support",
-    es: "Ayuda y Soporte",
-    fr: "Aide et Support",
-    de: "Hilfe und Support",
-    sv: "Hjälp och Support",
-    ja: "ヘルプとサポート",
-    zh: "帮助与支持",
-    ru: "Помощь и поддержка",
-    pt: "Ajuda e Suporte",
-    ar: "المساعدة والدعم"
+    en: "Help",
+    es: "Ayuda",
+    fr: "Aide",
+    de: "Hilfe",
+    sv: "Hjälp",
+    ja: "ヘルプ",
+    zh: "帮助",
+    ru: "Помощь",
+    pt: "Ajuda",
+    ar: "المساعدة"
   }),
   "user.signout": ensureAllLanguages({
     en: "Sign Out",
     es: "Cerrar Sesión",
     fr: "Déconnexion",
     de: "Abmelden",
-    sv: "Logga Ut",
-    ja: "ログアウト",
+    sv: "Logga ut",
+    ja: "サインアウト",
     zh: "退出登录",
     ru: "Выйти",
     pt: "Sair",
     ar: "تسجيل الخروج"
-  }),
-  "dashboard.user": ensureAllLanguages({
-    en: "User",
-    es: "Usuario",
-    fr: "Utilisateur",
-    de: "Benutzer",
-    sv: "Användare",
-    ja: "ユーザー",
-    zh: "用户",
-    ru: "Пользователь",
-    pt: "Usuário",
-    ar: "المستخدم"
   })
 };
 
