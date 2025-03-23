@@ -21,6 +21,7 @@ import aiToolsTranslations from "./aitools";
 import libraryTranslations from "./library";
 import documentationTranslations from "./documentation";
 import connectTranslations from "./connect";
+import projectsTranslations from "./projects";
 import { languageNames } from "./categories/languageNames";
 
 // Combine all translations
@@ -46,7 +47,8 @@ const translations = {
   ...aiToolsTranslations,
   ...libraryTranslations,
   ...documentationTranslations,
-  ...connectTranslations
+  ...connectTranslations,
+  ...projectsTranslations
 };
 
 export { languageNames };

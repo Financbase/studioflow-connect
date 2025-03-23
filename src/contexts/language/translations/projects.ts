@@ -1,0 +1,260 @@
+
+import { Language } from "../types";
+import { ensureAllLanguages } from "../utils";
+
+const projectsTranslations: Record<string, Record<Language, string>> = {
+  "projects.title": ensureAllLanguages({
+    en: "Project Library",
+    es: "Biblioteca de Proyectos",
+    fr: "Bibliothèque de Projets",
+    de: "Projektbibliothek",
+    sv: "Projektbibliotek",
+    ja: "プロジェクトライブラリ",
+    zh: "项目库",
+    ru: "Библиотека проектов",
+    pt: "Biblioteca de Projetos",
+    ar: "مكتبة المشاريع"
+  }),
+  "projects.description": ensureAllLanguages({
+    en: "Browse and manage all your music projects",
+    es: "Explora y gestiona todos tus proyectos musicales",
+    fr: "Parcourez et gérez tous vos projets musicaux",
+    de: "Durchsuchen und verwalten Sie alle Ihre Musikprojekte",
+    sv: "Bläddra och hantera alla dina musikprojekt",
+    ja: "すべての音楽プロジェクトを閲覧および管理",
+    zh: "浏览和管理您的所有音乐项目",
+    ru: "Просматривайте и управляйте всеми музыкальными проектами",
+    pt: "Navegue e gerencie todos os seus projetos musicais",
+    ar: "تصفح وإدارة جميع مشاريعك الموسيقية"
+  }),
+  "projects.allProjects": ensureAllLanguages({
+    en: "All Projects",
+    es: "Todos los Proyectos",
+    fr: "Tous les Projets",
+    de: "Alle Projekte",
+    sv: "Alla Projekt",
+    ja: "すべてのプロジェクト",
+    zh: "所有项目",
+    ru: "Все проекты",
+    pt: "Todos os Projetos",
+    ar: "جميع المشاريع"
+  }),
+  "projects.recent": ensureAllLanguages({
+    en: "Recent",
+    es: "Recientes",
+    fr: "Récents",
+    de: "Neueste",
+    sv: "Senaste",
+    ja: "最近",
+    zh: "最近",
+    ru: "Недавние",
+    pt: "Recentes",
+    ar: "الأخيرة"
+  }),
+  "projects.shared": ensureAllLanguages({
+    en: "Shared",
+    es: "Compartidos",
+    fr: "Partagés",
+    de: "Geteilt",
+    sv: "Delade",
+    ja: "共有",
+    zh: "共享",
+    ru: "Общие",
+    pt: "Compartilhados",
+    ar: "المشتركة"
+  }),
+  "projects.archived": ensureAllLanguages({
+    en: "Archived",
+    es: "Archivados",
+    fr: "Archivés",
+    de: "Archiviert",
+    sv: "Arkiverade",
+    ja: "アーカイブ済み",
+    zh: "已存档",
+    ru: "В архиве",
+    pt: "Arquivados",
+    ar: "المؤرشفة"
+  }),
+  "projects.name": ensureAllLanguages({
+    en: "Name",
+    es: "Nombre",
+    fr: "Nom",
+    de: "Name",
+    sv: "Namn",
+    ja: "名前",
+    zh: "名称",
+    ru: "Название",
+    pt: "Nome",
+    ar: "الاسم"
+  }),
+  "projects.lastEdited": ensureAllLanguages({
+    en: "Last Edited",
+    es: "Última Edición",
+    fr: "Dernière Modification",
+    de: "Zuletzt bearbeitet",
+    sv: "Senast redigerad",
+    ja: "最終編集",
+    zh: "最后编辑",
+    ru: "Последнее изменение",
+    pt: "Última Edição",
+    ar: "آخر تعديل"
+  }),
+  "projects.tracks": ensureAllLanguages({
+    en: "Tracks",
+    es: "Pistas",
+    fr: "Pistes",
+    de: "Spuren",
+    sv: "Spår",
+    ja: "トラック",
+    zh: "音轨",
+    ru: "Треки",
+    pt: "Faixas",
+    ar: "المسارات"
+  }),
+  "projects.status": ensureAllLanguages({
+    en: "Status",
+    es: "Estado",
+    fr: "Statut",
+    de: "Status",
+    sv: "Status",
+    ja: "ステータス",
+    zh: "状态",
+    ru: "Статус",
+    pt: "Status",
+    ar: "الحالة"
+  }),
+  "projects.actions": ensureAllLanguages({
+    en: "Actions",
+    es: "Acciones",
+    fr: "Actions",
+    de: "Aktionen",
+    sv: "Åtgärder",
+    ja: "アクション",
+    zh: "操作",
+    ru: "Действия",
+    pt: "Ações",
+    ar: "الإجراءات"
+  }),
+  "projects.import": ensureAllLanguages({
+    en: "Import Project",
+    es: "Importar Proyecto",
+    fr: "Importer un Projet",
+    de: "Projekt importieren",
+    sv: "Importera projekt",
+    ja: "プロジェクトをインポート",
+    zh: "导入项目",
+    ru: "Импорт проекта",
+    pt: "Importar Projeto",
+    ar: "استيراد مشروع"
+  }),
+  "projects.export": ensureAllLanguages({
+    en: "Export",
+    es: "Exportar",
+    fr: "Exporter",
+    de: "Exportieren",
+    sv: "Exportera",
+    ja: "エクスポート",
+    zh: "导出",
+    ru: "Экспорт",
+    pt: "Exportar",
+    ar: "تصدير"
+  }),
+  "projects.templates": ensureAllLanguages({
+    en: "Project Templates",
+    es: "Plantillas de Proyecto",
+    fr: "Modèles de Projet",
+    de: "Projektvorlagen",
+    sv: "Projektmallar",
+    ja: "プロジェクトテンプレート",
+    zh: "项目模板",
+    ru: "Шаблоны проектов",
+    pt: "Modelos de Projeto",
+    ar: "قوالب المشروع"
+  }),
+  "projects.templates.description": ensureAllLanguages({
+    en: "Quick-start your next project",
+    es: "Inicia rápidamente tu próximo proyecto",
+    fr: "Démarrez rapidement votre prochain projet",
+    de: "Schnellstart für Ihr nächstes Projekt",
+    sv: "Snabbstarta ditt nästa projekt",
+    ja: "次のプロジェクトをクイックスタート",
+    zh: "快速启动您的下一个项目",
+    ru: "Быстрый старт вашего следующего проекта",
+    pt: "Inicie rapidamente seu próximo projeto",
+    ar: "بدء مشروعك التالي بسرعة"
+  }),
+  "projects.recentActivity": ensureAllLanguages({
+    en: "Recent Activity",
+    es: "Actividad Reciente",
+    fr: "Activité Récente",
+    de: "Neueste Aktivitäten",
+    sv: "Senaste aktivitet",
+    ja: "最近のアクティビティ",
+    zh: "最近活动",
+    ru: "Недавняя активность",
+    pt: "Atividade Recente",
+    ar: "النشاط الأخير"
+  }),
+  "projects.status.inProgress": ensureAllLanguages({
+    en: "In Progress",
+    es: "En Progreso",
+    fr: "En Cours",
+    de: "In Bearbeitung",
+    sv: "Pågår",
+    ja: "進行中",
+    zh: "进行中",
+    ru: "В процессе",
+    pt: "Em Andamento",
+    ar: "قيد التقدم"
+  }),
+  "projects.status.mixing": ensureAllLanguages({
+    en: "Mixing",
+    es: "Mezclando",
+    fr: "Mixage",
+    de: "Mixing",
+    sv: "Mixning",
+    ja: "ミキシング",
+    zh: "混音",
+    ru: "Сведение",
+    pt: "Mixagem",
+    ar: "المزج"
+  }),
+  "projects.status.mastering": ensureAllLanguages({
+    en: "Mastering",
+    es: "Masterización",
+    fr: "Mastering",
+    de: "Mastering",
+    sv: "Mastering",
+    ja: "マスタリング",
+    zh: "母带处理",
+    ru: "Мастеринг",
+    pt: "Masterização",
+    ar: "الماسترينغ"
+  }),
+  "projects.status.completed": ensureAllLanguages({
+    en: "Completed",
+    es: "Completado",
+    fr: "Terminé",
+    de: "Abgeschlossen",
+    sv: "Slutförd",
+    ja: "完了",
+    zh: "已完成",
+    ru: "Завершено",
+    pt: "Concluído",
+    ar: "مكتمل"
+  }),
+  "projects.status.archived": ensureAllLanguages({
+    en: "Archived",
+    es: "Archivado",
+    fr: "Archivé",
+    de: "Archiviert",
+    sv: "Arkiverad",
+    ja: "アーカイブ済み",
+    zh: "已存档",
+    ru: "В архиве",
+    pt: "Arquivado",
+    ar: "مؤرشف"
+  })
+};
+
+export default projectsTranslations;
