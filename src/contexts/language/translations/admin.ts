@@ -7,7 +7,7 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     en: "Overview",
     es: "Resumen",
     fr: "Aperçu",
-    de: "Überblick",
+    de: "Übersicht",
     sv: "Översikt",
     ja: "概要",
     zh: "概述",
@@ -18,12 +18,12 @@ const adminTranslations: Record<string, Record<Language, string>> = {
   "admin.support_tickets": ensureAllLanguages({
     en: "Support Tickets",
     es: "Tickets de Soporte",
-    fr: "Tickets de Support",
+    fr: "Tickets d'Assistance",
     de: "Support-Tickets",
     sv: "Supportärenden",
     ja: "サポートチケット",
-    zh: "支持票据",
-    ru: "Заявки в поддержку",
+    zh: "支持票",
+    ru: "Тикеты поддержки",
     pt: "Tickets de Suporte",
     ar: "تذاكر الدعم"
   }),
@@ -39,45 +39,9 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     pt: "Sessões de Usuário",
     ar: "جلسات المستخدم"
   }),
-  "admin.remote_assistance": ensureAllLanguages({
-    en: "Remote Assistance",
-    es: "Asistencia Remota",
-    fr: "Assistance à Distance",
-    de: "Fernunterstützung",
-    sv: "Fjärrhjälp",
-    ja: "リモートアシスタンス",
-    zh: "远程协助",
-    ru: "Удаленная помощь",
-    pt: "Assistência Remota",
-    ar: "المساعدة عن بعد"
-  }),
-  "admin.system_analytics": ensureAllLanguages({
-    en: "System Analytics",
-    es: "Análisis del Sistema",
-    fr: "Analytique Système",
-    de: "Systemanalyse",
-    sv: "Systemanalys",
-    ja: "システム分析",
-    zh: "系统分析",
-    ru: "Системная аналитика",
-    pt: "Análise do Sistema",
-    ar: "تحليلات النظام"
-  }),
-  "admin.dashboard": ensureAllLanguages({
-    en: "Admin Dashboard",
-    es: "Panel de Administrador",
-    fr: "Tableau de Bord Admin",
-    de: "Admin-Dashboard",
-    sv: "Administratörspanel",
-    ja: "管理ダッシュボード",
-    zh: "管理员仪表板",
-    ru: "Панель администратора",
-    pt: "Painel de Administração",
-    ar: "لوحة تحكم المشرف"
-  }),
   "admin.manage_users": ensureAllLanguages({
     en: "Manage Users",
-    es: "Gestionar Usuarios",
+    es: "Administrar Usuarios",
     fr: "Gérer les Utilisateurs",
     de: "Benutzer verwalten",
     sv: "Hantera användare",
@@ -87,53 +51,41 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     pt: "Gerenciar Usuários",
     ar: "إدارة المستخدمين"
   }),
-  "admin.system_health": ensureAllLanguages({
-    en: "System Health",
-    es: "Salud del Sistema",
-    fr: "Santé du Système",
-    de: "Systemzustand",
-    sv: "Systemstatus",
-    ja: "システム状態",
-    zh: "系统健康",
-    ru: "Состояние системы",
-    pt: "Saúde do Sistema",
-    ar: "صحة النظام"
+  "admin.remote_assistance": ensureAllLanguages({
+    en: "Remote Assistance",
+    es: "Asistencia Remota",
+    fr: "Assistance à Distance",
+    de: "Fernunterstützung",
+    sv: "Fjärrassistans",
+    ja: "リモートアシスタンス",
+    zh: "远程协助",
+    ru: "Удаленная помощь",
+    pt: "Assistência Remota",
+    ar: "المساعدة عن بعد"
   }),
-  "admin.performance": ensureAllLanguages({
-    en: "Performance",
-    es: "Rendimiento",
-    fr: "Performance",
-    de: "Leistung",
-    sv: "Prestanda",
-    ja: "パフォーマンス",
-    zh: "性能",
-    ru: "Производительность",
-    pt: "Desempenho",
-    ar: "الأداء"
+  "admin.system_analytics": ensureAllLanguages({
+    en: "System Analytics",
+    es: "Análisis del Sistema",
+    fr: "Analytique du Système",
+    de: "Systemanalyse",
+    sv: "Systemanalys",
+    ja: "システム分析",
+    zh: "系统分析",
+    ru: "Аналитика системы",
+    pt: "Análise do Sistema",
+    ar: "تحليلات النظام"
   }),
-  "admin.refresh": ensureAllLanguages({
-    en: "Refresh",
-    es: "Actualizar",
-    fr: "Rafraîchir",
-    de: "Aktualisieren",
-    sv: "Uppdatera",
-    ja: "更新",
-    zh: "刷新",
-    ru: "Обновить",
-    pt: "Atualizar",
-    ar: "تحديث"
-  }),
-  "admin.refreshing": ensureAllLanguages({
-    en: "Refreshing...",
-    es: "Actualizando...",
-    fr: "Rafraîchissement...",
-    de: "Aktualisiere...",
-    sv: "Uppdaterar...",
-    ja: "更新中...",
-    zh: "刷新中...",
-    ru: "Обновление...",
-    pt: "Atualizando...",
-    ar: "جاري التحديث..."
+  "admin.dashboard": ensureAllLanguages({
+    en: "Dashboard",
+    es: "Panel de Control",
+    fr: "Tableau de Bord",
+    de: "Dashboard",
+    sv: "Instrumentpanel",
+    ja: "ダッシュボード",
+    zh: "仪表板",
+    ru: "Панель управления",
+    pt: "Painel",
+    ar: "لوحة المعلومات"
   }),
   "admin.settings": ensureAllLanguages({
     en: "Settings",
@@ -148,28 +100,52 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     ar: "الإعدادات"
   }),
   "admin.help": ensureAllLanguages({
-    en: "Help",
-    es: "Ayuda",
-    fr: "Aide",
-    de: "Hilfe",
-    sv: "Hjälp",
-    ja: "ヘルプ",
-    zh: "帮助",
-    ru: "Помощь",
-    pt: "Ajuda",
-    ar: "مساعدة"
+    en: "Help & Support",
+    es: "Ayuda y Soporte",
+    fr: "Aide et Support",
+    de: "Hilfe & Support",
+    sv: "Hjälp & Support",
+    ja: "ヘルプとサポート",
+    zh: "帮助与支持",
+    ru: "Помощь и поддержка",
+    pt: "Ajuda e Suporte",
+    ar: "المساعدة والدعم"
   }),
-  "admin.back_to_dashboard": ensureAllLanguages({
-    en: "Back to Dashboard",
-    es: "Volver al Panel",
-    fr: "Retour au Tableau de Bord",
-    de: "Zurück zum Dashboard",
-    sv: "Tillbaka till Instrumentpanelen",
-    ja: "ダッシュボードに戻る",
-    zh: "返回仪表板",
-    ru: "Вернуться к панели управления",
-    pt: "Voltar ao Painel",
-    ar: "العودة إلى لوحة التحكم"
+  "admin.notifications": ensureAllLanguages({
+    en: "Notifications",
+    es: "Notificaciones",
+    fr: "Notifications",
+    de: "Benachrichtigungen",
+    sv: "Aviseringar",
+    ja: "通知",
+    zh: "通知",
+    ru: "Уведомления",
+    pt: "Notificações",
+    ar: "الإشعارات"
+  }),
+  "admin.system_stats": ensureAllLanguages({
+    en: "System Statistics",
+    es: "Estadísticas del Sistema",
+    fr: "Statistiques du Système",
+    de: "Systemstatistiken",
+    sv: "Systemstatistik",
+    ja: "システム統計",
+    zh: "系统统计",
+    ru: "Статистика системы",
+    pt: "Estatísticas do Sistema",
+    ar: "إحصائيات النظام"
+  }),
+  "admin.main_navigation": ensureAllLanguages({
+    en: "MAIN NAVIGATION",
+    es: "NAVEGACIÓN PRINCIPAL",
+    fr: "NAVIGATION PRINCIPALE",
+    de: "HAUPTNAVIGATION",
+    sv: "HUVUDNAVIGERING",
+    ja: "メインナビゲーション",
+    zh: "主导航",
+    ru: "ОСНОВНАЯ НАВИГАЦИЯ",
+    pt: "NAVEGAÇÃO PRINCIPAL",
+    ar: "التنقل الرئيسي"
   })
 };
 
