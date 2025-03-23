@@ -3,6 +3,42 @@ import { Language } from "../types";
 import { ensureAllLanguages } from "../utils";
 
 const dashboardTranslations: Record<string, Record<Language, string>> = {
+  "dashboard.title": ensureAllLanguages({
+    en: "Dashboard",
+    es: "Panel de Control",
+    fr: "Tableau de Bord",
+    de: "Dashboard",
+    sv: "Instrumentpanel",
+    ja: "ダッシュボード",
+    zh: "仪表盘",
+    ru: "Панель управления",
+    pt: "Painel",
+    ar: "لوحة التحكم"
+  }),
+  "dashboard.subtitle": ensureAllLanguages({
+    en: "Manage your music production workflow",
+    es: "Gestiona tu flujo de trabajo de producción musical",
+    fr: "Gérez votre flux de travail de production musicale",
+    de: "Verwalten Sie Ihren Musikproduktionsworkflow",
+    sv: "Hantera ditt musikproduktionsarbetsflöde",
+    ja: "音楽制作ワークフローを管理する",
+    zh: "管理您的音乐制作工作流程",
+    ru: "Управляйте рабочим процессом создания музыки",
+    pt: "Gerencie seu fluxo de trabalho de produção musical",
+    ar: "إدارة سير عمل إنتاج الموسيقى الخاص بك"
+  }),
+  "dashboard.loading": ensureAllLanguages({
+    en: "Loading dashboard...",
+    es: "Cargando panel...",
+    fr: "Chargement du tableau de bord...",
+    de: "Dashboard wird geladen...",
+    sv: "Laddar instrumentpanelen...",
+    ja: "ダッシュボードを読み込んでいます...",
+    zh: "加载仪表板...",
+    ru: "Загрузка панели управления...",
+    pt: "Carregando painel...",
+    ar: "جاري تحميل لوحة المعلومات..."
+  }),
   "dashboard.greeting.morning": ensureAllLanguages({
     en: "Good morning",
     es: "Buenos días",
@@ -51,29 +87,77 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     pt: "Usuário",
     ar: "المستخدم"
   }),
-  "dashboard.viewChanged": ensureAllLanguages({
-    en: "View Changed",
-    es: "Vista Cambiada",
-    fr: "Vue Modifiée",
-    de: "Ansicht Geändert",
-    sv: "Vy Ändrad",
-    ja: "表示が変更されました",
-    zh: "视图已更改",
-    ru: "Вид Изменен",
-    pt: "Visualização Alterada",
-    ar: "تم تغيير العرض"
+  "dashboard.quickActions": ensureAllLanguages({
+    en: "Quick Actions",
+    es: "Acciones Rápidas",
+    fr: "Actions Rapides",
+    de: "Schnellaktionen",
+    sv: "Snabbåtgärder",
+    ja: "クイックアクション",
+    zh: "快捷操作",
+    ru: "Быстрые действия",
+    pt: "Ações Rápidas",
+    ar: "إجراءات سريعة"
   }),
-  "dashboard.viewSet": ensureAllLanguages({
-    en: "Dashboard view set to",
-    es: "Vista del panel establecida en",
-    fr: "Vue du tableau de bord définie sur",
-    de: "Dashboard-Ansicht eingestellt auf",
-    sv: "Instrumentpanelsvy inställd på",
-    ja: "ダッシュボード表示を次に設定しました：",
-    zh: "仪表板视图设置为",
-    ru: "Вид панели управления установлен на",
-    pt: "Visualização do painel definida para",
-    ar: "تم تعيين عرض لوحة المعلومات إلى"
+  "dashboard.frequentlyUsed": ensureAllLanguages({
+    en: "Frequently used tools and actions",
+    es: "Herramientas y acciones de uso frecuente",
+    fr: "Outils et actions fréquemment utilisés",
+    de: "Häufig verwendete Tools und Aktionen",
+    sv: "Ofta använda verktyg och åtgärder",
+    ja: "よく使うツールとアクション",
+    zh: "常用工具和操作",
+    ru: "Часто используемые инструменты и действия",
+    pt: "Ferramentas e ações usadas com frequência",
+    ar: "الأدوات والإجراءات المستخدمة بشكل متكرر"
+  }),
+  "dashboard.newProject": ensureAllLanguages({
+    en: "New Project",
+    es: "Nuevo Proyecto",
+    fr: "Nouveau Projet",
+    de: "Neues Projekt",
+    sv: "Nytt Projekt",
+    ja: "新規プロジェクト",
+    zh: "新项目",
+    ru: "Новый проект",
+    pt: "Novo Projeto",
+    ar: "مشروع جديد"
+  }),
+  "dashboard.myLibrary": ensureAllLanguages({
+    en: "My Library",
+    es: "Mi Biblioteca",
+    fr: "Ma Bibliothèque",
+    de: "Meine Bibliothek",
+    sv: "Mitt Bibliotek",
+    ja: "マイライブラリ",
+    zh: "我的库",
+    ru: "Моя библиотека",
+    pt: "Minha Biblioteca",
+    ar: "مكتبتي"
+  }),
+  "dashboard.connect": ensureAllLanguages({
+    en: "Connect",
+    es: "Conectar",
+    fr: "Connecter",
+    de: "Verbinden",
+    sv: "Anslut",
+    ja: "接続",
+    zh: "连接",
+    ru: "Подключить",
+    pt: "Conectar",
+    ar: "توصيل"
+  }),
+  "dashboard.aiTools": ensureAllLanguages({
+    en: "AI Tools",
+    es: "Herramientas de IA",
+    fr: "Outils d'IA",
+    de: "KI-Werkzeuge",
+    sv: "AI-verktyg",
+    ja: "AIツール",
+    zh: "AI工具",
+    ru: "ИИ инструменты",
+    pt: "Ferramentas de IA",
+    ar: "أدوات الذكاء الاصطناعي"
   })
 };
 
