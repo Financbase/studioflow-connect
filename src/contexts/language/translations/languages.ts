@@ -1,6 +1,7 @@
 
 import { Language } from "../types";
-import categoryTranslations, { languageNames } from "./categories";
+import categoryTranslations from "./categories";
+import { languageNames } from "./categories";
 
 export { languageNames };
 export default categoryTranslations;

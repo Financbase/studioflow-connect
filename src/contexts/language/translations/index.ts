@@ -1,3 +1,4 @@
+
 import { Language } from "../types";
 
 // Import categories
@@ -25,6 +26,9 @@ import designTokensTranslations from './designTokens';
 import languagesTranslations from './languages';
 import footerTranslations from './footer';
 import headerTranslations from './header';
+
+// Import languageNames from categories exports
+import { languageNames } from './categories';
 
 // Combine all translations
 const translations: Record<string, Record<Language, string>> = {
@@ -54,4 +58,6 @@ const translations: Record<string, Record<Language, string>> = {
   ...headerTranslations
 };
 
+// Export translations and languageNames
+export { languageNames };
 export default translations;
