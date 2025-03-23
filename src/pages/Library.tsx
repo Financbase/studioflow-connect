@@ -11,9 +11,20 @@ import StoragePanel from "@/components/library/StoragePanel";
 import SearchAndFilter from "@/components/library/SearchAndFilter";
 import LibraryTabs from "@/components/library/LibraryTabs";
 import { useAudioAssets } from "@/hooks/use-audio-assets";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { AudioAsset } from "@/types/supabase";
+
+// Define the AudioFile interface that's expected by the components
+interface AudioFile {
+  name: string;
+  size: string;
+  duration: string;
+  type: string;
+  id?: string;
+  url?: string;
+  created_at?: string;
+}
 
 const Library = () => {
   const { themeVariant } = useTheme();
@@ -26,14 +37,39 @@ const Library = () => {
   
   const { assets, loading, refreshAssets } = useAudioAssets(user);
   
-  // Filter samples based on search query
+  // Function to convert AudioAsset to AudioFile
+  const mapAssetsToAudioFiles = (assets: AudioAsset[]): AudioFile[] => {
+    return assets.map(asset => ({
+      id: asset.id,
+      name: asset.name,
+      size: formatFileSize(asset.size),
+      duration: "0:00", // Default duration since AudioAsset doesn't have this property
+      type: asset.type,
+      url: asset.storage_path,
+      created_at: asset.created_at
+    }));
+  };
+
+  // Helper function to format file size
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  };
+  
+  // Filter assets based on search query
   const filteredAssets = assets.filter(asset => 
     asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     asset.type.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Convert filtered assets to AudioFile format
+  const filteredAudioFiles = mapAssetsToAudioFiles(filteredAssets);
+
   // Mock library data as fallback
-  const audioSamples = [
+  const audioSamples: AudioFile[] = [
     { name: "Acoustic Guitar.wav", size: "24.5 MB", duration: "5:42", type: "Instrument" },
     { name: "Drum Loop 120BPM.wav", size: "8.2 MB", duration: "0:32", type: "Loop" },
     { name: "Strings Ensemble.mp3", size: "18.7 MB", duration: "3:15", type: "Instrument" },
@@ -119,7 +155,7 @@ const Library = () => {
                 setActiveTab={setActiveTab}
                 viewMode={viewMode}
                 sortBy={sortBy}
-                filteredSamples={filteredAssets.length > 0 ? filteredAssets : audioSamples}
+                filteredSamples={filteredAudioFiles.length > 0 ? filteredAudioFiles : audioSamples}
                 isLoading={loading}
               />
             </div>
