@@ -18,37 +18,21 @@ const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
 
   return (
     <div className="flex space-x-1 p-1 bg-muted rounded-lg">
-      <Tabs defaultValue={activeTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
         <TabsList 
-          className={`bg-transparent ${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
+          className={`${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
           aria-label="Library Navigation Tabs"
         >
-          <TabsTrigger 
-            value="all" 
-            onClick={() => onTabChange("all")}
-            className={activeTab === "all" ? "bg-background data-[state=active]:bg-background" : ""}
-          >
+          <TabsTrigger value="all">
             {t("library.tabs.all")}
           </TabsTrigger>
-          <TabsTrigger 
-            value="samples" 
-            onClick={() => onTabChange("samples")}
-            className={activeTab === "samples" ? "bg-background data-[state=active]:bg-background" : ""}
-          >
+          <TabsTrigger value="samples">
             {t("library.tabs.samples")}
           </TabsTrigger>
-          <TabsTrigger 
-            value="loops" 
-            onClick={() => onTabChange("loops")}
-            className={activeTab === "loops" ? "bg-background data-[state=active]:bg-background" : ""}
-          >
+          <TabsTrigger value="loops">
             {t("library.tabs.loops")}
           </TabsTrigger>
-          <TabsTrigger 
-            value="vocals" 
-            onClick={() => onTabChange("vocals")}
-            className={activeTab === "vocals" ? "bg-background data-[state=active]:bg-background" : ""}
-          >
+          <TabsTrigger value="vocals">
             {t("library.tabs.vocals")}
           </TabsTrigger>
         </TabsList>
