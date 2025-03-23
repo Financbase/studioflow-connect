@@ -26,6 +26,54 @@ const dashboardTranslations = {
     ru: "Единая платформа для музыкального производства с поддержкой устаревших систем, мульти-DAW рабочих процессов и креативных инструментов",
     pt: "Plataforma unificada de produção musical para integração legada, fluxos de trabalho multi-DAW e ferramentas criativas",
     ar: "منصة إنتاج موسيقي موحدة للتكامل القديم وتدفقات عمل DAW المتعددة والأدوات الإبداعية"
+  },
+  "dashboard.greeting.morning": {
+    en: "Good morning",
+    es: "Buenos días",
+    fr: "Bonjour",
+    de: "Guten Morgen",
+    sv: "God morgon",
+    ja: "おはようございます",
+    zh: "早上好",
+    ru: "Доброе утро",
+    pt: "Bom dia",
+    ar: "صباح الخير"
+  },
+  "dashboard.greeting.afternoon": {
+    en: "Good afternoon",
+    es: "Buenas tardes",
+    fr: "Bon après-midi",
+    de: "Guten Tag",
+    sv: "God eftermiddag",
+    ja: "こんにちは",
+    zh: "下午好",
+    ru: "Добрый день",
+    pt: "Boa tarde",
+    ar: "مساء الخير"
+  },
+  "dashboard.greeting.evening": {
+    en: "Good evening",
+    es: "Buenas noches",
+    fr: "Bonsoir",
+    de: "Guten Abend",
+    sv: "God kväll",
+    ja: "こんばんは",
+    zh: "晚上好",
+    ru: "Добрый вечер",
+    pt: "Boa noite",
+    ar: "مساء الخير"
+  },
+  "dashboard.user": {
+    en: "User",
+    es: "Usuario",
+    fr: "Utilisateur",
+    de: "Benutzer",
+    sv: "Användare",
+    ja: "ユーザー",
+    zh: "用户",
+    ru: "Пользователь",
+    pt: "Usuário",
+    ar: "مستخدم"
   }
 };
 
