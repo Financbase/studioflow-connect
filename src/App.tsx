@@ -21,7 +21,7 @@ import SubscriptionPage from "./pages/Subscription";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import Contribution from "./pages/Contribution";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { LanguageProvider } from "./contexts/language/LanguageProvider";
+import { LanguageProvider } from "./contexts/language";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { useEffect } from "react";
 import { useThemeInitializer } from "./hooks/use-theme-initializer";

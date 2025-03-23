@@ -1,4 +1,5 @@
 
+// Export the language provider, hook, types and utilities
 export * from "./LanguageProvider";
 export * from "./types";
 export { flagEmojis } from "./utils";

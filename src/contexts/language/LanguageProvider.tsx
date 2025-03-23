@@ -6,7 +6,7 @@ import translations, { languageNames } from "./translations";
 import { flagEmojis } from "./utils";
 
 // Create the language context
-export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>("en");
@@ -125,3 +125,6 @@ export const useLanguage = () => {
   }
   return context;
 };
+
+// Export the context for direct access if needed
+export { LanguageContext };
