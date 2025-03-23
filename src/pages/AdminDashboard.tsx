@@ -1,30 +1,33 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Header from "@/components/Header";
-import { Separator } from "@/components/ui/separator";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useSystemMetrics } from "@/hooks/use-system-metrics";
+import { toast } from "@/hooks/use-toast";
 import { 
   RefreshCw, BarChart2, TicketPlus, Activity, 
-  Share2, LineChart, ChevronLeft, HelpCircle 
+  Share2, LineChart, ChevronLeft, HelpCircle, Users
 } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
-// Import components
+// UI components
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { PageContainer } from "@/components/ui/page-container";
+import { Panel } from "@/components/ui/panel";
+
+// Admin components
 import AdminHeader from "@/components/admin/AdminHeader";
 import OverviewTab from "@/components/admin/OverviewTab";
 import TicketsTab from "@/components/admin/TicketsTab";
 import SessionsTab from "@/components/admin/SessionsTab";
 import RemoteAssistanceTab from "@/components/admin/RemoteAssistanceTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
-import { useSystemMetrics } from "@/hooks/use-system-metrics";
+import UsersTab from "@/components/admin/UsersTab";
 
 const AdminDashboard = () => {
-  const { themeVariant } = useTheme();
   const { user, profile, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { systemMetrics, tickets, userSessions, refreshMetrics } = useSystemMetrics();
@@ -33,6 +36,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isRefreshing, setIsRefreshing] = useState(false);
   
+  // Authentication and admin permission check
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth");
@@ -55,6 +59,7 @@ const AdminDashboard = () => {
     }
   }, [isAuthenticated, navigate, profile, user]);
   
+  // Calculate metrics for dashboard
   const openTickets = tickets.filter(t => t.status === "open").length;
   const activeUsers = userSessions.length;
   const criticalTickets = tickets.filter(t => t.priority === "critical").length;
@@ -63,7 +68,8 @@ const AdminDashboard = () => {
     new Date(t.updated_at).toDateString() === new Date().toDateString()
   ).length;
   
-  const handleRefresh = () => {
+  // Handle dashboard refresh
+  const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
     refreshMetrics();
     
@@ -74,13 +80,13 @@ const AdminDashboard = () => {
         description: "Dashboard data has been updated",
       });
     }, 1000);
-  };
+  }, [refreshMetrics]);
   
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased">
       <Header />
       
-      <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
+      <PageContainer isMain className="py-8">
         <div className="max-w-[1200px] mx-auto space-y-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -97,28 +103,44 @@ const AdminDashboard = () => {
               </Button>
             </div>
             
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-1"
-              asChild
-            >
-              <Link to="/support">
-                <HelpCircle className="h-3.5 w-3.5" />
-                <span>Help</span>
-              </Link>
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-1"
+                onClick={() => {
+                  toast({
+                    title: "Settings",
+                    description: "Admin settings will be available soon"
+                  });
+                }}
+              >
+                Settings
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-1"
+                asChild
+              >
+                <Link to="/support">
+                  <HelpCircle className="h-3.5 w-3.5" />
+                  <span>Help</span>
+                </Link>
+              </Button>
+            </div>
           </div>
           
           <AdminHeader activeUsers={activeUsers} />
           
-          <Separator className={themeVariant === "windows" ? "border-b-2" : ""} />
+          <Separator />
           
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <div className="flex justify-between items-center">
-                  <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+                  <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 h-auto">
                     <TabsTrigger value="overview" className="text-sm h-10">
                       <BarChart2 className="mr-2 h-4 w-4" />
                       <span className="hidden xs:inline">{t("admin.overview")}</span>
@@ -130,6 +152,10 @@ const AdminDashboard = () => {
                     <TabsTrigger value="sessions" className="text-sm h-10">
                       <Activity className="mr-2 h-4 w-4" />
                       <span className="hidden xs:inline">{t("admin.user_sessions")}</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="users" className="text-sm h-10">
+                      <Users className="mr-2 h-4 w-4" />
+                      <span className="hidden xs:inline">{t("admin.manage_users")}</span>
                     </TabsTrigger>
                     <TabsTrigger value="remote" className="text-sm h-10">
                       <Share2 className="mr-2 h-4 w-4" />
@@ -153,39 +179,45 @@ const AdminDashboard = () => {
                   </Button>
                 </div>
                 
-                <TabsContent value="overview" className="space-y-4 mt-0">
-                  <OverviewTab 
-                    activeUsers={activeUsers} 
-                    totalUsers={systemMetrics.totalUsers}
-                    openTickets={openTickets} 
-                    criticalTickets={criticalTickets}
-                    resolvedToday={resolvedToday}
-                    systemMetrics={systemMetrics}
-                    userSessions={userSessions}
-                    tickets={tickets}
-                  />
-                </TabsContent>
-                
-                <TabsContent value="tickets" className="space-y-4 mt-0">
-                  <TicketsTab tickets={tickets} />
-                </TabsContent>
-                
-                <TabsContent value="sessions" className="space-y-4 mt-0">
-                  <SessionsTab userSessions={userSessions} />
-                </TabsContent>
-                
-                <TabsContent value="remote" className="space-y-4 mt-0">
-                  <RemoteAssistanceTab />
-                </TabsContent>
-                
-                <TabsContent value="analytics" className="space-y-4 mt-0">
-                  <AnalyticsTab systemMetrics={systemMetrics} openTickets={openTickets} resolvedToday={resolvedToday} />
-                </TabsContent>
+                <Panel className="mt-6">
+                  <TabsContent value="overview" className="space-y-4 mt-0">
+                    <OverviewTab 
+                      activeUsers={activeUsers} 
+                      totalUsers={systemMetrics.totalUsers}
+                      openTickets={openTickets} 
+                      criticalTickets={criticalTickets}
+                      resolvedToday={resolvedToday}
+                      systemMetrics={systemMetrics}
+                      userSessions={userSessions}
+                      tickets={tickets}
+                    />
+                  </TabsContent>
+                  
+                  <TabsContent value="tickets" className="space-y-4 mt-0">
+                    <TicketsTab tickets={tickets} />
+                  </TabsContent>
+                  
+                  <TabsContent value="sessions" className="space-y-4 mt-0">
+                    <SessionsTab userSessions={userSessions} />
+                  </TabsContent>
+                  
+                  <TabsContent value="users" className="space-y-4 mt-0">
+                    <UsersTab />
+                  </TabsContent>
+                  
+                  <TabsContent value="remote" className="space-y-4 mt-0">
+                    <RemoteAssistanceTab />
+                  </TabsContent>
+                  
+                  <TabsContent value="analytics" className="space-y-4 mt-0">
+                    <AnalyticsTab systemMetrics={systemMetrics} openTickets={openTickets} resolvedToday={resolvedToday} />
+                  </TabsContent>
+                </Panel>
               </Tabs>
             </div>
           </div>
         </div>
-      </main>
+      </PageContainer>
     </div>
   );
 };
