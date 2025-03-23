@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { useDashboard } from "@/contexts/dashboard";
-import { useLanguage } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const PlanInfoCard = () => {
   const { pricingTier } = useDashboard();

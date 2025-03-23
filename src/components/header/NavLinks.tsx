@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Shield, TicketPlus } from "lucide-react";
-import { useLanguage } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 interface NavLinksProps {
   isAdmin: boolean;

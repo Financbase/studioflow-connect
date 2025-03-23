@@ -7,16 +7,18 @@ import { Link } from "react-router-dom";
 import { useDashboard } from "@/contexts/dashboard";
 import { toast } from "@/hooks/use-toast";
 import { WidgetId } from "@/contexts/dashboard/types";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const QuickActionsCard = () => {
   const { hasFeatureAccess } = useDashboard();
+  const { t } = useLanguage();
 
   const handlePremiumFeature = (e: React.MouseEvent, featureId: WidgetId) => {
     if (!hasFeatureAccess(featureId)) {
       e.preventDefault();
       toast({
-        title: "Premium Feature",
-        description: "Upgrade your plan to access this feature",
+        title: t("toast.premiumFeature"),
+        description: t("toast.upgradeRequired"),
         variant: "destructive",
       });
     }
@@ -25,28 +27,28 @@ const QuickActionsCard = () => {
   return (
     <Card className="border-primary/10 shadow-sm hover:shadow-md transition-all duration-300">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg">Quick Actions</CardTitle>
-        <CardDescription>Frequently used features</CardDescription>
+        <CardTitle className="text-lg">{t("dashboard.quickActions")}</CardTitle>
+        <CardDescription>{t("dashboard.frequentlyUsed")}</CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-3">
         <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center hover:bg-muted/50 transition-colors" asChild>
           <Link to="/projects">
             <Music className="h-5 w-5 mb-1 text-primary/80" />
-            <span>New Project</span>
+            <span>{t("dashboard.newProject")}</span>
           </Link>
         </Button>
         
         <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center hover:bg-muted/50 transition-colors" asChild>
           <Link to="/library">
             <Headphones className="h-5 w-5 mb-1 text-primary/80" />
-            <span>My Library</span>
+            <span>{t("dashboard.myLibrary")}</span>
           </Link>
         </Button>
         
         <Button variant="outline" className="h-auto py-4 justify-start flex-col items-center hover:bg-muted/50 transition-colors" asChild>
           <Link to="/connect">
             <Share2 className="h-5 w-5 mb-1 text-primary/80" />
-            <span>Connect</span>
+            <span>{t("dashboard.connect")}</span>
           </Link>
         </Button>
         
@@ -60,7 +62,7 @@ const QuickActionsCard = () => {
             onClick={(e) => handlePremiumFeature(e, 'ai')}
           >
             <Sparkles className="h-5 w-5 mb-1 text-primary/80" />
-            <span>AI Tools</span>
+            <span>{t("dashboard.aiTools")}</span>
           </Link>
         </Button>
       </CardContent>

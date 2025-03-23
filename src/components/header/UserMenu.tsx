@@ -13,7 +13,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { User, Settings, Shield, HelpCircle, Languages, LogOut, TicketPlus } from "lucide-react";
 import { UserProfile } from "@/types/supabase";
-import { useLanguage, Language, flagEmojis, languageNames } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { Language } from "@/contexts/language/types";
+import { flagEmojis } from "@/contexts/language/utils";
+import { languageNames } from "@/contexts/language/translations/categories/languageNames";
 
 interface UserMenuProps {
   user: any;

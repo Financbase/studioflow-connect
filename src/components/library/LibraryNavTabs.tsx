@@ -2,7 +2,7 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useLanguage } from "@/contexts/language";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 interface LibraryNavTabsProps {
   activeTab: string;

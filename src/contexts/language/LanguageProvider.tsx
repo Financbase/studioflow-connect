@@ -15,6 +15,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     if (storedLanguage && Object.keys(flagEmojis).includes(storedLanguage)) {
       setLanguageState(storedLanguage);
     }
+    
+    // Debug output to verify translations are loaded
+    console.log("Translation keys count:", Object.keys(translations).length);
   }, []);
   
   const setLanguage = (lang: Language) => {
