@@ -2,6 +2,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ColorVersion, VersionUpdateData } from './types';
 import { toast } from "@/components/ui/use-toast";
+import { generateThemePalette } from '@/lib/colorUtils/themeGenerator';
 
 export function useVersionOperations(
   versions: ColorVersion[],
@@ -163,14 +164,13 @@ export function useVersionOperations(
     ));
   };
 
-  // Generate a theme variation
+  // Generate a theme variation - Fixed to return directly instead of a Promise
   const generateThemeVariation = (
     baseColor: string, 
     isDark: boolean = false
   ): Record<string, string> => {
-    return import('@/lib/colorUtils/themeGenerator').then(module => {
-      return module.generateThemePalette(baseColor, isDark);
-    });
+    // Directly call and return the result from the generator function
+    return generateThemePalette(baseColor, isDark);
   };
 
   return {
