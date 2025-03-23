@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 import { toast } from "@/hooks/use-toast";
 
 const LibraryHeader: React.FC = () => {

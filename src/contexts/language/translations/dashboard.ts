@@ -158,6 +158,30 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "ИИ инструменты",
     pt: "Ferramentas de IA",
     ar: "أدوات الذكاء الاصطناعي"
+  }),
+  "dashboard.viewChanged": ensureAllLanguages({
+    en: "View Changed",
+    es: "Vista Cambiada",
+    fr: "Vue Modifiée",
+    de: "Ansicht Geändert",
+    sv: "Vy Ändrad",
+    ja: "表示が変更されました",
+    zh: "视图已更改",
+    ru: "Вид Изменен",
+    pt: "Visualização Alterada",
+    ar: "تم تغيير العرض"
+  }),
+  "dashboard.viewSet": ensureAllLanguages({
+    en: "View set to",
+    es: "Vista establecida a",
+    fr: "Vue définie sur",
+    de: "Ansicht eingestellt auf",
+    sv: "Vy inställd på",
+    ja: "表示が設定されました：",
+    zh: "视图设置为",
+    ru: "Вид установлен на",
+    pt: "Visualização definida para",
+    ar: "تم تعيين العرض إلى"
   })
 };
 
