@@ -13,15 +13,21 @@ import AudioAssetList from './audio/AudioAssetList';
 
 interface AudioAssetLibraryProps {
   onSelectAudio?: (asset: AudioAsset) => void;
+  filterType?: string;
 }
 
-const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) => {
+const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio, filterType = "all" }) => {
   const { user } = useAuth();
   const { themeVariant } = useTheme();
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const { assets, loading, refreshAssets } = useAudioAssets(user);
+  
+  // Filter assets based on filterType
+  const filteredAssets = filterType === "all" 
+    ? assets 
+    : assets.filter(asset => asset.type === filterType);
 
   const handleSelectAudio = (asset: AudioAsset) => {
     if (onSelectAudio) {
@@ -48,7 +54,7 @@ const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) 
         <CardHeader>
           <CardTitle className="flex items-center">
             <Music className="w-5 h-5 mr-2" />
-            Audio Library
+            Audio Library {filterType !== "all" ? `- ${filterType}s` : ""}
           </CardTitle>
           <CardDescription>
             Manage your audio files and recordings
@@ -57,7 +63,7 @@ const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) 
         
         <CardContent>
           <AudioAssetList
-            assets={assets}
+            assets={filteredAssets}
             loading={loading}
             onSelectAudio={handleSelectAudio}
             currentlyPlaying={currentlyPlaying}
@@ -68,7 +74,7 @@ const AudioAssetLibrary: React.FC<AudioAssetLibraryProps> = ({ onSelectAudio }) 
         
         <CardFooter className="flex justify-between">
           <p className="text-sm text-muted-foreground">
-            {assets.length} audio {assets.length === 1 ? 'file' : 'files'}
+            {filteredAssets.length} audio {filteredAssets.length === 1 ? 'file' : 'files'}
           </p>
         </CardFooter>
       </Card>
