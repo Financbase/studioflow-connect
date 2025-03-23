@@ -89,8 +89,8 @@ const LibraryTabs = ({
         viewMode={viewMode}
         emptyMessage={
           <ContentPlaceholder 
-            title={t(`library.empty.${activeTab}.title`) || `No ${activeTab} found`}
-            description={t(`library.empty.${activeTab}.description`) || `Upload or create ${activeTab} to see them here`}
+            title={t(`library.empty.${activeTab}.title`)}
+            description={t(`library.empty.${activeTab}.description`)}
           />
         }
       />

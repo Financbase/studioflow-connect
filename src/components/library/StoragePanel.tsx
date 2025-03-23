@@ -1,54 +1,53 @@
 
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { FolderOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, HardDrive } from "lucide-react";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
-const StoragePanel = () => {
+const StoragePanel: React.FC = () => {
+  const { t } = useLanguage();
+  
+  // Mock data - in a real app this would come from an API
+  const storageData = {
+    total: 20, // GB
+    used: 8.4, // GB
+    free: 11.6, // GB
+    percentage: 42, // %
+  };
+
   return (
-    <Card className="md:col-span-1">
-      <CardHeader>
-        <CardTitle>Storage</CardTitle>
+    <Card>
+      <CardHeader className="pb-2">
+        <div className="flex items-center space-x-2">
+          <HardDrive className="h-5 w-5 text-muted-foreground" />
+          <CardTitle className="text-lg">{t("library.storagePanel.title")}</CardTitle>
+        </div>
+        <CardDescription>
+          {storageData.used.toFixed(1)} GB / {storageData.total} GB
+        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <div className="flex justify-between text-sm mb-1">
-            <span>4.2 GB used</span>
-            <span>10 GB total</span>
-          </div>
-          <Progress value={42} />
-        </div>
+      <CardContent className="pb-2">
+        <Progress value={storageData.percentage} className="h-2 mb-4" />
         
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium">Categories</h4>
-          <div className="space-y-1">
-            {["All Files", "Samples", "Loops", "Presets", "Projects"].map((category) => (
-              <Button 
-                key={category} 
-                variant={category === "All Files" ? "secondary" : "ghost"} 
-                className="w-full justify-start"
-                size="sm"
-              >
-                <FolderOpen className="h-4 w-4 mr-2" />
-                {category}
-              </Button>
-            ))}
+        <div className="grid grid-cols-2 gap-4 text-center text-sm">
+          <div>
+            <p className="text-muted-foreground">{t("library.storagePanel.used")}</p>
+            <p className="font-medium">{storageData.used.toFixed(1)} GB</p>
           </div>
-        </div>
-        
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium">Labels</h4>
-          <div className="flex flex-wrap gap-2">
-            {["Drums", "Bass", "Synth", "Guitar", "Vocals", "FX"].map((label) => (
-              <Badge key={label} variant="outline">
-                {label}
-              </Badge>
-            ))}
+          <div>
+            <p className="text-muted-foreground">{t("library.storagePanel.free")}</p>
+            <p className="font-medium">{storageData.free.toFixed(1)} GB</p>
           </div>
         </div>
       </CardContent>
+      <CardFooter>
+        <Button variant="ghost" size="sm" className="w-full text-primary">
+          <span>{t("library.storagePanel.upgrade")}</span>
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

@@ -10,6 +10,11 @@ import mobileTranslations from "./mobile";
 import commonTranslations from "./common";
 import toastTranslations from "./toast";
 import designTranslations from "./design";
+import libraryTranslations from "./library";
+import documentationTranslations from "./documentation";
+import aiToolsTranslations from "./aitools";
+import sidebarTranslations from "./sidebar";
+import settingsTranslations from "./settings";
 
 // Combine all translations
 const translations = {
@@ -23,7 +28,12 @@ const translations = {
   ...mobileTranslations,
   ...commonTranslations,
   ...toastTranslations,
-  ...designTranslations
+  ...designTranslations,
+  ...libraryTranslations,
+  ...documentationTranslations,
+  ...aiToolsTranslations,
+  ...sidebarTranslations,
+  ...settingsTranslations
 };
 
 export { languageNames };

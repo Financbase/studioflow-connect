@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { X, Menu, Home, Music, Book, Users, Settings, BarChart2, Headphones, Share2, Sparkles } from "lucide-react";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const { pricingTier } = useDashboard();
+  const { t } = useLanguage();
 
   // Force sidebar to be open on desktop and closed on mobile by default
   useEffect(() => {
@@ -45,18 +47,18 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   };
 
   const sidebarItems = [
-    { name: "Dashboard", href: "/dashboard", icon: Home },
-    { name: "Projects", href: "/projects", icon: Music },
-    { name: "Library", href: "/library", icon: Headphones },
-    { name: "Connect", href: "/connect", icon: Share2 },
-    { name: "AI Tools", href: "/ai-tools", icon: Sparkles, isPro: true },
-    { name: "Documentation", href: "/docs", icon: Book },
-    { name: "Support", href: "/support", icon: Users },
+    { name: t("sidebar.dashboard"), href: "/dashboard", icon: Home },
+    { name: t("sidebar.projects"), href: "/projects", icon: Music },
+    { name: t("sidebar.library"), href: "/library", icon: Headphones },
+    { name: t("sidebar.connect"), href: "/connect", icon: Share2 },
+    { name: t("sidebar.aiTools"), href: "/ai-tools", icon: Sparkles, isPro: true },
+    { name: t("sidebar.documentation"), href: "/docs", icon: Book },
+    { name: t("sidebar.support"), href: "/support", icon: Users },
   ];
 
   const bottomItems = [
-    { name: "Admin", href: "/admin", icon: BarChart2, isAdmin: true },
-    { name: "Settings", href: "/settings", icon: Settings },
+    { name: t("sidebar.admin"), href: "/admin", icon: BarChart2, isAdmin: true },
+    { name: t("sidebar.settings"), href: "/settings", icon: Settings },
   ];
 
   // Filter pro items if user doesn't have pro

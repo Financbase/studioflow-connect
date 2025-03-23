@@ -32,8 +32,8 @@ const RecentlyAdded = ({ files, viewMode = "grid" }: RecentlyAddedProps) => {
         <div className="flex items-center space-x-2">
           <Calendar className="h-5 w-5 text-muted-foreground" />
           <div>
-            <CardTitle className="text-lg">{t("library.recentlyAdded") || "Recently Added"}</CardTitle>
-            <CardDescription>{t("library.recentlyAddedDescription") || "Your most recent audio files"}</CardDescription>
+            <CardTitle className="text-lg">{t("library.recentlyAdded")}</CardTitle>
+            <CardDescription>{t("library.recentlyAddedDescription")}</CardDescription>
           </div>
         </div>
       </CardHeader>

@@ -101,22 +101,22 @@ const Library = () => {
         <div className="max-w-[1200px] mx-auto space-y-6 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold">{t("library.title") || "Audio Library"}</h1>
-              <p className="text-muted-foreground">{t("library.description") || "Manage your samples, loops, and audio assets"}</p>
+              <h1 className="text-3xl font-bold">{t("library.title")}</h1>
+              <p className="text-muted-foreground">{t("library.description")}</p>
             </div>
             <Button className="gap-2" onClick={handleUploadClick}>
               <Upload className="w-4 h-4" />
-              {t("library.upload") || "Upload Assets"}
+              {t("library.upload")}
             </Button>
           </div>
 
           <div className="flex items-center justify-between">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
               <TabsList>
-                <TabsTrigger value="all">{t("library.tabs.all") || "All Files"}</TabsTrigger>
-                <TabsTrigger value="samples">{t("library.tabs.samples") || "Samples"}</TabsTrigger>
-                <TabsTrigger value="loops">{t("library.tabs.loops") || "Loops"}</TabsTrigger>
-                <TabsTrigger value="vocals">{t("library.tabs.vocals") || "Vocals"}</TabsTrigger>
+                <TabsTrigger value="all">{t("library.tabs.all")}</TabsTrigger>
+                <TabsTrigger value="samples">{t("library.tabs.samples")}</TabsTrigger>
+                <TabsTrigger value="loops">{t("library.tabs.loops")}</TabsTrigger>
+                <TabsTrigger value="vocals">{t("library.tabs.vocals")}</TabsTrigger>
               </TabsList>
             </Tabs>
             
