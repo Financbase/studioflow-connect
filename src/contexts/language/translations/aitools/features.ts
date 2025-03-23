@@ -134,6 +134,18 @@ const featuresTranslations: Record<string, Record<Language, string>> = {
     ru: "Управление ресурсами",
     pt: "Gerenciamento de Recursos",
     ar: "إدارة الموارد"
+  }),
+  "ai.features.feedbackTitle": ensureAllLanguages({
+    en: "Feedback Analysis",
+    es: "Análisis de Retroalimentación",
+    fr: "Analyse des Retours",
+    de: "Feedback-Analyse",
+    sv: "Feedbackanalys",
+    ja: "フィードバック分析",
+    zh: "反馈分析",
+    ru: "Анализ обратной связи",
+    pt: "Análise de Feedback",
+    ar: "تحليل التعليقات"
   })
 };
 

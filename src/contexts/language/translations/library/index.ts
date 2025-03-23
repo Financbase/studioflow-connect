@@ -1,20 +1,22 @@
 
 import { Language } from "../../types";
 import generalLibraryTranslations from "./general";
-import tabsTranslations from "./tabs";
 import interfaceTranslations from "./interface";
+import searchFilterTranslations from "./searchFilter";
+import tabsTranslations from "./tabs";
 import storageTranslations from "./storage";
 import emptyStateTranslations from "./emptyState";
-import searchFilterTranslations from "./searchFilter";
+import uploadTranslations from "./upload";
 
 // Combine all library translations
 const libraryTranslations: Record<string, Record<Language, string>> = {
   ...generalLibraryTranslations,
-  ...tabsTranslations,
   ...interfaceTranslations,
+  ...searchFilterTranslations,
+  ...tabsTranslations,
   ...storageTranslations,
   ...emptyStateTranslations,
-  ...searchFilterTranslations
+  ...uploadTranslations
 };
 
 export default libraryTranslations;
