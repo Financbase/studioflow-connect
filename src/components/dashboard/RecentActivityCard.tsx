@@ -1,90 +1,85 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileMusic, Upload, Bluetooth, Share2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/contexts/language";
 
-interface ActivityItem {
-  id: number;
-  action: string;
-  name: string;
-  time: string;
-  icon: React.ReactNode;
-}
-
-interface RecentActivityCardProps {
-  onViewActivity?: () => void;
-}
-
-const RecentActivityCard = ({ onViewActivity }: RecentActivityCardProps) => {
+const RecentActivityCard = () => {
   const { t, isInitialized } = useLanguage();
   
-  // Recent activity for timeline with icons
-  const recentActivity: ActivityItem[] = [
+  // Example recent activities
+  const activities = [
     { 
       id: 1, 
-      action: isInitialized ? t("activity.projectCreated") : "Project Created", 
-      name: isInitialized ? t("activity.ambientSoundscape") : "Ambient Soundscape", 
-      time: isInitialized ? t("activity.hoursAgo", { hours: "2" }) : "2 hours ago",
-      icon: <FileMusic className="h-4 w-4 text-blue-500" />
+      user: "Alex", 
+      avatar: "/avatars/alex.png", 
+      action: isInitialized ? t("dashboard.activity.created") : "created", 
+      project: "Ambient Synth", 
+      time: "2 hours ago" 
     },
     { 
       id: 2, 
-      action: isInitialized ? t("activity.fileUploaded") : "File Uploaded", 
-      name: "vocal_take_final.wav", 
-      time: isInitialized ? t("activity.yesterday") : "Yesterday",
-      icon: <Upload className="h-4 w-4 text-green-500" />
+      user: "Maya", 
+      avatar: "/avatars/maya.png", 
+      action: isInitialized ? t("dashboard.activity.commented") : "commented on", 
+      project: "Drum Sequence", 
+      time: "3 hours ago" 
     },
     { 
       id: 3, 
-      action: isInitialized ? t("activity.deviceConnected") : "Device Connected", 
-      name: "Focusrite Scarlett 2i2", 
-      time: isInitialized ? t("activity.daysAgo", { days: "3" }) : "3 days ago",
-      icon: <Bluetooth className="h-4 w-4 text-purple-500" />
+      user: "Jamie", 
+      avatar: "/avatars/jamie.png", 
+      action: isInitialized ? t("dashboard.activity.shared") : "shared", 
+      project: "Bass Riff", 
+      time: "5 hours ago" 
     },
     { 
       id: 4, 
-      action: isInitialized ? t("activity.projectShared") : "Project Shared", 
-      name: isInitialized ? t("activity.summerBeatsEP") : "Summer Beats EP", 
-      time: isInitialized ? t("activity.weekAgo") : "1 week ago",
-      icon: <Share2 className="h-4 w-4 text-amber-500" />
+      user: "Sam", 
+      avatar: "/avatars/sam.png", 
+      action: isInitialized ? t("dashboard.activity.uploaded") : "uploaded", 
+      project: "Vocal Sample", 
+      time: "7 hours ago" 
+    },
+    { 
+      id: 5, 
+      user: "Taylor", 
+      avatar: "/avatars/taylor.png", 
+      action: isInitialized ? t("dashboard.activity.edited") : "edited", 
+      project: "Guitar Loop", 
+      time: "yesterday" 
     }
   ];
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <div>
-          <CardTitle>{isInitialized ? t("activity.recentActivity") : "Recent Activity"}</CardTitle>
-          <CardDescription>{isInitialized ? t("activity.latestActions") : "Your latest actions and updates"}</CardDescription>
-        </div>
-        {onViewActivity && (
-          <Button variant="ghost" size="sm" onClick={onViewActivity}>
-            {isInitialized ? t("activity.viewAll") : "View all"}
-          </Button>
-        )}
+    <Card className="dashboard-card h-full">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg">
+          {isInitialized ? t("dashboard.recentActivity") : "Recent Activity"}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="relative">
-          <div className="absolute left-3 top-0 bottom-0 w-px bg-muted" />
-          <ul className="space-y-4 relative">
-            {recentActivity.map((item) => (
-              <li key={item.id} className="pl-7 relative">
-                <div className="absolute left-0 rounded-full p-1 bg-card border flex items-center justify-center">
-                  {item.icon}
+      <CardContent className="p-0">
+        <ScrollArea className="h-[280px] px-6">
+          <div className="space-y-4 mt-2">
+            {activities.map((activity) => (
+              <div key={activity.id} className="flex items-center">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={activity.avatar} alt={activity.user} />
+                  <AvatarFallback>{activity.user.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="ml-3 space-y-0.5">
+                  <p className="text-sm">
+                    <span className="font-medium">{activity.user}</span>{' '}
+                    <span className="text-muted-foreground">{activity.action}</span>{' '}
+                    <span className="font-medium">{activity.project}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">{activity.time}</p>
                 </div>
-                <div className="flex items-start justify-between pb-1 mb-1 border-b">
-                  <div>
-                    <p className="font-medium">{item.action}</p>
-                    <p className="text-sm text-muted-foreground">{item.name}</p>
-                  </div>
-                  <div className="text-sm text-muted-foreground">{item.time}</div>
-                </div>
-              </li>
+              </div>
             ))}
-          </ul>
-        </div>
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

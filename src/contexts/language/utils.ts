@@ -51,3 +51,35 @@ export const formatNumber = (num: number, language: Language): string => {
     return num.toString();
   }
 };
+
+/**
+ * Ensures that a translation object has translations for all supported languages
+ * If a language is missing, it falls back to English
+ */
+export const ensureAllLanguages = (translations: Partial<Record<Language, string>>): Record<Language, string> => {
+  const result: Partial<Record<Language, string>> = { ...translations };
+  const allLanguages: Language[] = Object.keys(flagEmojis) as Language[];
+  
+  // Ensure all languages are present, falling back to English or the first available language
+  allLanguages.forEach(lang => {
+    if (!result[lang]) {
+      result[lang] = result.en || Object.values(result)[0] || "";
+    }
+  });
+  
+  return result as Record<Language, string>;
+};
+
+/**
+ * Process translation objects to ensure all languages are covered
+ */
+export const processTranslations = (translationsObj: Record<string, Partial<Record<Language, string>>>) => {
+  const processed: Record<string, Record<Language, string>> = {};
+  
+  Object.entries(translationsObj).forEach(([key, translations]) => {
+    processed[key] = ensureAllLanguages(translations);
+  });
+  
+  return processed;
+};
+
