@@ -110,6 +110,66 @@ const adminTranslations: Record<string, Record<Language, string>> = {
     ru: "Производительность",
     pt: "Desempenho",
     ar: "الأداء"
+  }),
+  "admin.refresh": ensureAllLanguages({
+    en: "Refresh",
+    es: "Actualizar",
+    fr: "Rafraîchir",
+    de: "Aktualisieren",
+    sv: "Uppdatera",
+    ja: "更新",
+    zh: "刷新",
+    ru: "Обновить",
+    pt: "Atualizar",
+    ar: "تحديث"
+  }),
+  "admin.refreshing": ensureAllLanguages({
+    en: "Refreshing...",
+    es: "Actualizando...",
+    fr: "Rafraîchissement...",
+    de: "Aktualisiere...",
+    sv: "Uppdaterar...",
+    ja: "更新中...",
+    zh: "刷新中...",
+    ru: "Обновление...",
+    pt: "Atualizando...",
+    ar: "جاري التحديث..."
+  }),
+  "admin.settings": ensureAllLanguages({
+    en: "Settings",
+    es: "Configuración",
+    fr: "Paramètres",
+    de: "Einstellungen",
+    sv: "Inställningar",
+    ja: "設定",
+    zh: "设置",
+    ru: "Настройки",
+    pt: "Configurações",
+    ar: "الإعدادات"
+  }),
+  "admin.help": ensureAllLanguages({
+    en: "Help",
+    es: "Ayuda",
+    fr: "Aide",
+    de: "Hilfe",
+    sv: "Hjälp",
+    ja: "ヘルプ",
+    zh: "帮助",
+    ru: "Помощь",
+    pt: "Ajuda",
+    ar: "مساعدة"
+  }),
+  "admin.back_to_dashboard": ensureAllLanguages({
+    en: "Back to Dashboard",
+    es: "Volver al Panel",
+    fr: "Retour au Tableau de Bord",
+    de: "Zurück zum Dashboard",
+    sv: "Tillbaka till Instrumentpanelen",
+    ja: "ダッシュボードに戻る",
+    zh: "返回仪表板",
+    ru: "Вернуться к панели управления",
+    pt: "Voltar ao Painel",
+    ar: "العودة إلى لوحة التحكم"
   })
 };
 
