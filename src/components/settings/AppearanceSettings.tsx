@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ColorPaletteEditor from "./ColorPaletteEditor";
 import ThemeVersionControl from "./ThemeVersionControl";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
 import DesignTokenVisualizer from "./DesignTokenVisualizer";
+import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const AppearanceSettings: React.FC = () => {
   const { t } = useLanguage();

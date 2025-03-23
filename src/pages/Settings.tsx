@@ -1,17 +1,19 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
 import GeneralSettings from "@/components/settings/GeneralSettings";
 import AppearanceSettings from "@/components/settings/AppearanceSettings";
 import NotificationSettings from "@/components/settings/NotificationSettings";
 import PrivacySettings from "@/components/settings/PrivacySettings";
 import SubscriptionSettings from "@/components/settings/SubscriptionSettings";
+import SettingsNavTabs from "@/components/settings/SettingsNavTabs";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 
 const Settings = () => {
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState("general");
 
   return (
     <SidebarLayout>
@@ -25,35 +27,15 @@ const Settings = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="general" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="general">{t("settings.tabs.general")}</TabsTrigger>
-              <TabsTrigger value="appearance">{t("settings.tabs.appearance")}</TabsTrigger>
-              <TabsTrigger value="notifications">{t("settings.tabs.notifications")}</TabsTrigger>
-              <TabsTrigger value="privacy">{t("settings.tabs.privacy")}</TabsTrigger>
-              <TabsTrigger value="subscription">{t("settings.tabs.subscription")}</TabsTrigger>
-            </TabsList>
+          <div className="space-y-4">
+            <SettingsNavTabs activeTab={activeTab} onTabChange={setActiveTab} />
             
-            <TabsContent value="general" className="space-y-4">
-              <GeneralSettings />
-            </TabsContent>
-            
-            <TabsContent value="appearance" className="space-y-4">
-              <AppearanceSettings />
-            </TabsContent>
-            
-            <TabsContent value="notifications" className="space-y-4">
-              <NotificationSettings />
-            </TabsContent>
-            
-            <TabsContent value="privacy" className="space-y-4">
-              <PrivacySettings />
-            </TabsContent>
-            
-            <TabsContent value="subscription" className="space-y-4">
-              <SubscriptionSettings />
-            </TabsContent>
-          </Tabs>
+            {activeTab === "general" && <GeneralSettings />}
+            {activeTab === "appearance" && <AppearanceSettings />}
+            {activeTab === "notifications" && <NotificationSettings />}
+            {activeTab === "privacy" && <PrivacySettings />}
+            {activeTab === "subscription" && <SubscriptionSettings />}
+          </div>
         </div>
       </main>
     </SidebarLayout>

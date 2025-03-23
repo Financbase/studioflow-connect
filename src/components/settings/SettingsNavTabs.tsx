@@ -4,12 +4,12 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/language/LanguageProvider";
 
-interface LibraryNavTabsProps {
+interface SettingsNavTabsProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
+const SettingsNavTabs: React.FC<SettingsNavTabsProps> = ({
   activeTab,
   onTabChange,
 }) => {
@@ -20,23 +20,26 @@ const LibraryNavTabs: React.FC<LibraryNavTabsProps> = ({
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
       <TabsList 
         className={`${themeVariant === "windows" ? "gap-0" : "gap-1"} w-full`}
-        aria-label="Library Navigation Tabs"
+        aria-label="Settings Navigation Tabs"
       >
-        <TabsTrigger value="all">
-          {t("library.tabs.all")}
+        <TabsTrigger value="general">
+          {t("settings.tabs.general")}
         </TabsTrigger>
-        <TabsTrigger value="samples">
-          {t("library.tabs.samples")}
+        <TabsTrigger value="appearance">
+          {t("settings.tabs.appearance")}
         </TabsTrigger>
-        <TabsTrigger value="loops">
-          {t("library.tabs.loops")}
+        <TabsTrigger value="notifications">
+          {t("settings.tabs.notifications")}
         </TabsTrigger>
-        <TabsTrigger value="vocals">
-          {t("library.tabs.vocals")}
+        <TabsTrigger value="privacy">
+          {t("settings.tabs.privacy")}
+        </TabsTrigger>
+        <TabsTrigger value="subscription">
+          {t("settings.tabs.subscription")}
         </TabsTrigger>
       </TabsList>
     </Tabs>
   );
 };
 
-export default LibraryNavTabs;
+export default SettingsNavTabs;

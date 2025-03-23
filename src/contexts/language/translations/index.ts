@@ -1,40 +1,32 @@
 
-import headerTranslations from "./header";
-import dashboardTranslations from "./dashboard";
-import footerTranslations from "./footer";
-import widgetTranslations from "./widgets";
-import categoryTranslations, { languageNames } from "./categories";
-import knowledgeBaseTranslations from "./knowledge";
-import supportTranslations from "./support";
-import mobileTranslations from "./mobile";
-import commonTranslations from "./common";
-import toastTranslations from "./toast";
-import designTranslations from "./design";
-import libraryTranslations from "./library";
-import documentationTranslations from "./documentation";
-import aiToolsTranslations from "./aitools";
-import sidebarTranslations from "./sidebar";
-import settingsTranslations from "./settings";
+import generalTranslations from './general';
+import navigationTranslations from './navigation';
+import dashboardTranslations from './dashboard';
+import projectsTranslations from './projects';
+import libraryTranslations from './library';
+import connectTranslations from './connect';
+import settingsTranslations from './settings';
+import profileTranslations from './profile';
+import authTranslations from './auth';
+import miscTranslations from './misc';
+import aitoolsTranslations from './aitools';
+import designTokensTranslations from './designTokens';
+import colorPaletteTranslations from './colorPalette';
 
-// Combine all translations
 const translations = {
-  ...headerTranslations,
+  ...generalTranslations,
+  ...navigationTranslations,
   ...dashboardTranslations,
-  ...footerTranslations,
-  ...widgetTranslations,
-  ...categoryTranslations,
-  ...knowledgeBaseTranslations,
-  ...supportTranslations,
-  ...mobileTranslations,
-  ...commonTranslations,
-  ...toastTranslations,
-  ...designTranslations,
+  ...projectsTranslations,
   ...libraryTranslations,
-  ...documentationTranslations,
-  ...aiToolsTranslations,
-  ...sidebarTranslations,
-  ...settingsTranslations
+  ...connectTranslations,
+  ...settingsTranslations,
+  ...profileTranslations,
+  ...authTranslations,
+  ...miscTranslations,
+  ...aitoolsTranslations,
+  ...designTokensTranslations,
+  ...colorPaletteTranslations,
 };
 
-export { languageNames };
 export default translations;
