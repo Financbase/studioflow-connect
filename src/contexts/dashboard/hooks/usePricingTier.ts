@@ -13,10 +13,11 @@ function isValidPlanChange(currentPlan: PricingTier, newPlan: PricingTier): bool
   // Standard users can upgrade to pro or downgrade to free
   // Pro users can downgrade to standard or free
   
-  const tiers: Record<PricingTier, number> = {
+  const tiers: Record<string, number> = {
     'free': 0,
     'standard': 1,
-    'pro': 2
+    'pro': 2,
+    'enterprise': 3
   };
   
   // Allow any change if it's the same tier or an upgrade

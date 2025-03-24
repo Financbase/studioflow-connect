@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import DriveManager from "./studioflow/DriveManager";
 import CoreFeatures from "./studioflow/CoreFeatures";
 import FeaturesTab from "./studioflow/FeaturesTab";
@@ -67,8 +67,7 @@ const StudioFlowConnect = () => {
           title: universalBridgeEnabled ? "Universal Bridge Disabled" : "Universal Bridge Enabled",
           description: universalBridgeEnabled ? 
             "OS-specific file system drivers are now in use." : 
-            "All drives now accessible across all operating systems.",
-          duration: 3000,
+            "All drives now accessible across all operating systems."
         });
         break;
       case 'versioning':
@@ -77,8 +76,7 @@ const StudioFlowConnect = () => {
           title: versioningEnabled ? "Auto-Versioning Disabled" : "Auto-Versioning Enabled",
           description: versioningEnabled ? 
             "Real-time file versioning has been disabled." : 
-            "Real-time versioning now active for all audio projects.",
-          duration: 3000,
+            "Real-time versioning now active for all audio projects."
         });
         break;
       case 'acceleration':
@@ -87,8 +85,7 @@ const StudioFlowConnect = () => {
           title: hardwareAccelerationEnabled ? "Hardware Acceleration Disabled" : "Hardware Acceleration Enabled",
           description: hardwareAccelerationEnabled ? 
             "Standard disk I/O operations in use." : 
-            "GPU-accelerated disk access enabled for improved performance.",
-          duration: 3000,
+            "GPU-accelerated disk access enabled for improved performance."
         });
         break;
     }

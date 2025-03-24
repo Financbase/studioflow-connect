@@ -11,7 +11,7 @@ import {
   BarChart4,
   Zap
 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface DAWConnection {
   id: number;
@@ -55,8 +55,7 @@ const DAWWorkflow = () => {
           
           toast({
             title: `${conn.name} ${newStatus === "connected" ? "Connected" : "Disconnected"}`,
-            description: `DAW ${newStatus === "connected" ? "successfully connected via" : "disconnected from"} ${conn.syncMethod}`,
-            duration: 3000,
+            description: `DAW ${newStatus === "connected" ? "successfully connected via" : "disconnected from"} ${conn.syncMethod}`
           });
           
           return {
@@ -73,8 +72,7 @@ const DAWWorkflow = () => {
   const startVRSession = () => {
     toast({
       title: "VR Mixing Session Started",
-      description: "Launching immersive environment. Connect your VR headset.",
-      duration: 3000,
+      description: "Launching immersive environment. Connect your VR headset."
     });
   };
 

@@ -37,8 +37,7 @@ const ZenModeTimer: React.FC<ZenModeTimerProps> = ({
       // Show notification when timer completes
       toast({
         title: "Focus session complete",
-        description: `You've completed a ${timerMinutes} minute focus session.`,
-        duration: 5000,
+        description: `You've completed a ${timerMinutes} minute focus session.`
       });
       
       // Play a subtle sound to indicate timer completion
@@ -71,8 +70,7 @@ const ZenModeTimer: React.FC<ZenModeTimerProps> = ({
     setTimerActive(true);
     toast({
       title: "Focus timer started",
-      description: `${timerMinutes} minute focus session started.`,
-      duration: 3000,
+      description: `${timerMinutes} minute focus session started.`
     });
   };
   

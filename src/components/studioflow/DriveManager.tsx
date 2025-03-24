@@ -1,24 +1,17 @@
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  HardDrive, 
-  Plus, 
-  Laptop, 
-  Server, 
-  Database,
-  Clock,
-  Shuffle,
-} from "lucide-react";
+import { HardDrive, RefreshCw, Download, Filter } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { toast } from "@/components/ui/use-toast";
+import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
 
 interface Drive {
   id: number;
   name: string;
-  format: "HFS+" | "APFS" | "NTFS" | "exFAT" | "Universal";
+  format: string;
   size: string;
   used: number;
   syncStatus: "synced" | "syncing" | "pending" | "error";
@@ -32,159 +25,162 @@ interface DriveManagerProps {
   versioningEnabled: boolean;
 }
 
-const DriveManager: React.FC<DriveManagerProps> = ({ drives, setDrives, versioningEnabled }) => {
-  const connectNewDrive = () => {
+const DriveManager: React.FC<DriveManagerProps> = ({ 
+  drives, 
+  setDrives, 
+  versioningEnabled 
+}) => {
+  const [syncingAll, setSyncingAll] = useState(false);
+
+  const syncAllDrives = () => {
+    setSyncingAll(true);
     toast({
-      title: "Drive Scanner Started",
-      description: "Detecting available drives for universal connection...",
-      duration: 3000,
+      title: "Synchronizing All Drives",
+      description: "Starting cloud synchronization for all connected drives."
     });
+    
+    // Simulate sync process
+    setTimeout(() => {
+      setDrives(drives.map(drive => ({
+        ...drive,
+        syncStatus: "synced"
+      })));
+      setSyncingAll(false);
+      
+      toast({
+        title: "Synchronization Complete",
+        description: "All drives have been synchronized successfully."
+      });
+    }, 3000);
   };
 
-  const convertDriveFormat = (id: number) => {
-    setDrives(
-      drives.map((drive) => {
-        if (drive.id === id) {
-          const newDrive = {
-            ...drive,
-            format: "Universal" as const,
-            syncStatus: "syncing" as const,
-            os: "all" as const
-          };
-          
-          // Simulate conversion process
-          setTimeout(() => {
-            setDrives(prev => 
-              prev.map(d => 
-                d.id === id 
-                  ? {...d, syncStatus: "synced" as const} 
-                  : d
-              )
-            );
-            
-            toast({
-              title: "Drive Conversion Complete",
-              description: `${drive.name} is now accessible on all operating systems.`,
-              duration: 3000,
-            });
-          }, 3000);
-          
-          return newDrive;
-        }
-        return drive;
-      })
-    );
-    
-    toast({
-      title: "Converting Drive Format",
-      description: `Converting ${drives.find(d => d.id === id)?.name} to Universal format...`,
-      duration: 3000,
-    });
+  const formatDrive = (id: number) => {
+    if (window.confirm("Are you sure you want to format this drive? All data will be lost.")) {
+      toast({
+        title: "Formatting Drive",
+        description: "Drive format operation has been initiated."
+      });
+      
+      // In a real app, we would actually format the drive
+      
+      // Update the drive state
+      setDrives(drives.map(drive => 
+        drive.id === id ? {
+          ...drive,
+          used: 0,
+          syncStatus: "synced"
+        } : drive
+      ));
+    }
+  };
+
+  const getOSIcon = (os: string) => {
+    switch(os) {
+      case 'macos':
+        return '🍎';
+      case 'windows':
+        return '🪟';
+      case 'linux':
+        return '🐧';
+      case 'all':
+        return '🌐';
+      default:
+        return '💻';
+    }
   };
 
   return (
-    <div className="lg:col-span-3 space-y-4">
-      <Card>
-        <CardHeader className="pb-2">
-          <div className="flex items-center gap-2">
-            <HardDrive className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-medium">Universal Drive Manager</h3>
+    <div className="col-span-3">
+      <Card className="h-full">
+        <CardHeader className="pb-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <HardDrive className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-medium">Drive Manager</h3>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="gap-1 text-xs"
+                onClick={syncAllDrives}
+                disabled={syncingAll}
+              >
+                {syncingAll ? (
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-3.5 w-3.5" />
+                )}
+                Sync All
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="gap-1 text-xs"
+              >
+                <Filter className="h-3.5 w-3.5" />
+                Filter
+              </Button>
+            </div>
           </div>
+          <CardDescription>
+            Connected drives and network storage devices
+          </CardDescription>
         </CardHeader>
+        
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {drives.map((drive) => (
-              <Card key={drive.id} className="border-muted/70 hover:border-muted/90 transition-colors">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2.5 h-2.5 rounded-full ${
-                        drive.syncStatus === "synced" ? "bg-green-500" : 
-                        drive.syncStatus === "syncing" ? "bg-blue-500 animate-pulse" :
-                        drive.syncStatus === "pending" ? "bg-amber-500" : "bg-red-500"
-                      }`} />
-                      <div>
-                        <h4 className="font-medium">{drive.name}</h4>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          {drive.os === "windows" && <Laptop className="h-3 w-3" />}
-                          {drive.os === "macos" && <Laptop className="h-3 w-3" />}
-                          {drive.os === "linux" && <Server className="h-3 w-3" />}
-                          {drive.os === "all" && <Database className="h-3 w-3" />}
-                          <span>
-                            {drive.format} • {drive.size} • {drive.accessLevel}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {drive.format !== "Universal" ? (
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => convertDriveFormat(drive.id)}
-                        className="text-xs"
-                      >
-                        <Shuffle className="h-3 w-3 mr-1" />
-                        Convert to Universal
-                      </Button>
-                    ) : (
-                      <Badge variant="outline" className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20">
-                        Universal Format
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-2 mb-3">
+              <div key={drive.id} className="border rounded-md p-3">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{getOSIcon(drive.os)}</span>
                     <div>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-muted-foreground">Storage Usage</span>
-                        <span>{drive.used}%</span>
+                      <h4 className="font-medium">{drive.name}</h4>
+                      <div className="flex gap-2 text-xs text-muted-foreground">
+                        <span>{drive.format}</span>
+                        <span>•</span>
+                        <span>{drive.size}</span>
                       </div>
-                      <Progress value={drive.used} className="h-1.5" />
                     </div>
                   </div>
                   
-                  {drive.syncStatus === "syncing" && (
-                    <div className="mt-3 border-t pt-3">
-                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                        <span>Syncing progress:</span>
-                        <span>68%</span>
-                      </div>
-                      <Progress value={68} className="h-1.5" />
-                      <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                        <span>Estimated time remaining:</span>
-                        <span>4 minutes</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {drive.format === "Universal" && versioningEnabled && (
-                    <div className="mt-3 border-t pt-3 text-xs">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-medium">Project versions</span>
-                        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Current version:</span>
-                          <span>v43 (2 min ago)</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Total versions:</span>
-                          <span>43</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={drive.syncStatus === "synced" ? "outline" : "default"}>
+                      {drive.syncStatus === "syncing" && (
+                        <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                      )}
+                      {drive.syncStatus.charAt(0).toUpperCase() + drive.syncStatus.slice(1)}
+                    </Badge>
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => formatDrive(drive.id)}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span>Used space</span>
+                    <span className="text-muted-foreground">{drive.used}%</span>
+                  </div>
+                  <Progress value={drive.used} className="h-1.5" />
+                </div>
+                
+                {versioningEnabled && (
+                  <div className="mt-3 pt-3 border-t text-xs flex justify-between text-muted-foreground">
+                    <span>Auto-versioning</span>
+                    <span>Active • {Math.floor(Math.random() * 10) + 1} versions</span>
+                  </div>
+                )}
+              </div>
             ))}
-          </div>
-          
-          <div className="mt-4">
-            <Button onClick={connectNewDrive} className="gap-2">
-              <Plus className="h-4 w-4" /> Connect Drive
-            </Button>
           </div>
         </CardContent>
       </Card>

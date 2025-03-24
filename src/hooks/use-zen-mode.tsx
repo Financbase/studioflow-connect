@@ -1,184 +1,92 @@
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { toast } from "@/hooks/use-toast";
+import { useState, useCallback } from 'react';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { toast } from '@/hooks/use-toast';
+
+export type ZenModeTheme = 'minimal' | 'dark' | 'light' | 'paper';
+export type ZenModeSoundscape = 'silence' | 'lofi' | 'nature' | 'ambient';
 
 export interface ZenModeOptions {
-  theme: 'minimal' | 'ambient' | 'focus';
-  soundscape: 'silence' | 'lofi' | 'nature' | 'analog';
+  theme: ZenModeTheme;
+  soundscape: ZenModeSoundscape;
   enableTimers: boolean;
   hideNotifications: boolean;
-  enableBrainstorming?: boolean;
+  enableBrainstorming: boolean;
 }
 
-interface UseZenModeProps {
-  initialOptions?: Partial<ZenModeOptions>;
-  onStateChange?: (isActive: boolean) => void;
-}
-
-const DEFAULT_OPTIONS: ZenModeOptions = {
+const defaultOptions: ZenModeOptions = {
   theme: 'minimal',
   soundscape: 'silence',
   enableTimers: false,
   hideNotifications: true,
-  enableBrainstorming: true,
+  enableBrainstorming: false
 };
 
-// Map of soundscape names to their audio URLs
-// In a real app, these would be actual audio files
-const SOUNDSCAPE_URLS: Record<Exclude<ZenModeOptions['soundscape'], 'silence'>, string> = {
-  lofi: 'https://example.com/lofi-beats.mp3',
-  nature: 'https://example.com/nature-sounds.mp3',
-  analog: 'https://example.com/analog-static.mp3',
-};
-
-// Store user preferences for zen mode
-const STORAGE_KEY = 'zen-mode-preferences';
-
-export const useZenMode = (props?: UseZenModeProps) => {
-  // Load saved options from localStorage
-  const getSavedOptions = useCallback((): ZenModeOptions => {
-    try {
-      const savedOptions = localStorage.getItem(STORAGE_KEY);
-      return savedOptions 
-        ? { ...DEFAULT_OPTIONS, ...JSON.parse(savedOptions) } 
-        : { ...DEFAULT_OPTIONS, ...props?.initialOptions };
-    } catch (e) {
-      console.error('Error loading zen mode preferences:', e);
-      return { ...DEFAULT_OPTIONS, ...props?.initialOptions };
-    }
-  }, [props?.initialOptions]);
-
-  const [isActive, setIsActive] = useState(false);
-  const [options, setOptions] = useState<ZenModeOptions>(getSavedOptions());
-  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+/**
+ * Hook for managing the application's Zen Mode state and behaviors
+ */
+export const useZenMode = () => {
+  // Store Zen Mode state in localStorage to persist between sessions
+  const [isActive, setIsActive] = useLocalStorage<boolean>('zenMode-active', false);
   
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Store Zen Mode options in localStorage to persist user preferences
+  const [options, setOptions] = useLocalStorage<ZenModeOptions>('zenMode-options', defaultOptions);
   
-  // Save options when they change
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(options));
-    } catch (e) {
-      console.error('Error saving zen mode preferences:', e);
-    }
-  }, [options]);
+  // Track how long the user has been in Zen Mode
+  const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   
-  // Apply zen mode classes to document body
-  useEffect(() => {
-    if (isActive) {
-      document.body.classList.add('zen-mode-active');
+  /**
+   * Toggle Zen Mode on/off
+   */
+  const toggleZenMode = useCallback(() => {
+    const newState = !isActive;
+    setIsActive(newState);
+    
+    if (newState) {
+      // Zen Mode activated
+      setSessionStartTime(Date.now());
       
-      // Notify user that zen mode is active
-      if (options.theme !== 'minimal') {
-        toast({
-          title: `${options.theme.charAt(0).toUpperCase() + options.theme.slice(1)} Zen Mode activated`,
-          description: "Enjoy your distraction-free environment.",
-          duration: 3000,
-        });
+      // Show a toast notification
+      toast({
+        title: 'Zen Mode Activated',
+        description: 'Distractions minimized. Focus enhanced.'
+      });
+      
+      // Apply any global effects for zen mode (like hiding notifications)
+      if (options.hideNotifications) {
+        // In a real app, would integrate with OS notifications API
+        // or disable in-app notifications
       }
     } else {
-      document.body.classList.remove('zen-mode-active');
-      // Reset active feature when exiting zen mode
-      setActiveFeature(null);
-    }
-    
-    // Call onStateChange if provided
-    props?.onStateChange?.(isActive);
-    
-    return () => {
-      document.body.classList.remove('zen-mode-active');
-    };
-  }, [isActive, options.theme, props]);
-  
-  // Handle notification hiding
-  useEffect(() => {
-    if (isActive && options.hideNotifications) {
-      // This would be where we'd implement notification hiding
-      // For example: document.querySelectorAll('.notification').forEach(el => el.classList.add('hidden'));
-      console.log('Notifications hidden in Zen Mode');
-    }
-    
-    return () => {
-      // And restoring them when zen mode is disabled
-      // document.querySelectorAll('.notification').forEach(el => el.classList.remove('hidden'));
-      if (options.hideNotifications) {
-        console.log('Notifications restored');
+      // Zen Mode deactivated
+      // Calculate session duration if we have a start time
+      if (sessionStartTime) {
+        const duration = Math.floor((Date.now() - sessionStartTime) / 1000 / 60); // in minutes
+        toast({
+          title: 'Zen Mode Ended',
+          description: `You stayed focused for ${duration} minutes`
+        });
       }
-    };
-  }, [isActive, options.hideNotifications]);
-  
-  // Handle soundscapes
-  useEffect(() => {
-    // Cleanup previous audio if it exists
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    
-    if (isActive && options.soundscape !== 'silence') {
-      // In a real implementation, we would load and play the audio
-      console.log(`Playing ${options.soundscape} soundscape`);
       
-      // Create audio element (in a real app this would actually play sounds)
-      const url = SOUNDSCAPE_URLS[options.soundscape];
-      if (url) {
-        const audio = new Audio(url);
-        audio.loop = true;
-        audio.volume = 0.4;
-        // In a real implementation, uncomment the line below:
-        // audio.play().catch(err => console.error('Error playing audio:', err));
-        audioRef.current = audio;
-        
-        // Log instead of actually playing (since we don't have real audio files)
-        console.log(`Started ${options.soundscape} soundscape (volume: ${audio.volume})`);
-      }
+      setSessionStartTime(null);
     }
-    
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-        console.log(`Stopped soundscape audio`);
-      }
-    };
-  }, [isActive, options.soundscape]);
+  }, [isActive, options.hideNotifications, sessionStartTime, setIsActive]);
   
-  // Keyboard shortcut for toggling zen mode (Ctrl/Cmd + Shift + Z)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Z') {
-        setIsActive(prev => !prev);
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-  
+  /**
+   * Update Zen Mode options
+   */
   const updateOptions = useCallback((newOptions: Partial<ZenModeOptions>) => {
-    setOptions(prev => ({ ...prev, ...newOptions }));
-  }, []);
-  
-  const toggle = useCallback(() => setIsActive(prev => !prev), []);
-  const activate = useCallback(() => setIsActive(true), []);
-  const deactivate = useCallback(() => setIsActive(false), []);
-  
-  const setFeature = useCallback((feature: string | null) => {
-    setActiveFeature(feature);
-  }, []);
+    setOptions(prevOptions => ({
+      ...prevOptions,
+      ...newOptions
+    }));
+  }, [setOptions]);
   
   return {
     isActive,
     options,
-    activeFeature,
-    toggle,
-    activate,
-    deactivate,
-    updateOptions,
-    setFeature,
+    toggleZenMode,
+    updateOptions
   };
 };
 

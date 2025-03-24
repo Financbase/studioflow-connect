@@ -59,16 +59,14 @@ const ZenMode: React.FC<ZenModeProps> = ({
       onOptionsChange({ soundscape: 'lofi' });
       toast({
         title: "Sound enabled",
-        description: "Lo-fi background audio is now playing.",
-        duration: 3000,
+        description: "Lo-fi background audio is now playing."
       });
     } else {
       // If currently unmuted, mute by setting to silence
       onOptionsChange({ soundscape: 'silence' });
       toast({
         title: "Sound disabled",
-        description: "Background audio is now muted.",
-        duration: 3000,
+        description: "Background audio is now muted."
       });
     }
   };

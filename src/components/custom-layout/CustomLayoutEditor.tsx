@@ -7,19 +7,19 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { useDashboard, WidgetId } from '@/contexts/dashboard';
-import { WidgetList } from './WidgetList';
-import { LayoutNameInput } from './LayoutNameInput';
+import WidgetList from './WidgetList';
+import LayoutNameInput from './LayoutNameInput';
 import { useCustomLayout } from '@/contexts/dashboard/hooks/useCustomLayout';
-import { DialogActions } from './DialogActions';
-import { Layout } from './types';
+import DialogActions from './DialogActions';
+import { SavedLayout } from './types';
 import { Panel } from '@/components/ui/panel';
 
 /**
  * Component for creating and editing custom dashboard layouts
  */
-export const CustomLayoutEditor = () => {
+const CustomLayoutEditor = () => {
   const { hasFeatureAccess, pricingTier } = useDashboard();
-  const { saveLayout, updateLayout, layouts, selectedLayout } = useCustomLayout();
+  const { customLayout, updateCustomLayout, isUpdating, isLayoutChanged, hasLayoutChanged } = useCustomLayout();
   
   const [name, setName] = useState('');
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>([]);
@@ -27,16 +27,12 @@ export const CustomLayoutEditor = () => {
   
   // Initialize component state when selected layout changes
   useEffect(() => {
-    if (selectedLayout) {
-      setName(selectedLayout.name);
-      setSelectedWidgets(selectedLayout.widgets);
-      setEditMode(true);
+    if (customLayout) {
+      setSelectedWidgets(customLayout);
     } else {
-      setName('');
       setSelectedWidgets([]);
-      setEditMode(false);
     }
-  }, [selectedLayout]);
+  }, [customLayout]);
   
   const handleSaveLayout = () => {
     if (selectedWidgets.length === 0) {
@@ -55,33 +51,16 @@ export const CustomLayoutEditor = () => {
       return;
     }
     
-    // Create a new layout or update existing one
-    const newLayout: Layout = {
-      id: editMode && selectedLayout ? selectedLayout.id : Date.now().toString(),
-      name: name.trim(),
-      widgets: selectedWidgets,
-      createdAt: editMode && selectedLayout ? selectedLayout.createdAt : new Date(),
-      updatedAt: new Date()
-    };
+    // Update the custom layout
+    updateCustomLayout(selectedWidgets);
     
-    if (editMode && selectedLayout) {
-      updateLayout(newLayout);
-      toast.default({
-        title: "Layout Updated",
-        description: `Your "${name}" layout has been updated.`
-      });
-    } else {
-      saveLayout(newLayout);
-      toast.default({
-        title: "Layout Saved",
-        description: `Your "${name}" layout has been saved.`
-      });
-    }
+    toast.default({
+      title: "Layout Updated",
+      description: `Your "${name}" layout has been updated.`
+    });
     
     // Reset form after save
     setName('');
-    setSelectedWidgets([]);
-    setEditMode(false);
   };
   
   const handleWidgetToggle = (widgetId: WidgetId) => {
@@ -111,17 +90,37 @@ export const CustomLayoutEditor = () => {
       
       <CardContent className="space-y-4">
         <LayoutNameInput 
-          name={name} 
-          setName={setName} 
-          placeholder="My Custom Layout"
+          layoutName={name} 
+          onLayoutNameChange={setName} 
+          canSaveMultipleLayouts={true}
+          pricingTier={pricingTier}
         />
           
         <div className="space-y-2">
           <Label>Select Widgets</Label>
           <Panel className="p-4">
             <WidgetList 
+              widgets={Object.values(WidgetId)}
               selectedWidgets={selectedWidgets} 
-              onToggle={handleWidgetToggle}
+              onToggleWidget={handleWidgetToggle}
+              featureAccess={{
+                // Assuming all widgets are available to Pro users
+                analytics: pricingTier !== "free",
+                audio_player: true,
+                calendar: true,
+                file_browser: true,
+                marketplace: true,
+                performance: pricingTier === "pro",
+                projects: true,
+                quick_actions: true,
+                recent_files: true,
+                settings: true,
+                system_status: pricingTier !== "free",
+                todo: true,
+                usage_stats: pricingTier !== "free",
+                weather: true
+              }}
+              pricingTier={pricingTier}
             />
           </Panel>
         </div>
@@ -141,3 +140,5 @@ export const CustomLayoutEditor = () => {
     </Card>
   );
 };
+
+export default CustomLayoutEditor;

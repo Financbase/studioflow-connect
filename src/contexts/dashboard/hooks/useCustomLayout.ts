@@ -1,86 +1,42 @@
 
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { WidgetId } from '../types';
-import { useDashboard } from '../useDashboard';
-import { toast } from '@/hooks/use-toast';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 /**
- * Hook for managing custom layout functionality with enhanced error handling,
- * user feedback, and performance optimizations.
+ * Hook for managing custom dashboard layouts
  */
 export const useCustomLayout = () => {
-  const { 
-    customLayout, 
-    updateCustomLayout: updateLayout,
-    viewMode,
-    saveDashboard,
-    isUpdating
-  } = useDashboard();
+  const [customLayout, setCustomLayout] = useLocalStorage<WidgetId[]>('dashboard-custom-layout', []);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [isLayoutChanged, setIsLayoutChanged] = useState<boolean>(false);
   
-  const [lastSavedLayout, setLastSavedLayout] = useState<WidgetId[]>([]);
-  const [isLayoutChanged, setIsLayoutChanged] = useState(false);
-  
-  // Track last saved layout for comparison
-  useEffect(() => {
-    if (customLayout && !isUpdating) {
-      setLastSavedLayout([...customLayout]);
+  /**
+   * Update the custom layout
+   */
+  const updateCustomLayout = useCallback((newLayout: WidgetId[]) => {
+    setIsUpdating(true);
+    
+    try {
+      setCustomLayout(newLayout);
       setIsLayoutChanged(false);
+    } finally {
+      setIsUpdating(false);
     }
-  }, [customLayout, isUpdating]);
+  }, [setCustomLayout]);
   
-  // Function to check if the layout has been modified
-  const hasLayoutChanged = useCallback((newLayout: WidgetId[]): boolean => {
-    if (!lastSavedLayout || lastSavedLayout.length !== newLayout.length) {
+  /**
+   * Check if the layout has been changed from the saved version
+   */
+  const hasLayoutChanged = useCallback((newLayout: WidgetId[]) => {
+    if (!customLayout || !newLayout) return false;
+    
+    if (customLayout.length !== newLayout.length) {
       return true;
     }
     
-    return JSON.stringify(lastSavedLayout.sort()) !== JSON.stringify(newLayout.sort());
-  }, [lastSavedLayout]);
-  
-  // Function used in CustomLayoutEditor.tsx to update the custom layout
-  const updateCustomLayout = useCallback((newLayout: WidgetId[]): void => {
-    if (!newLayout || newLayout.length === 0) {
-      toast({
-        title: "Invalid Layout",
-        description: "Layout must contain at least one widget",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // Update the layout changed status
-    const layoutChanged = hasLayoutChanged(newLayout);
-    setIsLayoutChanged(layoutChanged);
-    
-    if (updateLayout) {
-      updateLayout(newLayout);
-    
-      // If we're in custom view mode, update the visible widgets too
-      if (viewMode === 'custom') {
-        // Save the dashboard with new settings
-        saveDashboard(newLayout, viewMode, newLayout)
-          .then(success => {
-            if (success) {
-              // Only show toast on successful save and if the layout actually changed
-              if (layoutChanged) {
-                toast({
-                  title: "Layout Updated",
-                  description: "Your custom dashboard layout has been saved",
-                });
-              }
-            }
-          })
-          .catch(error => {
-            toast({
-              title: "Save Failed",
-              description: "There was an error saving your layout. Please try again.",
-              variant: "destructive"
-            });
-            console.error("Error saving dashboard:", error);
-          });
-      }
-    }
-  }, [updateLayout, viewMode, saveDashboard, lastSavedLayout, hasLayoutChanged]);
+    return !customLayout.every(widget => newLayout.includes(widget));
+  }, [customLayout]);
   
   return {
     customLayout,
