@@ -1,5 +1,5 @@
-
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { toast } from '@/hooks/use-toast';
 import { Profile } from '@/types/supabase';
 
 interface UseAuthReturn {
-  user: any;
+  user: User | null;
   profile: Profile | null;
   isLoading: boolean;
   isAuthenticated: boolean;

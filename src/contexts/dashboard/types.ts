@@ -1,3 +1,4 @@
+import { SavedLayout as NewSavedLayout, WidgetConfig } from '@/types/dashboard';
 
 export type PricingTier = "free" | "standard" | "pro" | "enterprise";
 
@@ -22,11 +23,13 @@ export enum WidgetId {
   audio = "audio",
   ai = "ai",
   vm = "vm",
-  daw = "daw"
+  daw = "daw",
+  zen = "zen" // Adding Zen mode widget
 }
 
 export type ViewMode = "simple" | "advanced" | "custom";
 
+// Legacy layout definition (for backward compatibility)
 export interface SavedLayout {
   id: string;
   name: string;
@@ -35,6 +38,7 @@ export interface SavedLayout {
   createdAt: string;
 }
 
+// Enhanced Dashboard Context with new layout types
 export interface DashboardContextType {
   // Core dashboard properties
   widgets: WidgetId[];
@@ -76,6 +80,17 @@ export interface DashboardContextType {
   applyLayout?: (layoutId: string) => boolean;
   updateCustomLayout?: (widgets: WidgetId[]) => void;
   hasLayoutChanged?: boolean;
+  
+  // New enhanced layout functionality
+  enhancedLayouts?: NewSavedLayout[];
+  saveEnhancedLayout?: (layout: Omit<NewSavedLayout, 'id' | 'createdAt' | 'updatedAt'>) => Promise<NewSavedLayout | null>;
+  updateEnhancedLayout?: (layoutId: string, updates: Partial<NewSavedLayout>) => Promise<boolean>;
+  deleteEnhancedLayout?: (layoutId: string) => Promise<boolean>;
+  applyEnhancedLayout?: (layoutId: string) => boolean;
+  currentEnhancedLayout?: NewSavedLayout | null;
+  addWidgetConfig?: (widget: WidgetConfig) => void;
+  updateWidgetConfig?: (widgetId: string, updates: Partial<WidgetConfig>) => void;
+  removeWidgetConfig?: (widgetId: string) => void;
 }
 
 // Define default visible widgets for each view mode - needed by useViewMode.ts
