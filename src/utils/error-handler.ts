@@ -9,7 +9,9 @@ export interface ErrorMetadata {
   component?: string;
   action?: string;
   source?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
+  // Allow additional properties
+  [key: string]: unknown;
 }
 
 // Base error structure
@@ -164,7 +166,7 @@ export function handleError(
   let appError: AppError;
   
   // Convert to AppError if not already
-  if ('code' in error && typeof error.code === 'string') {
+  if (error && typeof error === 'object' && 'code' in error && typeof (error as Record<string, unknown>).code === 'string') {
     appError = error as AppError;
     // Add additional metadata if provided
     if (metadata) {
@@ -257,7 +259,7 @@ export async function tryOperation<T>(
 ): Promise<T> {
   try {
     return await operation();
-  } catch (error) {
+  } catch (error: unknown) {
     const appError = handleError(
       createAppError(
         errorCode,

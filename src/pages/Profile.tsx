@@ -1,3 +1,2 @@
-
-import Profile from './profile';
-export default Profile;
+import ProfileComponent from './profile/index';
+export default ProfileComponent;

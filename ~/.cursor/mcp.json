@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "mcp/github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
+      }
+    },
+    "postgres": {
+      "command": "/Users/jonathanpizarro/mcp-build/node_modules/.bin/mcp-server-postgres",
+      "args": [],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://username:password@localhost:5432/database"
+      }
+    },
+    "filesystem": {
+      "command": "/Users/jonathanpizarro/mcp-build/node_modules/.bin/mcp-server-filesystem",
+      "args": [],
+      "env": {}
+    }
+  }
+} 

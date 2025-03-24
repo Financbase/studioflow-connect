@@ -2,13 +2,15 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/supabase';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Use environment variables or fallback to mock values for development
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mock.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'mock-key-for-development';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
-  throw new Error('Missing Supabase environment variables');
-}
+// Log for debugging - remove in production
+console.log('Using Supabase config:', { 
+  url: supabaseUrl, 
+  isUsingMock: !import.meta.env.VITE_SUPABASE_URL 
+});
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

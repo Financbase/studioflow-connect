@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useZenMode } from '@/contexts/ZenModeContext';
+import { useZenMode, AmbientSoundType } from '@/contexts/ZenModeContext';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -34,7 +34,7 @@ const ZenModePanel: React.FC = () => {
   }, [state.currentTimerValue]);
 
   const handleSoundChange = (value: string) => {
-    actions.setAmbientSound(value as any);
+    actions.setAmbientSound(value as AmbientSoundType);
   };
 
   return (

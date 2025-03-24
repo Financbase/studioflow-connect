@@ -14,7 +14,7 @@ let audioContext: AudioContext | null = null;
 export function getAudioContext(): AudioContext {
   if (!audioContext) {
     try {
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     } catch (error) {
       handleError(error, true, { action: 'getAudioContext' });
       throw new Error('WebAudio is not supported in this browser');

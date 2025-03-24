@@ -1,3 +1,126 @@
+# Tab Manager Extension
+
+A Chrome extension for safely managing tab operations and iframe interactions with proper error handling.
+
+## Features
+
+- View and manage tabs in your Chrome browser
+- Interact with iframes in active tabs
+- Robust error handling
+- TypeScript-based for type safety
+- Consistent Promise-based messaging
+- Unit tested
+
+## Project Structure
+
+```
+tab-manager-extension/
+├── dist/                  # Compiled extension files
+├── src/                   # Source code
+│   ├── types/             # TypeScript type definitions
+│   │   └── chrome.d.ts    # Type definitions for Chrome APIs
+│   ├── utils/             # Utility functions
+│   │   ├── dom.ts         # DOM manipulation utilities
+│   │   └── messaging.ts   # Communication utilities
+│   ├── __tests__/         # Test files
+│   │   ├── dom.test.ts    # Tests for DOM utilities
+│   │   └── messaging.test.ts # Tests for messaging utilities
+│   ├── background.ts      # Background script
+│   ├── content-script.ts  # Content script injected into pages
+│   ├── popup.ts           # Popup script
+│   ├── popup.html         # Popup HTML
+│   └── manifest.json      # Extension manifest
+├── .eslintrc.json         # ESLint configuration
+├── .prettierrc            # Prettier configuration
+├── tsconfig.json          # TypeScript configuration
+├── webpack.config.js      # Webpack configuration
+├── package.json           # Project dependencies and scripts
+└── README.md              # Project documentation
+```
+
+## Development Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start development mode:
+
+```bash
+npm run dev
+```
+
+This will compile the TypeScript files and watch for changes.
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+The extension will be compiled to the `dist` directory.
+
+## Loading the Extension in Chrome
+
+1. Build the extension
+2. Open Chrome and navigate to `chrome://extensions`
+3. Enable "Developer mode" in the top right corner
+4. Click "Load unpacked" and select the `dist` directory
+
+## Testing
+
+Run unit tests:
+
+```bash
+npm test
+```
+
+## Linting
+
+Check code style:
+
+```bash
+npm run lint
+```
+
+Fix code style issues:
+
+```bash
+npm run format
+```
+
+## Type Checking
+
+Verify TypeScript:
+
+```bash
+npm run type-check
+```
+
+## Complete Validation
+
+Run all checks at once:
+
+```bash
+npm run validate
+```
+
+## Design Patterns
+
+This extension uses consistent Promise-based messaging between components:
+
+- **Background Script**: Manages extension state and coordinates operations between tabs
+- **Content Script**: Interacts with web page DOM to find iframes
+- **Popup**: Provides UI for tab and iframe management
+
+Communication between these components uses standardized message passing with proper error handling.
+
+## License
+
+MIT
+
 # Welcome to your Lovable project
 
 ## Project info
