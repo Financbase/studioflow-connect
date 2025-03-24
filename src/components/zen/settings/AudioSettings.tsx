@@ -1,16 +1,14 @@
 
 import React from "react";
+import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
-import { MusicIcon, VolumeX, Volume, Volume2 } from "lucide-react";
-import { ZenModeOptions } from "@/hooks/use-zen-mode";
 
 interface AudioSettingsProps {
   volume: number;
-  soundscape: ZenModeOptions['soundscape'];
+  soundscape: string;
   onVolumeChange: (value: number[]) => void;
-  onSoundscapeChange: (value: ZenModeOptions['soundscape']) => void;
+  onSoundscapeChange: (value: string) => void;
 }
 
 const AudioSettings: React.FC<AudioSettingsProps> = ({ 
@@ -19,76 +17,48 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
   onVolumeChange, 
   onSoundscapeChange 
 }) => {
-  const getVolumeIcon = () => {
-    if (volume === 0) return <VolumeX className="h-4 w-4" />;
-    if (volume < 50) return <Volume className="h-4 w-4" />;
-    return <Volume2 className="h-4 w-4" />;
-  };
-
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <Label className="text-base">Audio Settings</Label>
-          <p className="text-sm text-muted-foreground">Control background audio for your zen experience</p>
-        </div>
-      </div>
-      
-      <div className="px-1 pb-2">
-        <div className="flex items-center justify-between mb-1">
-          <Label htmlFor="volume" className="text-sm flex items-center gap-1.5">
-            {getVolumeIcon()}
-            <span>Volume</span>
-          </Label>
-          <span className="text-sm text-muted-foreground">{volume}%</span>
-        </div>
+      <div>
+        <h3 className="text-sm font-medium mb-2">Audio</h3>
+        <Label htmlFor="volume" className="text-xs mb-1 text-muted-foreground">
+          Volume: {volume}%
+        </Label>
         <Slider
           id="volume"
-          value={[volume]}
+          min={0}
           max={100}
-          step={5}
-          className="py-2"
+          step={1}
+          value={[volume]}
           onValueChange={onVolumeChange}
+          className="mt-1"
         />
       </div>
-      
+
       {volume > 0 && (
-        <RadioGroup 
-          value={soundscape === 'silence' ? 'lofi' : soundscape} 
-          onValueChange={(value) => onSoundscapeChange(value as ZenModeOptions['soundscape'])}
-          className="grid grid-cols-2 gap-4"
-        >
-          <div>
-            <RadioGroupItem value="lofi" id="lofi" className="sr-only peer" />
-            <Label 
-              htmlFor="lofi" 
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary transition-colors duration-200"
-            >
-              <MusicIcon className="h-6 w-6 mb-2" />
-              <span className="font-medium">Lo-Fi</span>
-            </Label>
-          </div>
-          <div>
-            <RadioGroupItem value="nature" id="nature" className="sr-only peer" />
-            <Label 
-              htmlFor="nature" 
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary transition-colors duration-200"
-            >
-              <MusicIcon className="h-6 w-6 mb-2" />
-              <span className="font-medium">Nature</span>
-            </Label>
-          </div>
-          <div>
-            <RadioGroupItem value="analog" id="analog" className="sr-only peer" />
-            <Label 
-              htmlFor="analog" 
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary transition-colors duration-200"
-            >
-              <MusicIcon className="h-6 w-6 mb-2" />
-              <span className="font-medium">Analog</span>
-            </Label>
-          </div>
-        </RadioGroup>
+        <div className="pt-2">
+          <Label htmlFor="soundscape" className="text-xs mb-2 text-muted-foreground">
+            Sound Type
+          </Label>
+          <RadioGroup
+            value={soundscape}
+            onValueChange={onSoundscapeChange}
+            className="flex flex-col space-y-1 mt-1"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="lofi" id="lofi" />
+              <Label htmlFor="lofi" className="text-sm cursor-pointer">Lo-Fi Music</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="ambient" id="ambient" />
+              <Label htmlFor="ambient" className="text-sm cursor-pointer">Ambient Sounds</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="whitenoise" id="whitenoise" />
+              <Label htmlFor="whitenoise" className="text-sm cursor-pointer">White Noise</Label>
+            </div>
+          </RadioGroup>
+        </div>
       )}
     </div>
   );

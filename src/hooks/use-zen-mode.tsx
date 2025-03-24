@@ -7,6 +7,9 @@ export interface ZenModeOptions {
   theme: ZenModeTheme;
   music: boolean;
   notifications: boolean;
+  soundscape?: string;
+  enableTimers?: boolean;
+  hideNotifications?: boolean;
   timer: {
     enabled: boolean;
     minutes: number;
@@ -19,6 +22,9 @@ export const defaultZenModeOptions: ZenModeOptions = {
   theme: 'minimal',
   music: true,
   notifications: false,
+  soundscape: 'silence',
+  enableTimers: false,
+  hideNotifications: true,
   timer: {
     enabled: false,
     minutes: 25

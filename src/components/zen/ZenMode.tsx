@@ -18,10 +18,17 @@ const ZenMode: React.FC<ZenModeProps> = ({
   onToggle, 
   options = {
     theme: 'minimal',
+    music: false,
+    notifications: false,
     soundscape: 'silence',
     enableTimers: false,
     hideNotifications: true,
-    enableBrainstorming: true
+    timer: {
+      enabled: false,
+      minutes: 25
+    },
+    autoSave: true,
+    focusHighlight: true
   },
   onOptionsChange = () => {}
 }) => {

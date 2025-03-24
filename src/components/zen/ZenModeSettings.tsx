@@ -73,14 +73,14 @@ const ZenModeSettings: React.FC<ZenModeSettingsProps> = ({ options, onChange }) 
           
           <AudioSettings 
             volume={volume}
-            soundscape={options.soundscape}
+            soundscape={options.soundscape || 'silence'}
             onVolumeChange={handleVolumeChange}
             onSoundscapeChange={(soundscape) => onChange({ soundscape })}
           />
           
           <AdditionalFeatures
-            enableTimers={options.enableTimers}
-            hideNotifications={options.hideNotifications}
+            enableTimers={options.enableTimers || false}
+            hideNotifications={options.hideNotifications || false}
             onToggleTimers={(checked) => onChange({ enableTimers: checked })}
             onToggleNotifications={(checked) => onChange({ hideNotifications: checked })}
           />

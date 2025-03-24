@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from '@/hooks/use-toast';
 import { useDashboard } from '@/contexts/dashboard';
-import { WidgetId } from '@/contexts/dashboard/types';
+import { WidgetId, SavedLayout } from '@/contexts/dashboard/types';
 import { Settings2 } from 'lucide-react';
 import CustomLayoutTabs from './CustomLayoutTabs';
 
@@ -25,7 +25,7 @@ const DialogActions: React.FC<DialogActionsProps> = ({ onCancel, onSave }) => (
  */
 const CustomLayoutEditor = () => {
   const { hasFeatureAccess, pricingTier, widgets, customLayout, savedLayouts } = useDashboard();
-  const { updateCustomLayout, isUpdating, isLayoutChanged, hasLayoutChanged } = useDashboard();
+  const { updateCustomLayout, isUpdating } = useDashboard();
   const { saveLayout, deleteLayout, applyLayout } = useDashboard();
   
   const [name, setName] = useState('');
@@ -44,17 +44,19 @@ const CustomLayoutEditor = () => {
   
   const handleSaveLayout = () => {
     if (selectedWidgets.length === 0) {
-      toast.error({
+      toast({
         title: "Invalid Layout",
         description: "Please select at least one widget for your layout",
+        variant: "destructive"
       });
       return;
     }
     
     if (!name.trim()) {
-      toast.error({
+      toast({
         title: "Name Required",
         description: "Please provide a name for your layout",
+        variant: "destructive"
       });
       return;
     }
