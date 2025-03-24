@@ -27,6 +27,14 @@ export enum WidgetId {
 
 export type ViewMode = "simple" | "advanced" | "custom";
 
+export interface SavedLayout {
+  id: string;
+  name: string;
+  widgets: WidgetId[];
+  isDefault?: boolean;
+  createdAt: string;
+}
+
 export interface DashboardContextType {
   // Core dashboard properties
   widgets: WidgetId[];
@@ -43,7 +51,7 @@ export interface DashboardContextType {
   featureAccess: Record<WidgetId, boolean>;
   isLoading: boolean;
   
-  // Added properties referenced elsewhere but missing from interface
+  // Widget visibility and collapse
   isWidgetVisible: (widgetId: WidgetId) => boolean;
   isWidgetCollapsed: (widgetId: WidgetId) => boolean;
   toggleWidgetCollapse: (widgetId: WidgetId) => void;
@@ -59,6 +67,13 @@ export interface DashboardContextType {
   customLayout?: WidgetId[];
   collapsedWidgets?: WidgetId[];
   toggleWidget?: (widgetId: WidgetId) => void;
+  
+  // Saved layouts functionality
+  savedLayouts?: SavedLayout[];
+  saveLayout?: (name: string, widgets: WidgetId[], isDefault?: boolean) => Promise<SavedLayout | null>;
+  updateLayout?: (layoutId: string, updates: Partial<SavedLayout>) => Promise<boolean>;
+  deleteLayout?: (layoutId: string) => Promise<boolean>;
+  applyLayout?: (layoutId: string) => boolean;
 }
 
 // Define default visible widgets for each view mode - needed by useViewMode.ts

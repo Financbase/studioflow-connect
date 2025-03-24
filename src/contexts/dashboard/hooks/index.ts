@@ -7,3 +7,4 @@ export * from './useWidgets';
 export * from './useViewMode';
 export * from './usePricingTier';
 export * from './useDashboardPersistence';
+export * from './useSavedLayouts';

@@ -7,6 +7,7 @@ import { useDashboardPersistence } from './hooks/useDashboardPersistence';
 import { usePricingTier } from './hooks/usePricingTier';
 import { WidgetId, ViewMode, DashboardContextType } from './types';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSavedLayouts } from './hooks/useSavedLayouts';
 
 // Creating the Dashboard Context
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -32,8 +33,20 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     resetWidgets, 
     collapsedWidgets, 
     toggleWidget, 
-    isWidgetCollapsed 
+    isWidgetCollapsed,
+    setWidgets 
   } = useWidgets(viewMode, (widget: WidgetId) => hasFeatureAccess(widget));
+  
+  // Initialize saved layouts hook
+  const {
+    layouts: savedLayouts,
+    saveLayout,
+    updateLayout,
+    deleteLayout,
+    applyLayout,
+    isLoading: isLayoutsLoading,
+    createDefaultLayout
+  } = useSavedLayouts();
   
   // Initialize persistence hooks
   const { 
@@ -42,7 +55,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   } = useDashboardPersistence(user?.id, viewMode, widgets, customLayout);
   
   // Combined loading state
-  const isUpdating = isChangingTier || persistenceUpdating;
+  const isUpdating = isChangingTier || persistenceUpdating || isLayoutsLoading;
 
   // Console log to debug auth status
   useEffect(() => {
@@ -93,14 +106,20 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Set widget layout
   const setWidgetLayout = useCallback((newWidgets: WidgetId[]): void => {
     // Implementation here
+    setWidgets(newWidgets);
     console.log('Setting widget layout:', newWidgets);
-  }, []);
+  }, [setWidgets]);
 
   // Toggle widget visibility
   const toggleWidgetVisibility = useCallback((widgetId: WidgetId): void => {
     // Implementation here
+    if (widgets.includes(widgetId)) {
+      removeWidget(widgetId);
+    } else {
+      addWidget(widgetId);
+    }
     console.log('Toggling widget visibility:', widgetId);
-  }, []);
+  }, [widgets, removeWidget, addWidget]);
 
   // Reorder widgets
   const reorderWidgets = useCallback((startIndex: number, endIndex: number): void => {
@@ -128,6 +147,13 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const visibleWidgets = useMemo(() => {
     return widgets.filter(widgetId => hasFeatureAccess(widgetId));
   }, [widgets, hasFeatureAccess]);
+  
+  // Create default layout if user is logged in and no default layout exists
+  useEffect(() => {
+    if (user && widgets.length > 0 && savedLayouts.length === 0) {
+      createDefaultLayout(widgets);
+    }
+  }, [user, widgets, savedLayouts, createDefaultLayout]);
 
   return (
     <DashboardContext.Provider
@@ -147,7 +173,21 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         isWidgetCollapsed,
         toggleWidgetCollapse,
         resetDashboard,
-        isPricingTierChanging: isChangingTier
+        isPricingTierChanging: isChangingTier,
+        setPricingTier: changePricingTier,
+        isUpdating,
+        addWidget,
+        removeWidget,
+        moveWidget,
+        customLayout,
+        collapsedWidgets,
+        toggleWidget,
+        // Add saved layouts functionality
+        savedLayouts,
+        saveLayout,
+        updateLayout,
+        deleteLayout,
+        applyLayout
       }}
     >
       {children}

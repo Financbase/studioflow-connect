@@ -1,152 +1,69 @@
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { toast } from '@/hooks/use-toast';
-import { WidgetId, ViewMode } from '../types';
-
-// Default widget configurations
-const DEFAULT_WIDGETS: WidgetId[] = [
-  WidgetId.connect, 
-  WidgetId.system, 
-  WidgetId.audio, 
-  WidgetId.ai, 
-  WidgetId.vm, 
-  WidgetId.daw, 
-  WidgetId.marketplace
-];
-
-const DEFAULT_CUSTOM_LAYOUT: WidgetId[] = [
-  WidgetId.connect, 
-  WidgetId.system, 
-  WidgetId.audio, 
-  WidgetId.ai
-];
+import { useState, useEffect, useCallback } from 'react';
+import { WidgetId, ViewMode, defaultVisibleWidgets } from '../types';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: WidgetId) => boolean) => {
-  // Widget state
-  const [widgets, setWidgets] = useState<WidgetId[]>(DEFAULT_WIDGETS);
+  // Store the list of widgets for each view mode
+  const [widgets, setWidgets] = useState<WidgetId[]>([]);
   
-  // Collapsed widgets state
-  const [collapsedWidgets, setCollapsedWidgets] = useState<WidgetId[]>([]);
+  // Store custom layout widgets
+  const [customLayout, setCustomLayout] = useLocalStorage<WidgetId[]>('dashboard-custom-layout', []);
   
-  // Custom layout state
-  const [customLayout, setCustomLayout] = useState<WidgetId[]>(DEFAULT_CUSTOM_LAYOUT);
-
-  // Initialize widgets from localStorage if available
+  // Store collapsed widgets
+  const [collapsedWidgets, setCollapsedWidgets] = useLocalStorage<WidgetId[]>('dashboard-collapsed-widgets', []);
+  
+  // Initialize widgets based on view mode
   useEffect(() => {
-    try {
-      const savedWidgets = localStorage.getItem('studioflow_widgets');
-      const savedCollapsed = localStorage.getItem('studioflow_collapsed_widgets');
-      const savedCustomLayout = localStorage.getItem('studioflow_custom_layout');
-      
-      if (savedWidgets) {
-        const parsed = JSON.parse(savedWidgets);
-        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
-          setWidgets(parsed as WidgetId[]);
-        }
-      }
-      
-      if (savedCollapsed) {
-        const parsed = JSON.parse(savedCollapsed);
-        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
-          setCollapsedWidgets(parsed as WidgetId[]);
-        }
-      }
-      
-      if (savedCustomLayout) {
-        const parsed = JSON.parse(savedCustomLayout);
-        if (Array.isArray(parsed) && parsed.every(w => typeof w === 'string')) {
-          setCustomLayout(parsed as WidgetId[]);
-        }
-      }
-    } catch (err) {
-      console.warn('Error loading widget settings from localStorage:', err);
+    if (viewMode === 'custom' && customLayout && customLayout.length > 0) {
+      // For custom view mode, use the saved custom layout
+      setWidgets(customLayout.filter(widget => hasFeatureAccess(widget)));
+    } else {
+      // For other view modes, use the default widgets for that mode
+      const defaultWidgets = defaultVisibleWidgets[viewMode] || [];
+      setWidgets(defaultWidgets.filter(widget => hasFeatureAccess(widget)));
     }
-  }, []);
+  }, [viewMode, customLayout, hasFeatureAccess]);
   
-  // Save widget states to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('studioflow_widgets', JSON.stringify(widgets));
-      localStorage.setItem('studioflow_collapsed_widgets', JSON.stringify(collapsedWidgets));
-      localStorage.setItem('studioflow_custom_layout', JSON.stringify(customLayout));
-    } catch (err) {
-      console.warn('Error saving widget settings to localStorage:', err);
-    }
-  }, [widgets, collapsedWidgets, customLayout]);
-
-  // Add a widget to the dashboard
-  const addWidget = useCallback((widget: WidgetId) => {
-    if (!hasFeatureAccess(widget)) {
-      toast({
-        title: "Feature Access Required",
-        description: "Please upgrade your plan to access this widget",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setWidgets(prev => {
-      if (prev.includes(widget)) {
-        return prev;
+  // Add a widget to the current layout
+  const addWidget = useCallback((widgetId: WidgetId) => {
+    if (!widgets.includes(widgetId)) {
+      const updatedWidgets = [...widgets, widgetId];
+      setWidgets(updatedWidgets);
+      
+      // If in custom mode, also update the custom layout
+      if (viewMode === 'custom') {
+        setCustomLayout(updatedWidgets);
       }
-      return [...prev, widget];
-    });
+    }
+  }, [widgets, viewMode, setCustomLayout]);
+  
+  // Remove a widget from the current layout
+  const removeWidget = useCallback((widgetId: WidgetId) => {
+    const updatedWidgets = widgets.filter(id => id !== widgetId);
+    setWidgets(updatedWidgets);
     
-    // Also add to custom layout if using custom view
+    // If in custom mode, also update the custom layout
     if (viewMode === 'custom') {
-      setCustomLayout(prev => {
-        if (prev.includes(widget)) {
-          return prev;
-        }
-        return [...prev, widget];
-      });
+      setCustomLayout(updatedWidgets);
     }
+  }, [widgets, viewMode, setCustomLayout]);
+  
+  // Move a widget to a different position in the layout
+  const moveWidget = useCallback((startIndex: number, endIndex: number) => {
+    const result = Array.from(widgets);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
     
-    toast({
-      title: "Widget Added",
-      description: `The widget has been added to your dashboard`,
-    });
-  }, [hasFeatureAccess, viewMode, setCustomLayout]);
-
-  // Remove a widget from the dashboard
-  const removeWidget = useCallback((widget: WidgetId) => {
-    setWidgets(prev => prev.filter(w => w !== widget));
+    setWidgets(result);
     
-    // Also remove from custom layout
-    setCustomLayout(prev => prev.filter(w => w !== widget));
-    
-    // Remove from collapsed state if it exists
-    setCollapsedWidgets(prev => prev.filter(w => w !== widget));
-    
-    toast({
-      title: "Widget Removed",
-      description: `The widget has been removed from your dashboard`,
-    });
-  }, [setCustomLayout]);
-
-  // Move a widget in the dashboard
-  const moveWidget = useCallback((fromIndex: number, toIndex: number) => {
-    setWidgets(prev => {
-      const result = [...prev];
-      const [removed] = result.splice(fromIndex, 1);
-      result.splice(toIndex, 0, removed);
-      return result;
-    });
-  }, []);
-
-  // Reset widgets to default
-  const resetWidgets = useCallback(() => {
-    setWidgets(DEFAULT_WIDGETS);
-    setCollapsedWidgets([]);
-    setCustomLayout(DEFAULT_CUSTOM_LAYOUT);
-    
-    toast({
-      title: "Dashboard Reset",
-      description: "Your widget settings have been reset to default",
-    });
-  }, []);
-
-  // Toggle widget collapse state
+    // If in custom mode, also update the custom layout
+    if (viewMode === 'custom') {
+      setCustomLayout(result);
+    }
+  }, [widgets, viewMode, setCustomLayout]);
+  
+  // Toggle a widget's collapsed state
   const toggleWidget = useCallback((widgetId: WidgetId) => {
     setCollapsedWidgets(prev => {
       if (prev.includes(widgetId)) {
@@ -155,20 +72,30 @@ export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: Widget
         return [...prev, widgetId];
       }
     });
-  }, []);
+  }, [setCollapsedWidgets]);
   
-  // Check if widget is collapsed
+  // Check if a widget is collapsed
   const isWidgetCollapsed = useCallback((widgetId: WidgetId) => {
     return collapsedWidgets.includes(widgetId);
   }, [collapsedWidgets]);
-
-  // Memoized filtered widgets based on feature access
-  const accessibleWidgets = useMemo(() => {
-    return widgets.filter(widget => hasFeatureAccess(widget));
-  }, [widgets, hasFeatureAccess]);
-
+  
+  // Reset to default layout for the current view mode
+  const resetWidgets = useCallback(() => {
+    const defaultWidgets = defaultVisibleWidgets[viewMode] || [];
+    setWidgets(defaultWidgets.filter(widget => hasFeatureAccess(widget)));
+    
+    if (viewMode === 'custom') {
+      // Reset custom layout to empty
+      setCustomLayout([]);
+    }
+    
+    // Clear collapsed widgets
+    setCollapsedWidgets([]);
+  }, [viewMode, hasFeatureAccess, setCustomLayout, setCollapsedWidgets]);
+  
   return {
-    widgets: accessibleWidgets,
+    widgets,
+    setWidgets,
     addWidget,
     removeWidget,
     moveWidget,

@@ -16,7 +16,7 @@ interface DashboardActionsProps {
 
 const DashboardActions: React.FC<DashboardActionsProps> = ({ onZenModeActivate }) => {
   const navigate = useNavigate();
-  const { hasFeatureAccess, resetDashboard } = useDashboard();
+  const { hasFeatureAccess, resetDashboard, applyLayout, savedLayouts } = useDashboard();
   const { themeVariant } = useTheme();
   const isMobile = useIsMobile();
   
@@ -38,6 +38,15 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({ onZenModeActivate }
       title: "Dashboard Reset",
       description: "Your dashboard has been reset to default settings"
     });
+  };
+  
+  const handleApplyDefaultLayout = () => {
+    if (savedLayouts && savedLayouts.length > 0) {
+      const defaultLayout = savedLayouts.find(layout => layout.isDefault);
+      if (defaultLayout && applyLayout) {
+        applyLayout(defaultLayout.id);
+      }
+    }
   };
   
   return (
