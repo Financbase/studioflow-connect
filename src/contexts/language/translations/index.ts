@@ -1,55 +1,24 @@
 
-import categoryTranslations, { languageNames } from "./categories";
-import adminTranslations from "./admin";
-import widgetsTranslations from "./widgets";
+import { Language } from "../types";
+import systemTranslations from "./system";
+import authTranslations from "./auth";
 import navigationTranslations from "./navigation";
-import dashboardTranslations from "./dashboard";
-import supportTranslations from "./support";
-import designTranslations from "./design";
-import designTokenTranslations from "./designTokens";
-import commonTranslations from "./common";
-import footerTranslations from "./footer";
-import headerTranslations from "./header";
-import mobileTranslations from "./mobile";
-import projectTranslations from "./projects";
-import toastTranslations from "./toast";
-import userTranslations from "./user";
+import errorTranslations from "./errors";
 import aiToolsTranslations from "./aitools";
-import documentationTranslations from "./documentation";
 import libraryTranslations from "./library";
-import settingsTranslations from "./settings";
-import colorPaletteTranslations from "./colorPalette";
-import knowledgeTranslations from "./knowledge";
-import connectTranslations from "./connect";
-import languagesTranslations from "./languages";
-import sidebarTranslations from "./sidebar";
+import categoryTranslations, { languageNames } from "./categories";
+import dashboardTranslations from "./dashboard";
 
 // Combine all translations
-const translations = {
-  ...categoryTranslations,
-  ...adminTranslations,
-  ...widgetsTranslations,
+const translations: Record<string, Record<Language, string>> = {
+  ...systemTranslations,
+  ...authTranslations,
   ...navigationTranslations,
-  ...dashboardTranslations,
-  ...supportTranslations,
-  ...designTranslations,
-  ...designTokenTranslations,
-  ...commonTranslations,
-  ...footerTranslations,
-  ...headerTranslations,
-  ...mobileTranslations,
-  ...projectTranslations,
-  ...toastTranslations,
-  ...userTranslations,
+  ...errorTranslations,
   ...aiToolsTranslations,
-  ...documentationTranslations,
   ...libraryTranslations,
-  ...settingsTranslations,
-  ...colorPaletteTranslations,
-  ...knowledgeTranslations,
-  ...connectTranslations,
-  ...languagesTranslations,
-  ...sidebarTranslations
+  ...categoryTranslations,
+  ...dashboardTranslations
 };
 
 export { languageNames };
