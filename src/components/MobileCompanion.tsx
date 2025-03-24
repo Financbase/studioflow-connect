@@ -13,7 +13,8 @@ import {
   Link2 
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
+import { useDashboard } from "@/contexts/dashboard";
+import { WidgetId } from "@/contexts/dashboard/types";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";

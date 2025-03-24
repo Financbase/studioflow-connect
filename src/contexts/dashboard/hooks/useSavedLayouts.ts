@@ -1,275 +1,233 @@
 
 import { useState, useCallback, useEffect } from 'react';
-import { WidgetId } from '../types';
-import { useDashboard } from '../useDashboard';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { SavedLayout, WidgetId } from '../types';
 import { useAuth } from '@/hooks/use-auth';
-import { SavedLayout } from '@/components/custom-layout/types';
+import { toast } from '@/hooks/use-toast';
+import { v4 as uuidv4 } from 'uuid';
 
-/**
- * Hook for managing saved dashboard layouts
- */
 export const useSavedLayouts = () => {
   const { user } = useAuth();
-  const { setWidgetLayout } = useDashboard();
   const [layouts, setLayouts] = useState<SavedLayout[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeLayoutId, setActiveLayoutId] = useState<string | null>(null);
-
-  // Load saved layouts from Supabase
-  const loadSavedLayouts = useCallback(async () => {
-    if (!user) return;
-    
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('saved_layouts')
-        .select('*')
-        .order('created_at', { ascending: false });
-        
-      if (error) throw error;
-      
-      // Transform and set layouts
-      const savedLayouts = data.map(layout => ({
-        id: layout.id,
-        name: layout.name,
-        widgets: layout.widgets as WidgetId[],
-        isDefault: layout.is_default,
-        createdAt: layout.created_at
-      }));
-      
-      setLayouts(savedLayouts);
-      
-      // Find and activate default layout if any
-      const defaultLayout = savedLayouts.find(layout => layout.isDefault);
-      if (defaultLayout) {
-        setActiveLayoutId(defaultLayout.id);
+  
+  // Load layouts from localStorage initially
+  useEffect(() => {
+    if (user) {
+      try {
+        const savedLayoutsString = localStorage.getItem(`dashboard_layouts_${user.id}`);
+        if (savedLayoutsString) {
+          const savedLayouts = JSON.parse(savedLayoutsString) as SavedLayout[];
+          setLayouts(savedLayouts);
+        }
+      } catch (error) {
+        console.error('Error loading saved layouts:', error);
       }
-    } catch (error: any) {
-      console.error('Error loading layouts:', error.message);
-      toast.error({
-        title: "Failed to load layouts",
-        description: error.message
-      });
-    } finally {
-      setIsLoading(false);
     }
   }, [user]);
   
-  // Load layouts on user change
-  useEffect(() => {
-    loadSavedLayouts();
-  }, [loadSavedLayouts]);
-
-  // Save a new layout to Supabase
-  const saveLayout = useCallback(async (name: string, widgets: WidgetId[], isDefault: boolean = false) => {
+  // Save layouts to localStorage
+  const persistLayouts = useCallback((updatedLayouts: SavedLayout[]) => {
+    if (user) {
+      try {
+        localStorage.setItem(`dashboard_layouts_${user.id}`, JSON.stringify(updatedLayouts));
+      } catch (error) {
+        console.error('Error saving layouts to localStorage:', error);
+      }
+    }
+  }, [user]);
+  
+  // Create a new layout
+  const saveLayout = useCallback(async (name: string, widgets: WidgetId[], isDefault: boolean = false): Promise<SavedLayout | null> => {
     if (!user) {
       toast.error({
-        title: "Authentication required",
-        description: "You need to be logged in to save layouts"
+        title: "Authentication Required",
+        description: "Please log in to save layouts",
       });
       return null;
     }
     
     setIsLoading(true);
+    
     try {
-      // If this is a default layout, first remove default status from other layouts
-      if (isDefault) {
-        await supabase
-          .from('saved_layouts')
-          .update({ is_default: false })
-          .eq('user_id', user.id)
-          .eq('is_default', true);
-      }
-      
-      // Insert new layout
-      const { data, error } = await supabase
-        .from('saved_layouts')
-        .insert({
-          user_id: user.id,
-          name,
-          widgets: widgets,
-          is_default: isDefault
-        })
-        .select()
-        .single();
-        
-      if (error) throw error;
-      
-      // Create layout object and add to state
+      // Create new layout
       const newLayout: SavedLayout = {
-        id: data.id,
-        name: data.name,
-        widgets: data.widgets as WidgetId[],
-        isDefault: data.is_default,
-        createdAt: data.created_at
+        id: uuidv4(),
+        name,
+        widgets,
+        isDefault,
+        createdAt: new Date().toISOString()
       };
       
-      setLayouts(prev => [newLayout, ...prev]);
+      // If this is default, remove default flag from other layouts
+      let updatedLayouts: SavedLayout[];
       
-      // Set as active if it's default
       if (isDefault) {
-        setActiveLayoutId(newLayout.id);
+        updatedLayouts = layouts.map(layout => ({
+          ...layout,
+          isDefault: false
+        }));
+      } else {
+        updatedLayouts = [...layouts];
       }
       
-      toast.default({
-        title: "Layout saved",
-        description: `Layout "${name}" has been saved successfully`
+      // Add new layout
+      updatedLayouts.push(newLayout);
+      setLayouts(updatedLayouts);
+      persistLayouts(updatedLayouts);
+      
+      toast({
+        title: "Layout Saved",
+        description: `'${name}' has been saved successfully`,
       });
       
       return newLayout;
-    } catch (error: any) {
-      console.error('Error saving layout:', error.message);
+    } catch (error) {
+      console.error('Error saving layout:', error);
       toast.error({
-        title: "Failed to save layout",
-        description: error.message
+        title: "Save Failed",
+        description: "There was an error saving your layout",
       });
       return null;
     } finally {
       setIsLoading(false);
     }
-  }, [user]);
-
+  }, [layouts, user, persistLayouts]);
+  
   // Update an existing layout
-  const updateLayout = useCallback(async (layoutId: string, updates: Partial<SavedLayout>) => {
-    if (!user) return false;
-    
+  const updateLayout = useCallback(async (layoutId: string, updates: Partial<SavedLayout>): Promise<boolean> => {
     setIsLoading(true);
+    
     try {
-      // Prepare update data
-      const updateData: any = {};
-      if (updates.name) updateData.name = updates.name;
-      if (updates.widgets) updateData.widgets = updates.widgets;
-      if (updates.isDefault !== undefined) updateData.is_default = updates.isDefault;
+      const layoutIndex = layouts.findIndex(layout => layout.id === layoutId);
       
-      // If setting as default, first remove default status from other layouts
+      if (layoutIndex === -1) {
+        toast.error({
+          title: "Layout Not Found",
+          description: "The layout you're trying to update doesn't exist",
+        });
+        return false;
+      }
+      
+      // Make a copy of layouts
+      const updatedLayouts = [...layouts];
+      
+      // If setting this as default, unset others
       if (updates.isDefault) {
-        await supabase
-          .from('saved_layouts')
-          .update({ is_default: false })
-          .eq('user_id', user.id)
-          .eq('is_default', true)
-          .neq('id', layoutId);
+        updatedLayouts.forEach(layout => {
+          layout.isDefault = false;
+        });
       }
       
       // Update the layout
-      const { error } = await supabase
-        .from('saved_layouts')
-        .update(updateData)
-        .eq('id', layoutId);
-        
-      if (error) throw error;
+      updatedLayouts[layoutIndex] = {
+        ...updatedLayouts[layoutIndex],
+        ...updates
+      };
       
-      // Update local state
-      setLayouts(prev => prev.map(layout => {
-        if (layout.id === layoutId) {
-          return { ...layout, ...updates };
-        }
-        return layout;
-      }));
+      setLayouts(updatedLayouts);
+      persistLayouts(updatedLayouts);
       
-      // Update active layout if needed
-      if (updates.isDefault) {
-        setActiveLayoutId(layoutId);
-      }
-      
-      toast.default({
-        title: "Layout updated",
-        description: "The layout has been updated successfully"
+      toast({
+        title: "Layout Updated",
+        description: `'${updatedLayouts[layoutIndex].name}' has been updated`,
       });
       
       return true;
-    } catch (error: any) {
-      console.error('Error updating layout:', error.message);
+    } catch (error) {
+      console.error('Error updating layout:', error);
       toast.error({
-        title: "Failed to update layout",
-        description: error.message
+        title: "Update Failed",
+        description: "There was an error updating your layout",
       });
       return false;
     } finally {
       setIsLoading(false);
     }
-  }, [user]);
-
+  }, [layouts, persistLayouts]);
+  
   // Delete a layout
-  const deleteLayout = useCallback(async (layoutId: string) => {
-    if (!user) return false;
-    
+  const deleteLayout = useCallback(async (layoutId: string): Promise<boolean> => {
     setIsLoading(true);
+    
     try {
-      const { error } = await supabase
-        .from('saved_layouts')
-        .delete()
-        .eq('id', layoutId);
-        
-      if (error) throw error;
+      const layoutToDelete = layouts.find(layout => layout.id === layoutId);
       
-      // Update local state
-      setLayouts(prev => prev.filter(layout => layout.id !== layoutId));
-      
-      // Reset active layout if needed
-      if (activeLayoutId === layoutId) {
-        setActiveLayoutId(null);
+      if (!layoutToDelete) {
+        toast.error({
+          title: "Layout Not Found",
+          description: "The layout you're trying to delete doesn't exist",
+        });
+        return false;
       }
       
-      toast.default({
-        title: "Layout deleted",
-        description: "The layout has been deleted successfully"
+      const updatedLayouts = layouts.filter(layout => layout.id !== layoutId);
+      setLayouts(updatedLayouts);
+      persistLayouts(updatedLayouts);
+      
+      toast({
+        title: "Layout Deleted",
+        description: `'${layoutToDelete.name}' has been deleted`,
       });
       
       return true;
-    } catch (error: any) {
-      console.error('Error deleting layout:', error.message);
+    } catch (error) {
+      console.error('Error deleting layout:', error);
       toast.error({
-        title: "Failed to delete layout",
-        description: error.message
+        title: "Delete Failed",
+        description: "There was an error deleting your layout",
       });
       return false;
     } finally {
       setIsLoading(false);
     }
-  }, [user, activeLayoutId]);
-
-  // Apply a saved layout
-  const applyLayout = useCallback((layoutId: string) => {
-    const layout = layouts.find(layout => layout.id === layoutId);
-    if (!layout) {
+  }, [layouts, persistLayouts]);
+  
+  // Apply a layout
+  const applyLayout = useCallback((layoutId: string): boolean => {
+    try {
+      const layoutToApply = layouts.find(layout => layout.id === layoutId);
+      
+      if (!layoutToApply) {
+        toast.error({
+          title: "Layout Not Found",
+          description: "The layout you're trying to apply doesn't exist",
+        });
+        return false;
+      }
+      
+      // Logic to apply the layout will be handled by the parent component
+      // This function just validates the layout exists and returns true/false
+      
+      toast({
+        title: "Layout Applied",
+        description: `'${layoutToApply.name}' has been applied to your dashboard`,
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error applying layout:', error);
       toast.error({
-        title: "Layout not found",
-        description: "The selected layout could not be found"
+        title: "Apply Failed",
+        description: "There was an error applying the layout",
       });
       return false;
     }
-    
-    // Apply the layout widgets to the dashboard
-    setWidgetLayout(layout.widgets);
-    setActiveLayoutId(layoutId);
-    
-    toast.default({
-      title: "Layout applied",
-      description: `Layout "${layout.name}" has been applied`
-    });
-    
-    return true;
-  }, [layouts, setWidgetLayout]);
-
-  // Create a default layout if none exists
-  const createDefaultLayout = useCallback(async (widgets: WidgetId[]) => {
-    if (!user || layouts.some(layout => layout.isDefault)) return;
-    
-    await saveLayout("Default Layout", widgets, true);
-  }, [user, layouts, saveLayout]);
-
+  }, [layouts]);
+  
+  // Create a default layout
+  const createDefaultLayout = useCallback((widgets: WidgetId[]) => {
+    if (layouts.length === 0 && user) {
+      saveLayout("Default Layout", widgets, true);
+    }
+  }, [layouts, user, saveLayout]);
+  
   return {
     layouts,
-    isLoading,
-    activeLayoutId,
     saveLayout,
     updateLayout,
     deleteLayout,
     applyLayout,
-    createDefaultLayout,
-    loadSavedLayouts
+    isLoading,
+    createDefaultLayout
   };
 };

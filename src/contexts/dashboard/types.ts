@@ -74,6 +74,8 @@ export interface DashboardContextType {
   updateLayout?: (layoutId: string, updates: Partial<SavedLayout>) => Promise<boolean>;
   deleteLayout?: (layoutId: string) => Promise<boolean>;
   applyLayout?: (layoutId: string) => boolean;
+  updateCustomLayout?: (widgets: WidgetId[]) => void;
+  hasLayoutChanged?: boolean;
 }
 
 // Define default visible widgets for each view mode - needed by useViewMode.ts

@@ -1,43 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from '@/hooks/use-toast';
-import { useDashboard, WidgetId } from '@/contexts/dashboard';
-import WidgetList from './WidgetList';
-import LayoutNameInput from './LayoutNameInput';
-import { useCustomLayout } from '@/contexts/dashboard/hooks/useCustomLayout';
-import { useSavedLayouts } from '@/contexts/dashboard/hooks/useSavedLayouts';
-import DialogActions from './DialogActions';
-import { SavedLayout } from './types';
-import { Panel } from '@/components/ui/panel';
-import CustomLayoutTabs from './CustomLayoutTabs';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useDashboard } from '@/contexts/dashboard';
+import { WidgetId } from '@/contexts/dashboard/types';
 import { Settings2 } from 'lucide-react';
+import CustomLayoutTabs from './CustomLayoutTabs';
+
+interface DialogActionsProps {
+  onCancel: () => void;
+  onSave: () => void;
+}
+
+const DialogActions: React.FC<DialogActionsProps> = ({ onCancel, onSave }) => (
+  <div className="flex justify-end gap-2 mt-4">
+    <Button variant="outline" onClick={onCancel}>Cancel</Button>
+    <Button onClick={onSave}>Save Layout</Button>
+  </div>
+);
 
 /**
  * Component for creating and editing custom dashboard layouts
  */
 const CustomLayoutEditor = () => {
-  const { hasFeatureAccess, pricingTier, widgets } = useDashboard();
-  const { customLayout, updateCustomLayout, isUpdating, isLayoutChanged, hasLayoutChanged } = useCustomLayout();
-  const { 
-    layouts, 
-    saveLayout, 
-    deleteLayout, 
-    applyLayout, 
-    isLoading: isLoadingLayouts 
-  } = useSavedLayouts();
+  const { hasFeatureAccess, pricingTier, widgets, customLayout, savedLayouts } = useDashboard();
+  const { updateCustomLayout, isUpdating, isLayoutChanged, hasLayoutChanged } = useDashboard();
+  const { saveLayout, deleteLayout, applyLayout } = useDashboard();
   
   const [name, setName] = useState('');
   const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>([]);
@@ -71,10 +60,14 @@ const CustomLayoutEditor = () => {
     }
     
     // Save layout to database and local state
-    saveLayout(name, selectedWidgets);
+    if (saveLayout) {
+      saveLayout(name, selectedWidgets);
+    }
     
     // Update the custom layout
-    updateCustomLayout(selectedWidgets);
+    if (updateCustomLayout) {
+      updateCustomLayout(selectedWidgets);
+    }
     
     // Reset form after save
     setName('');
@@ -91,13 +84,17 @@ const CustomLayoutEditor = () => {
     });
   };
   
-  const handleSelectLayout = (layout: SavedLayout) => {
-    applyLayout(layout.id);
-    setIsOpen(false);
+  const handleSelectLayout = (layoutId: string) => {
+    if (applyLayout) {
+      applyLayout(layoutId);
+      setIsOpen(false);
+    }
   };
   
   const handleDeleteLayout = (layoutId: string) => {
-    deleteLayout(layoutId);
+    if (deleteLayout) {
+      deleteLayout(layoutId);
+    }
   };
   
   // Check if user has access to this feature
@@ -131,33 +128,32 @@ const CustomLayoutEditor = () => {
           onLayoutNameChange={setName}
           canSaveMultipleLayouts={canSaveMultipleLayouts}
           pricingTier={pricingTier}
-          widgets={Object.values(WidgetId)}
+          widgets={Object.values(WidgetId) as WidgetId[]}
           selectedWidgets={selectedWidgets}
           featureAccess={{
-            // All widget access flags based on pricing tier
-            analytics: pricingTier !== "free",
-            audio_player: true,
-            calendar: true,
-            file_browser: true,
-            marketplace: true,
-            performance: pricingTier === "pro" || pricingTier === "enterprise",
-            projects: true,
-            quick_actions: true,
-            recent_files: true,
-            settings: true,
-            system_status: pricingTier !== "free",
-            todo: true,
-            usage_stats: pricingTier !== "free",
-            weather: true,
-            connect: true,
-            system: pricingTier !== "free",
-            audio: true,
-            ai: pricingTier !== "free",
-            vm: pricingTier === "pro" || pricingTier === "enterprise",
-            daw: pricingTier !== "free"
+            analytics: hasFeatureAccess(WidgetId.analytics),
+            audio_player: hasFeatureAccess(WidgetId.audio_player),
+            calendar: hasFeatureAccess(WidgetId.calendar),
+            file_browser: hasFeatureAccess(WidgetId.file_browser),
+            marketplace: hasFeatureAccess(WidgetId.marketplace),
+            performance: hasFeatureAccess(WidgetId.performance),
+            projects: hasFeatureAccess(WidgetId.projects),
+            quick_actions: hasFeatureAccess(WidgetId.quick_actions),
+            recent_files: hasFeatureAccess(WidgetId.recent_files),
+            settings: hasFeatureAccess(WidgetId.settings),
+            system_status: hasFeatureAccess(WidgetId.system_status),
+            todo: hasFeatureAccess(WidgetId.todo),
+            usage_stats: hasFeatureAccess(WidgetId.usage_stats),
+            weather: hasFeatureAccess(WidgetId.weather),
+            connect: hasFeatureAccess(WidgetId.connect),
+            system: hasFeatureAccess(WidgetId.system),
+            audio: hasFeatureAccess(WidgetId.audio),
+            ai: hasFeatureAccess(WidgetId.ai),
+            vm: hasFeatureAccess(WidgetId.vm),
+            daw: hasFeatureAccess(WidgetId.daw)
           }}
           onToggleWidget={handleWidgetToggle}
-          savedLayouts={layouts}
+          savedLayouts={savedLayouts || []}
           onSelectSavedLayout={handleSelectLayout}
           onDeleteLayout={handleDeleteLayout}
         />

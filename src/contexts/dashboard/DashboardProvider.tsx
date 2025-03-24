@@ -1,13 +1,14 @@
 
 import React, { createContext, useEffect, useCallback, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { useWidgets } from './hooks/useWidgets';
+import { useWidgetManagement } from './hooks/useWidgetManagement';
 import { useViewMode } from './hooks/useViewMode';
 import { useDashboardPersistence } from './hooks/useDashboardPersistence';
 import { usePricingTier } from './hooks/usePricingTier';
 import { WidgetId, ViewMode, DashboardContextType } from './types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSavedLayouts } from './hooks/useSavedLayouts';
+import { useMemo } from 'react';
 
 // Creating the Dashboard Context
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
@@ -22,7 +23,25 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const { currentTier: pricingTier, changePricingTier, isChangingTier } = usePricingTier();
   const { viewMode, setViewMode } = useViewMode();
   
-  // Initialize widget management hooks
+  // Feature access check
+  const hasFeatureAccess = useCallback((widgetId: WidgetId): boolean => {
+    // Implement logic to check if user has access to this widget
+    if (!pricingTier) return false;
+    
+    // Example implementation - can be enhanced with actual feature rules
+    if (pricingTier === 'enterprise') return true;
+    if (pricingTier === 'pro') return true;
+    
+    // Standard users have access to basic widgets
+    if (pricingTier === 'standard') {
+      return ['analytics', 'calendar', 'projects', 'quick_actions', 'recent_files'].includes(widgetId);
+    }
+    
+    // Free users have access to minimal widgets
+    return ['analytics', 'quick_actions', 'recent_files'].includes(widgetId);
+  }, [pricingTier]);
+  
+  // Initialize widget management hooks - IMPORTANT: this now comes after hasFeatureAccess
   const { 
     widgets, 
     addWidget, 
@@ -35,7 +54,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     toggleWidget, 
     isWidgetCollapsed,
     setWidgets 
-  } = useWidgets(viewMode, (widget: WidgetId) => hasFeatureAccess(widget));
+  } = useWidgetManagement(viewMode, hasFeatureAccess);
   
   // Initialize saved layouts hook
   const {
@@ -71,29 +90,11 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     console.log('PricingTier changed:', pricingTier);
   }, [pricingTier]);
 
-  // Feature access check
-  const hasFeatureAccess = useCallback((widgetId: WidgetId): boolean => {
-    // Implement logic to check if user has access to this widget
-    if (!pricingTier) return false;
-    
-    // Example implementation - can be enhanced with actual feature rules
-    if (pricingTier === 'enterprise') return true;
-    if (pricingTier === 'pro') return true;
-    
-    // Standard users have access to basic widgets
-    if (pricingTier === 'standard') {
-      return ['analytics', 'calendar', 'projects', 'quick_actions', 'recent_files'].includes(widgetId);
-    }
-    
-    // Free users have access to minimal widgets
-    return ['analytics', 'quick_actions', 'recent_files'].includes(widgetId);
-  }, [pricingTier]);
-
   // Generate feature access map
   const featureAccess = useMemo(() => {
     const result: Record<WidgetId, boolean> = {} as Record<WidgetId, boolean>;
     Object.values(WidgetId).forEach(widgetId => {
-      result[widgetId] = hasFeatureAccess(widgetId);
+      result[widgetId as WidgetId] = hasFeatureAccess(widgetId as WidgetId);
     });
     return result;
   }, [hasFeatureAccess]);
@@ -105,14 +106,12 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Set widget layout
   const setWidgetLayout = useCallback((newWidgets: WidgetId[]): void => {
-    // Implementation here
     setWidgets(newWidgets);
     console.log('Setting widget layout:', newWidgets);
   }, [setWidgets]);
 
   // Toggle widget visibility
   const toggleWidgetVisibility = useCallback((widgetId: WidgetId): void => {
-    // Implementation here
     if (widgets.includes(widgetId)) {
       removeWidget(widgetId);
     } else {
@@ -150,8 +149,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   
   // Create default layout if user is logged in and no default layout exists
   useEffect(() => {
-    if (user && widgets.length > 0 && savedLayouts.length === 0) {
-      createDefaultLayout(widgets);
+    if (user && widgets.length > 0 && savedLayouts && savedLayouts.length === 0) {
+      createDefaultLayout?.(widgets);
     }
   }, [user, widgets, savedLayouts, createDefaultLayout]);
 
@@ -194,6 +193,3 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     </DashboardContext.Provider>
   );
 };
-
-// Add missing import for useMemo
-import { useMemo } from 'react';

@@ -1,7 +1,7 @@
 
 import { useContext } from 'react';
 import { DashboardContext } from './DashboardProvider';
-import { WidgetId, ViewMode, DashboardContextType } from './types';
+import { DashboardContextType } from './types';
 import { toast } from '@/hooks/use-toast';
 
 /**
@@ -17,12 +17,16 @@ export const useDashboard = (): DashboardContextType => {
   
   if (!context) {
     const errorMessage = 'useDashboard must be used within a DashboardProvider';
-    toast.error({
-      title: "Dashboard Context Error",
-      description: errorMessage
-    });
-    
     console.error(`[Dashboard Context Error]: ${errorMessage}`);
+    
+    // Only show toast if we're in a browser environment
+    if (typeof window !== 'undefined') {
+      toast.error({
+        title: "Dashboard Context Error",
+        description: errorMessage
+      });
+    }
+    
     throw new Error(errorMessage);
   }
   
