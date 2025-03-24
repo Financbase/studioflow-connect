@@ -16,10 +16,9 @@ const QuickActionsCard = () => {
   const handlePremiumFeature = (e: React.MouseEvent, featureId: WidgetId) => {
     if (!hasFeatureAccess(featureId)) {
       e.preventDefault();
-      toast({
+      toast.error({
         title: t("toast.premiumFeature"),
         description: t("toast.upgradeRequired"),
-        variant: "destructive",
       });
     }
   };

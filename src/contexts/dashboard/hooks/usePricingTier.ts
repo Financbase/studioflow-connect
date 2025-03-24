@@ -40,7 +40,7 @@ export const usePricingTier = (user: User | null, profile: any) => {
     
     // Check if the plan change is valid
     if (!isValidPlanChange(profile.plan as PricingTier, newTier)) {
-      toast.destructive({
+      toast.error({
         title: 'Plan Downgrade Not Allowed',
         description: `You cannot downgrade from ${profile.plan} plan to ${newTier} plan.`
       });
@@ -62,7 +62,7 @@ export const usePricingTier = (user: User | null, profile: any) => {
         
       if (error) {
         console.error('Error updating pricing tier:', error);
-        toast.destructive({
+        toast.error({
           title: 'Error',
           description: 'Could not update subscription plan'
         });
@@ -76,7 +76,7 @@ export const usePricingTier = (user: User | null, profile: any) => {
       return true;
     } catch (err) {
       console.error('Error in updating pricing tier:', err);
-      toast.destructive({
+      toast.error({
         title: 'Error',
         description: 'An unexpected error occurred while updating your subscription'
       });

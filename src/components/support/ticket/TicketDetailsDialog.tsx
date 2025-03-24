@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
@@ -21,7 +22,7 @@ const TicketDetailsDialog: React.FC = () => {
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
     
-    toast({
+    toast.default({
       title: "Reply Sent",
       description: "Your reply has been sent to the support team."
     });

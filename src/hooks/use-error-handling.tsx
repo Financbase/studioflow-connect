@@ -34,10 +34,9 @@ const useErrorHandling = () => {
     
     // Show toast if needed
     if (opts.showToast) {
-      toast({
+      toast.error({
         title: opts.title || t('system.error'),
         description: errorMessage,
-        variant: 'destructive',
       });
     }
     

@@ -190,8 +190,11 @@ function useToast() {
   };
 }
 
-// Add variant helpers to toast function
+// Helper functions for different toast variants
 toast.error = (props: Omit<Toast, "variant">) => 
+  toast({ ...props, variant: "destructive" });
+
+toast.destructive = (props: Omit<Toast, "variant">) => 
   toast({ ...props, variant: "destructive" });
 
 toast.default = (props: Omit<Toast, "variant">) => 

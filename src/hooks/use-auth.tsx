@@ -36,7 +36,7 @@ export const useAuth = (): UseAuthReturn => {
 
   useEffect(() => {
     if (error) {
-      toast.destructive({
+      toast.error({
         title: 'Authentication Error',
         description: error.message,
       });
@@ -88,7 +88,7 @@ export const useAuth = (): UseAuthReturn => {
         description: 'You have been signed out successfully',
       });
     } catch (error: any) {
-      toast.destructive({
+      toast.error({
         title: 'Error signing out',
         description: error.message,
       });

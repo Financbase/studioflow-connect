@@ -11,10 +11,9 @@ export function useUploadError() {
   const handleError = useCallback((error: Error, fileName: string) => {
     setError(error);
     
-    toast({
+    toast.error({
       title: "Upload failed",
       description: `Could not upload ${fileName}: ${error.message}`,
-      variant: "destructive"
     });
     
     return error;

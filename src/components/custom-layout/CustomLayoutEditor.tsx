@@ -58,7 +58,7 @@ const CustomLayoutEditor = () => {
   
   const handleSaveLayout = () => {
     if (selectedWidgets.length === 0) {
-      toast.destructive({
+      toast.error({
         title: "Invalid Layout",
         description: "Please select at least one widget for your layout",
       });
