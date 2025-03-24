@@ -11,64 +11,64 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/language";
 
 const AITools = () => {
-  const { t } = useLanguage();
+  const { t, isInitialized } = useLanguage();
   const [activeTab, setActiveTab] = useState("organization");
   
   const handleToolClick = (tool: string) => {
     toast({
-      title: `${tool} ${t("ai.activated")}`,
-      description: t("ai.workflowStarted"),
+      title: `${tool} ${isInitialized ? t("ai.activated") : "activated"}`,
+      description: isInitialized ? t("ai.workflowStarted") : "Workflow started successfully",
       duration: 3000,
     });
   };
 
   return (
     <section id="ai-tools" className="py-6 w-full">
-      <h2 className="text-2xl font-semibold mb-4">{t("ai.workflowAssistant")}</h2>
+      <h2 className="text-2xl font-semibold mb-4">{isInitialized ? t("ai.workflowAssistant") : "AI Workflow Assistant"}</h2>
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-medium">{t("ai.generator.title")}</h3>
+            <h3 className="text-lg font-medium">{isInitialized ? t("ai.generator.title") : "AI Generator"}</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            {t("ai.workflowDescription")}
+            {isInitialized ? t("ai.workflowDescription") : "Enhance your creative process with AI-powered assistance"}
           </p>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid grid-cols-4 mb-6">
-              <TabsTrigger value="organization">{t("ai.tabs.organization")}</TabsTrigger>
-              <TabsTrigger value="templates">{t("ai.tabs.templates")}</TabsTrigger>
-              <TabsTrigger value="project-management">{t("ai.tabs.projectManagement")}</TabsTrigger>
-              <TabsTrigger value="studio-tools">{t("ai.tabs.studioTools")}</TabsTrigger>
+              <TabsTrigger value="organization">{isInitialized ? t("ai.tabs.organization") : "Organization"}</TabsTrigger>
+              <TabsTrigger value="templates">{isInitialized ? t("ai.tabs.templates") : "Templates"}</TabsTrigger>
+              <TabsTrigger value="project-management">{isInitialized ? t("ai.tabs.projectManagement") : "Project Management"}</TabsTrigger>
+              <TabsTrigger value="studio-tools">{isInitialized ? t("ai.tabs.studioTools") : "Studio Tools"}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="organization" className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <AIToolCard 
-                  title={t("ai.tools.sampleOrganizer")}
-                  description={t("ai.tools.sampleOrganizerDesc")}
+                  title={isInitialized ? t("ai.tools.sampleOrganizer") : "Sample Organizer"}
+                  description={isInitialized ? t("ai.tools.sampleOrganizerDesc") : "Automatically organize your samples by type, genre, and BPM"}
                   icon={<FolderSearch className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.sampleOrganizer"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.sampleOrganizer") : "Sample Organizer")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.patternCategorizer")}
-                  description={t("ai.tools.patternCategorizerDesc")}
+                  title={isInitialized ? t("ai.tools.patternCategorizer") : "Pattern Categorizer"}
+                  description={isInitialized ? t("ai.tools.patternCategorizerDesc") : "Identify and categorize patterns in your sound library"}
                   icon={<Layers className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.patternCategorizer"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.patternCategorizer") : "Pattern Categorizer")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.smartTagging")}
-                  description={t("ai.tools.smartTaggingDesc")}
+                  title={isInitialized ? t("ai.tools.smartTagging") : "Smart Tagging"}
+                  description={isInitialized ? t("ai.tools.smartTaggingDesc") : "AI-powered tagging for easier content discovery"}
                   icon={<Tag className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.smartTagging"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.smartTagging") : "Smart Tagging")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.sessionPlanner")}
-                  description={t("ai.tools.sessionPlannerDesc")}
+                  title={isInitialized ? t("ai.tools.sessionPlanner") : "Session Planner"}
+                  description={isInitialized ? t("ai.tools.sessionPlannerDesc") : "Schedule and optimize your recording sessions"}
                   icon={<Clock className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.sessionPlanner"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.sessionPlanner") : "Session Planner")}
                 />
               </div>
             </TabsContent>
@@ -76,28 +76,28 @@ const AITools = () => {
             <TabsContent value="templates" className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <AIToolCard 
-                  title={t("ai.tools.projectTemplates")}
-                  description={t("ai.tools.projectTemplatesDesc")}
+                  title={isInitialized ? t("ai.tools.projectTemplates") : "Project Templates"}
+                  description={isInitialized ? t("ai.tools.projectTemplatesDesc") : "Get started fast with intelligent templates"}
                   icon={<FolderGit2 className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.projectTemplates"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.projectTemplates") : "Project Templates")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.signalFlow")}
-                  description={t("ai.tools.signalFlowDesc")}
+                  title={isInitialized ? t("ai.tools.signalFlow") : "Signal Flow"}
+                  description={isInitialized ? t("ai.tools.signalFlowDesc") : "Visualize and analyze signal flow in your audio projects"}
                   icon={<GitBranch className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.signalFlow"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.signalFlow") : "Signal Flow")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.referenceLibrary")}
-                  description={t("ai.tools.referenceLibraryDesc")}
+                  title={isInitialized ? t("ai.tools.referenceLibrary") : "Reference Library"}
+                  description={isInitialized ? t("ai.tools.referenceLibraryDesc") : "Access a vast library of audio samples and references"}
                   icon={<Bookmark className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.referenceLibrary"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.referenceLibrary") : "Reference Library")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.autoDocumentation")}
-                  description={t("ai.tools.autoDocumentationDesc")}
+                  title={isInitialized ? t("ai.tools.autoDocumentation") : "Auto Documentation"}
+                  description={isInitialized ? t("ai.tools.autoDocumentationDesc") : "Automatically generate documentation for your audio projects"}
                   icon={<FileText className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.autoDocumentation"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.autoDocumentation") : "Auto Documentation")}
                 />
               </div>
             </TabsContent>
@@ -105,28 +105,28 @@ const AITools = () => {
             <TabsContent value="project-management" className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <AIToolCard 
-                  title={t("ai.tools.deadlineTracker")}
-                  description={t("ai.tools.deadlineTrackerDesc")}
+                  title={isInitialized ? t("ai.tools.deadlineTracker") : "Deadline Tracker"}
+                  description={isInitialized ? t("ai.tools.deadlineTrackerDesc") : "Never miss a project deadline with AI-powered scheduling"}
                   icon={<Calendar className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.deadlineTracker"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.deadlineTracker") : "Deadline Tracker")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.clientFeedback")}
-                  description={t("ai.tools.clientFeedbackDesc")}
+                  title={isInitialized ? t("ai.tools.clientFeedback") : "Client Feedback"}
+                  description={isInitialized ? t("ai.tools.clientFeedbackDesc") : "Streamline client communication and feedback collection"}
                   icon={<MessageSquare className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.clientFeedback"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.clientFeedback") : "Client Feedback")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.timeTracker")}
-                  description={t("ai.tools.timeTrackerDesc")}
+                  title={isInitialized ? t("ai.tools.timeTracker") : "Time Tracker"}
+                  description={isInitialized ? t("ai.tools.timeTrackerDesc") : "Track and optimize your recording time"}
                   icon={<Timer className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.timeTracker"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.timeTracker") : "Time Tracker")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.backupManager")}
-                  description={t("ai.tools.backupManagerDesc")}
+                  title={isInitialized ? t("ai.tools.backupManager") : "Backup Manager"}
+                  description={isInitialized ? t("ai.tools.backupManagerDesc") : "Automatically back up your audio projects"}
                   icon={<Clock className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.backupManager"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.backupManager") : "Backup Manager")}
                 />
               </div>
             </TabsContent>
@@ -134,28 +134,28 @@ const AITools = () => {
             <TabsContent value="studio-tools" className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <AIToolCard 
-                  title={t("ai.tools.resourceMonitor")}
-                  description={t("ai.tools.resourceMonitorDesc")}
+                  title={isInitialized ? t("ai.tools.resourceMonitor") : "Resource Monitor"}
+                  description={isInitialized ? t("ai.tools.resourceMonitorDesc") : "Track system performance and optimize resource usage"}
                   icon={<Activity className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.resourceMonitor"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.resourceMonitor") : "Resource Monitor")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.equipmentScanner")}
-                  description={t("ai.tools.equipmentScannerDesc")}
+                  title={isInitialized ? t("ai.tools.equipmentScanner") : "Equipment Scanner"}
+                  description={isInitialized ? t("ai.tools.equipmentScannerDesc") : "Automatically scan and manage your recording equipment"}
                   icon={<FolderSearch className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.equipmentScanner"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.equipmentScanner") : "Equipment Scanner")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.pluginAnalytics")}
-                  description={t("ai.tools.pluginAnalyticsDesc")}
+                  title={isInitialized ? t("ai.tools.pluginAnalytics") : "Plugin Analytics"}
+                  description={isInitialized ? t("ai.tools.pluginAnalyticsDesc") : "Analyze and optimize the performance of your audio plugins"}
                   icon={<Activity className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.pluginAnalytics"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.pluginAnalytics") : "Plugin Analytics")}
                 />
                 <AIToolCard 
-                  title={t("ai.tools.bpmDetector")}
-                  description={t("ai.tools.bpmDetectorDesc")}
+                  title={isInitialized ? t("ai.tools.bpmDetector") : "BPM Detector"}
+                  description={isInitialized ? t("ai.tools.bpmDetectorDesc") : "Automatically detect and adjust BPM in your audio projects"}
                   icon={<Tag className="h-5 w-5" />}
-                  onClick={() => handleToolClick(t("ai.tools.bpmDetector"))}
+                  onClick={() => handleToolClick(isInitialized ? t("ai.tools.bpmDetector") : "BPM Detector")}
                 />
               </div>
             </TabsContent>
@@ -163,18 +163,18 @@ const AITools = () => {
           
           <div className="mt-6">
             <div className="bg-muted/50 p-4 rounded-md mb-4">
-              <p className="text-sm font-medium mb-2">{t("ai.philosophyTitle")}</p>
+              <p className="text-sm font-medium mb-2">{isInitialized ? t("ai.philosophyTitle") : "Our AI Philosophy"}</p>
               <p className="text-xs text-muted-foreground">
-                {t("ai.philosophyDescription")}
+                {isInitialized ? t("ai.philosophyDescription") : "We believe in AI that enhances human creativity rather than replacing it"}
               </p>
             </div>
             <div className="flex justify-end">
               <Button variant="outline" className="mr-2">
-                {t("ai.viewHistory")}
+                {isInitialized ? t("ai.viewHistory") : "View History"}
               </Button>
               <Button>
                 <Wand2 className="h-4 w-4 mr-2" />
-                {t("ai.startBatch")}
+                {isInitialized ? t("ai.startBatch") : "Start Batch"}
               </Button>
             </div>
           </div>
@@ -183,134 +183,134 @@ const AITools = () => {
 
       <div className="mt-8 space-y-8">
         <FeatureShowcase 
-          title={t("ai.features.templatesTitle")}
+          title={isInitialized ? t("ai.features.templatesTitle") : "Project Templates"}
           icon={<FolderGit2 className="h-6 w-6 text-primary" />}
-          description={t("ai.features.templatesDesc")}
+          description={isInitialized ? t("ai.features.templatesDesc") : "Get started fast with intelligent templates"}
         >
           <p className="text-sm text-muted-foreground mb-4">
-            {t("ai.features.templatesLongDesc")}
+            {isInitialized ? t("ai.features.templatesLongDesc") : "Our AI analyzes your previous projects and working style to create personalized templates that match your workflow preferences."}
           </p>
           <ul className="text-sm space-y-2 mb-4">
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.templatesFeature1")}</span>
+              <span>{isInitialized ? t("ai.features.templatesFeature1") : "Intelligent template suggestions based on project type"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.templatesFeature2")}</span>
+              <span>{isInitialized ? t("ai.features.templatesFeature2") : "Customizable template parameters for fine-tuning"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.templatesFeature3")}</span>
+              <span>{isInitialized ? t("ai.features.templatesFeature3") : "Share templates with team members and collaborate"}</span>
             </li>
           </ul>
-          <Button size="sm" onClick={() => handleToolClick(t("ai.tools.projectTemplates"))}>
-            {t("ai.browse")}
+          <Button size="sm" onClick={() => handleToolClick(isInitialized ? t("ai.tools.projectTemplates") : "Project Templates")}>
+            {isInitialized ? t("ai.browse") : "Browse Templates"}
           </Button>
         </FeatureShowcase>
 
         <FeatureShowcase 
-          title={t("ai.features.deadlineTitle")}
+          title={isInitialized ? t("ai.features.deadlineTitle") : "Smart Deadline Tracker"}
           icon={<Calendar className="h-6 w-6 text-primary" />}
-          description={t("ai.features.deadlineDesc")}
+          description={isInitialized ? t("ai.features.deadlineDesc") : "Never miss a project deadline with AI-powered scheduling"}
         >
           <p className="text-sm text-muted-foreground mb-4">
-            {t("ai.features.deadlineLongDesc")}
+            {isInitialized ? t("ai.features.deadlineLongDesc") : "Our AI-powered deadline tracker learns from your work patterns and project history to provide intelligent scheduling assistance. It analyzes your commitments, resource availability, and delivers realistic timeline estimates."}
           </p>
           <ul className="text-sm space-y-2 mb-4">
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.deadlineFeature1")}</span>
+              <span>{isInitialized ? t("ai.features.deadlineFeature1") : "Smart timeline predictions based on your working patterns"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.deadlineFeature2")}</span>
+              <span>{isInitialized ? t("ai.features.deadlineFeature2") : "Automated resource allocation to meet critical deadlines"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.deadlineFeature3")}</span>
+              <span>{isInitialized ? t("ai.features.deadlineFeature3") : "Collaborative scheduling with team availability synchronization"}</span>
             </li>
           </ul>
-          <Button size="sm" onClick={() => handleToolClick(t("ai.tools.deadlineTracker"))}>
-            {t("ai.viewProjects")}
+          <Button size="sm" onClick={() => handleToolClick(isInitialized ? t("ai.tools.deadlineTracker") : "Deadline Tracker")}>
+            {isInitialized ? t("ai.viewProjects") : "View Projects"}
           </Button>
         </FeatureShowcase>
 
         <FeatureShowcase 
-          title={t("ai.features.feedbackTitle")}
+          title={isInitialized ? t("ai.features.feedbackTitle") : "Client Feedback Portal"}
           icon={<MessageSquare className="h-6 w-6 text-primary" />}
-          description={t("ai.features.feedbackDesc")}
+          description={isInitialized ? t("ai.features.feedbackDesc") : "Streamline client communication and feedback collection"}
         >
           <p className="text-sm text-muted-foreground mb-4">
-            {t("ai.features.feedbackLongDesc")}
+            {isInitialized ? t("ai.features.feedbackLongDesc") : "Our AI-powered feedback portal provides a centralized platform for collecting, organizing, and responding to client feedback. Automated sentiment analysis helps prioritize critical feedback."}
           </p>
           <ul className="text-sm space-y-2 mb-4">
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.feedbackFeature1")}</span>
+              <span>{isInitialized ? t("ai.features.feedbackFeature1") : "Secure client access with customizable permission levels"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.feedbackFeature2")}</span>
+              <span>{isInitialized ? t("ai.features.feedbackFeature2") : "AI-powered sentiment analysis to prioritize feedback"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.feedbackFeature3")}</span>
+              <span>{isInitialized ? t("ai.features.feedbackFeature3") : "Automated response suggestions for common feedback types"}</span>
             </li>
           </ul>
-          <Button size="sm" onClick={() => handleToolClick(t("ai.tools.clientFeedback"))}>
-            {t("ai.openPortal")}
+          <Button size="sm" onClick={() => handleToolClick(isInitialized ? t("ai.tools.clientFeedback") : "Client Feedback")}>
+            {isInitialized ? t("ai.openPortal") : "Open AI Portal"}
           </Button>
         </FeatureShowcase>
 
         <FeatureShowcase 
-          title={t("ai.features.resourceTitle")}
+          title={isInitialized ? t("ai.features.resourceTitle") : "Resource Monitor"}
           icon={<Activity className="h-6 w-6 text-primary" />}
-          description={t("ai.features.resourceDesc")}
+          description={isInitialized ? t("ai.features.resourceDesc") : "Track system performance and optimize resource usage"}
         >
           <p className="text-sm text-muted-foreground mb-4">
-            {t("ai.features.resourceLongDesc")}
+            {isInitialized ? t("ai.features.resourceLongDesc") : "Our AI-powered resource monitor continuously analyzes your system performance, identifying bottlenecks and suggesting optimizations to improve workflow efficiency."}
           </p>
           <ul className="text-sm space-y-2 mb-4">
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.resourceFeature1")}</span>
+              <span>{isInitialized ? t("ai.features.resourceFeature1") : "Real-time CPU, RAM, and disk usage monitoring"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.resourceFeature2")}</span>
+              <span>{isInitialized ? t("ai.features.resourceFeature2") : "Plugin performance analysis and optimization suggestions"}</span>
             </li>
             <li className="flex items-start gap-2">
               <div className="rounded-full bg-primary/10 p-1 mt-0.5">
                 <Clock className="h-3 w-3 text-primary" />
               </div>
-              <span>{t("ai.features.resourceFeature3")}</span>
+              <span>{isInitialized ? t("ai.features.resourceFeature3") : "Project-specific resource allocation recommendations"}</span>
             </li>
           </ul>
-          <Button size="sm" onClick={() => handleToolClick(t("ai.tools.resourceMonitor"))}>
-            {t("ai.runAnalysis")}
+          <Button size="sm" onClick={() => handleToolClick(isInitialized ? t("ai.tools.resourceMonitor") : "Resource Monitor")}>
+            {isInitialized ? t("ai.runAnalysis") : "Run Analysis"}
           </Button>
         </FeatureShowcase>
       </div>
