@@ -39,7 +39,6 @@ import { useThemeInitializer } from "./hooks/use-theme-initializer";
 import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from "./components/ProtectedRoute";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
-import { ToastProvider } from "@/hooks/use-toast";
 
 // Initialize query client with optimized settings
 const queryClient = new QueryClient({
@@ -74,225 +73,223 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <LanguageProvider>
-            <ToastProvider>
-              <TooltipProvider>
-                <BrowserRouter>
-                  {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
-                  <DashboardProvider>
-                    <Toaster />
-                    <ScrollToTop />
-                    <Routes>
-                      <Route path="/auth" element={<Auth />} />
-                      
-                      {/* Home and Dashboard Routes */}
-                      <Route 
-                        path="/" 
-                        element={
-                          <ProtectedRoute>
-                            <Dashboard />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      <Route 
-                        path="/dashboard" 
-                        element={
-                          <ProtectedRoute>
-                            <Dashboard />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* Feature Routes */}
-                      <Route 
-                        path="/projects" 
-                        element={
-                          <ProtectedRoute>
-                            <Projects />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      <Route 
-                        path="/library" 
-                        element={
-                          <ProtectedRoute>
-                            <Library />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      <Route 
-                        path="/connect" 
-                        element={
-                          <ProtectedRoute>
-                            <Connect />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      <Route 
-                        path="/ai-tools" 
-                        element={
-                          <ProtectedRoute>
-                            <AIToolsPage />
-                          </ProtectedRoute>
-                        } 
-                      />
+            <TooltipProvider>
+              <BrowserRouter>
+                {/* Dashboard Provider moved inside BrowserRouter so useNavigate works properly */}
+                <DashboardProvider>
+                  <Toaster />
+                  <ScrollToTop />
+                  <Routes>
+                    <Route path="/auth" element={<Auth />} />
+                    
+                    {/* Home and Dashboard Routes */}
+                    <Route 
+                      path="/" 
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Feature Routes */}
+                    <Route 
+                      path="/projects" 
+                      element={
+                        <ProtectedRoute>
+                          <Projects />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    <Route 
+                      path="/library" 
+                      element={
+                        <ProtectedRoute>
+                          <Library />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    <Route 
+                      path="/connect" 
+                      element={
+                        <ProtectedRoute>
+                          <Connect />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    <Route 
+                      path="/ai-tools" 
+                      element={
+                        <ProtectedRoute>
+                          <AIToolsPage />
+                        </ProtectedRoute>
+                      } 
+                    />
 
-                      <Route 
-                        path="/subscription" 
-                        element={
-                          <ProtectedRoute>
-                            <SubscriptionPage />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      <Route 
-                        path="/recommendations" 
-                        element={
-                          <ProtectedRoute>
-                            <RecommendationsPage />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* Contribution Routes */}
-                      <Route 
-                        path="/contribution" 
-                        element={
-                          <ProtectedRoute>
-                            <Contribution />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* Admin Routes */}
-                      <Route 
-                        path="/admin" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminDashboard />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/users" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminUsers />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/tickets" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminTickets />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/sessions" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminSessions />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/analytics" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminAnalytics />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/remote" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminRemote />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/stats" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminStats />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/notifications" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminNotifications />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/help" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminHelp />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/admin/settings" 
-                        element={
-                          <ProtectedRoute>
-                            <AdminSettings />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* User & System Routes */}
-                      <Route 
-                        path="/profile" 
-                        element={
-                          <ProtectedRoute>
-                            <Profile />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/settings" 
-                        element={
-                          <ProtectedRoute>
-                            <Settings />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      <Route 
-                        path="/support" 
-                        element={
-                          <ProtectedRoute>
-                            <Support />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* Documentation Routes */}
-                      <Route 
-                        path="/docs" 
-                        element={
-                          <ProtectedRoute>
-                            <Documentation />
-                          </ProtectedRoute>
-                        } 
-                      />
-                      
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </DashboardProvider>
-                </BrowserRouter>
-              </TooltipProvider>
-            </ToastProvider>
+                    <Route 
+                      path="/subscription" 
+                      element={
+                        <ProtectedRoute>
+                          <SubscriptionPage />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    <Route 
+                      path="/recommendations" 
+                      element={
+                        <ProtectedRoute>
+                          <RecommendationsPage />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Contribution Routes */}
+                    <Route 
+                      path="/contribution" 
+                      element={
+                        <ProtectedRoute>
+                          <Contribution />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Admin Routes */}
+                    <Route 
+                      path="/admin" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminDashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/users" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminUsers />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/tickets" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminTickets />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/sessions" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminSessions />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/analytics" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminAnalytics />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/remote" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminRemote />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/stats" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminStats />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/notifications" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminNotifications />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/help" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminHelp />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/admin/settings" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminSettings />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* User & System Routes */}
+                    <Route 
+                      path="/profile" 
+                      element={
+                        <ProtectedRoute>
+                          <Profile />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/settings" 
+                      element={
+                        <ProtectedRoute>
+                          <Settings />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/support" 
+                      element={
+                        <ProtectedRoute>
+                          <Support />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Documentation Routes */}
+                    <Route 
+                      path="/docs" 
+                      element={
+                        <ProtectedRoute>
+                          <Documentation />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </DashboardProvider>
+              </BrowserRouter>
+            </TooltipProvider>
           </LanguageProvider>
         </ThemeProvider>
       </QueryClientProvider>

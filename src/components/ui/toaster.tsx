@@ -1,6 +1,6 @@
 
 import { useToast, ToastGlobalHelper } from "@/hooks/use-toast";
-import type { Toast as ToastType } from "@/hooks/use-toast";
+import type { Toast } from "@/hooks/use-toast";
 import {
   Toast,
   ToastClose,
@@ -17,7 +17,7 @@ export function Toaster() {
     <>
       <ToastGlobalHelper />
       <ToastProvider>
-        {toasts.map(function ({ id, title, description, action, ...props }: ToastType) {
+        {toasts.map(function ({ id, title, description, action, ...props }: Toast) {
           return (
             <Toast key={id} {...props}>
               <div className="grid gap-1">

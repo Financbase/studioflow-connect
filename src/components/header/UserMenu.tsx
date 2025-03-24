@@ -16,7 +16,7 @@ import { UserProfile } from "@/types/supabase";
 import { useLanguage } from "@/contexts/language";
 import { Language } from "@/contexts/language";
 import { flagEmojis } from "@/contexts/language";
-import { languageNames } from "@/contexts/language";
+import { languageNames } from "@/contexts/language/translations";
 
 interface UserMenuProps {
   user: any;

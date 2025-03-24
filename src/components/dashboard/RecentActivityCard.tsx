@@ -46,7 +46,7 @@ const RecentActivityCard: React.FC = () => {
           {activities.map((activity) => (
             <div key={activity.id} className="flex items-start gap-3">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={activity.avatar} alt={activity.user.name} />
+                <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
                 <AvatarFallback>{activity.user.initials}</AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-1">

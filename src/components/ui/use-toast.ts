@@ -1,9 +1,9 @@
 
 // This file properly re-exports the toast hooks and types from the main implementation
-import { useToast, toast, ToastProvider, ToastGlobalHelper } from "@/hooks/use-toast";
+import { useToast as useHookToast, toast, ToastGlobalHelper } from "@/hooks/use-toast";
 import type { Toast } from "@/hooks/use-toast";
 
-// Re-export the toast action element and props types from the hook
+// Re-export the toast action element and props types
 export type ToastActionElement = React.ReactElement<{
   className?: string;
   altText: string;
@@ -20,5 +20,7 @@ export type ToastProps = {
   className?: string;
 };
 
-export { useToast, toast, ToastProvider, ToastGlobalHelper };
+// Re-export hooks and utilities
+export const useToast = useHookToast;
+export { toast, ToastGlobalHelper };
 export type { Toast };

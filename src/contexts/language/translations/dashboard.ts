@@ -207,6 +207,30 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     pt: "editou",
     ar: "عدل"
   }),
+  "dashboard.activity.created": ensureAllLanguages({
+    en: "Created",
+    es: "Creado",
+    fr: "Créé",
+    de: "Erstellt",
+    sv: "Skapad",
+    ja: "作成済み",
+    zh: "已创建",
+    ru: "Создано",
+    pt: "Criado",
+    ar: "تم الإنشاء"
+  }),
+  "dashboard.activity.lastModified": ensureAllLanguages({
+    en: "Last modified",
+    es: "Última modificación",
+    fr: "Dernière modification",
+    de: "Zuletzt geändert",
+    sv: "Senast ändrad",
+    ja: "最終更新",
+    zh: "最后修改",
+    ru: "Последнее изменение",
+    pt: "Última modificação",
+    ar: "آخر تعديل"
+  }),
   "dashboard.recentActivity": ensureAllLanguages({
     en: "Recent Activity",
     es: "Actividad Reciente",
@@ -230,6 +254,66 @@ const dashboardTranslations: Record<string, Record<Language, string>> = {
     ru: "Просмотреть все",
     pt: "Ver Tudo",
     ar: "عرض الكل"
+  }),
+  "dashboard.exploreKnowledge": ensureAllLanguages({
+    en: "Explore Knowledge",
+    es: "Explorar Conocimiento",
+    fr: "Explorer les Connaissances",
+    de: "Wissen entdecken",
+    sv: "Utforska Kunskap",
+    ja: "知識を探る",
+    zh: "探索知识",
+    ru: "Исследовать знания",
+    pt: "Explorar Conhecimento",
+    ar: "استكشاف المعرفة"
+  }),
+  "dashboard.studioTechniques": ensureAllLanguages({
+    en: "Studio Techniques",
+    es: "Técnicas de Estudio",
+    fr: "Techniques de Studio",
+    de: "Studio-Techniken",
+    sv: "Studioteknik",
+    ja: "スタジオテクニック",
+    zh: "工作室技巧",
+    ru: "Студийные техники",
+    pt: "Técnicas de Estúdio",
+    ar: "تقنيات الاستوديو"
+  }),
+  "dashboard.studioTechniquesDescription": ensureAllLanguages({
+    en: "Learn professional audio production techniques",
+    es: "Aprende técnicas profesionales de producción de audio",
+    fr: "Apprenez des techniques professionnelles de production audio",
+    de: "Lernen Sie professionelle Audioproduktions-Techniken",
+    sv: "Lär dig professionella ljudproduktionstekniker",
+    ja: "プロのオーディオ制作テクニックを学ぶ",
+    zh: "学习专业音频制作技术",
+    ru: "Изучите профессиональные методы аудиопроизводства",
+    pt: "Aprenda técnicas profissionais de produção de áudio",
+    ar: "تعلم تقنيات إنتاج الصوت الاحترافية"
+  }),
+  "dashboard.audioTroubleshooting": ensureAllLanguages({
+    en: "Audio Troubleshooting",
+    es: "Solución de Problemas de Audio",
+    fr: "Dépannage Audio",
+    de: "Audio-Fehlerbehebung",
+    sv: "Felsökning av Ljud",
+    ja: "オーディオトラブルシューティング",
+    zh: "音频故障排除",
+    ru: "Устранение неполадок аудио",
+    pt: "Solução de Problemas de Áudio",
+    ar: "استكشاف أخطاء الصوت وإصلاحها"
+  }),
+  "dashboard.audioTroubleshootingDescription": ensureAllLanguages({
+    en: "Fix common audio issues in your setup",
+    es: "Soluciona problemas comunes de audio en tu configuración",
+    fr: "Résoudre les problèmes audio courants dans votre configuration",
+    de: "Beheben Sie häufige Audioprobleme in Ihrem Setup",
+    sv: "Åtgärda vanliga ljudproblem i din konfiguration",
+    ja: "セットアップで一般的なオーディオの問題を修正する",
+    zh: "修复设置中常见的音频问题",
+    ru: "Исправьте типичные проблемы со звуком в вашей системе",
+    pt: "Corrija problemas comuns de áudio em sua configuração",
+    ar: "إصلاح مشكلات الصوت الشائعة في الإعداد الخاص بك"
   })
 };
 
