@@ -15,15 +15,15 @@
       }
     },
     "postgres": {
-      "command": "/Users/jonathanpizarro/mcp-build/node_modules/.bin/mcp-server-postgres",
-      "args": [],
+      "command": "/usr/local/bin/mcp-server-postgres",
+      "args": ["postgresql://postgres:dySmot-vextu8-rygtyq@db.jbhbuipfyoupfcjsolbk.supabase.co:5432/postgres"],
       "env": {
-        "POSTGRES_CONNECTION_STRING": "postgresql://username:password@localhost:5432/database"
+        "POSTGRES_CONNECTION_STRING": "postgresql://postgres:dySmot-vextu8-rygtyq@db.jbhbuipfyoupfcjsolbk.supabase.co:5432/postgres"
       }
     },
     "filesystem": {
-      "command": "/Users/jonathanpizarro/mcp-build/node_modules/.bin/mcp-server-filesystem",
-      "args": [],
+      "command": "/usr/local/bin/mcp-server-filesystem",
+      "args": ["/Users/jonathanpizarro"],
       "env": {}
     }
   }
