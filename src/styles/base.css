@@ -48,13 +48,17 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+/* Improved heading styles for consistency */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.2;
   color: hsl(var(--foreground));
+  margin-top: 0;
+  margin-bottom: 0.5em;
 }
 
+/* Text color utilities */
 p, span, div, a {
   color: hsl(var(--foreground));
 }
@@ -78,13 +82,25 @@ button, a, input, select, textarea {
 }
 
 /* Font improvements */
-h1, h2, h3, h4, h5, h6 {
-  letter-spacing: -0.02em;
-  color: hsl(var(--foreground));
-}
-
 .font-heading {
   letter-spacing: -0.03em;
   font-weight: 600;
   color: hsl(var(--foreground));
 }
+
+/* Heading emphasis utilities */
+.heading-emphasis {
+  color: hsl(var(--primary));
+  font-weight: 700;
+}
+
+.heading-subtle {
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+.heading-balanced {
+  max-width: 50ch;
+  line-height: 1.3;
+}
+
