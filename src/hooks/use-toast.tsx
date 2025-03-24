@@ -1,32 +1,46 @@
 
 import * as React from "react";
-import { Toast as ToastPrimitive } from "@/components/ui/toast";
-import { toast as toastFunction } from "@/components/ui/use-toast";
+import { ToastActionElement, type ToastProps } from "@/components/ui/toast";
+
+// Create unique ID for toast
+const generateId = () => `toast-${Math.random().toString(36).slice(2)}`;
 
 // Create context for toast
-const ToastContext = React.createContext<{
-  toasts: ToastPrimitive[];
-  addToast: (toast: ToastPrimitive) => void;
+type ToastProviderProps = {
+  toasts: ToastProps[];
+  addToast: (toast: Omit<ToastProps, "id">) => void;
   removeToast: (id: string) => void;
-}>({
+};
+
+const ToastContext = React.createContext<ToastProviderProps>({
   toasts: [],
   addToast: () => {},
   removeToast: () => {},
 });
 
-// Re-export toast function
-export const toast = toastFunction;
-
 // Create a provider component
-export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
-  const [toasts, setToasts] = React.useState<ToastPrimitive[]>([]);
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ 
+  children 
+}) => {
+  const [toasts, setToasts] = React.useState<ToastProps[]>([]);
 
-  const addToast = React.useCallback((toast: ToastPrimitive) => {
-    setToasts((prev) => [...prev, toast]);
+  const addToast = React.useCallback((toast: Omit<ToastProps, "id">) => {
+    const id = generateId();
+    
+    setToasts(prev => [
+      ...prev,
+      { ...toast, id }
+    ]);
+    
+    if (toast.duration !== Infinity) {
+      setTimeout(() => {
+        removeToast(id);
+      }, toast.duration || 5000);
+    }
   }, []);
 
   const removeToast = React.useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
 
   return (
@@ -45,8 +59,41 @@ export const useToast = () => {
   return context;
 };
 
-// Helper utility for consistent toast styling
-export const ToastGlobalHelper = () => null;
+// Helper component for providing global toast functions
+export const ToastGlobalHelper = () => {
+  // No actual rendering is needed, this exists for the provider system
+  return null;
+};
 
-// Export the Toast type
-export type { ToastPrimitive as Toast };
+// Toast function interface
+interface ToastOptions extends Omit<ToastProps, "id"> {}
+
+// Create a function to add toast
+type ToastFunction = {
+  (opts: ToastOptions): string;
+  default: (opts: ToastOptions) => string;
+  destructive: (opts: ToastOptions) => string;
+};
+
+const createToastFunction = (): ToastFunction => {
+  const toast = ((opts: ToastOptions) => {
+    // This will be populated by the ToastGlobalHelper
+    console.error("Toast was called before ToastProvider was initialized");
+    return "";
+  }) as ToastFunction;
+  
+  toast.default = (opts: ToastOptions) => {
+    return toast({ ...opts, variant: "default" });
+  };
+  
+  toast.destructive = (opts: ToastOptions) => {
+    return toast({ ...opts, variant: "destructive" });
+  };
+  
+  return toast;
+};
+
+export const toast = createToastFunction();
+
+// Set up global toast function when provider is available
+export type { ToastActionElement, ToastProps as Toast };

@@ -1,98 +1,50 @@
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/language';
 
-interface ErrorOptions {
+type ErrorOptions = {
   title?: string;
-  logToConsole?: boolean;
   showToast?: boolean;
-  toastVariant?: 'default' | 'destructive';
-  retry?: () => Promise<any>;
-}
+  logToConsole?: boolean;
+  context?: string;
+};
+
+const defaultOptions: ErrorOptions = {
+  title: undefined,
+  showToast: true,
+  logToConsole: true,
+  context: 'application',
+};
 
 /**
- * Hook for centralized and consistent error handling
- * with support for retry logic and user feedback
+ * A hook to standardize error handling across the application
  */
-export const useErrorHandling = () => {
-  const [isRetrying, setIsRetrying] = useState(false);
-  const [lastError, setLastError] = useState<Error | null>(null);
+const useErrorHandling = () => {
+  const { t } = useLanguage();
   
-  const handleError = useCallback((error: any, options: ErrorOptions = {}) => {
-    const {
-      title = 'An error occurred',
-      logToConsole = true,
-      showToast = true,
-      toastVariant = 'destructive',
-      retry
-    } = options;
-    
-    // Store the error
-    const errorObj = error instanceof Error ? error : new Error(String(error));
-    setLastError(errorObj);
-    
-    // Format error message
-    const errorMessage = errorObj.message || 'Something went wrong';
+  const handleError = useCallback((error: unknown, options?: ErrorOptions) => {
+    const opts = { ...defaultOptions, ...options };
+    const errorMessage = error instanceof Error ? error.message : String(error);
     
     // Log to console if needed
-    if (logToConsole) {
-      console.error(`[Error] ${title}:`, errorObj);
+    if (opts.logToConsole) {
+      console.error(`[${opts.context} Error]:`, error);
     }
     
-    // Show toast notification if needed
-    if (showToast) {
+    // Show toast if needed
+    if (opts.showToast) {
       toast({
-        title,
+        title: opts.title || t('system.error'),
         description: errorMessage,
-        variant: toastVariant,
-        action: retry ? (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => retryOperation(retry)}
-            className="retry-action"
-          >
-            Retry
-          </Button>
-        ) : undefined
+        variant: 'destructive',
       });
     }
     
-    return errorObj;
-  }, []);
+    return errorMessage;
+  }, [t]);
   
-  const retryOperation = useCallback(async (operation: () => Promise<any>) => {
-    try {
-      setIsRetrying(true);
-      setLastError(null);
-      await operation();
-      toast({
-        title: "Operation successful",
-        description: "The operation completed successfully on retry.",
-      });
-    } catch (error) {
-      handleError(error, {
-        title: "Retry failed",
-        showToast: true
-      });
-    } finally {
-      setIsRetrying(false);
-    }
-  }, [handleError]);
-  
-  const clearError = useCallback(() => {
-    setLastError(null);
-  }, []);
-  
-  return {
-    handleError,
-    retryOperation,
-    clearError,
-    lastError,
-    isRetrying,
-    hasError: lastError !== null
-  };
+  return { handleError };
 };
 
 export default useErrorHandling;

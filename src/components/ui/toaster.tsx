@@ -1,8 +1,8 @@
 
-import { useToast, ToastGlobalHelper } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import type { Toast } from "@/hooks/use-toast";
 import {
-  Toast,
+  Toast as ToastComponent,
   ToastClose,
   ToastDescription,
   ToastProvider,
@@ -14,25 +14,22 @@ export function Toaster() {
   const { toasts } = useToast();
 
   return (
-    <>
-      <ToastGlobalHelper />
-      <ToastProvider>
-        {toasts.map(function ({ id, title, description, action, ...props }: Toast) {
-          return (
-            <Toast key={id} {...props}>
-              <div className="grid gap-1">
-                {title && <ToastTitle>{title}</ToastTitle>}
-                {description && (
-                  <ToastDescription>{description}</ToastDescription>
-                )}
-              </div>
-              {action}
-              <ToastClose />
-            </Toast>
-          );
-        })}
-        <ToastViewport />
-      </ToastProvider>
-    </>
+    <ToastProvider>
+      {toasts.map(function ({ id, title, description, action, ...props }: Toast) {
+        return (
+          <ToastComponent key={id} {...props}>
+            <div className="grid gap-1">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && (
+                <ToastDescription>{description}</ToastDescription>
+              )}
+            </div>
+            {action}
+            <ToastClose />
+          </ToastComponent>
+        );
+      })}
+      <ToastViewport />
+    </ToastProvider>
   );
 }

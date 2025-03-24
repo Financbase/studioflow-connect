@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PlanSwitcher from "@/components/PlanSwitcher";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { PricingTier } from "@/contexts/dashboard/types";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info, AlertTriangle } from "lucide-react";
 import AIAssistant from "@/components/AIAssistant";
