@@ -86,9 +86,10 @@ const CustomLayoutEditor = () => {
     });
   };
   
-  const handleSelectLayout = (layoutId: string) => {
+  // Fixed: Changed the parameter type to match the expected SavedLayout
+  const handleSelectLayout = (layout: SavedLayout) => {
     if (applyLayout) {
-      applyLayout(layoutId);
+      applyLayout(layout.id);
       setIsOpen(false);
     }
   };
