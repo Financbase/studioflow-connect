@@ -1,99 +1,201 @@
 
 import * as React from "react";
-import { ToastActionElement, type ToastProps } from "@/components/ui/toast";
+import { 
+  type ToastActionElement, 
+  type ToastProps 
+} from "@/components/ui/toast";
 
-// Create unique ID for toast
-const generateId = () => `toast-${Math.random().toString(36).slice(2)}`;
+const TOAST_LIMIT = 20;
+export const TOAST_REMOVE_DELAY = 1000000;
 
-// Create context for toast
-type ToastProviderProps = {
-  toasts: ToastProps[];
-  addToast: (toast: Omit<ToastProps, "id">) => void;
-  removeToast: (id: string) => void;
+type ToasterToast = ToastProps & {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
 };
 
-const ToastContext = React.createContext<ToastProviderProps>({
-  toasts: [],
-  addToast: () => {},
-  removeToast: () => {},
-});
+const actionTypes = {
+  ADD_TOAST: "ADD_TOAST",
+  UPDATE_TOAST: "UPDATE_TOAST",
+  DISMISS_TOAST: "DISMISS_TOAST",
+  REMOVE_TOAST: "REMOVE_TOAST",
+} as const;
 
-// Create a provider component
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ 
-  children 
-}) => {
-  const [toasts, setToasts] = React.useState<ToastProps[]>([]);
+let count = 0;
 
-  const addToast = React.useCallback((toast: Omit<ToastProps, "id">) => {
-    const id = generateId();
-    
-    setToasts(prev => [
-      ...prev,
-      { ...toast, id }
-    ]);
-    
-    if (toast.duration !== Infinity) {
-      setTimeout(() => {
-        removeToast(id);
-      }, toast.duration || 5000);
+function genId() {
+  count = (count + 1) % Number.MAX_SAFE_INTEGER;
+  return count.toString();
+}
+
+type ActionType = typeof actionTypes;
+
+type Action =
+  | {
+      type: ActionType["ADD_TOAST"];
+      toast: ToasterToast;
     }
-  }, []);
+  | {
+      type: ActionType["UPDATE_TOAST"];
+      toast: Partial<ToasterToast>;
+    }
+  | {
+      type: ActionType["DISMISS_TOAST"];
+      toastId?: string;
+    }
+  | {
+      type: ActionType["REMOVE_TOAST"];
+      toastId?: string;
+    };
 
-  const removeToast = React.useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  }, []);
+interface State {
+  toasts: ToasterToast[];
+}
 
-  return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
-      {children}
-    </ToastContext.Provider>
-  );
-};
+const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
-// Create a hook to use toast context
-export const useToast = () => {
-  const context = React.useContext(ToastContext);
-  if (!context) {
-    throw new Error("useToast must be used within a ToastProvider");
+const addToRemoveQueue = (toastId: string) => {
+  if (toastTimeouts.has(toastId)) {
+    return;
   }
-  return context;
+
+  const timeout = setTimeout(() => {
+    toastTimeouts.delete(toastId);
+    dispatch({
+      type: actionTypes.REMOVE_TOAST,
+      toastId: toastId,
+    });
+  }, TOAST_REMOVE_DELAY);
+
+  toastTimeouts.set(toastId, timeout);
 };
 
-// Helper component for providing global toast functions
-export const ToastGlobalHelper = () => {
-  // No actual rendering is needed, this exists for the provider system
-  return null;
+export const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case actionTypes.ADD_TOAST:
+      return {
+        ...state,
+        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+      };
+
+    case actionTypes.UPDATE_TOAST:
+      return {
+        ...state,
+        toasts: state.toasts.map((t) =>
+          t.id === action.toast.id ? { ...t, ...action.toast } : t
+        ),
+      };
+
+    case actionTypes.DISMISS_TOAST: {
+      const { toastId } = action;
+
+      if (toastId) {
+        addToRemoveQueue(toastId);
+      } else {
+        state.toasts.forEach((toast) => {
+          addToRemoveQueue(toast.id);
+        });
+      }
+
+      return {
+        ...state,
+        toasts: state.toasts.map((t) =>
+          t.id === toastId || toastId === undefined
+            ? {
+                ...t,
+                open: false,
+              }
+            : t
+        ),
+      };
+    }
+
+    case actionTypes.REMOVE_TOAST:
+      if (action.toastId === undefined) {
+        return {
+          ...state,
+          toasts: [],
+        };
+      }
+      return {
+        ...state,
+        toasts: state.toasts.filter((t) => t.id !== action.toastId),
+      };
+  }
 };
 
-// Toast function interface
-interface ToastOptions extends Omit<ToastProps, "id"> {}
+const listeners: Array<(state: State) => void> = [];
 
-// Create a function to add toast
-type ToastFunction = {
-  (opts: ToastOptions): string;
-  default: (opts: ToastOptions) => string;
-  destructive: (opts: ToastOptions) => string;
-};
+let memoryState: State = { toasts: [] };
 
-const createToastFunction = (): ToastFunction => {
-  const toast = ((opts: ToastOptions) => {
-    // This will be populated by the ToastGlobalHelper
-    console.error("Toast was called before ToastProvider was initialized");
-    return "";
-  }) as ToastFunction;
-  
-  toast.default = (opts: ToastOptions) => {
-    return toast({ ...opts, variant: "default" });
+function dispatch(action: Action) {
+  memoryState = reducer(memoryState, action);
+  listeners.forEach((listener) => {
+    listener(memoryState);
+  });
+}
+
+type Toast = Omit<ToasterToast, "id">;
+
+function toast(props: Toast) {
+  const id = genId();
+
+  const update = (props: Toast) =>
+    dispatch({
+      type: actionTypes.UPDATE_TOAST,
+      toast: { ...props, id },
+    });
+
+  const dismiss = () =>
+    dispatch({ type: actionTypes.DISMISS_TOAST, toastId: id });
+
+  dispatch({
+    type: actionTypes.ADD_TOAST,
+    toast: {
+      ...props,
+      id,
+      open: true,
+      onOpenChange: (open) => {
+        if (!open) dismiss();
+      },
+    },
+  });
+
+  return {
+    id,
+    dismiss,
+    update,
   };
-  
-  toast.destructive = (opts: ToastOptions) => {
-    return toast({ ...opts, variant: "destructive" });
+}
+
+function useToast() {
+  const [state, setState] = React.useState<State>(memoryState);
+
+  React.useEffect(() => {
+    listeners.push(setState);
+    return () => {
+      const index = listeners.indexOf(setState);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }, [state]);
+
+  return {
+    ...state,
+    toast,
+    dismiss: (toastId?: string) =>
+      dispatch({ type: actionTypes.DISMISS_TOAST, toastId }),
   };
-  
-  return toast;
-};
+}
 
-export const toast = createToastFunction();
+// Add variant helpers to toast function
+toast.error = (props: Omit<Toast, "variant">) => 
+  toast({ ...props, variant: "destructive" });
 
-// Set up global toast function when provider is available
-export type { ToastActionElement, ToastProps as Toast };
+toast.default = (props: Omit<Toast, "variant">) => 
+  toast({ ...props, variant: "default" });
+
+export { toast, useToast };
+export type { ToasterToast as Toast };

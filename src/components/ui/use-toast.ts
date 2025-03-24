@@ -1,10 +1,7 @@
 
 // Re-export everything from the hooks implementation
-import { useToast, toast, ToastGlobalHelper } from "@/hooks/use-toast";
-import type { ToastActionElement, Toast } from "@/hooks/use-toast";
+import { useToast, toast, type Toast } from "@/hooks/use-toast";
+import type { ToastActionElement } from "@/components/ui/toast";
 
-export type ToastProps = Toast;
-
-// Re-export hooks and utilities
-export { useToast, toast, ToastGlobalHelper };
+export { useToast, toast };
 export type { ToastActionElement, Toast };
