@@ -15,7 +15,14 @@ export enum WidgetId {
   system_status = "system_status",
   todo = "todo",
   usage_stats = "usage_stats",
-  weather = "weather"
+  weather = "weather",
+  // Add these to match the referenced widgets in other files
+  connect = "connect",
+  system = "system",
+  audio = "audio",
+  ai = "ai",
+  vm = "vm",
+  daw = "daw"
 }
 
 export type ViewMode = "simple" | "advanced" | "custom";
@@ -35,4 +42,11 @@ export interface DashboardContextType {
   hasFeatureAccess: (widgetId: WidgetId) => boolean;
   featureAccess: Record<WidgetId, boolean>;
   isLoading: boolean;
+  
+  // Added properties referenced elsewhere but missing from interface
+  isWidgetVisible: (widgetId: WidgetId) => boolean;
+  isWidgetCollapsed: (widgetId: WidgetId) => boolean;
+  toggleWidgetCollapse: (widgetId: WidgetId) => void;
+  resetDashboard: () => void;
+  isPricingTierChanging?: boolean;
 }

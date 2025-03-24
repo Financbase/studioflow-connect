@@ -1,8 +1,22 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { ViewMode, WidgetId, defaultVisibleWidgets, PricingTier } from '../types';
+import { ViewMode, WidgetId, PricingTier } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from '@/hooks/use-toast';
+
+// Define default visible widgets for each view mode
+const defaultVisibleWidgets: Record<ViewMode, WidgetId[]> = {
+  simple: [WidgetId.analytics, WidgetId.quick_actions, WidgetId.recent_files],
+  advanced: [
+    WidgetId.analytics, 
+    WidgetId.calendar, 
+    WidgetId.projects, 
+    WidgetId.quick_actions,
+    WidgetId.recent_files,
+    WidgetId.usage_stats
+  ],
+  custom: [] // Will be populated from custom layout
+};
 
 interface ViewModeOptions {
   persistToStorage?: boolean;
@@ -22,9 +36,9 @@ export const useViewMode = (options: ViewModeOptions = {}) => {
   const isMobile = useIsMobile();
   const storageKey = 'studioflow_view_mode';
   
-  // View mode state - default to mobile if on mobile device
+  // View mode state - default to simple if on mobile device
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    if (isMobile) return 'mobile';
+    if (isMobile) return 'simple';
     
     if (persistToStorage) {
       try {
@@ -33,7 +47,7 @@ export const useViewMode = (options: ViewModeOptions = {}) => {
         if (savedViewMode) {
           const parsedMode = JSON.parse(savedViewMode) as ViewMode;
           // Validate the saved mode is a valid ViewMode
-          if (['simple', 'advanced', 'custom', 'mobile'].includes(parsedMode)) {
+          if (['simple', 'advanced', 'custom'].includes(parsedMode)) {
             return parsedMode;
           }
         }
@@ -48,8 +62,8 @@ export const useViewMode = (options: ViewModeOptions = {}) => {
   
   // Update view mode when mobile status changes
   useEffect(() => {
-    if (isMobile && viewMode !== 'mobile') {
-      setViewMode('mobile');
+    if (isMobile && viewMode !== 'simple') {
+      setViewMode('simple');
     }
   }, [isMobile, viewMode]);
 
@@ -102,6 +116,6 @@ export const useViewMode = (options: ViewModeOptions = {}) => {
     viewMode,
     setViewMode: updateViewMode,
     isWidgetVisible,
-    isMobileView: viewMode === 'mobile'
+    isMobileView: viewMode === 'simple'
   };
 };

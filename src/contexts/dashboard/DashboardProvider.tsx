@@ -18,7 +18,7 @@ export const DashboardContext = createContext<DashboardContextType | undefined>(
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
   const isMobile = useIsMobile();
-  const { pricingTier, setPricingTier, hasFeatureAccess, featureAccess, isUpdating: pricingUpdating } = usePricingTier(user, profile);
+  const { currentTier: pricingTier, changePricingTier, isChangingTier } = usePricingTier();
   const { viewMode, setViewMode } = useViewMode();
   
   // Initialize widget management hooks
@@ -33,7 +33,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     collapsedWidgets, 
     toggleWidget, 
     isWidgetCollapsed 
-  } = useWidgets(viewMode, hasFeatureAccess);
+  } = useWidgets(viewMode, (widget: WidgetId) => hasFeatureAccess(widget));
   
   // Initialize persistence hooks
   const { 
@@ -42,7 +42,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   } = useDashboardPersistence(user?.id, viewMode, widgets, customLayout);
   
   // Combined loading state
-  const isUpdating = pricingUpdating || persistenceUpdating;
+  const isUpdating = isChangingTier || persistenceUpdating;
 
   // Console log to debug auth status
   useEffect(() => {
@@ -58,15 +58,54 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     console.log('PricingTier changed:', pricingTier);
   }, [pricingTier]);
 
+  // Feature access check
+  const hasFeatureAccess = useCallback((widgetId: WidgetId): boolean => {
+    // Implement logic to check if user has access to this widget
+    if (!pricingTier) return false;
+    
+    // Example implementation - can be enhanced with actual feature rules
+    if (pricingTier === 'enterprise') return true;
+    if (pricingTier === 'pro') return true;
+    
+    // Standard users have access to basic widgets
+    if (pricingTier === 'standard') {
+      return ['analytics', 'calendar', 'projects', 'quick_actions', 'recent_files'].includes(widgetId);
+    }
+    
+    // Free users have access to minimal widgets
+    return ['analytics', 'quick_actions', 'recent_files'].includes(widgetId);
+  }, [pricingTier]);
+
+  // Generate feature access map
+  const featureAccess = useMemo(() => {
+    const result: Record<WidgetId, boolean> = {} as Record<WidgetId, boolean>;
+    Object.values(WidgetId).forEach(widgetId => {
+      result[widgetId] = hasFeatureAccess(widgetId);
+    });
+    return result;
+  }, [hasFeatureAccess]);
+
   // Check if a widget is visible based on the current view mode
   const isWidgetVisible = useCallback((widgetId: WidgetId): boolean => {
     return widgets.includes(widgetId);
   }, [widgets]);
 
-  // Update custom layout
-  const updateCustomLayout = useCallback((newLayout: WidgetId[]): void => {
-    setCustomLayout(newLayout);
-  }, [setCustomLayout]);
+  // Set widget layout
+  const setWidgetLayout = useCallback((newWidgets: WidgetId[]): void => {
+    // Implementation here
+    console.log('Setting widget layout:', newWidgets);
+  }, []);
+
+  // Toggle widget visibility
+  const toggleWidgetVisibility = useCallback((widgetId: WidgetId): void => {
+    // Implementation here
+    console.log('Toggling widget visibility:', widgetId);
+  }, []);
+
+  // Reorder widgets
+  const reorderWidgets = useCallback((startIndex: number, endIndex: number): void => {
+    moveWidget(startIndex, endIndex);
+  }, [moveWidget]);
 
   // Handler for toggling widget collapse
   const toggleWidgetCollapse = useCallback((widgetId: WidgetId): void => {
@@ -85,34 +124,36 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     // which triggers the useEffect to save to localStorage
   }, [resetWidgets]);
 
+  // Define visible widgets based on current view mode and user access
+  const visibleWidgets = useMemo(() => {
+    return widgets.filter(widgetId => hasFeatureAccess(widgetId));
+  }, [widgets, hasFeatureAccess]);
+
   return (
     <DashboardContext.Provider
       value={{
         widgets,
-        addWidget,
-        removeWidget,
-        moveWidget,
+        visibleWidgets,
         viewMode, 
         setViewMode,
-        customLayout,
-        setCustomLayout,
-        saveDashboard,
-        resetDashboard,
-        pricingTier,
-        setPricingTier,
-        isUpdating,
+        pricingTier: pricingTier || 'free',
+        isLoading: isUpdating,
         hasFeatureAccess,
         featureAccess,
+        setWidgetLayout,
+        toggleWidgetVisibility,
+        reorderWidgets,
         isWidgetVisible,
         isWidgetCollapsed,
         toggleWidgetCollapse,
-        updateCustomLayout,
-        collapsedWidgets,
-        toggleWidget,
-        isMobileView: isMobile
+        resetDashboard,
+        isPricingTierChanging: isChangingTier
       }}
     >
       {children}
     </DashboardContext.Provider>
   );
 };
+
+// Add missing import for useMemo
+import { useMemo } from 'react';

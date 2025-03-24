@@ -4,8 +4,22 @@ import { toast } from '@/hooks/use-toast';
 import { WidgetId, ViewMode } from '../types';
 
 // Default widget configurations
-const DEFAULT_WIDGETS: WidgetId[] = ['connect', 'system', 'audio', 'ai', 'vm', 'daw', 'marketplace'];
-const DEFAULT_CUSTOM_LAYOUT: WidgetId[] = ['connect', 'system', 'audio', 'ai'];
+const DEFAULT_WIDGETS: WidgetId[] = [
+  WidgetId.connect, 
+  WidgetId.system, 
+  WidgetId.audio, 
+  WidgetId.ai, 
+  WidgetId.vm, 
+  WidgetId.daw, 
+  WidgetId.marketplace
+];
+
+const DEFAULT_CUSTOM_LAYOUT: WidgetId[] = [
+  WidgetId.connect, 
+  WidgetId.system, 
+  WidgetId.audio, 
+  WidgetId.ai
+];
 
 export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: WidgetId) => boolean) => {
   // Widget state
@@ -92,7 +106,7 @@ export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: Widget
       title: "Widget Added",
       description: `The widget has been added to your dashboard`,
     });
-  }, [hasFeatureAccess, viewMode]);
+  }, [hasFeatureAccess, viewMode, setCustomLayout]);
 
   // Remove a widget from the dashboard
   const removeWidget = useCallback((widget: WidgetId) => {
@@ -108,7 +122,7 @@ export const useWidgets = (viewMode: ViewMode, hasFeatureAccess: (widget: Widget
       title: "Widget Removed",
       description: `The widget has been removed from your dashboard`,
     });
-  }, []);
+  }, [setCustomLayout]);
 
   // Move a widget in the dashboard
   const moveWidget = useCallback((fromIndex: number, toIndex: number) => {

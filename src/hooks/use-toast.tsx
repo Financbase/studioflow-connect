@@ -160,32 +160,38 @@ export const ToastProvider = (props: { children: React.ReactNode }) => {
   );
 };
 
-export const toast = {
-  default: (props: Omit<Toast, "variant">) => {
+// Create a callable toast function
+interface ToastFunction {
+  (props: Omit<Toast, "id">): void;
+  default: (props: Omit<Toast, "id">) => void;
+  error: (props: Omit<Toast, "id">) => void;
+  destructive: (props: Omit<Toast, "id">) => void;
+}
+
+const createToastFunction = (): ToastFunction => {
+  // Base function
+  const fn = ((props: Omit<Toast, "id">) => {
+    const { addToast } = useToast();
+    addToast({ ...props });
+  }) as ToastFunction;
+
+  // Variant methods
+  fn.default = (props: Omit<Toast, "id">) => {
     const { addToast } = useToast();
     addToast({ ...props, variant: "default" });
-  },
-  
-  error: (props: Omit<Toast, "variant">) => {
+  };
+
+  fn.error = (props: Omit<Toast, "id">) => {
     const { addToast } = useToast();
     addToast({ ...props, variant: "destructive" });
-  },
-  
-  destructive: (props: Omit<Toast, "variant">) => {
+  };
+
+  fn.destructive = (props: Omit<Toast, "id">) => {
     const { addToast } = useToast();
     addToast({ ...props, variant: "destructive" });
-  },
-  
-  // Default function to handle direct calls to toast()
-  __proto__: {
-    call: function(this: any, props: Omit<Toast, "id">) {
-      const { addToast } = useToast();
-      addToast(props);
-      return undefined;
-    }
-  }
+  };
+
+  return fn;
 };
 
-// Make the toast function callable directly
-Object.setPrototypeOf(toast, toast.__proto__);
-export default toast;
+export const toast = createToastFunction();

@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { toast } from '@/hooks/use-toast';
 
-export type ZenModeTheme = 'minimal' | 'dark' | 'light' | 'paper';
+export type ZenModeTheme = 'minimal' | 'dark' | 'light' | 'paper' | 'ambient' | 'focus';
 export type ZenModeSoundscape = 'silence' | 'lofi' | 'nature' | 'ambient';
 
 export interface ZenModeOptions {
@@ -86,7 +86,9 @@ export const useZenMode = () => {
     isActive,
     options,
     toggleZenMode,
-    updateOptions
+    updateOptions,
+    // Alias for components that might be using toggle directly
+    toggle: toggleZenMode
   };
 };
 
