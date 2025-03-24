@@ -20,33 +20,15 @@ const AIToolsPage: React.FC = () => {
     }
   }, [isInitialized, t]);
 
-  if (!isInitialized) {
-    return (
-      <SidebarLayout>
-        <Header />
-        <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
-          <div className="max-w-5xl mx-auto space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">Loading...</h1>
-              <p className="text-muted-foreground">
-                Please wait while we load AI tools
-              </p>
-            </div>
-          </div>
-        </main>
-      </SidebarLayout>
-    );
-  }
-  
   return (
     <SidebarLayout>
       <Header />
       <main className="flex-1 px-4 py-6 md:px-6 lg:px-8 bg-background overflow-auto">
         <div className="max-w-5xl mx-auto space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">{t("ai.title")}</h1>
+            <h1 className="text-3xl font-bold">{isInitialized ? t("ai.title") : "AI Tools"}</h1>
             <p className="text-muted-foreground">
-              {t("ai.subtitle")}
+              {isInitialized ? t("ai.subtitle") : "Intelligent automation for your workflow"}
             </p>
           </div>
           

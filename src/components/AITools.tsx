@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { 
@@ -9,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 
 const AITools = () => {
   const { t } = useLanguage();
@@ -182,7 +181,6 @@ const AITools = () => {
         </CardContent>
       </Card>
 
-      {/* Feature showcase with detailed descriptions */}
       <div className="mt-8 space-y-8">
         <FeatureShowcase 
           title={t("ai.features.templatesTitle")}
