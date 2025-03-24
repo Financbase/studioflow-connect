@@ -23,7 +23,7 @@ const SupportHeader = ({
   onSendMessage,
   onNewTicket
 }: SupportHeaderProps) => {
-  const { t } = useLanguage();
+  const { t, isInitialized } = useLanguage();
   
   return (
     <motion.section 
@@ -33,15 +33,15 @@ const SupportHeader = ({
       transition={{ duration: 0.3 }}
     >
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t("support.title")}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{isInitialized ? t("support.title") : "Support"}</h1>
         <p className="text-muted-foreground">
-          {t("support.subtitle")}
+          {isInitialized ? t("support.subtitle") : "Get help with StudioFlow"}
         </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2">
         <Button className="gap-2" onClick={onNewTicket}>
           <TicketPlus className="h-4 w-4" />
-          {t("support.new_ticket")}
+          {isInitialized ? t("support.new_ticket") : "New Ticket"}
         </Button>
         <LiveChatDialog 
           isOpen={isChatOpen}

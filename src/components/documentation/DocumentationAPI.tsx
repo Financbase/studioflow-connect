@@ -7,7 +7,7 @@ import { useLanguage } from "@/contexts/language";
 import { motion } from "framer-motion";
 
 const DocumentationAPI = () => {
-  const { t } = useLanguage();
+  const { t, isInitialized } = useLanguage();
 
   return (
     <motion.div
@@ -17,19 +17,19 @@ const DocumentationAPI = () => {
     >
       <Card>
         <CardHeader>
-          <CardTitle>{t("docs.api_reference")}</CardTitle>
-          <CardDescription>{t("docs.api_description")}</CardDescription>
+          <CardTitle>{isInitialized ? t("docs.api_reference") : "API Reference"}</CardTitle>
+          <CardDescription>{isInitialized ? t("docs.api_description") : "Complete reference documentation for the StudioFlow API"}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            {t("docs.api_content")}
+            {isInitialized ? t("docs.api_content") : "Access detailed information about all available endpoints, parameters, and response types for integrating with StudioFlow services."}
           </p>
           <div className="mt-4 grid gap-3">
             <Link to="/api/authentication" className="flex p-3 items-center justify-between rounded-lg border border-border hover:bg-muted transition-colors">
               <div className="flex items-center gap-3">
                 <div>
-                  <h3 className="font-medium">{t("docs.authentication")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("docs.authentication_description")}</p>
+                  <h3 className="font-medium">{isInitialized ? t("docs.authentication") : "Authentication"}</h3>
+                  <p className="text-sm text-muted-foreground">{isInitialized ? t("docs.authentication_description") : "Learn how to authenticate with the StudioFlow API"}</p>
                 </div>
               </div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />

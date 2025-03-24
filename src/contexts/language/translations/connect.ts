@@ -20,173 +20,180 @@ const connectTranslations: Record<string, Record<Language, string>> = {
     es: "Acceso de almacenamiento multiplataforma de código abierto para producción de audio",
     fr: "Accès de stockage multiplateforme open-source pour la production audio",
     de: "Open-Source plattformübergreifender Speicherzugriff für Audioproduktion",
-    sv: "Öppen källkod för plattformsoberoende lagringsåtkomst för ljudproduktion",
-    ja: "オーディオ制作のためのオープンソースクロスプラットフォームストレージアクセス",
+    sv: "Öppen källkod multiplattforms lagringsåtkomst för ljudproduktion",
+    ja: "オーディオ制作のためのオープンソースのクロスプラットフォームストレージアクセス",
     zh: "用于音频制作的开源跨平台存储访问",
     ru: "Кроссплатформенный доступ к хранилищу с открытым исходным кодом для аудиопроизводства",
     pt: "Acesso de armazenamento multiplataforma de código aberto para produção de áudio",
-    ar: "وصول تخزين مفتوح المصدر عبر الأنظمة للإنتاج الصوتي"
+    ar: "وصول تخزين مفتوح المصدر متعدد المنصات لإنتاج الصوت"
   }),
-  "connect.openSource": ensureAllLanguages({
-    en: "Open Source",
-    es: "Código Abierto",
-    fr: "Open Source",
-    de: "Open Source",
-    sv: "Öppen Källkod",
-    ja: "オープンソース",
-    zh: "开源",
-    ru: "Открытый исходный код",
-    pt: "Código Aberto",
-    ar: "مفتوح المصدر"
+  
+  "connect.tabs.connect": ensureAllLanguages({
+    en: "Connect",
+    es: "Conectar",
+    fr: "Connecter",
+    de: "Verbinden",
+    sv: "Anslut",
+    ja: "接続",
+    zh: "连接",
+    ru: "Подключение",
+    pt: "Conectar",
+    ar: "ربط"
   }),
-  "connect.contribute": ensureAllLanguages({
-    en: "Contribute",
-    es: "Contribuir",
-    fr: "Contribuer",
-    de: "Beitragen",
-    sv: "Bidra",
-    ja: "貢献する",
-    zh: "贡献",
-    ru: "Внести вклад",
-    pt: "Contribuir",
-    ar: "المساهمة"
+  "connect.tabs.devices": ensureAllLanguages({
+    en: "Devices",
+    es: "Dispositivos",
+    fr: "Appareils",
+    de: "Geräte",
+    sv: "Enheter",
+    ja: "デバイス",
+    zh: "设备",
+    ru: "Устройства",
+    pt: "Dispositivos",
+    ar: "الأجهزة"
   }),
-  "connect.foundation": ensureAllLanguages({
-    en: "StudioFlow Connect: The Foundation of the VR Mixing Project",
-    es: "StudioFlow Connect: La base del proyecto de mezcla de VR",
-    fr: "StudioFlow Connect: La fondation du projet de mixage VR",
-    de: "StudioFlow Connect: Die Grundlage des VR-Mixing-Projekts",
-    sv: "StudioFlow Connect: Grunden för VR-mixningsprojektet",
-    ja: "StudioFlow Connect: VRミキシングプロジェクトの基盤",
-    zh: "StudioFlow Connect: VR混音项目的基础",
-    ru: "StudioFlow Connect: Основа проекта VR-микширования",
-    pt: "StudioFlow Connect: A fundação do projeto de mixagem VR",
-    ar: "StudioFlow Connect: أساس مشروع المزج بالواقع الافتراضي"
+  "connect.tabs.storage": ensureAllLanguages({
+    en: "Storage",
+    es: "Almacenamiento",
+    fr: "Stockage",
+    de: "Speicher",
+    sv: "Lagring",
+    ja: "ストレージ",
+    zh: "存储",
+    ru: "Хранилище",
+    pt: "Armazenamento",
+    ar: "التخزين"
   }),
-  "connect.description": ensureAllLanguages({
-    en: "StudioFlow Connect is our free, open-source foundation that solves the most critical challenge in audio production: seamless cross-platform storage access. Experience the power of our universal drive technology and join our community of developers building the future of audio production.",
-    es: "StudioFlow Connect es nuestra base gratuita y de código abierto que resuelve el desafío más crítico en la producción de audio: acceso de almacenamiento multiplataforma sin problemas. Experimenta el poder de nuestra tecnología de unidad universal y únete a nuestra comunidad de desarrolladores que construyen el futuro de la producción de audio.",
-    fr: "StudioFlow Connect est notre fondation gratuite et open-source qui résout le défi le plus critique de la production audio : un accès de stockage transparent entre plateformes. Découvrez la puissance de notre technologie d'unité universelle et rejoignez notre communauté de développeurs qui construisent l'avenir de la production audio.",
-    de: "StudioFlow Connect ist unsere kostenlose Open-Source-Grundlage, die die kritischste Herausforderung in der Audioproduktion löst: nahtloser plattformübergreifender Speicherzugriff. Erleben Sie die Leistungsfähigkeit unserer universellen Laufwerkstechnologie und schließen Sie sich unserer Entwicklergemeinschaft an, die die Zukunft der Audioproduktion gestaltet.",
-    sv: "StudioFlow Connect är vår gratis, öppen källkod-grund som löser den mest kritiska utmaningen inom ljudproduktion: sömlös plattformsoberoende lagringsåtkomst. Upplev kraften i vår universella drivteknik och gå med i vår gemenskap av utvecklare som bygger framtidens ljudproduktion.",
-    ja: "StudioFlow Connectは、オーディオ制作における最も重要な課題を解決する無料のオープンソース基盤です：シームレスなクロスプラットフォームストレージアクセス。私たちのユニバーサルドライブテクノロジーのパワーを体験し、オーディオ制作の未来を構築する開発者コミュニティに参加してください。",
-    zh: "StudioFlow Connect是我们免费的开源基础，解决了音频制作中最关键的挑战：无缝跨平台存储访问。体验我们通用驱动技术的强大功能，加入我们构建音频制作未来的开发者社区。",
-    ru: "StudioFlow Connect - это наша бесплатная основа с открытым исходным кодом, которая решает самую критическую проблему в аудиопроизводстве: беспрепятственный доступ к хранилищу на разных платформах. Испытайте мощь нашей универсальной технологии дисков и присоединитесь к нашему сообществу разработчиков, создающих будущее аудиопроизводства.",
-    pt: "StudioFlow Connect é nossa fundação gratuita e de código aberto que resolve o desafio mais crítico na produção de áudio: acesso de armazenamento multiplataforma sem problemas. Experimente o poder de nossa tecnologia de unidade universal e junte-se à nossa comunidade de desenvolvedores construindo o futuro da produção de áudio.",
-    ar: "StudioFlow Connect هو أساسنا المجاني ومفتوح المصدر الذي يحل التحدي الأكثر أهمية في إنتاج الصوت: وصول تخزين سلس عبر المنصات. جرب قوة تقنية محرك الأقراص العالمي لدينا وانضم إلى مجتمعنا من المطورين الذين يبنون مستقبل إنتاج الصوت."
+  "connect.tabs.plugins": ensureAllLanguages({
+    en: "Plugins",
+    es: "Complementos",
+    fr: "Plugins",
+    de: "Plugins",
+    sv: "Plugins",
+    ja: "プラグイン",
+    zh: "插件",
+    ru: "Плагины",
+    pt: "Plugins",
+    ar: "الإضافات"
   }),
-  "connect.supportVR": ensureAllLanguages({
-    en: "Support the VR Mixing Project",
-    es: "Apoya el proyecto de mezcla de VR",
-    fr: "Soutenez le projet de mixage VR",
-    de: "Unterstützen Sie das VR-Mixing-Projekt",
-    sv: "Stöd VR-mixningsprojektet",
-    ja: "VRミキシングプロジェクトをサポート",
-    zh: "支持VR混音项目",
-    ru: "Поддержите проект VR-микширования",
-    pt: "Apoie o projeto de mixagem VR",
-    ar: "دعم مشروع المزج بالواقع الافتراضي"
+  
+  "connect.cards.connect.title": ensureAllLanguages({
+    en: "StudioFlow Connect",
+    es: "StudioFlow Connect",
+    fr: "StudioFlow Connect",
+    de: "StudioFlow Connect",
+    sv: "StudioFlow Connect",
+    ja: "StudioFlow Connect",
+    zh: "StudioFlow Connect",
+    ru: "StudioFlow Connect",
+    pt: "StudioFlow Connect",
+    ar: "StudioFlow Connect"
   }),
-  "connect.joinCommunity": ensureAllLanguages({
-    en: "Join Community",
-    es: "Únete a la comunidad",
-    fr: "Rejoindre la communauté",
-    de: "Community beitreten",
-    sv: "Gå med i gemenskapen",
-    ja: "コミュニティに参加",
-    zh: "加入社区",
-    ru: "Присоединиться к сообществу",
-    pt: "Juntar-se à comunidade",
-    ar: "انضم إلى المجتمع"
+  "connect.cards.connect.description": ensureAllLanguages({
+    en: "The Foundation of the VR Mixing Project",
+    es: "La Fundación del Proyecto de Mezcla VR",
+    fr: "La Fondation du Projet de Mixage VR",
+    de: "Die Grundlage des VR-Mixing-Projekts",
+    sv: "Grunden för VR-mixningsprojektet",
+    ja: "VRミキシングプロジェクトの基盤",
+    zh: "VR混音项目的基础",
+    ru: "Основа проекта VR-микширования",
+    pt: "A Fundação do Projeto de Mixagem VR",
+    ar: "أساس مشروع المزج بالواقع الافتراضي"
   }),
-  "connect.documentation": ensureAllLanguages({
-    en: "Documentation",
-    es: "Documentación",
-    fr: "Documentation",
-    de: "Dokumentation",
-    sv: "Dokumentation",
-    ja: "ドキュメント",
-    zh: "文档",
-    ru: "Документация",
-    pt: "Documentação",
-    ar: "التوثيق"
+  
+  "connect.cards.devices.title": ensureAllLanguages({
+    en: "Device Management",
+    es: "Gestión de Dispositivos",
+    fr: "Gestion des Appareils",
+    de: "Geräteverwaltung",
+    sv: "Enhetshantering",
+    ja: "デバイス管理",
+    zh: "设备管理",
+    ru: "Управление устройствами",
+    pt: "Gerenciamento de Dispositivos",
+    ar: "إدارة الأجهزة"
   }),
-  "connect.driveManager": ensureAllLanguages({
-    en: "Drive Manager",
-    es: "Administrador de unidades",
-    fr: "Gestionnaire de disques",
-    de: "Laufwerksmanager",
-    sv: "Enhetshanterare",
-    ja: "ドライブマネージャー",
-    zh: "驱动管理器",
-    ru: "Менеджер дисков",
-    pt: "Gerenciador de Unidades",
-    ar: "مدير محركات الأقراص"
+  "connect.cards.devices.description": ensureAllLanguages({
+    en: "Connect and manage your audio hardware",
+    es: "Conecte y administre su hardware de audio",
+    fr: "Connectez et gérez votre matériel audio",
+    de: "Verbinden und verwalten Sie Ihre Audio-Hardware",
+    sv: "Anslut och hantera din ljudhårdvara",
+    ja: "オーディオハードウェアを接続および管理する",
+    zh: "连接和管理您的音频硬件",
+    ru: "Подключайте и управляйте своим аудиооборудованием",
+    pt: "Conecte e gerencie seu hardware de áudio",
+    ar: "توصيل وإدارة أجهزة الصوت الخاصة بك"
   }),
-  "connect.coreFeatures": ensureAllLanguages({
-    en: "Core Features",
-    es: "Características principales",
-    fr: "Fonctionnalités de base",
-    de: "Kernfunktionen",
-    sv: "Kärnfunktioner",
-    ja: "主な機能",
-    zh: "核心功能",
-    ru: "Основные функции",
-    pt: "Recursos Principais",
-    ar: "الميزات الأساسية"
+  
+  "connect.cards.storage.title": ensureAllLanguages({
+    en: "Storage Management",
+    es: "Gestión de Almacenamiento",
+    fr: "Gestion du Stockage",
+    de: "Speicherverwaltung",
+    sv: "Lagringshantering",
+    ja: "ストレージ管理",
+    zh: "存储管理",
+    ru: "Управление хранилищем",
+    pt: "Gerenciamento de Armazenamento",
+    ar: "إدارة التخزين"
   }),
-  "connect.community": ensureAllLanguages({
-    en: "Community",
-    es: "Comunidad",
-    fr: "Communauté",
-    de: "Community",
-    sv: "Gemenskap",
-    ja: "コミュニティ",
-    zh: "社区",
-    ru: "Сообщество",
-    pt: "Comunidade",
-    ar: "المجتمع"
+  "connect.cards.storage.description": ensureAllLanguages({
+    en: "Configure your storage drives and backups",
+    es: "Configure sus unidades de almacenamiento y copias de seguridad",
+    fr: "Configurez vos lecteurs de stockage et sauvegardes",
+    de: "Konfigurieren Sie Ihre Speicherlaufwerke und Backups",
+    sv: "Konfigurera dina lagringsenheter och säkerhetskopior",
+    ja: "ストレージドライブとバックアップを構成する",
+    zh: "配置您的存储驱动器和备份",
+    ru: "Настройте ваши накопители и резервные копии",
+    pt: "Configure seus drives de armazenamento e backups",
+    ar: "تكوين محركات التخزين والنسخ الاحتياطية"
   }),
-  "connect.premiumFeatures": ensureAllLanguages({
-    en: "Premium Features",
-    es: "Características premium",
-    fr: "Fonctionnalités premium",
-    de: "Premium-Funktionen",
-    sv: "Premiumfunktioner",
-    ja: "プレミアム機能",
-    zh: "高级功能",
-    ru: "Премиум-функции",
-    pt: "Recursos Premium",
-    ar: "الميزات المتميزة"
+  
+  "connect.cards.plugins.title": ensureAllLanguages({
+    en: "Plugin Bridge",
+    es: "Puente de Complementos",
+    fr: "Pont de Plugins",
+    de: "Plugin-Brücke",
+    sv: "Plugin-brygga",
+    ja: "プラグインブリッジ",
+    zh: "插件桥",
+    ru: "Мост для плагинов",
+    pt: "Ponte de Plugins",
+    ar: "جسر الإضافات"
   }),
-  "connect.universalDriveManager": ensureAllLanguages({
+  "connect.cards.plugins.description": ensureAllLanguages({
+    en: "Manage cross-platform plugin compatibility",
+    es: "Gestione la compatibilidad de complementos multiplataforma",
+    fr: "Gérez la compatibilité des plugins multiplateforme",
+    de: "Verwalten Sie die plattformübergreifende Plugin-Kompatibilität",
+    sv: "Hantera plattformsoberoende plugin-kompatibilitet",
+    ja: "クロスプラットフォームのプラグイン互換性を管理する",
+    zh: "管理跨平台插件兼容性",
+    ru: "Управляйте кроссплатформенной совместимостью плагинов",
+    pt: "Gerencie a compatibilidade de plugins multiplataforma",
+    ar: "إدارة توافق المكونات الإضافية عبر المنصات"
+  }),
+  
+  // StudioFlow Connect specific translations
+  "studioflow.driveManager": ensureAllLanguages({
     en: "Universal Drive Manager",
-    es: "Administrador de unidades universal",
-    fr: "Gestionnaire de disque universel",
+    es: "Administrador de Unidades Universal",
+    fr: "Gestionnaire de Disques Universel",
     de: "Universeller Laufwerksmanager",
-    sv: "Universell enhetshanterare",
+    sv: "Universell Enhetshanterare",
     ja: "ユニバーサルドライブマネージャー",
-    zh: "通用驱动管理器",
+    zh: "通用驱动器管理器",
     ru: "Универсальный менеджер дисков",
-    pt: "Gerenciador de Unidade Universal",
+    pt: "Gerenciador de Unidades Universal",
     ar: "مدير محركات الأقراص العالمي"
   }),
-  "connect.convertToUniversal": ensureAllLanguages({
-    en: "Convert to Universal",
-    es: "Convertir a universal",
-    fr: "Convertir en universel",
-    de: "In Universal konvertieren",
-    sv: "Konvertera till universell",
-    ja: "ユニバーサルに変換",
-    zh: "转换为通用格式",
-    ru: "Конвертировать в универсальный",
-    pt: "Converter para Universal",
-    ar: "تحويل إلى عالمي"
-  }),
-  "connect.storageUsage": ensureAllLanguages({
+  "studioflow.storageUsage": ensureAllLanguages({
     en: "Storage Usage",
-    es: "Uso de almacenamiento",
-    fr: "Utilisation du stockage",
+    es: "Uso de Almacenamiento",
+    fr: "Utilisation du Stockage",
     de: "Speichernutzung",
     sv: "Lagringsanvändning",
     ja: "ストレージ使用量",
@@ -195,31 +202,31 @@ const connectTranslations: Record<string, Record<Language, string>> = {
     pt: "Uso de Armazenamento",
     ar: "استخدام التخزين"
   }),
-  "connect.syncingProgress": ensureAllLanguages({
+  "studioflow.syncingProgress": ensureAllLanguages({
     en: "Syncing progress",
     es: "Progreso de sincronización",
     fr: "Progression de la synchronisation",
     de: "Synchronisierungsfortschritt",
-    sv: "Synkroniseringsframsteg",
+    sv: "Synkroniseringsförlopp",
     ja: "同期の進行状況",
     zh: "同步进度",
     ru: "Прогресс синхронизации",
     pt: "Progresso de sincronização",
     ar: "تقدم المزامنة"
   }),
-  "connect.estimatedTime": ensureAllLanguages({
+  "studioflow.timeRemaining": ensureAllLanguages({
     en: "Estimated time remaining",
     es: "Tiempo estimado restante",
     fr: "Temps restant estimé",
     de: "Geschätzte verbleibende Zeit",
-    sv: "Uppskattad återstående tid",
+    sv: "Beräknad återstående tid",
     ja: "推定残り時間",
     zh: "预计剩余时间",
     ru: "Расчетное оставшееся время",
     pt: "Tempo restante estimado",
-    ar: "الوقت المتبقي المقدر"
+    ar: "الوقت المقدر المتبقي"
   }),
-  "connect.projectVersions": ensureAllLanguages({
+  "studioflow.projectVersions": ensureAllLanguages({
     en: "Project versions",
     es: "Versiones del proyecto",
     fr: "Versions du projet",
@@ -231,7 +238,7 @@ const connectTranslations: Record<string, Record<Language, string>> = {
     pt: "Versões do projeto",
     ar: "إصدارات المشروع"
   }),
-  "connect.currentVersion": ensureAllLanguages({
+  "studioflow.currentVersion": ensureAllLanguages({
     en: "Current version",
     es: "Versión actual",
     fr: "Version actuelle",
@@ -243,83 +250,107 @@ const connectTranslations: Record<string, Record<Language, string>> = {
     pt: "Versão atual",
     ar: "الإصدار الحالي"
   }),
-  "connect.totalVersions": ensureAllLanguages({
+  "studioflow.totalVersions": ensureAllLanguages({
     en: "Total versions",
     es: "Versiones totales",
     fr: "Versions totales",
     de: "Gesamtversionen",
     sv: "Totala versioner",
-    ja: "バージョン総数",
+    ja: "合計バージョン",
     zh: "总版本数",
     ru: "Всего версий",
-    pt: "Total de versões",
+    pt: "Versões totais",
     ar: "إجمالي الإصدارات"
   }),
-  "connect.connectDrive": ensureAllLanguages({
+  "studioflow.convertToUniversal": ensureAllLanguages({
+    en: "Convert to Universal",
+    es: "Convertir a Universal",
+    fr: "Convertir en Universal",
+    de: "In Universal konvertieren",
+    sv: "Konvertera till Universal",
+    ja: "ユニバーサルに変換",
+    zh: "转换为通用格式",
+    ru: "Преобразовать в универсальный",
+    pt: "Converter para Universal",
+    ar: "التحويل إلى عالمي"
+  }),
+  "studioflow.connectDrive": ensureAllLanguages({
     en: "Connect Drive",
-    es: "Conectar unidad",
-    fr: "Connecter le disque",
+    es: "Conectar Unidad",
+    fr: "Connecter le Disque",
     de: "Laufwerk verbinden",
     sv: "Anslut enhet",
     ja: "ドライブを接続",
     zh: "连接驱动器",
     ru: "Подключить диск",
     pt: "Conectar Unidade",
-    ar: "ربط محرك الأقراص"
+    ar: "توصيل محرك الأقراص"
   }),
-  "connect.universalBridge": ensureAllLanguages({
+  "studioflow.coreFeatures": ensureAllLanguages({
+    en: "Core Features",
+    es: "Características Principales",
+    fr: "Fonctionnalités Principales",
+    de: "Kernfunktionen",
+    sv: "Kärnfunktioner",
+    ja: "コア機能",
+    zh: "核心功能",
+    ru: "Основные функции",
+    pt: "Recursos Principais",
+    ar: "الميزات الأساسية"
+  }),
+  "studioflow.universalBridge": ensureAllLanguages({
     en: "Universal Bridge",
-    es: "Puente universal",
-    fr: "Pont universel",
-    de: "Universalbrücke",
-    sv: "Universell brygga",
+    es: "Puente Universal",
+    fr: "Pont Universel",
+    de: "Universal-Brücke",
+    sv: "Universell Brygga",
     ja: "ユニバーサルブリッジ",
     zh: "通用桥接",
     ru: "Универсальный мост",
     pt: "Ponte Universal",
-    ar: "الجسر العالمي"
+    ar: "جسر عالمي"
   }),
-  "connect.universalBridgeDesc": ensureAllLanguages({
+  "studioflow.universalBridgeDesc": ensureAllLanguages({
     en: "Provides seamless access to any drive format across macOS, Windows, and Linux platforms.",
     es: "Proporciona acceso sin problemas a cualquier formato de unidad en plataformas macOS, Windows y Linux.",
     fr: "Fournit un accès transparent à tout format de disque sur les plateformes macOS, Windows et Linux.",
-    de: "Bietet nahtlosen Zugriff auf jedes Laufwerksformat auf macOS-, Windows- und Linux-Plattformen.",
-    sv: "Ger sömlös åtkomst till alla enhetsformat på macOS, Windows och Linux-plattformar.",
-    ja: "macOS、Windows、Linuxプラットフォーム間であらゆるドライブフォーマットへのシームレスなアクセスを提供します。",
-    zh: "提供跨macOS、Windows和Linux平台的任何驱动器格式的无缝访问。",
+    de: "Bietet nahtlosen Zugriff auf jedes Laufwerksformat über macOS-, Windows- und Linux-Plattformen hinweg.",
+    sv: "Ger sömlös åtkomst till alla enhetsformat över macOS-, Windows- och Linux-plattformar.",
+    ja: "macOS、Windows、およびLinuxプラットフォーム間で、あらゆるドライブ形式へのシームレスなアクセスを提供します。",
+    zh: "提供跨macOS、Windows和Linux平台对任何驱动器格式的无缝访问。",
     ru: "Обеспечивает беспрепятственный доступ к любому формату диска на платформах macOS, Windows и Linux.",
-    pt: "Fornece acesso sem interrupções a qualquer formato de unidade nas plataformas macOS, Windows e Linux.",
+    pt: "Fornece acesso perfeito a qualquer formato de unidade nas plataformas macOS, Windows e Linux.",
     ar: "يوفر وصولاً سلسًا إلى أي تنسيق محرك أقراص عبر منصات macOS وWindows وLinux."
   }),
-  "connect.autoVersioning": ensureAllLanguages({
+  "studioflow.autoVersioning": ensureAllLanguages({
     en: "Auto-Versioning",
-    es: "Versionado automático",
-    fr: "Versionnement automatique",
-    de: "Automatische Versionierung",
-    sv: "Automatisk versionshantering",
+    es: "Versionado Automático",
+    fr: "Versionnage Automatique",
+    de: "Auto-Versionierung",
+    sv: "Automatisk Versionshantering",
     ja: "自動バージョン管理",
     zh: "自动版本控制",
-    ru: "Автоматическое управление версиями",
+    ru: "Авто-версионирование",
     pt: "Versionamento Automático",
     ar: "إصدار تلقائي"
   }),
-  "connect.autoVersioningDesc": ensureAllLanguages({
+  "studioflow.autoVersioningDesc": ensureAllLanguages({
     en: "Automatically creates versions of all project files without manual saving.",
     es: "Crea automáticamente versiones de todos los archivos del proyecto sin guardar manualmente.",
-    fr: "Crée automatiquement des versions de tous les fichiers de projet sans enregistrement manuel.",
+    fr: "Crée automatiquement des versions de tous les fichiers du projet sans enregistrement manuel.",
     de: "Erstellt automatisch Versionen aller Projektdateien ohne manuelles Speichern.",
-    sv: "Skapar automatiskt versioner av alla projektfiler utan manuell sparning.",
+    sv: "Skapar automatiskt versioner av alla projektfiler utan manuell sparande.",
     ja: "手動で保存せずに、すべてのプロジェクトファイルのバージョンを自動的に作成します。",
-    zh: "无需手动保存即可自动创建所有项目文件的版本。",
+    zh: "自动创建所有项目文件的版本，无需手动保存。",
     ru: "Автоматически создает версии всех файлов проекта без ручного сохранения.",
     pt: "Cria automaticamente versões de todos os arquivos do projeto sem salvamento manual.",
     ar: "ينشئ تلقائيًا إصدارات من جميع ملفات المشروع دون الحفظ اليدوي."
   }),
-  "connect.hardwareAcceleration": ensureAllLanguages({
+  "studioflow.hardwareAcceleration": ensureAllLanguages({
     en: "Hardware Acceleration",
-    es: "Aceleración de hardware",
-    fr: "Accélération matérielle",
-    de: "Hardwarebeschleunigung",
+    es: "Aceleración de Hardware",
+    fr: "Accélération Matérielle",
+    de: "Hardware-Beschleunigung",
     sv: "Hårdvaruacceleration",
     ja: "ハードウェアアクセラレーション",
     zh: "硬件加速",
@@ -327,65 +358,101 @@ const connectTranslations: Record<string, Record<Language, string>> = {
     pt: "Aceleração de Hardware",
     ar: "تسريع الأجهزة"
   }),
-  "connect.hardwareAccelerationDesc": ensureAllLanguages({
+  "studioflow.hardwareAccelerationDesc": ensureAllLanguages({
     en: "Utilizes GPU acceleration for faster file transfers and audio streaming.",
-    es: "Utiliza la aceleración de GPU para transferencias de archivos más rápidas y streaming de audio.",
+    es: "Utiliza aceleración GPU para transferencias de archivos más rápidas y transmisión de audio.",
     fr: "Utilise l'accélération GPU pour des transferts de fichiers plus rapides et le streaming audio.",
     de: "Nutzt GPU-Beschleunigung für schnellere Dateiübertragungen und Audio-Streaming.",
-    sv: "Använder GPU-acceleration för snabbare filöverföringar och ljudströmning.",
-    ja: "より高速なファイル転送とオーディオストリーミングのためにGPUアクセラレーションを利用します。",
-    zh: "利用GPU加速实现更快的文件传输和音频流媒体。",
+    sv: "Använder GPU-acceleration för snabbare filöverföringar och ljudstreaming.",
+    ja: "より高速なファイル転送とオーディオストリーミングのためにGPUアクセラレーションを活用します。",
+    zh: "利用GPU加速实现更快的文件传输和音频流传输。",
     ru: "Использует ускорение GPU для более быстрой передачи файлов и потоковой передачи аудио.",
-    pt: "Utiliza aceleração de GPU para transferências de arquivos mais rápidas e streaming de áudio.",
+    pt: "Utiliza aceleração GPU para transferências de arquivos mais rápidas e streaming de áudio.",
     ar: "يستخدم تسريع وحدة معالجة الرسومات لنقل الملفات بشكل أسرع وبث الصوت."
   }),
-  "connect.legacyIntegration": ensureAllLanguages({
+  "studioflow.legacyIntegration": ensureAllLanguages({
     en: "Legacy Integration",
-    es: "Integración heredada",
-    fr: "Intégration des systèmes hérités",
+    es: "Integración de Legacy",
+    fr: "Intégration Legacy",
     de: "Legacy-Integration",
-    sv: "Äldre integration",
+    sv: "Legacy-integration",
     ja: "レガシー統合",
-    zh: "传统集成",
+    zh: "旧版集成",
     ru: "Интеграция с устаревшими системами",
-    pt: "Integração de Sistemas Legados",
-    ar: "تكامل الأنظمة القديمة"
+    pt: "Integração com Legacy",
+    ar: "تكامل الإرث"
   }),
-  "connect.pluginBridge": ensureAllLanguages({
+  "studioflow.pluginBridge": ensureAllLanguages({
     en: "Plugin Bridge Connected",
-    es: "Puente de complementos conectado",
-    fr: "Pont de plugins connecté",
-    de: "Plugin-Brücke verbunden",
-    sv: "Insticksbrygga ansluten",
+    es: "Puente de Complementos Conectado",
+    fr: "Pont de Plugins Connecté",
+    de: "Plugin-Brücke Verbunden",
+    sv: "Plugin-brygga Ansluten",
     ja: "プラグインブリッジ接続済み",
     zh: "插件桥已连接",
-    ru: "Мост плагинов подключен",
-    pt: "Ponte de Plugin Conectada",
-    ar: "جسر المكونات الإضافية متصل"
+    ru: "Мост для плагинов подключен",
+    pt: "Ponte de Plugins Conectada",
+    ar: "تم توصيل جسر المكونات الإضافية"
   }),
-  "connect.pluginBridgeDesc": ensureAllLanguages({
+  "studioflow.pluginBridgeDesc": ensureAllLanguages({
     en: "StudioFlow Connect provides seamless support for legacy plugins and hardware through our universal plugin bridge.",
-    es: "StudioFlow Connect proporciona soporte sin problemas para complementos y hardware heredados a través de nuestro puente de complementos universal.",
-    fr: "StudioFlow Connect fournit un support transparent pour les plugins et le matériel hérités grâce à notre pont de plugins universel.",
-    de: "StudioFlow Connect bietet nahtlose Unterstützung für Legacy-Plugins und -Hardware durch unsere universelle Plugin-Brücke.",
-    sv: "StudioFlow Connect ger sömlöst stöd för äldre insticksmoduler och hårdvara genom vår universella insticksbrygga.",
-    ja: "StudioFlow Connectは、ユニバーサルプラグインブリッジを通じてレガシープラグインとハードウェアのシームレスなサポートを提供します。",
-    zh: "StudioFlow Connect通过我们的通用插件桥为传统插件和硬件提供无缝支持。",
-    ru: "StudioFlow Connect обеспечивает беспрепятственную поддержку устаревших плагинов и оборудования через наш универсальный мост плагинов.",
-    pt: "StudioFlow Connect fornece suporte contínuo para plugins e hardware legados através da nossa ponte de plugin universal.",
+    es: "StudioFlow Connect proporciona soporte perfecto para complementos y hardware heredados a través de nuestro puente de complementos universal.",
+    fr: "StudioFlow Connect fournit un support transparent pour les plugins et le matériel existants grâce à notre pont de plugins universel.",
+    de: "StudioFlow Connect bietet nahtlose Unterstützung für Legacy-Plugins und -Hardware über unsere universelle Plugin-Brücke.",
+    sv: "StudioFlow Connect ger sömlöst stöd för äldre plugins och hårdvara genom vår universella plugin-brygga.",
+    ja: "StudioFlow Connectは、当社のユニバーサルプラグインブリッジを通じて、レガシープラグインとハードウェアのシームレスなサポートを提供します。",
+    zh: "StudioFlow Connect通过我们的通用插件桥为旧版插件和硬件提供无缝支持。",
+    ru: "StudioFlow Connect обеспечивает беспрепятственную поддержку устаревших плагинов и оборудования через наш универсальный мост для плагинов.",
+    pt: "StudioFlow Connect fornece suporte perfeito para plugins e hardware legados através de nossa ponte de plugins universal.",
     ar: "يوفر StudioFlow Connect دعمًا سلسًا للمكونات الإضافية والأجهزة القديمة من خلال جسر المكونات الإضافية العالمي."
   }),
-  "connect.configureBridge": ensureAllLanguages({
+  "studioflow.configureBridge": ensureAllLanguages({
     en: "Configure Bridge",
-    es: "Configurar puente",
-    fr: "Configurer le pont",
-    de: "Brücke konfigurieren",
-    sv: "Konfigurera brygga",
-    ja: "ブリッジを設定",
+    es: "Configurar Puente",
+    fr: "Configurer le Pont",
+    de: "Brücke Konfigurieren",
+    sv: "Konfigurera Brygga",
+    ja: "ブリッジを構成",
     zh: "配置桥接",
     ru: "Настроить мост",
     pt: "Configurar Ponte",
     ar: "تكوين الجسر"
+  }),
+  "studioflow.enabled": ensureAllLanguages({
+    en: "Enabled",
+    es: "Habilitado",
+    fr: "Activé",
+    de: "Aktiviert",
+    sv: "Aktiverad",
+    ja: "有効",
+    zh: "已启用",
+    ru: "Включено",
+    pt: "Habilitado",
+    ar: "مُمكّن"
+  }),
+  "studioflow.active": ensureAllLanguages({
+    en: "Active",
+    es: "Activo",
+    fr: "Actif",
+    de: "Aktiv",
+    sv: "Aktiv",
+    ja: "アクティブ",
+    zh: "活动",
+    ru: "Активно",
+    pt: "Ativo",
+    ar: "نشط"
+  }),
+  "studioflow.universalFormat": ensureAllLanguages({
+    en: "Universal Format",
+    es: "Formato Universal",
+    fr: "Format Universel",
+    de: "Universelles Format",
+    sv: "Universellt Format",
+    ja: "ユニバーサルフォーマット",
+    zh: "通用格式",
+    ru: "Универсальный формат",
+    pt: "Formato Universal",
+    ar: "تنسيق عالمي"
   })
 };
 
