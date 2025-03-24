@@ -22,6 +22,7 @@ import colorPaletteTranslations from "./colorPalette";
 import knowledgeTranslations from "./knowledge";
 import connectTranslations from "./connect";
 import languagesTranslations from "./languages";
+import sidebarTranslations from "./sidebar";
 
 // Combine all translations
 const translations = {
@@ -47,7 +48,8 @@ const translations = {
   ...colorPaletteTranslations,
   ...knowledgeTranslations,
   ...connectTranslations,
-  ...languagesTranslations
+  ...languagesTranslations,
+  ...sidebarTranslations
 };
 
 export { languageNames };

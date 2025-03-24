@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { TicketPlus, MessageSquare } from "lucide-react";
 import LiveChatDialog from "@/components/support/LiveChatDialog";
 import { useLanguage } from "@/contexts/language";
+import { motion } from "framer-motion";
 
 interface SupportHeaderProps {
   isChatOpen: boolean;
@@ -25,7 +26,12 @@ const SupportHeader = ({
   const { t } = useLanguage();
   
   return (
-    <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <motion.section 
+      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t("support.title")}</h1>
         <p className="text-muted-foreground">
@@ -45,7 +51,7 @@ const SupportHeader = ({
           onSendMessage={onSendMessage}
         />
       </div>
-    </section>
+    </motion.section>
   );
 };
 

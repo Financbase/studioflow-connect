@@ -10,7 +10,7 @@ const sidebarTranslations: Record<string, Record<Language, string>> = {
     de: "Dashboard",
     sv: "Instrumentpanel",
     ja: "ダッシュボード",
-    zh: "仪表板",
+    zh: "仪表盘",
     ru: "Панель управления",
     pt: "Painel",
     ar: "لوحة التحكم"
@@ -47,20 +47,20 @@ const sidebarTranslations: Record<string, Record<Language, string>> = {
     sv: "Anslut",
     ja: "接続",
     zh: "连接",
-    ru: "Соединение",
+    ru: "Подключение",
     pt: "Conectar",
-    ar: "اتصال"
+    ar: "ربط"
   }),
   "sidebar.aiTools": ensureAllLanguages({
     en: "AI Tools",
-    es: "Herramientas de IA",
-    fr: "Outils d'IA",
-    de: "KI-Tools",
+    es: "Herramientas IA",
+    fr: "Outils IA",
+    de: "KI-Werkzeuge",
     sv: "AI-verktyg",
     ja: "AIツール",
     zh: "AI工具",
-    ru: "Инструменты ИИ",
-    pt: "Ferramentas de IA",
+    ru: "ИИ инструменты",
+    pt: "Ferramentas IA",
     ar: "أدوات الذكاء الاصطناعي"
   }),
   "sidebar.documentation": ensureAllLanguages({
@@ -90,14 +90,14 @@ const sidebarTranslations: Record<string, Record<Language, string>> = {
   "sidebar.admin": ensureAllLanguages({
     en: "Admin",
     es: "Administración",
-    fr: "Admin",
+    fr: "Administration",
     de: "Admin",
     sv: "Admin",
-    ja: "管理者",
-    zh: "管理员",
-    ru: "Админ",
+    ja: "管理",
+    zh: "管理",
+    ru: "Администрирование",
     pt: "Admin",
-    ar: "المسؤول"
+    ar: "الإدارة"
   }),
   "sidebar.settings": ensureAllLanguages({
     en: "Settings",
