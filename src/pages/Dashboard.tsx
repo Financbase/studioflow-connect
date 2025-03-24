@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/contexts/ThemeContext";
 import ZenMode from "@/components/zen/ZenMode";
-import { ZenModeOptions, useZenMode } from "@/hooks/use-zen-mode";
+import { useZenMode } from "@/hooks/use-zen-mode";
 
 // Import the new dashboard components
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -21,15 +21,7 @@ const Dashboard = () => {
     options: zenModeOptions, 
     toggle: toggleZenMode,
     updateOptions: updateZenModeOptions
-  } = useZenMode({
-    initialOptions: {
-      theme: 'minimal',
-      soundscape: 'silence',
-      enableTimers: false,
-      hideNotifications: true,
-      enableBrainstorming: true
-    }
-  });
+  } = useZenMode();
   
   // Optional effect to enhance the experience when entering/exiting zen mode
   useEffect(() => {

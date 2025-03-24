@@ -91,63 +91,63 @@ const Index = () => {
                 
                 <div className="space-y-10 py-4">
                   {/* Always show StudioFlow Connect as the main MVP feature */}
-                  {isWidgetVisible('connect') && (
+                  {isWidgetVisible(WidgetId.connect) && (
                     <div className="mb-10">
-                      <DashboardWidget id="connect" title={t("widgets.connect")}>
+                      <DashboardWidget id={WidgetId.connect} title={t("widgets.connect")}>
                         <StudioFlowConnect />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('system') && hasFeatureAccess('system') && (
+                  {isWidgetVisible(WidgetId.system) && hasFeatureAccess(WidgetId.system) && (
                     <div className="mb-10">
-                      <DashboardWidget id="system" title={t("widgets.system")} isPremiumFeature>
+                      <DashboardWidget id={WidgetId.system} title={t("widgets.system")} isPremiumFeature>
                         <SystemMonitor />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('vm') && hasFeatureAccess('vm') && (
+                  {isWidgetVisible(WidgetId.vm) && hasFeatureAccess(WidgetId.vm) && (
                     <div className="mb-10">
-                      <DashboardWidget id="vm" title={t("widgets.vm")} isPremiumFeature>
+                      <DashboardWidget id={WidgetId.vm} title={t("widgets.vm")} isPremiumFeature>
                         <VMController />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('daw') && hasFeatureAccess('daw') && (
+                  {isWidgetVisible(WidgetId.daw) && hasFeatureAccess(WidgetId.daw) && (
                     <div className="mb-10">
-                      <DashboardWidget id="daw" title={t("widgets.daw")} isPremiumFeature>
+                      <DashboardWidget id={WidgetId.daw} title={t("widgets.daw")} isPremiumFeature>
                         <DAWWorkflow />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('audio') && hasFeatureAccess('audio') && (
+                  {isWidgetVisible(WidgetId.audio) && hasFeatureAccess(WidgetId.audio) && (
                     <div className="mb-10">
-                      <DashboardWidget id="audio" title={t("widgets.audio")}>
+                      <DashboardWidget id={WidgetId.audio} title={t("widgets.audio")}>
                         <AudioAnalyzer />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('ai') && hasFeatureAccess('ai') && (
+                  {isWidgetVisible(WidgetId.ai) && hasFeatureAccess(WidgetId.ai) && (
                     <div className="mb-10">
-                      <DashboardWidget id="ai" title={t("widgets.ai")} isPremiumFeature>
+                      <DashboardWidget id={WidgetId.ai} title={t("widgets.ai")} isPremiumFeature>
                         <AITools />
                       </DashboardWidget>
                       <Separator className={`mt-10 ${themeVariant === "windows" ? "border-b-2" : ""}`} />
                     </div>
                   )}
                   
-                  {isWidgetVisible('marketplace') && hasFeatureAccess('marketplace') && (
+                  {isWidgetVisible(WidgetId.marketplace) && hasFeatureAccess(WidgetId.marketplace) && (
                     <div className="mb-10">
-                      <DashboardWidget id="marketplace" title={t("widgets.marketplace")} isPremiumFeature>
+                      <DashboardWidget id={WidgetId.marketplace} title={t("widgets.marketplace")} isPremiumFeature>
                         <StudioMarketplace />
                       </DashboardWidget>
                     </div>

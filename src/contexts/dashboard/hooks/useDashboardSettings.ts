@@ -7,25 +7,26 @@ import { useDashboard } from '../useDashboard';
  * Hook for managing dashboard settings and preferences
  */
 export const useDashboardSettings = () => {
+  const dashboard = useDashboard();
+  
+  // Extract only the settings-related properties
   const { 
     viewMode,
     setViewMode,
     pricingTier,
-    setPricingTier,
     hasFeatureAccess,
     featureAccess,
     resetDashboard,
-    isUpdating
-  } = useDashboard();
+  } = dashboard;
   
   return {
     viewMode,
     setViewMode,
     pricingTier,
-    setPricingTier,
+    setPricingTier: dashboard.setPricingTier,
     hasFeatureAccess,
     featureAccess,
     resetDashboard,
-    isUpdating
+    isUpdating: dashboard.isUpdating
   };
 };

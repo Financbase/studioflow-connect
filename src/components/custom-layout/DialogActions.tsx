@@ -1,42 +1,25 @@
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { DialogFooter } from "@/components/ui/dialog";
-import { Save } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 
-interface DialogActionsProps {
+export interface DialogActionsProps {
   onCancel: () => void;
   onSave: () => void;
-  activeTab: string;
-  canSaveMultipleLayouts: boolean;
 }
 
-const DialogActions = ({
+const DialogActions: React.FC<DialogActionsProps> = ({ 
   onCancel,
-  onSave,
-  activeTab,
-  canSaveMultipleLayouts
-}: DialogActionsProps) => {
-  const isMobile = useIsMobile();
-  
+  onSave
+}) => {
   return (
-    <DialogFooter className={isMobile ? "flex-col space-y-2" : ""}>
-      <Button 
-        variant="outline" 
-        onClick={onCancel} 
-        className={isMobile ? "w-full" : ""}
-      >
+    <div className="flex justify-between w-full">
+      <Button variant="outline" onClick={onCancel}>
         Cancel
       </Button>
-      <Button 
-        onClick={onSave} 
-        className={`${isMobile ? "w-full" : ""} gap-2`}
-      >
-        <Save className="h-4 w-4" />
-        {activeTab === "layouts" && canSaveMultipleLayouts ? "Save New Layout" : "Save Changes"}
+      <Button variant="default" onClick={onSave}>
+        Save Layout
       </Button>
-    </DialogFooter>
+    </div>
   );
 };
 

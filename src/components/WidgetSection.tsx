@@ -14,7 +14,7 @@ interface WidgetSectionProps {
 }
 
 // Help content for each widget section
-const widgetHelpContent: Record<WidgetId, { title: string, content: React.ReactNode, severity?: "info" | "warning" | "critical" }> = {
+const widgetHelpContent: Partial<Record<WidgetId, { title: string, content: React.ReactNode, severity?: "info" | "warning" | "critical" }>> = {
   system: {
     title: "System Monitor",
     content: (
@@ -119,13 +119,15 @@ const WidgetSection: React.FC<WidgetSectionProps> = ({
                 </span>
               )}
             </h2>
-            <HelpTip
-              title={helpInfo.title}
-              content={helpInfo.content}
-              severity={helpInfo.severity || "info"}
-              size="small"
-              sectionId={id}
-            />
+            {helpInfo && (
+              <HelpTip
+                title={helpInfo.title}
+                content={helpInfo.content}
+                severity={helpInfo.severity || "info"}
+                size="small"
+                sectionId={id}
+              />
+            )}
             <Link 
               to={`/docs#${id}`} 
               className="ml-2 text-xs text-muted-foreground hover:text-primary flex items-center"

@@ -74,7 +74,7 @@ const CustomLayoutEditor = () => {
   };
   
   // Check if user has access to this feature
-  const canEditLayouts = pricingTier === 'pro';
+  const canEditLayouts = pricingTier === 'pro' || pricingTier === 'enterprise';
   
   if (!canEditLayouts) {
     return null;
@@ -92,7 +92,7 @@ const CustomLayoutEditor = () => {
         <LayoutNameInput 
           layoutName={name} 
           onLayoutNameChange={setName} 
-          canSaveMultipleLayouts={true}
+          canSaveMultipleLayouts={pricingTier === 'pro' || pricingTier === 'enterprise'}
           pricingTier={pricingTier}
         />
           
@@ -104,13 +104,13 @@ const CustomLayoutEditor = () => {
               selectedWidgets={selectedWidgets} 
               onToggleWidget={handleWidgetToggle}
               featureAccess={{
-                // Assuming all widgets are available to Pro users
+                // All widget access flags
                 analytics: pricingTier !== "free",
                 audio_player: true,
                 calendar: true,
                 file_browser: true,
                 marketplace: true,
-                performance: pricingTier === "pro",
+                performance: pricingTier === "pro" || pricingTier === "enterprise",
                 projects: true,
                 quick_actions: true,
                 recent_files: true,
@@ -118,7 +118,13 @@ const CustomLayoutEditor = () => {
                 system_status: pricingTier !== "free",
                 todo: true,
                 usage_stats: pricingTier !== "free",
-                weather: true
+                weather: true,
+                connect: true,
+                system: pricingTier !== "free",
+                audio: true,
+                ai: pricingTier !== "free",
+                vm: pricingTier === "pro" || pricingTier === "enterprise",
+                daw: pricingTier !== "free"
               }}
               pricingTier={pricingTier}
             />
@@ -134,7 +140,6 @@ const CustomLayoutEditor = () => {
             setEditMode(false);
           }}
           onSave={handleSaveLayout}
-          isEditing={editMode}
         />
       </CardFooter>
     </Card>

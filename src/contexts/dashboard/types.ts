@@ -49,4 +49,28 @@ export interface DashboardContextType {
   toggleWidgetCollapse: (widgetId: WidgetId) => void;
   resetDashboard: () => void;
   isPricingTierChanging?: boolean;
+  
+  // Additional properties needed by other components
+  setPricingTier?: (tier: PricingTier) => void;
+  isUpdating?: boolean;
+  addWidget?: (widgetId: WidgetId) => void;
+  removeWidget?: (widgetId: WidgetId) => void;
+  moveWidget?: (startIndex: number, endIndex: number) => void;
+  customLayout?: WidgetId[];
+  collapsedWidgets?: WidgetId[];
+  toggleWidget?: (widgetId: WidgetId) => void;
 }
+
+// Define default visible widgets for each view mode - needed by useViewMode.ts
+export const defaultVisibleWidgets: Record<ViewMode, WidgetId[]> = {
+  simple: [WidgetId.analytics, WidgetId.quick_actions, WidgetId.recent_files],
+  advanced: [
+    WidgetId.analytics, 
+    WidgetId.calendar, 
+    WidgetId.projects, 
+    WidgetId.quick_actions,
+    WidgetId.recent_files,
+    WidgetId.usage_stats
+  ],
+  custom: [] // Will be populated from custom layout
+};

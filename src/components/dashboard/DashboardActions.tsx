@@ -47,7 +47,7 @@ const DashboardActions: React.FC<DashboardActionsProps> = ({ onZenModeActivate }
           variant="outline" 
           size="sm" 
           className="gap-2"
-          onClick={() => handleNavigate('/ai-tools', 'ai')}
+          onClick={() => handleNavigate('/ai-tools', WidgetId.ai)}
         >
           <Zap className="h-4 w-4" />
           AI Assistant

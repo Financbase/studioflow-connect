@@ -1,103 +1,117 @@
 
-import { useCallback, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PricingTier } from '../types';
 import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
 
-/**
- * Function to determine if a user can downgrade from their current plan
- * to a new pricing tier.
- */
-function isValidPlanChange(currentPlan: PricingTier, newPlan: PricingTier): boolean {
-  // Free users can upgrade to any plan
-  // Standard users can upgrade to pro or downgrade to free
-  // Pro users can downgrade to standard or free
-  
-  const tiers: Record<string, number> = {
-    'free': 0,
-    'standard': 1,
-    'pro': 2,
-    'enterprise': 3
-  };
-  
-  // Allow any change if it's the same tier or an upgrade
-  // Only allow downgrades of one tier at a time
-  if (tiers[newPlan] >= tiers[currentPlan] || 
-      tiers[currentPlan] - tiers[newPlan] <= 1) {
-    return true;
-  }
-  
-  return false;
+interface UsePricingTierOptions {
+  defaultTier?: PricingTier;
+  storageKey?: string;
 }
 
-/**
- * Custom hook for managing pricing tier-related functionality
- */
-export const usePricingTier = () => {
-  const { profile, updateProfile } = useAuth();
+export const usePricingTier = (options: UsePricingTierOptions = {}) => {
+  const { 
+    defaultTier = 'free', 
+    storageKey = 'studioflow_pricing_tier' 
+  } = options;
+  
+  const { user } = useAuth();
+  const [currentTier, setCurrentTier] = useState<PricingTier>(() => {
+    if (typeof window === 'undefined') return defaultTier;
+    
+    try {
+      const storedTier = localStorage.getItem(storageKey);
+      if (storedTier) {
+        return JSON.parse(storedTier) as PricingTier;
+      }
+    } catch (err) {
+      console.error('Error reading pricing tier from storage:', err);
+    }
+    
+    return defaultTier;
+  });
+  
   const [isChangingTier, setIsChangingTier] = useState(false);
   
-  /**
-   * Update the user's pricing tier
-   */
+  // Sync the pricing tier to localStorage when it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(currentTier));
+    } catch (err) {
+      console.error('Error saving pricing tier to storage:', err);
+    }
+  }, [currentTier, storageKey]);
+  
+  // Fetch the user's pricing tier from the server when they log in
+  useEffect(() => {
+    const fetchUserTier = async () => {
+      if (!user) return;
+      
+      try {
+        // In a real app, this would be an API call to get the user's pricing tier
+        // This is a simulated delay for demo purposes
+        setIsChangingTier(true);
+        
+        // Simulate network request
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // For demo purposes, we'll just use the stored tier or default
+        const storedTier = localStorage.getItem(storageKey);
+        if (storedTier) {
+          setCurrentTier(JSON.parse(storedTier) as PricingTier);
+        }
+      } catch (err) {
+        console.error('Error fetching user pricing tier:', err);
+        toast({
+          title: 'Error',
+          description: 'Could not fetch your subscription information',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsChangingTier(false);
+      }
+    };
+    
+    fetchUserTier();
+  }, [user, storageKey]);
+  
+  // Function to change the user's pricing tier
   const changePricingTier = useCallback(async (newTier: PricingTier): Promise<boolean> => {
-    if (!profile) {
-      toast.error({
-        title: 'Error',
-        description: 'You must be logged in to change your subscription plan'
-      });
-      return false;
-    }
-    
-    // Check if the plan change is valid
-    if (!isValidPlanChange(profile.plan as PricingTier, newTier)) {
-      toast.error({
-        title: 'Plan Downgrade Not Allowed',
-        description: `You cannot downgrade from ${profile.plan} plan to ${newTier} plan.`
-      });
-      return false;
-    }
-    
-    // Same plan, no need to update
-    if (profile.plan === newTier) {
-      return true;
-    }
+    if (currentTier === newTier) return true;
     
     setIsChangingTier(true);
     
     try {
-      // In a real app, we would call a payment processor here
-      // and handle the actual payment and subscription update
+      // In a real app, this would be an API call to update the user's pricing tier
+      // This is a simulated delay for demo purposes
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Update the user's profile with the new plan
-      await updateProfile({ 
-        plan: newTier
-      });
-        
-      console.info('PricingTier changed:', newTier);
-        
-      // Show success message
-      toast.default({
+      setCurrentTier(newTier);
+      
+      toast({
         title: 'Subscription Updated',
-        description: `Your plan has been changed to ${newTier}.`
+        description: `Your subscription has been updated to ${newTier}`,
       });
       
-      setIsChangingTier(false);
       return true;
     } catch (err) {
-      console.error('Error in updating pricing tier:', err);
-      toast.error({
+      console.error('Error changing pricing tier:', err);
+      toast({
         title: 'Error',
-        description: 'An unexpected error occurred while updating your subscription'
+        description: 'Could not update your subscription',
+        variant: 'destructive',
       });
-      setIsChangingTier(false);
       return false;
+    } finally {
+      setIsChangingTier(false);
     }
-  }, [profile, updateProfile]);
+  }, [currentTier]);
   
   return {
-    currentTier: profile?.plan as PricingTier | undefined, 
+    currentTier,
     changePricingTier,
-    isChangingTier
+    isChangingTier,
+    // Alias for easier integration with existing code
+    isUpdating: isChangingTier
   };
 };

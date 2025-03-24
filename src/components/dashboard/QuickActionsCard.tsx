@@ -53,12 +53,12 @@ const QuickActionsCard = () => {
         
         <Button 
           variant="outline" 
-          className={`h-auto py-4 justify-start flex-col items-center hover:bg-muted/50 transition-colors ${!hasFeatureAccess('ai') ? 'opacity-70 hover:opacity-100' : ''}`}
+          className={`h-auto py-4 justify-start flex-col items-center hover:bg-muted/50 transition-colors ${!hasFeatureAccess(WidgetId.ai) ? 'opacity-70 hover:opacity-100' : ''}`}
           asChild
         >
           <Link 
             to="/ai-tools" 
-            onClick={(e) => handlePremiumFeature(e, 'ai')}
+            onClick={(e) => handlePremiumFeature(e, WidgetId.ai)}
           >
             <Sparkles className="h-5 w-5 mb-1 text-primary/80" />
             <span>{t("dashboard.aiTools")}</span>

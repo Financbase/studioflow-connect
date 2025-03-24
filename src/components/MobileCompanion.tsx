@@ -15,7 +15,7 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboard, WidgetId } from "@/contexts/DashboardContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
@@ -154,7 +154,7 @@ const MobileCompanion = () => {
         ))}
       </div>
 
-      {!hasFeatureAccess('ai') && (
+      {!hasFeatureAccess(WidgetId.ai) && (
         <Card className="bg-muted/40">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">

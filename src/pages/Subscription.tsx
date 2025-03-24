@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { SidebarLayout } from "@/components/layout/Sidebar";
 import Header from "@/components/Header";
@@ -5,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import SubscriptionPlans from "@/components/subscription/SubscriptionPlans";
 import FeaturesComparison from "@/components/subscription/FeaturesComparison";
 import AIAssistantInfo from "@/components/subscription/AIAssistantInfo";
+import { useDashboardSettings } from "@/contexts/dashboard/hooks/useDashboardSettings";
+import { PricingTier } from "@/contexts/dashboard/types";
 
 interface PlanFeature {
   name: string;
@@ -22,7 +25,8 @@ interface PlanFeature {
 }
 
 const Subscription: React.FC = () => {
-  const { pricingTier, setPricingTier } = useDashboard();
+  const { pricingTier } = useDashboard();
+  const { setPricingTier } = useDashboardSettings();
   const [showUpgradeAlert, setShowUpgradeAlert] = useState(false);
 
   const planFeatures: PlanFeature[] = [
@@ -141,8 +145,10 @@ const Subscription: React.FC = () => {
     });
   };
 
-  const handleSwitch = (plan: "free" | "standard" | "pro" | "enterprise") => {
-    setPricingTier(plan);
+  const handleSwitch = (plan: PricingTier) => {
+    if (setPricingTier) {
+      setPricingTier(plan);
+    }
     setShowUpgradeAlert(false);
     toast({
       title: "Plan Switched",
@@ -189,7 +195,7 @@ const Subscription: React.FC = () => {
             
             <TabsContent value="plans" className="space-y-6">
               <SubscriptionPlans 
-                pricingTier={pricingTier}
+                pricingTier={pricingTier} 
                 planFeatures={planFeatures}
                 handleSwitch={handleSwitch}
                 handleUpgrade={handleUpgrade}

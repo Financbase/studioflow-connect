@@ -7,17 +7,12 @@ import { useDashboard } from '../useDashboard';
  * Hook for managing widget operations (add, remove, move)
  */
 export const useWidgetManagement = () => {
-  const { 
-    widgets,
-    addWidget,
-    removeWidget,
-    moveWidget
-  } = useDashboard();
+  const dashboard = useDashboard();
   
   return {
-    widgets,
-    addWidget,
-    removeWidget,
-    moveWidget
+    widgets: dashboard.widgets,
+    addWidget: dashboard.addWidget,
+    removeWidget: dashboard.removeWidget,
+    moveWidget: dashboard.moveWidget
   };
 };

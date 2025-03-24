@@ -14,6 +14,10 @@ export interface ZenModeOptions {
   enableBrainstorming: boolean;
 }
 
+interface UseZenModeOptions {
+  initialOptions?: Partial<ZenModeOptions>;
+}
+
 const defaultOptions: ZenModeOptions = {
   theme: 'minimal',
   soundscape: 'silence',
@@ -25,12 +29,14 @@ const defaultOptions: ZenModeOptions = {
 /**
  * Hook for managing the application's Zen Mode state and behaviors
  */
-export const useZenMode = () => {
+export const useZenMode = (options?: UseZenModeOptions) => {
   // Store Zen Mode state in localStorage to persist between sessions
   const [isActive, setIsActive] = useLocalStorage<boolean>('zenMode-active', false);
   
   // Store Zen Mode options in localStorage to persist user preferences
-  const [options, setOptions] = useLocalStorage<ZenModeOptions>('zenMode-options', defaultOptions);
+  const [zenOptions, setZenOptions] = useLocalStorage<ZenModeOptions>('zenMode-options', 
+    options?.initialOptions ? { ...defaultOptions, ...options.initialOptions } : defaultOptions
+  );
   
   // Track how long the user has been in Zen Mode
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
@@ -53,7 +59,7 @@ export const useZenMode = () => {
       });
       
       // Apply any global effects for zen mode (like hiding notifications)
-      if (options.hideNotifications) {
+      if (zenOptions.hideNotifications) {
         // In a real app, would integrate with OS notifications API
         // or disable in-app notifications
       }
@@ -70,21 +76,21 @@ export const useZenMode = () => {
       
       setSessionStartTime(null);
     }
-  }, [isActive, options.hideNotifications, sessionStartTime, setIsActive]);
+  }, [isActive, zenOptions.hideNotifications, sessionStartTime, setIsActive]);
   
   /**
    * Update Zen Mode options
    */
   const updateOptions = useCallback((newOptions: Partial<ZenModeOptions>) => {
-    setOptions(prevOptions => ({
+    setZenOptions(prevOptions => ({
       ...prevOptions,
       ...newOptions
     }));
-  }, [setOptions]);
+  }, [setZenOptions]);
   
   return {
     isActive,
-    options,
+    options: zenOptions,
     toggleZenMode,
     updateOptions,
     // Alias for components that might be using toggle directly

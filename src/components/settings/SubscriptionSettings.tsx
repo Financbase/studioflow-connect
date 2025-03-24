@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PlanSwitcher from "@/components/PlanSwitcher";
@@ -8,15 +9,17 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info, AlertTriangle } from "lucide-react";
 import AIAssistant from "@/components/AIAssistant";
 import { Button } from "@/components/ui/button";
+import { useDashboardSettings } from "@/contexts/dashboard/hooks/useDashboardSettings";
 
 const SubscriptionSettings = () => {
-  const { pricingTier, setPricingTier, isUpdating } = useDashboard();
+  const { pricingTier } = useDashboard();
+  const { setPricingTier, isUpdating } = useDashboardSettings();
   const [error, setError] = useState<string | null>(null);
   
   const handlePlanChange = async (plan: PricingTier) => {
     try {
       // Only update if the plan actually changes and not currently updating
-      if (plan !== pricingTier && !isUpdating) {
+      if (plan !== pricingTier && !isUpdating && setPricingTier) {
         await setPricingTier(plan);
       }
       
@@ -53,6 +56,7 @@ const SubscriptionSettings = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
+                  className="ml-2" 
                   onClick={() => setError(null)}
                 >
                   Dismiss
