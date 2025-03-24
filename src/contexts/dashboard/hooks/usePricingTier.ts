@@ -1,40 +1,50 @@
 
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import { useCallback, useState } from 'react';
+import { PricingTier } from '../types';
+import { useAuth } from '@/hooks/use-auth';
 import { toast } from '@/hooks/use-toast';
-import { PricingTier, featureAccessMap, WidgetId } from '../types';
-import { isValidPlanChange } from '../utils';
 
-export const usePricingTier = (user: User | null, profile: any) => {
-  // Pricing tier state - load from profile if available
-  const [pricingTier, setPricingTier] = useState<PricingTier>('free');
-  const [isUpdating, setIsUpdating] = useState(false);
+/**
+ * Function to determine if a user can downgrade from their current plan
+ * to a new pricing tier.
+ */
+function isValidPlanChange(currentPlan: PricingTier, newPlan: PricingTier): boolean {
+  // Free users can upgrade to any plan
+  // Standard users can upgrade to pro or downgrade to free
+  // Pro users can downgrade to standard or free
   
-  // Load pricing tier from profile
-  useEffect(() => {
-    if (profile && profile.plan) {
-      try {
-        // Ensure plan is one of the allowed values
-        const planValue = profile.plan as PricingTier;
-        if (['free', 'standard', 'pro', 'enterprise'].includes(planValue)) {
-          setPricingTier(planValue);
-          console.log("Setting pricing tier from profile:", planValue);
-        } else {
-          console.warn(`Invalid plan value in profile: ${planValue}, defaulting to free`);
-          setPricingTier('free');
-        }
-      } catch (err) {
-        console.error("Error loading pricing tier from profile:", err);
-        setPricingTier('free');
-      }
-    }
-  }, [profile]);
+  const tiers: Record<PricingTier, number> = {
+    'free': 0,
+    'standard': 1,
+    'pro': 2
+  };
   
-  // Update user profile when pricing tier changes
-  const updatePricingTierInDB = useCallback(async (newTier: PricingTier) => {
-    if (!user || !profile) {
-      console.warn("Cannot update pricing tier: Missing user or profile");
+  // Allow any change if it's the same tier or an upgrade
+  // Only allow downgrades of one tier at a time
+  if (tiers[newPlan] >= tiers[currentPlan] || 
+      tiers[currentPlan] - tiers[newPlan] <= 1) {
+    return true;
+  }
+  
+  return false;
+}
+
+/**
+ * Custom hook for managing pricing tier-related functionality
+ */
+export const usePricingTier = () => {
+  const { profile, updateProfile } = useAuth();
+  const [isChangingTier, setIsChangingTier] = useState(false);
+  
+  /**
+   * Update the user's pricing tier
+   */
+  const changePricingTier = useCallback(async (newTier: PricingTier): Promise<boolean> => {
+    if (!profile) {
+      toast.error({
+        title: 'Error',
+        description: 'You must be logged in to change your subscription plan'
+      });
       return false;
     }
     
@@ -44,35 +54,34 @@ export const usePricingTier = (user: User | null, profile: any) => {
         title: 'Plan Downgrade Not Allowed',
         description: `You cannot downgrade from ${profile.plan} plan to ${newTier} plan.`
       });
-      
-      // Reset to the current plan in profile
       return false;
     }
     
-    setIsUpdating(true);
+    // Same plan, no need to update
+    if (profile.plan === newTier) {
+      return true;
+    }
+    
+    setIsChangingTier(true);
     
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          plan: newTier,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id);
-        
-      if (error) {
-        console.error('Error updating pricing tier:', error);
-        toast.error({
-          title: 'Error',
-          description: 'Could not update subscription plan'
-        });
-        return false;
-      } 
+      // In a real app, we would call a payment processor here
+      // and handle the actual payment and subscription update
       
-      toast.default({
-        title: 'Plan Updated',
-        description: `Your plan has been updated to ${newTier}`
+      // Update the user's profile with the new plan
+      await updateProfile({ 
+        plan: newTier
       });
+        
+      console.info('PricingTier changed:', newTier);
+        
+      // Show success message
+      toast.default({
+        title: 'Subscription Updated',
+        description: `Your plan has been changed to ${newTier}.`
+      });
+      
+      setIsChangingTier(false);
       return true;
     } catch (err) {
       console.error('Error in updating pricing tier:', err);
@@ -80,34 +89,14 @@ export const usePricingTier = (user: User | null, profile: any) => {
         title: 'Error',
         description: 'An unexpected error occurred while updating your subscription'
       });
+      setIsChangingTier(false);
       return false;
-    } finally {
-      setIsUpdating(false);
     }
-  }, [user, profile]);
+  }, [profile, updateProfile]);
   
-  // Safely update the pricing tier with validation
-  const setValidatedPricingTier = useCallback(async (newTier: PricingTier) => {
-    // Skip if the tier is the same
-    if (newTier === pricingTier) return;
-    
-    // Only attempt to update the DB if needed
-    const success = await updatePricingTierInDB(newTier);
-    if (success) {
-      setPricingTier(newTier);
-    }
-  }, [pricingTier, updatePricingTierInDB]);
-
-  // Check if user has access to the feature based on pricing tier
-  const hasFeatureAccess = useCallback((widgetId: WidgetId): boolean => {
-    return featureAccessMap[pricingTier][widgetId];
-  }, [pricingTier]);
-
   return {
-    pricingTier,
-    setPricingTier: setValidatedPricingTier,
-    isUpdating,
-    hasFeatureAccess,
-    featureAccess: featureAccessMap[pricingTier]
+    currentTier: profile?.plan as PricingTier | undefined, 
+    changePricingTier,
+    isChangingTier
   };
 };

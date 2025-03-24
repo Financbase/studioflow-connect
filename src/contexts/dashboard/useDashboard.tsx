@@ -17,10 +17,9 @@ export const useDashboard = (): DashboardContextType => {
   
   if (!context) {
     const errorMessage = 'useDashboard must be used within a DashboardProvider';
-    toast({
+    toast.error({
       title: "Dashboard Context Error",
-      description: errorMessage,
-      variant: "destructive"
+      description: errorMessage
     });
     
     console.error(`[Dashboard Context Error]: ${errorMessage}`);

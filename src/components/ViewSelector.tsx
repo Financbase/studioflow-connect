@@ -30,16 +30,15 @@ const ViewSelector = () => {
   const handleViewChange = (value: string) => {
     if (value) {
       if (value === "custom" && pricingTier !== "pro") {
-        toast({
+        toast.error({
           title: t("tooltips.featureNotAvailable"),
           description: t("tooltips.proonly"),
-          variant: "destructive"
         });
         return;
       }
       
       setViewMode(value as ViewMode);
-      toast({
+      toast.default({
         title: t("dashboard.viewChanged"),
         description: `${t("dashboard.viewSet")} ${t(`view.${value}`)}`,
       });

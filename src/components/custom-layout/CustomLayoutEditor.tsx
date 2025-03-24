@@ -1,60 +1,42 @@
 
-import React, { useState } from "react";
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Settings2 } from "lucide-react";
-import { useDashboard } from "@/contexts/dashboard";
-import { WidgetId } from "@/contexts/dashboard/types";
-import { toast } from "@/hooks/use-toast";
-import { useTheme } from "@/contexts/ThemeContext";
-import { useIsMobile } from "@/hooks/use-mobile";
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { toast } from '@/hooks/use-toast';
+import { useDashboard, WidgetId } from '@/contexts/dashboard';
+import { WidgetList } from './WidgetList';
+import { LayoutNameInput } from './LayoutNameInput';
+import { useCustomLayout } from '@/contexts/dashboard/hooks/useCustomLayout';
+import { DialogActions } from './DialogActions';
+import { Layout } from './types';
+import { Panel } from '@/components/ui/panel';
 
-import CustomLayoutTabs from "./CustomLayoutTabs";
-import DialogActions from "./DialogActions";
-import { SavedLayout } from "./types";
-
-const CustomLayoutEditor = () => {
-  const { customLayout, updateCustomLayout, featureAccess, pricingTier } = useDashboard();
-  const { themeVariant } = useTheme();
-  const isMobile = useIsMobile();
+/**
+ * Component for creating and editing custom dashboard layouts
+ */
+export const CustomLayoutEditor = () => {
+  const { hasFeatureAccess, pricingTier } = useDashboard();
+  const { saveLayout, updateLayout, layouts, selectedLayout } = useCustomLayout();
   
-  const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>(customLayout);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("widgets");
-  const [layoutName, setLayoutName] = useState("My Custom Layout");
+  const [name, setName] = useState('');
+  const [selectedWidgets, setSelectedWidgets] = useState<WidgetId[]>([]);
+  const [editMode, setEditMode] = useState(false);
   
-  const [savedLayouts, setSavedLayouts] = useState<SavedLayout[]>([
-    {
-      id: "default",
-      name: "Default Layout",
-      widgets: ["connect", "audio", "system"],
-      isDefault: true,
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: "minimal",
-      name: "Minimal Studio",
-      widgets: ["connect", "audio"],
-      createdAt: new Date().toISOString()
+  // Initialize component state when selected layout changes
+  useEffect(() => {
+    if (selectedLayout) {
+      setName(selectedLayout.name);
+      setSelectedWidgets(selectedLayout.widgets);
+      setEditMode(true);
+    } else {
+      setName('');
+      setSelectedWidgets([]);
+      setEditMode(false);
     }
-  ]);
-  
-  const handleToggleWidget = (widgetId: WidgetId) => {
-    setSelectedWidgets(prev => {
-      if (prev.includes(widgetId)) {
-        return prev.filter(id => id !== widgetId);
-      } else {
-        return [...prev, widgetId];
-      }
-    });
-  };
+  }, [selectedLayout]);
   
   const handleSaveLayout = () => {
     if (selectedWidgets.length === 0) {
@@ -65,105 +47,97 @@ const CustomLayoutEditor = () => {
       return;
     }
     
-    updateCustomLayout(selectedWidgets);
+    if (!name.trim()) {
+      toast.error({
+        title: "Name Required",
+        description: "Please provide a name for your layout",
+      });
+      return;
+    }
     
-    if (pricingTier === 'pro' || pricingTier === 'enterprise') {
-      const layoutExists = savedLayouts.some(layout => layout.name === layoutName);
-      
-      if (layoutExists) {
-        setSavedLayouts(savedLayouts.map(layout => 
-          layout.name === layoutName 
-            ? { ...layout, widgets: selectedWidgets } 
-            : layout
-        ));
-        
-        toast.default({
-          title: "Layout Updated",
-          description: `The layout "${layoutName}" has been updated`
-        });
-      } else {
-        const newLayout: SavedLayout = {
-          id: `layout-${Date.now()}`,
-          name: layoutName,
-          widgets: selectedWidgets,
-          createdAt: new Date().toISOString()
-        };
-        
-        setSavedLayouts([...savedLayouts, newLayout]);
-        
-        toast.default({
-          title: "Layout Saved",
-          description: `New layout "${layoutName}" has been saved`
-        });
-      }
-    } else {
+    // Create a new layout or update existing one
+    const newLayout: Layout = {
+      id: editMode && selectedLayout ? selectedLayout.id : Date.now().toString(),
+      name: name.trim(),
+      widgets: selectedWidgets,
+      createdAt: editMode && selectedLayout ? selectedLayout.createdAt : new Date(),
+      updatedAt: new Date()
+    };
+    
+    if (editMode && selectedLayout) {
+      updateLayout(newLayout);
       toast.default({
         title: "Layout Updated",
-        description: "Your dashboard layout has been updated"
+        description: `Your "${name}" layout has been updated.`
+      });
+    } else {
+      saveLayout(newLayout);
+      toast.default({
+        title: "Layout Saved",
+        description: `Your "${name}" layout has been saved.`
       });
     }
     
-    setIsOpen(false);
+    // Reset form after save
+    setName('');
+    setSelectedWidgets([]);
+    setEditMode(false);
   };
   
-  const handleSelectSavedLayout = (layout: SavedLayout) => {
-    setSelectedWidgets(layout.widgets);
-    setLayoutName(layout.name);
-    setActiveTab("widgets");
-  };
-  
-  const handleDeleteLayout = (layoutId: string) => {
-    setSavedLayouts(savedLayouts.filter(layout => layout.id !== layoutId));
-    
-    toast.default({
-      title: "Layout Deleted",
-      description: "The layout has been removed from your saved layouts"
+  const handleWidgetToggle = (widgetId: WidgetId) => {
+    setSelectedWidgets(prev => {
+      if (prev.includes(widgetId)) {
+        return prev.filter(id => id !== widgetId);
+      } else {
+        return [...prev, widgetId];
+      }
     });
   };
   
-  const canSaveMultipleLayouts = pricingTier === 'pro' || pricingTier === 'enterprise';
+  // Check if user has access to this feature
+  const canEditLayouts = pricingTier === 'pro';
+  
+  if (!canEditLayouts) {
+    return null;
+  }
   
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size={isMobile ? "icon" : "sm"} className={isMobile ? "w-9 h-9 p-0" : "gap-2"}>
-          <Settings2 className="h-4 w-4" />
-          {!isMobile && "Customize"}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className={`${isMobile ? "w-[95vw] max-w-[95vw]" : "sm:max-w-[625px]"} ${themeVariant === "windows" ? "rounded-none" : ""}`}>
-        <DialogHeader>
-          <DialogTitle>Customize Dashboard</DialogTitle>
-          <DialogDescription>
-            Configure your studio dashboard to suit your workflow
-          </DialogDescription>
-        </DialogHeader>
-        
-        <CustomLayoutTabs
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          layoutName={layoutName}
-          onLayoutNameChange={setLayoutName}
-          canSaveMultipleLayouts={canSaveMultipleLayouts}
-          pricingTier={pricingTier}
-          widgets={Object.keys(featureAccess) as WidgetId[]}
-          selectedWidgets={selectedWidgets}
-          featureAccess={featureAccess}
-          onToggleWidget={handleToggleWidget}
-          savedLayouts={savedLayouts}
-          onSelectSavedLayout={handleSelectSavedLayout}
-          onDeleteLayout={handleDeleteLayout}
+    <Card className="shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl">
+          {editMode ? 'Edit Layout' : 'Create Custom Layout'}
+        </CardTitle>
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
+        <LayoutNameInput 
+          name={name} 
+          setName={setName} 
+          placeholder="My Custom Layout"
         />
-        
-        <DialogActions
-          onCancel={() => setIsOpen(false)}
+          
+        <div className="space-y-2">
+          <Label>Select Widgets</Label>
+          <Panel className="p-4">
+            <WidgetList 
+              selectedWidgets={selectedWidgets} 
+              onToggle={handleWidgetToggle}
+            />
+          </Panel>
+        </div>
+      </CardContent>
+      
+      <CardFooter className="flex justify-between">
+        <DialogActions 
+          onCancel={() => {
+            setName('');
+            setSelectedWidgets([]);
+            setEditMode(false);
+          }}
           onSave={handleSaveLayout}
-          activeTab={activeTab}
-          canSaveMultipleLayouts={canSaveMultipleLayouts}
+          isEditing={editMode}
         />
-      </DialogContent>
-    </Dialog>
+      </CardFooter>
+    </Card>
   );
 };
-
-export default CustomLayoutEditor;
