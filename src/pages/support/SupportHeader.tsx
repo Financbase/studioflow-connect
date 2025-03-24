@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { TicketPlus, MessageSquare } from "lucide-react";
 import LiveChatDialog from "@/components/support/LiveChatDialog";
+import { useLanguage } from "@/contexts/language";
 
 interface SupportHeaderProps {
   isChatOpen: boolean;
@@ -21,18 +22,20 @@ const SupportHeader = ({
   onSendMessage,
   onNewTicket
 }: SupportHeaderProps) => {
+  const { t } = useLanguage();
+  
   return (
     <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Support Center</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("support.title")}</h1>
         <p className="text-muted-foreground">
-          Get help with your StudioFlow issues and access our knowledge resources
+          {t("support.subtitle")}
         </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2">
         <Button className="gap-2" onClick={onNewTicket}>
           <TicketPlus className="h-4 w-4" />
-          New Support Ticket
+          {t("support.new_ticket")}
         </Button>
         <LiveChatDialog 
           isOpen={isChatOpen}

@@ -1,9 +1,10 @@
 
 import { Language } from "../types";
+import { ensureAllLanguages } from "../utils";
 
 const documentationTranslations: Record<string, Record<Language, string>> = {
   // Documentation page
-  "docs.title": {
+  "docs.title": ensureAllLanguages({
     en: "Documentation",
     es: "Documentación",
     fr: "Documentation",
@@ -14,8 +15,8 @@ const documentationTranslations: Record<string, Record<Language, string>> = {
     ru: "Документация",
     pt: "Documentação",
     ar: "التوثيق",
-  },
-  "docs.subtitle": {
+  }),
+  "docs.subtitle": ensureAllLanguages({
     en: "Technical guides and reference materials",
     es: "Guías técnicas y materiales de referencia",
     fr: "Guides techniques et documents de référence",
@@ -26,8 +27,8 @@ const documentationTranslations: Record<string, Record<Language, string>> = {
     ru: "Технические руководства и справочные материалы",
     pt: "Guias técnicos e materiais de referência",
     ar: "أدلة تقنية ومواد مرجعية",
-  },
-  "docs.tabs.guides": {
+  }),
+  "docs.tabs.guides": ensureAllLanguages({
     en: "Guides",
     es: "Guías",
     fr: "Guides",
@@ -38,8 +39,8 @@ const documentationTranslations: Record<string, Record<Language, string>> = {
     ru: "Руководства",
     pt: "Guias",
     ar: "أدلة",
-  },
-  "docs.tabs.api": {
+  }),
+  "docs.tabs.api": ensureAllLanguages({
     en: "API Reference",
     es: "Referencia API",
     fr: "Référence API",
@@ -50,8 +51,8 @@ const documentationTranslations: Record<string, Record<Language, string>> = {
     ru: "Справочник API",
     pt: "Referência API",
     ar: "مرجع واجهة برمجة التطبيقات",
-  },
-  "docs.tabs.examples": {
+  }),
+  "docs.tabs.examples": ensureAllLanguages({
     en: "Examples",
     es: "Ejemplos",
     fr: "Exemples",
@@ -62,7 +63,298 @@ const documentationTranslations: Record<string, Record<Language, string>> = {
     ru: "Примеры",
     pt: "Exemplos",
     ar: "أمثلة",
-  },
+  }),
+  // Guides section
+  "docs.getting_started": ensureAllLanguages({
+    en: "Getting Started",
+    es: "Primeros Pasos",
+    fr: "Premiers Pas",
+    de: "Erste Schritte",
+    sv: "Komma Igång",
+    ja: "はじめに",
+    zh: "入门指南",
+    ru: "Начало работы",
+    pt: "Primeiros Passos",
+    ar: "البدء"
+  }),
+  "docs.getting_started_help_title": ensureAllLanguages({
+    en: "Getting Started Guide",
+    es: "Guía de Primeros Pasos",
+    fr: "Guide de Démarrage",
+    de: "Erste-Schritte-Anleitung",
+    sv: "Komma igång-guide",
+    ja: "入門ガイド",
+    zh: "入门指南",
+    ru: "Руководство по началу работы",
+    pt: "Guia de Introdução",
+    ar: "دليل البدء"
+  }),
+  "docs.getting_started_help_content": ensureAllLanguages({
+    en: "This section covers the basics to help new users get up and running quickly.",
+    es: "Esta sección cubre los conceptos básicos para ayudar a los nuevos usuarios a comenzar rápidamente.",
+    fr: "Cette section couvre les bases pour aider les nouveaux utilisateurs à démarrer rapidement.",
+    de: "Dieser Abschnitt behandelt die Grundlagen, um neuen Benutzern einen schnellen Einstieg zu ermöglichen.",
+    sv: "Det här avsnittet täcker grunderna för att hjälpa nya användare att komma igång snabbt.",
+    ja: "このセクションでは、新しいユーザーがすぐに使い始められるよう基本をカバーしています。",
+    zh: "本节涵盖基础知识，帮助新用户快速上手。",
+    ru: "Этот раздел охватывает основы, чтобы помочь новым пользователям быстро начать работу.",
+    pt: "Esta seção aborda o básico para ajudar novos usuários a começarem rapidamente.",
+    ar: "يغطي هذا القسم الأساسيات لمساعدة المستخدمين الجدد على البدء بسرعة."
+  }),
+  "docs.getting_started_description": ensureAllLanguages({
+    en: "Everything you need to know to get started with our platform",
+    es: "Todo lo que necesitas saber para comenzar con nuestra plataforma",
+    fr: "Tout ce que vous devez savoir pour commencer avec notre plateforme",
+    de: "Alles, was Sie wissen müssen, um mit unserer Plattform zu beginnen",
+    sv: "Allt du behöver veta för att komma igång med vår plattform",
+    ja: "当社のプラットフォームを使い始めるために知っておくべきすべて",
+    zh: "开始使用我们平台所需了解的一切",
+    ru: "Все, что вам нужно знать, чтобы начать работу с нашей платформой",
+    pt: "Tudo o que você precisa saber para começar com nossa plataforma",
+    ar: "كل ما تحتاج لمعرفته للبدء باستخدام منصتنا"
+  }),
+  "docs.installation_guide": ensureAllLanguages({
+    en: "Installation Guide",
+    es: "Guía de Instalación",
+    fr: "Guide d'Installation",
+    de: "Installationsanleitung",
+    sv: "Installationsguide",
+    ja: "インストールガイド",
+    zh: "安装指南",
+    ru: "Руководство по установке",
+    pt: "Guia de Instalação",
+    ar: "دليل التثبيت"
+  }),
+  "docs.installation_description": ensureAllLanguages({
+    en: "Step-by-step instructions for setting up",
+    es: "Instrucciones paso a paso para la configuración",
+    fr: "Instructions étape par étape pour la configuration",
+    de: "Schritt-für-Schritt-Anleitung für die Einrichtung",
+    sv: "Steg-för-steg-instruktioner för installation",
+    ja: "セットアップのための段階的な手順",
+    zh: "设置的分步说明",
+    ru: "Пошаговые инструкции по настройке",
+    pt: "Instruções passo a passo para configuração",
+    ar: "تعليمات خطوة بخطوة للإعداد"
+  }),
+  "docs.quickstart_tutorial": ensureAllLanguages({
+    en: "Quick Start Tutorial",
+    es: "Tutorial de Inicio Rápido",
+    fr: "Tutoriel de Démarrage Rapide",
+    de: "Schnellstart-Tutorial",
+    sv: "Snabbstartshandledning",
+    ja: "クイックスタートチュートリアル",
+    zh: "快速入门教程",
+    ru: "Руководство по быстрому старту",
+    pt: "Tutorial de Início Rápido",
+    ar: "دليل البدء السريع"
+  }),
+  "docs.quickstart_description": ensureAllLanguages({
+    en: "Get up and running in minutes",
+    es: "Ponte en marcha en minutos",
+    fr: "Démarrez en quelques minutes",
+    de: "In Minuten einsatzbereit",
+    sv: "Kom igång på några minuter",
+    ja: "数分で稼働",
+    zh: "几分钟内即可上手",
+    ru: "Начните работу за несколько минут",
+    pt: "Comece a usar em minutos",
+    ar: "ابدأ في غضون دقائق"
+  }),
+  "docs.advanced_guides": ensureAllLanguages({
+    en: "Advanced Guides",
+    es: "Guías Avanzadas",
+    fr: "Guides Avancés",
+    de: "Fortgeschrittene Anleitungen",
+    sv: "Avancerade guider",
+    ja: "高度なガイド",
+    zh: "高级指南",
+    ru: "Продвинутые руководства",
+    pt: "Guias Avançados",
+    ar: "أدلة متقدمة"
+  }),
+  "docs.advanced_description": ensureAllLanguages({
+    en: "Detailed guides for more experienced users",
+    es: "Guías detalladas para usuarios con más experiencia",
+    fr: "Guides détaillés pour les utilisateurs plus expérimentés",
+    de: "Detaillierte Anleitungen für erfahrenere Benutzer",
+    sv: "Detaljerade guider för mer erfarna användare",
+    ja: "より経験豊富なユーザー向けの詳細なガイド",
+    zh: "为有经验的用户提供的详细指南",
+    ru: "Подробные руководства для более опытных пользователей",
+    pt: "Guias detalhados para usuários mais experientes",
+    ar: "أدلة مفصلة للمستخدمين الأكثر خبرة"
+  }),
+  "docs.configuration": ensureAllLanguages({
+    en: "Configuration Options",
+    es: "Opciones de Configuración",
+    fr: "Options de Configuration",
+    de: "Konfigurationsoptionen",
+    sv: "Konfigurationsalternativ",
+    ja: "設定オプション",
+    zh: "配置选项",
+    ru: "Параметры конфигурации",
+    pt: "Opções de Configuração",
+    ar: "خيارات التكوين"
+  }),
+  "docs.configuration_description": ensureAllLanguages({
+    en: "Customize your experience",
+    es: "Personaliza tu experiencia",
+    fr: "Personnalisez votre expérience",
+    de: "Passen Sie Ihre Erfahrung an",
+    sv: "Anpassa din upplevelse",
+    ja: "体験をカスタマイズ",
+    zh: "自定义您的体验",
+    ru: "Настройте под свои нужды",
+    pt: "Personalize sua experiência",
+    ar: "تخصيص تجربتك"
+  }),
+  "docs.optimization": ensureAllLanguages({
+    en: "Performance Optimization",
+    es: "Optimización de Rendimiento",
+    fr: "Optimisation des Performances",
+    de: "Leistungsoptimierung",
+    sv: "Prestandaoptimering",
+    ja: "パフォーマンス最適化",
+    zh: "性能优化",
+    ru: "Оптимизация производительности",
+    pt: "Otimização de Desempenho",
+    ar: "تحسين الأداء"
+  }),
+  "docs.optimization_description": ensureAllLanguages({
+    en: "Tips for improving performance",
+    es: "Consejos para mejorar el rendimiento",
+    fr: "Conseils pour améliorer les performances",
+    de: "Tipps zur Leistungsverbesserung",
+    sv: "Tips för att förbättra prestanda",
+    ja: "パフォーマンス向上のためのヒント",
+    zh: "提高性能的技巧",
+    ru: "Советы по улучшению производительности",
+    pt: "Dicas para melhorar o desempenho",
+    ar: "نصائح لتحسين الأداء"
+  }),
+  // API Reference section
+  "docs.api_reference": ensureAllLanguages({
+    en: "API Reference",
+    es: "Referencia de API",
+    fr: "Référence de l'API",
+    de: "API-Referenz",
+    sv: "API-referens",
+    ja: "APIリファレンス",
+    zh: "API参考",
+    ru: "Справочник по API",
+    pt: "Referência da API",
+    ar: "مرجع واجهة برمجة التطبيقات"
+  }),
+  "docs.api_description": ensureAllLanguages({
+    en: "Complete documentation of our API endpoints",
+    es: "Documentación completa de nuestros endpoints de API",
+    fr: "Documentation complète de nos points de terminaison API",
+    de: "Vollständige Dokumentation unserer API-Endpunkte",
+    sv: "Komplett dokumentation av våra API-slutpunkter",
+    ja: "APIエンドポイントの完全なドキュメント",
+    zh: "我们API端点的完整文档",
+    ru: "Полная документация конечных точек нашего API",
+    pt: "Documentação completa dos nossos endpoints de API",
+    ar: "توثيق كامل لنقاط نهاية واجهة برمجة التطبيقات لدينا"
+  }),
+  "docs.api_content": ensureAllLanguages({
+    en: "This section contains detailed information about our API endpoints, authentication, request parameters, response formats, and error handling.",
+    es: "Esta sección contiene información detallada sobre nuestros endpoints de API, autenticación, parámetros de solicitud, formatos de respuesta y manejo de errores.",
+    fr: "Cette section contient des informations détaillées sur nos points de terminaison API, l'authentification, les paramètres de requête, les formats de réponse et la gestion des erreurs.",
+    de: "Dieser Abschnitt enthält detaillierte Informationen zu unseren API-Endpunkten, Authentifizierung, Anforderungsparametern, Antwortformaten und Fehlerbehandlung.",
+    sv: "Detta avsnitt innehåller detaljerad information om våra API-slutpunkter, autentisering, förfrågningsparametrar, svarsformat och felhantering.",
+    ja: "このセクションには、APIエンドポイント、認証、リクエストパラメータ、レスポンス形式、エラー処理に関する詳細情報が含まれています。",
+    zh: "本节包含有关我们API端点、身份验证、请求参数、响应格式和错误处理的详细信息。",
+    ru: "Этот раздел содержит подробную информацию о конечных точках нашего API, аутентификации, параметрах запроса, форматах ответа и обработке ошибок.",
+    pt: "Esta seção contém informações detalhadas sobre nossos endpoints de API, autenticação, parâmetros de solicitação, formatos de resposta e tratamento de erros.",
+    ar: "يحتوي هذا القسم على معلومات مفصلة حول نقاط نهاية واجهة برمجة التطبيقات لدينا، والمصادقة، ومعلمات الطلب، وتنسيقات الاستجابة، ومعالجة الأخطاء."
+  }),
+  "docs.authentication": ensureAllLanguages({
+    en: "Authentication",
+    es: "Autenticación",
+    fr: "Authentification",
+    de: "Authentifizierung",
+    sv: "Autentisering",
+    ja: "認証",
+    zh: "身份验证",
+    ru: "Аутентификация",
+    pt: "Autenticação",
+    ar: "المصادقة"
+  }),
+  "docs.authentication_description": ensureAllLanguages({
+    en: "Learn how to authenticate your API requests",
+    es: "Aprende cómo autenticar tus solicitudes de API",
+    fr: "Apprenez à authentifier vos requêtes API",
+    de: "Erfahren Sie, wie Sie Ihre API-Anfragen authentifizieren",
+    sv: "Lär dig hur du autentiserar dina API-förfrågningar",
+    ja: "APIリクエストを認証する方法を学ぶ",
+    zh: "了解如何验证您的API请求",
+    ru: "Узнайте, как аутентифицировать ваши API-запросы",
+    pt: "Aprenda como autenticar suas solicitações de API",
+    ar: "تعلم كيفية مصادقة طلبات واجهة برمجة التطبيقات الخاصة بك"
+  }),
+  // Examples section
+  "docs.examples_title": ensureAllLanguages({
+    en: "Code Examples",
+    es: "Ejemplos de Código",
+    fr: "Exemples de Code",
+    de: "Code-Beispiele",
+    sv: "Kodexempel",
+    ja: "コード例",
+    zh: "代码示例",
+    ru: "Примеры кода",
+    pt: "Exemplos de Código",
+    ar: "أمثلة الشفرة"
+  }),
+  "docs.examples_description": ensureAllLanguages({
+    en: "Ready-to-use code snippets and examples",
+    es: "Fragmentos de código y ejemplos listos para usar",
+    fr: "Extraits de code et exemples prêts à l'emploi",
+    de: "Einsatzbereite Code-Snippets und Beispiele",
+    sv: "Färdiga kodavsnitt och exempel",
+    ja: "すぐに使えるコードスニペットと例",
+    zh: "即用型代码片段和示例",
+    ru: "Готовые к использованию фрагменты кода и примеры",
+    pt: "Trechos de código e exemplos prontos para uso",
+    ar: "مقتطفات التعليمات البرمجية وأمثلة جاهزة للاستخدام"
+  }),
+  "docs.examples_content": ensureAllLanguages({
+    en: "Browse our collection of code examples to accelerate your development process.",
+    es: "Explora nuestra colección de ejemplos de código para acelerar tu proceso de desarrollo.",
+    fr: "Parcourez notre collection d'exemples de code pour accélérer votre processus de développement.",
+    de: "Durchsuchen Sie unsere Sammlung von Code-Beispielen, um Ihren Entwicklungsprozess zu beschleunigen.",
+    sv: "Bläddra i vår samling av kodexempel för att påskynda din utvecklingsprocess.",
+    ja: "開発プロセスを加速するために、コード例のコレクションを閲覧してください。",
+    zh: "浏览我们的代码示例集合，加速您的开发过程。",
+    ru: "Просмотрите нашу коллекцию примеров кода, чтобы ускорить процесс разработки.",
+    pt: "Navegue em nossa coleção de exemplos de código para acelerar seu processo de desenvolvimento.",
+    ar: "تصفح مجموعتنا من أمثلة التعليمات البرمجية لتسريع عملية التطوير الخاصة بك."
+  }),
+  "docs.basic_integration": ensureAllLanguages({
+    en: "Basic Integration Example",
+    es: "Ejemplo de Integración Básica",
+    fr: "Exemple d'Intégration de Base",
+    de: "Basis-Integrationsbeispiel",
+    sv: "Grundläggande integrationsexempel",
+    ja: "基本的な統合例",
+    zh: "基本集成示例",
+    ru: "Пример базовой интеграции",
+    pt: "Exemplo de Integração Básica",
+    ar: "مثال التكامل الأساسي"
+  }),
+  "docs.basic_integration_description": ensureAllLanguages({
+    en: "Simple integration with our platform",
+    es: "Integración simple con nuestra plataforma",
+    fr: "Intégration simple avec notre plateforme",
+    de: "Einfache Integration mit unserer Plattform",
+    sv: "Enkel integration med vår plattform",
+    ja: "当社のプラットフォームとの簡単な統合",
+    zh: "与我们平台的简单集成",
+    ru: "Простая интеграция с нашей платформой",
+    pt: "Integração simples com nossa plataforma",
+    ar: "تكامل بسيط مع منصتنا"
+  })
 };
 
 export default documentationTranslations;

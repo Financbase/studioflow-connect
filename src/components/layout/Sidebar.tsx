@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { X, Menu, Home, Music, Book, Users, Settings, BarChart2, Headphones, Share2, Sparkles } from "lucide-react";
 import { useDashboard } from "@/contexts/dashboard/useDashboard";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/language/LanguageProvider";
+import { useLanguage } from "@/contexts/language";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;

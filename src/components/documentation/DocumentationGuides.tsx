@@ -4,8 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Link } from "react-router-dom";
 import { ChevronRight, BookOpen, FileText, Lightbulb, Code } from "lucide-react";
 import HelpTip from "@/components/HelpSystem";
+import { useLanguage } from "@/contexts/language";
 
 const DocumentationGuides = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="space-y-6">
       <Card id="getting-started">
@@ -13,14 +16,14 @@ const DocumentationGuides = () => {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <BookOpen className="h-5 w-5" />
-              Getting Started
+              {t("docs.getting_started")}
             </CardTitle>
             <HelpTip 
-              title="Getting Started Guide" 
-              content="This section covers the basics to help new users get up and running quickly."
+              title={t("docs.getting_started_help_title")} 
+              content={t("docs.getting_started_help_content")}
             />
           </div>
-          <CardDescription>Everything you need to know to get started with our platform</CardDescription>
+          <CardDescription>{t("docs.getting_started_description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3">
@@ -30,8 +33,8 @@ const DocumentationGuides = () => {
                   <FileText className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">Installation Guide</h3>
-                  <p className="text-sm text-muted-foreground">Step-by-step instructions for setting up</p>
+                  <h3 className="font-medium">{t("docs.installation_guide")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("docs.installation_description")}</p>
                 </div>
               </div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -43,8 +46,8 @@ const DocumentationGuides = () => {
                   <Lightbulb className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">Quick Start Tutorial</h3>
-                  <p className="text-sm text-muted-foreground">Get up and running in minutes</p>
+                  <h3 className="font-medium">{t("docs.quickstart_tutorial")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("docs.quickstart_description")}</p>
                 </div>
               </div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -57,17 +60,17 @@ const DocumentationGuides = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Code className="h-5 w-5" />
-            Advanced Guides
+            {t("docs.advanced_guides")}
           </CardTitle>
-          <CardDescription>Detailed guides for more experienced users</CardDescription>
+          <CardDescription>{t("docs.advanced_description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3">
             <Link to="/docs/advanced/configuration" className="flex p-3 items-center justify-between rounded-lg border border-border hover:bg-muted transition-colors">
               <div className="flex items-center gap-3">
                 <div>
-                  <h3 className="font-medium">Configuration Options</h3>
-                  <p className="text-sm text-muted-foreground">Customize your experience</p>
+                  <h3 className="font-medium">{t("docs.configuration")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("docs.configuration_description")}</p>
                 </div>
               </div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -76,8 +79,8 @@ const DocumentationGuides = () => {
             <Link to="/docs/advanced/optimization" className="flex p-3 items-center justify-between rounded-lg border border-border hover:bg-muted transition-colors">
               <div className="flex items-center gap-3">
                 <div>
-                  <h3 className="font-medium">Performance Optimization</h3>
-                  <p className="text-sm text-muted-foreground">Tips for improving performance</p>
+                  <h3 className="font-medium">{t("docs.optimization")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("docs.optimization_description")}</p>
                 </div>
               </div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
